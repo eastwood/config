@@ -1,0 +1,3 @@
+[submodule "nvim"]
+	path = vimfiles
+	url = https://github.com/eastwood/vimfiles/
