@@ -1,3 +1,6 @@
 [submodule "nvim"]
 	path = vimfiles
 	url = https://github.com/eastwood/vimfiles/
+[submodule "term/tmux-scroll-copy-mode"]
+	path = term/tmux-scroll-copy-mode
+	url = https://github.com/nhdaly/tmux-scroll-copy-mode
