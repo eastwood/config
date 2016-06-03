@@ -4,3 +4,6 @@
 [submodule "term/tmux-scroll-copy-mode"]
 	path = term/tmux-scroll-copy-mode
 	url = https://github.com/nhdaly/tmux-scroll-copy-mode
+[submodule "term/tmux-resurrect"]
+	path = term/tmux-resurrect
+	url = https://github.com/tmux-plugins/tmux-resurrect
