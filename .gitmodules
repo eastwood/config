@@ -7,3 +7,6 @@
 [submodule "term/tmux-resurrect"]
 	path = term/tmux-resurrect
 	url = https://github.com/tmux-plugins/tmux-resurrect
+[submodule "emacs"]
+	path = emacs
+	url = https://github.com/eastwood/emacs
