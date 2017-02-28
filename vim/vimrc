@@ -1,24 +1,29 @@
-" Vim 7 configuration file
+" Vim 8 configuration file
 
 " Install packages
 call plug#begin()
-Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-sensible' " Smart defaults
+Plug 'tpope/vim-fugitive' " Git badassery
+Plug 'tpope/vim-surround' " The Pope's gift to man
+Plug 'scrooloose/nerdcommenter' " Comment lines
+Plug 'scrooloose/nerdtree' " File tree
+Plug 'pangloss/vim-javascript' " Javascript support
+Plug 'mxw/vim-jsx' " JSX support
+Plug 'ternjs/tern_for_vim' " Javascript autocomplete
+Plug 'ajh17/VimCompletesMe' " Lightweight tab completion
+Plug 'w0rp/ale' " Linting engine
+Plug 'altercation/vim-colors-solarized' " Solar powered colorschemes
+Plug 'rakr/vim-one'
 Plug 'kien/ctrlp.vim'
-Plug 'scrooloose/nerdcommenter'
-Plug 'justinmk/vim-dirvish'
-Plug 'sickill/vim-monokai'
-Plug 'pangloss/vim-javascript'
-Plug 'ternjs/tern_for_vim'
-Plug 'tpope/vim-surround'
-Plug 'ajh17/VimCompletesMe'
+Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets' " Snippets
 call plug#end()
 
-filetype plugin indent on
-syntax enable
 set nocompatible
 let mapleader = " "
 
-set encoding=utf-8
+set clipboard=unnamed " system clipboard
+set clipboard=unnamed " system clipboard
+
 set completeopt=menu,preview,longest
 set backspace=2
 set ttyfast
@@ -26,20 +31,19 @@ set modelines=0
 set history=500
 set autoread
 set showmatch
-set backspace=indent,eol,start
-set laststatus=2
 set splitbelow splitright
 
-set statusline=%<\ %F%=\ %{&fileformat}\ \|\ %{&fileencoding}\ \|\ %{&filetype}\ \|\ %p%%\ \|\ LN\ %l:%c\ 
+set statusline=%<\ %F%=\ %{ALEGetStatusLine()}\ \|\ %{&fileformat}\ \|\ %{&fileencoding}\ \|\ %{&filetype}\ \|\ %p%%\ \|\ LN\ %l:%c\ 
 " Fonts and Colours
-set guifont=Sauce\ Code\ Powerline:h12
+set guifont=Source\ Code\ Pro:h12
+let &t_8f = "\<Esc>[38:2:%lu:%lu:%lum"
+let &t_8b = "\<Esc>[48:2:%lu:%lu:%lum"
+set mouse=a
 " 100 characters wide column
 set colorcolumn=100
-
 " User Interface
-colorscheme monokai 
-set background=dark
-
+colorscheme solarized
+set bg=dark
 if has("gui_running")
   set guioptions-=m " no menu
   set guioptions-=T " no toolbar
@@ -51,18 +55,11 @@ endif
 set title
 set number
 set cursorline
-set ruler
-set scrolloff=3
 set showcmd
-set lazyredraw
 set hidden
 set showmode
-set wildmenu
-set wildmode=list:longest
 
 " Files and Backups
-set nobackup
-set nowritebackup
 set noswapfile
 set backupdir=~/tmp,/tmp
 set undodir=~/.vim/.tmp,~/tmp,~/.tmp,/tmp
@@ -72,19 +69,18 @@ set undofile
 
 " Text Formatting
 set smartcase
-set ignorecase
-set incsearch
-set hlsearch
-set tabstop=2
-set softtabstop=2
-set shiftwidth=2
 set expandtab
-set smarttab
+set tabstop=2
+set shiftwidth=2
+set softtabstop=2
+set ignorecase
+set hlsearch
 set nowrap
 
 " Keybindings
 
   " General Keybindings
+  map <leader><leader> :
   imap jk <ESC>
   nnoremap <backspace> <C-^>
   nnoremap ` '
@@ -93,7 +89,7 @@ set nowrap
   imap <C-v> <ESC>"+gP
   vmap <C-c> "+y
   nnoremap / /\v
-  map \ :Dirvish<cr>
+  map \ :NERDTreeToggle<cr>
 
   " Menu settings
   inoremap <expr><Esc>      pumvisible() ? "\<C-e>" : "\<Esc>"
@@ -101,6 +97,22 @@ set nowrap
   inoremap <expr><C-j>      pumvisible() ? "\<C-n>" : "\<C-j>"
   inoremap <expr><C-k>      pumvisible() ? "\<C-p>" : "\<C-k>"
   autocmd CompleteDone * pclose
+
+  " Project management
+  nmap <leader>pf :CtrlP<CR>
+  nmap <leader>ft :NERDTreeFind<cr>
+  nmap <leader>pt :NERDTreeCWD<cr>
+  nmap <leader>pp :source ~/Dropbox/sessions/
+  nmap <leader>ps :mksession! ~/Dropbox/sessions/
+  
+  " Git/Fugitive keybindings
+  nnoremap <leader>gs :Gstatus<cr>
+  nnoremap <leader>gf :Gfetch<cr>
+  nnoremap <leader>gF :!git pull --rebase<cr>
+  nnoremap <leader>gP :Gpush
+  nnoremap <leader>gc :Gcommit<cr>
+  nnoremap <leader>gC :Git checkout
+
 
   " Window bindings
   nnoremap <leader>wh <C-w>h
@@ -113,8 +125,6 @@ set nowrap
   nnoremap <leader>wv <C-w>v
 
   " Buffer bindings
-  map <tab> :bn!<CR>
-  map <S-tab> :bp!<CR>
   nmap <leader>bd :bp<bar>sp<bar>bn<bar>bd<CR>
   nmap <leader>bb :buffers<cr>
   nmap <leader>bn :bn!<CR>
@@ -133,4 +143,13 @@ set nowrap
   nnoremap <leader>tn :tabn<cr>
   nnoremap <leader>tp :tabp<cr>
 
-  
+ " Plugins
+ 
+  " UltiSnips
+  let g:UltiSnipsExpandTrigger="<C-j>"
+  let g:UltiSnipsJumpForwardTrigger="<C-j>"
+  let g:UltiSnipsJumpBackwardTrigger="<C-k>"
+
+  " Ctrlp
+  let g:ctrlp_working_path_mode = 'ra'
+  let g:ctrlp_custom_ignore='node_modules\|dist'

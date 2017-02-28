@@ -7,7 +7,7 @@ ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/
 mkdir -p ~/Workspace/github.com/eastwood
 mkdir -p ~/Workspace/nib.com.au/cryan
 
-# Brew install 
+# Brew install
 brew install tmux
 brew install python3
 brew install reattach-to-user-namespace
@@ -38,6 +38,10 @@ npm config set strict-ssl false
 # Install git bash
 ln -s ~/Workspace/github.com/eastwood/config/term/profile ~/.profile
 
+# Install vagrant
+brew cask install virtualbox
+brew cask install vagrant
+brew cask install vagrant-manager
 
 # Install dropbox
 # Install slack
