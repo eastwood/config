@@ -54,6 +54,7 @@ endif
 
 set title
 set number
+set relativenumber
 set cursorline
 set showcmd
 set hidden
@@ -100,6 +101,7 @@ set nowrap
 
   " Project management
   nmap <leader>pf :CtrlP<CR>
+  nmap <leader>bb :CtrlBuffer<CR>
   nmap <leader>ft :NERDTreeFind<cr>
   nmap <leader>pt :NERDTreeCWD<cr>
   nmap <leader>pp :source ~/Dropbox/sessions/
@@ -126,7 +128,7 @@ set nowrap
 
   " Buffer bindings
   nmap <leader>bd :bp<bar>sp<bar>bn<bar>bd<CR>
-  nmap <leader>bb :buffers<cr>
+  nmap <leader>bb :CtrlBuffer<CR>
   nmap <leader>bn :bn!<CR>
   nmap <leader>bp :bp!<CR>
 

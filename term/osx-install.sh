@@ -10,7 +10,9 @@ mkdir -p ~/Workspace/nib.com.au/cryan
 # Brew install
 brew install tmux
 brew install python3
+brew install ruby
 brew install reattach-to-user-namespace
+brew install tmuxinator
 
 # Install config
 cd ~/Workspace/github.com/eastwood/
@@ -21,6 +23,7 @@ git submodule sync
 cd ~
 
 # Install tmux
+ln -s ~/Workspace/github.com/eastwood/config/term/tmuxinator ~/.tmuxinator
 ln -s ~/Workspace/github.com/eastwood/config/term/tmux.conf ~/.tmux.conf
 ln -s ~/Workspace/github.com/eastwood/config/term ~/.config/term/
 
@@ -36,7 +39,7 @@ brew install node
 npm config set strict-ssl false
 
 # Install git bash
-ln -s ~/Workspace/github.com/eastwood/config/term/profile ~/.profile
+ln -s ~/Workspace/github.com/eastwood/config/term/profile ~/.bash_profile
 
 # Install vagrant
 brew cask install virtualbox
