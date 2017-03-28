@@ -32,27 +32,27 @@ root: ~/Workspace/nib.com.au/cryan/one-nib/
 
 windows:
   - editor:
-      layout: main-vertical
+      layout: even-horizontal
       # Synchronize all panes of this window, can be enabled before or after the pane commands run.
       # 'before' represents legacy functionality and will be deprecated in a future release, in favour of 'after'
-      synchronize: after
       panes:
         - vim
   - one-nib: 
-     layout: main-horizontal
-     panes:
-       - npm run start.devauth
-       - npm run build.client -- --watch
-       - npm run build.server -- -w
+      layout: even-horizontal
+      main-pane-width: 100
+      panes:
+        - npm run start.devauth
+        - psql postgres://onenibuser:onenibpassword@localhost:5432/one-nib
   - auth:
-    root: ~/Workspace/nib.com.au/cryan/auth/
-    layout: main-vertical
+      root: ~/Workspace/nib.com.au/cryan/auth/
+      layout: even-horizontal
+      panes:
+        - npm run start.local
+        - psql postgres://onenibuser:onenibpassword@localhost:5432/auth
   - database: 
-      layout: main-vertical
+      layout: even-horizontal
       panes:
         - postgres -D /usr/local/var/postgres
-        - psql postgres://onenibuser:onenibpassword@localhost:5432/one-nib
-        - psql postgres://onenibuser:onenibpassword@localhost:5432/auth
-  - proxy:
-    root: ~/Workspace/nib.com.au/cryan/rqp-proxy/
-    layout: main-vertical
+  - other:
+      root: ~/Workspace/nib.com.au/cryan/rqp-proxy/
+      layout: main-horizontal

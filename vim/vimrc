@@ -3,6 +3,7 @@
 " Install packages
 call plug#begin()
 Plug 'tpope/vim-sensible' " Smart defaults
+Plug 'tpope/vim-dispatch' " Dispatcher
 Plug 'tpope/vim-fugitive' " Git badassery
 Plug 'tpope/vim-surround' " The Pope's gift to man
 Plug 'scrooloose/nerdcommenter' " Comment lines
@@ -22,7 +23,6 @@ set nocompatible
 let mapleader = " "
 
 set clipboard=unnamed " system clipboard
-set clipboard=unnamed " system clipboard
 
 set completeopt=menu,preview,longest
 set backspace=2
@@ -34,16 +34,18 @@ set showmatch
 set splitbelow splitright
 
 set statusline=%<\ %F%=\ %{ALEGetStatusLine()}\ \|\ %{&fileformat}\ \|\ %{&fileencoding}\ \|\ %{&filetype}\ \|\ %p%%\ \|\ LN\ %l:%c\ 
+
 " Fonts and Colours
 set guifont=Source\ Code\ Pro:h12
 let &t_8f = "\<Esc>[38:2:%lu:%lu:%lum"
 let &t_8b = "\<Esc>[48:2:%lu:%lu:%lum"
 set mouse=a
 " 100 characters wide column
-set colorcolumn=100
+set colorcolumn=120
 " User Interface
 colorscheme solarized
 set bg=dark
+hi StatusLine ctermfg=0 ctermbg=4
 if has("gui_running")
   set guioptions-=m " no menu
   set guioptions-=T " no toolbar
@@ -101,7 +103,6 @@ set nowrap
 
   " Project management
   nmap <leader>pf :CtrlP<CR>
-  nmap <leader>bb :CtrlBuffer<CR>
   nmap <leader>ft :NERDTreeFind<cr>
   nmap <leader>pt :NERDTreeCWD<cr>
   nmap <leader>pp :source ~/Dropbox/sessions/
@@ -115,7 +116,6 @@ set nowrap
   nnoremap <leader>gc :Gcommit<cr>
   nnoremap <leader>gC :Git checkout
 
-
   " Window bindings
   nnoremap <leader>wh <C-w>h
   nnoremap <leader>wj <C-w>j
@@ -127,8 +127,9 @@ set nowrap
   nnoremap <leader>wv <C-w>v
 
   " Buffer bindings
+  nmap <leader>d :bd!<CR>
   nmap <leader>bd :bp<bar>sp<bar>bn<bar>bd<CR>
-  nmap <leader>bb :CtrlBuffer<CR>
+  nmap <leader>bb :CtrlPBuffer<CR>
   nmap <leader>bn :bn!<CR>
   nmap <leader>bp :bp!<CR>
 
@@ -151,6 +152,9 @@ set nowrap
   let g:UltiSnipsExpandTrigger="<C-j>"
   let g:UltiSnipsJumpForwardTrigger="<C-j>"
   let g:UltiSnipsJumpBackwardTrigger="<C-k>"
+
+  " Tern
+  autocmd FileType javascript nnoremap <buffer> <F12> :TernDef<CR>
 
   " Ctrlp
   let g:ctrlp_working_path_mode = 'ra'
