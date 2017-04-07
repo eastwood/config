@@ -45,7 +45,9 @@ set colorcolumn=120
 " User Interface
 colorscheme solarized
 set bg=dark
-hi StatusLine ctermfg=0 ctermbg=4
+hi StatusLine ctermfg=0 ctermbg=4 guifg=#002b36 guibg=#268bd2
+hi StatusLineNC ctermfg=0 guifg=#002b36
+hi VertSplit ctermbg=0 guibg=#002b36
 if has("gui_running")
   set guioptions-=m " no menu
   set guioptions-=T " no toolbar
@@ -97,8 +99,8 @@ set nowrap
   " Menu settings
   inoremap <expr><Esc>      pumvisible() ? "\<C-e>" : "\<Esc>"
   inoremap <expr><CR>       pumvisible() ? "\<C-y>" : "\<CR>"
-  inoremap <expr><C-j>      pumvisible() ? "\<C-n>" : "\<C-j>"
-  inoremap <expr><C-k>      pumvisible() ? "\<C-p>" : "\<C-k>"
+  "inoremap <expr><C-j>      pumvisible() ? "\<C-n>" : "\<C-j>"
+  "inoremap <expr><C-k>      pumvisible() ? "\<C-p>" : "\<C-k>"
   autocmd CompleteDone * pclose
 
   " Project management
