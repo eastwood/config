@@ -21,9 +21,6 @@ call plug#end()
 set nocompatible
 let mapleader = " "
 
-set clipboard=unnamed " system clipboard
-set clipboard=unnamed " system clipboard
-
 set completeopt=menu,preview,longest
 set backspace=2
 set ttyfast
@@ -101,7 +98,7 @@ set nowrap
 
   " Project management
   nmap <leader>pf :CtrlP<CR>
-  nmap <leader>bb :CtrlBuffer<CR>
+  nmap <leader>bb :CtrlPBuffer<CR>
   nmap <leader>ft :NERDTreeFind<cr>
   nmap <leader>pt :NERDTreeCWD<cr>
   nmap <leader>pp :source ~/Dropbox/sessions/
@@ -128,7 +125,7 @@ set nowrap
 
   " Buffer bindings
   nmap <leader>bd :bp<bar>sp<bar>bn<bar>bd<CR>
-  nmap <leader>bb :CtrlBuffer<CR>
+  nmap <leader>bb :CtrlPBuffer<CR>
   nmap <leader>bn :bn!<CR>
   nmap <leader>bp :bp!<CR>
 
