@@ -25,10 +25,9 @@ I usually don't have many split windows, but ace makes it super convenient to na
 Solarized everything!
 #+BEGIN_SRC emacs-lisp
 (use-package solarized-theme
-  :ensure t)
-(use-package spacemacs-theme
-  :defer t
-  :init (load-theme 'spacemacs-dark t))
+  :ensure t
+  :init 
+    (load-theme 'solarized-dark t))
 #+END_SRC
   
 * Evil
