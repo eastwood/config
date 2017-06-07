@@ -1,7 +1,4 @@
-#+STARTUP: overview
-* Ace Window
-I usually don't have many split windows, but ace makes it super convenient to navigate around windows and across frames
-#+BEGIN_SRC emacs-lisp
+
 (use-package ace-window
   :ensure t
   :init
@@ -10,32 +7,19 @@ I usually don't have many split windows, but ace makes it super convenient to na
     (custom-set-faces
      '(aw-leading-char-face
       ((t (:inherit ace-jump-face-foreground :height 3.0)))))))
-#+END_SRC
-  
-* Autocomplete
-#+BEGIN_SRC emacs-lisp
+
 (use-package auto-complete
   :diminish auto-complete-mode
   :ensure t
   :init
   (ac-config-default)
   (global-auto-complete-mode t))
-#+END_SRC
-* Color Theme
-Solarized everything!
-#+BEGIN_SRC emacs-lisp
+
 (use-package solarized-theme
   :ensure t
   :init 
     (load-theme 'solarized-dark t))
-#+END_SRC
-  
-* Evil
-Evil complements the emacs ecosystem perfectly. The first thing I do is get this set up!
-It's super important to have the leader keymap as well, so that I can perform all my combinations super fast.
-A lot of these keybindings have been heavily influenced from spacemacs.
-I like to throw in magit support and surround support too (kudos to Tim Pope as always).
-#+BEGIN_SRC emacs-lisp
+
 (use-package evil
   :diminish evil-mode
   :ensure t
@@ -79,16 +63,12 @@ I like to throw in magit support and surround support too (kudos to Tim Pope as 
   :ensure t
   :config
   (global-evil-surround-mode))
-#+END_SRC
-* Expand Region
-#+BEGIN_SRC emacs-lisp
+
 (use-package expand-region
   :ensure t
   :bind
   ("C-=" . er/expand-region))
-#+END_SRC
-* FlyCheck
-#+BEGIN_SRC emacs-lisp
+
 (use-package flycheck
   :diminish flycheck-mode
   :ensure t
@@ -99,17 +79,12 @@ I like to throw in magit support and surround support too (kudos to Tim Pope as 
   (setq-default flycheck-disabled-checker 'json-jsonlist)
   (setq-default flycheck-javascript-eslint-executable "eslint-project-relative")
   (flycheck-add-mode 'javascript-eslint 'web-mode))
-#+END_SRC
-* General 
-#+BEGIN_SRC emacs-lisp
+
 (setq-default indent-tabs-mode nil)
 (global-set-key (kbd "<f5>") 'revert-buffer)
 (global-set-key (kbd "<f12>") 'ansi-term)
 (setq backup-directory-alist '(("." . "~/.emacs.d/backups")))
-#+END_SRC
 
-* Helper Functions
-#+BEGIN_SRC emacs-lisp
 ;; OSX fix for eslint lookup
 (use-package exec-path-from-shell
   :ensure t
@@ -147,11 +122,6 @@ If the universal prefix argument is used then will the windows too."
     (when (equal '(4) arg) (delete-other-windows))
     (message "Buffers deleted!")))
 
-#+END_SRC
-  
-* Interface
-Just some nice user interfaces tweaks. Bread and butter stuff!
-#+BEGIN_SRC emacs-lisp
 (global-linum-mode 1)
 (scroll-bar-mode -1)
 (setq inhibit-startup-message t)
@@ -159,9 +129,7 @@ Just some nice user interfaces tweaks. Bread and butter stuff!
 (setq ring-bell-function 'ignore)
 (tool-bar-mode -1)
 (fset 'yes-or-no-p 'y-or-n-p)
-#+END_SRC
-* Ivy/Swiper
-#+BEGIN_SRC emacs-lisp
+
 (use-package counsel
   :ensure t)
 (use-package swiper
@@ -175,9 +143,7 @@ Just some nice user interfaces tweaks. Bread and butter stuff!
   ("M-x" . counsel-M-x)
   ("M-y" . counsel-yank-pop)
   ("C-x C-f" . counsel-find-file))
-#+END_SRC
-* Javascript
-#+BEGIN_SRC emacs-lisp
+
 (use-package json-mode
   :ensure t)
 (use-package js2-mode
@@ -197,9 +163,7 @@ Just some nice user interfaces tweaks. Bread and butter stuff!
     (setq web-mode-css-indent-offset 2)
     (setq web-mode-code-indent-offset 2))
   (add-hook 'web-mode-hook  'my-web-mode-hook))
-#+END_SRC
-* Magit
-#+BEGIN_SRC emacs-lisp
+
 (use-package magit
   :ensure t
   :config
@@ -207,11 +171,7 @@ Just some nice user interfaces tweaks. Bread and butter stuff!
     :ensure t)
   (evil-leader/set-key
    "gs" 'magit-status))
-#+END_SRC
-  
-* NeoTree
-We need an evil tree!
-#+BEGIN_SRC emacs-lisp
+
 (use-package neotree
   :ensure t
   :config
@@ -224,9 +184,7 @@ We need an evil tree!
   (setq neo-window-fixed-size nil)
   (setq neo-smart-open t))
   (setq neo-window-width 40)
-#+END_SRC
-* Org
-#+BEGIN_SRC emacs-lisp
+
 (require 'org-agenda)
 (define-key org-agenda-mode-map "c" 'org-agenda-columns)
 (setq org-directory "~/Dropbox/notes")
@@ -257,16 +215,12 @@ We need an evil tree!
              "* %?\n%T" :prepend T)
         ("j" "Journal" entry (file+datetree "~/Dropbox/notes/journal.org")
              "* %?\nEntered on %U\n  %i\n  %a")))
-#+END_SRC
-Just give me nice bullet points!
-#+BEGIN_SRC emacs-lisp
+
 (use-package org-bullets
   :ensure t
   :config
   (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
-#+END_SRC
-* Projectile
-#+BEGIN_SRC emacs-lisp
+
 (use-package projectile
   :diminish projectile-mode
   :ensure t
@@ -281,14 +235,10 @@ Just give me nice bullet points!
   :config
   (setq projectile-completion-system 'ivy)
   (projectile-global-mode))
-#+END_SRC
-* Smart Parenthesis
-#+BEGIN_SRC emacs-lisp
+
 (use-package smartparens
   :ensure t)
-#+END_SRC
-* Snippets
-#+BEGIN_SRC emacs-lisp
+
 (use-package yasnippet
   :ensure t
   :diminish yas-minor-mode
@@ -299,9 +249,7 @@ Just give me nice bullet points!
    "is" 'yas-insert-snippet
    "in" 'yas-new-snippet)
   (yas-global-mode 1))
-#+END_SRC
-* Tern
-#+BEGIN_SRC emacs-lisp
+
 (use-package tern-auto-complete
   :ensure t
   :config
@@ -311,13 +259,8 @@ Just give me nice bullet points!
   :ensure t
   :config
   (add-hook 'js-mode-hook 'tern-mode))
-#+END_SRC 
-* Which Key
-Awesome package for key discovery!
-#+BEGIN_SRC emacs-lisp
+
 (use-package which-key
   :ensure t 
   :config
   (which-key-mode))
-#+END_SRC
-
