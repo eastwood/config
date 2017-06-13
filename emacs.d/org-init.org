@@ -1,4 +1,15 @@
 #+STARTUP: overview
+* Interface
+Just some nice user interfaces tweaks. Bread and butter stuff!
+#+BEGIN_SRC emacs-lisp
+(global-linum-mode 1)
+(scroll-bar-mode -1)
+(setq inhibit-startup-message t)
+(setq-default indent-tabs-mode nil)
+(setq ring-bell-function 'ignore)
+(tool-bar-mode -1)
+(fset 'yes-or-no-p 'y-or-n-p)
+#+END_SRC
 * Ace Window
 I usually don't have many split windows, but ace makes it super convenient to navigate around windows and across frames
 #+BEGIN_SRC emacs-lisp
@@ -29,7 +40,6 @@ Solarized everything!
   :init 
     (load-theme 'solarized-dark t))
 #+END_SRC
-  
 * Evil
 Evil complements the emacs ecosystem perfectly. The first thing I do is get this set up!
 It's super important to have the leader keymap as well, so that I can perform all my combinations super fast.
@@ -69,8 +79,7 @@ I like to throw in magit support and surround support too (kudos to Tim Pope as 
    "wo" 'delete-other-windows
    "wj" 'evil-window-down
    "wk" 'evil-window-up
-   "wh"
-'evil-window-left
+   "wh" 'evil-window-left
    "wl" 'evil-window-right
    "wv" 'evil-window-vsplit
    "ws" 'evil-window-split)
@@ -149,22 +158,9 @@ If the universal prefix argument is used then will the windows too."
 
 #+END_SRC
   
-* Interface
-Just some nice user interfaces tweaks. Bread and butter stuff!
-#+BEGIN_SRC emacs-lisp
-(global-linum-mode 1)
-(scroll-bar-mode -1)
-(setq inhibit-startup-message t)
-(setq-default indent-tabs-mode nil)
-(setq ring-bell-function 'ignore)
-(tool-bar-mode -1)
-(fset 'yes-or-no-p 'y-or-n-p)
-#+END_SRC
 * Ivy/Swiper
 #+BEGIN_SRC emacs-lisp
 (use-package counsel
-  :ensure t)
-(use-package swiper
   :ensure t
   :diminish ivy-mode
   :config
@@ -173,7 +169,6 @@ Just some nice user interfaces tweaks. Bread and butter stuff!
   :bind
   ("s-f" . swiper)
   ("M-x" . counsel-M-x)
-  ("M-y" . counsel-yank-pop)
   ("C-x C-f" . counsel-find-file))
 #+END_SRC
 * Javascript
@@ -208,7 +203,13 @@ Just some nice user interfaces tweaks. Bread and butter stuff!
   (evil-leader/set-key
    "gs" 'magit-status))
 #+END_SRC
-  
+
+* Markdown
+#+begin_src emacs-lisp
+(use-package markdown-mode
+  :ensure t
+  :commands (markdown-mode))
+#+end_src 
 * NeoTree
 We need an evil tree!
 #+BEGIN_SRC emacs-lisp
@@ -220,10 +221,15 @@ We need an evil tree!
   (evil-define-key 'normal neotree-mode-map (kbd "H") 'neotree-hidden-file-toggle)
   (evil-define-key 'normal neotree-mode-map (kbd "q") 'neotree-hide)
   (evil-define-key 'normal neotree-mode-map (kbd "RET") 'neotree-enter)
+  (evil-leader/set-key-for-mode 'neotree-mode "mo" 'neotree-open-file-in-system-application)
+  (evil-leader/set-key-for-mode 'neotree-mode "md" 'neotree-delete-node)
+  (evil-leader/set-key-for-mode 'neotree-mode "mr" 'neotree-rename-node)
+  (evil-leader/set-key-for-mode 'neotree-mode "mc" 'neotree-create-node)
   (setq neo-theme 'nerd)
   (setq neo-window-fixed-size nil)
   (setq neo-smart-open t))
   (setq neo-window-width 40)
+  (setq neo-default-system-application "open")
 #+END_SRC
 * Org
 #+BEGIN_SRC emacs-lisp
@@ -248,6 +254,10 @@ We need an evil tree!
     "od" 'org-deadline
     "oa" 'org-agenda
     "os" 'org-schedule)
+(evil-define-key 'normal org-mode-map
+  ">" 'org-shiftmetaright
+  "<" 'org-shiftmetaleft
+)
 (evil-leader/set-key-for-mode 'org-capture-mode "c" 'org-capture-finalize)
 (evil-leader/set-key-for-mode 'org-capture-mode "k" 'org-capture-kill)
 (setq org-capture-templates
@@ -287,6 +297,7 @@ Just give me nice bullet points!
 (use-package smartparens
   :ensure t)
 #+END_SRC
+
 * Snippets
 #+BEGIN_SRC emacs-lisp
 (use-package yasnippet
@@ -320,4 +331,3 @@ Awesome package for key discovery!
   :config
   (which-key-mode))
 #+END_SRC
-

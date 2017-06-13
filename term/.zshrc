@@ -7,6 +7,7 @@ export EDITOR="mvim -v"
 export TERM='xterm-256color'
 alias flushdns="mDNSResponder -HUP"
 alias vim="mvim -v"
+alias ec="emacsclient -q -c -n"
 alias ls="ls -lsaG"
 alias grep="grep --color=auto"
 alias debug-chrome="/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --remote-debugging-port=9222"

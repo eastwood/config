@@ -1,4 +1,12 @@
 
+(global-linum-mode 1)
+(scroll-bar-mode -1)
+(setq inhibit-startup-message t)
+(setq-default indent-tabs-mode nil)
+(setq ring-bell-function 'ignore)
+(tool-bar-mode -1)
+(fset 'yes-or-no-p 'y-or-n-p)
+
 (use-package ace-window
   :ensure t
   :init
@@ -53,8 +61,7 @@
    "wo" 'delete-other-windows
    "wj" 'evil-window-down
    "wk" 'evil-window-up
-   "wh"
-'evil-window-left
+   "wh" 'evil-window-left
    "wl" 'evil-window-right
    "wv" 'evil-window-vsplit
    "ws" 'evil-window-split)
@@ -122,17 +129,7 @@ If the universal prefix argument is used then will the windows too."
     (when (equal '(4) arg) (delete-other-windows))
     (message "Buffers deleted!")))
 
-(global-linum-mode 1)
-(scroll-bar-mode -1)
-(setq inhibit-startup-message t)
-(setq-default indent-tabs-mode nil)
-(setq ring-bell-function 'ignore)
-(tool-bar-mode -1)
-(fset 'yes-or-no-p 'y-or-n-p)
-
 (use-package counsel
-  :ensure t)
-(use-package swiper
   :ensure t
   :diminish ivy-mode
   :config
@@ -141,7 +138,6 @@ If the universal prefix argument is used then will the windows too."
   :bind
   ("s-f" . swiper)
   ("M-x" . counsel-M-x)
-  ("M-y" . counsel-yank-pop)
   ("C-x C-f" . counsel-find-file))
 
 (use-package json-mode
@@ -172,6 +168,10 @@ If the universal prefix argument is used then will the windows too."
   (evil-leader/set-key
    "gs" 'magit-status))
 
+(use-package markdown-mode
+  :ensure t
+  :commands (markdown-mode))
+
 (use-package neotree
   :ensure t
   :config
@@ -180,10 +180,15 @@ If the universal prefix argument is used then will the windows too."
   (evil-define-key 'normal neotree-mode-map (kbd "H") 'neotree-hidden-file-toggle)
   (evil-define-key 'normal neotree-mode-map (kbd "q") 'neotree-hide)
   (evil-define-key 'normal neotree-mode-map (kbd "RET") 'neotree-enter)
+  (evil-leader/set-key-for-mode 'neotree-mode "mo" 'neotree-open-file-in-system-application)
+  (evil-leader/set-key-for-mode 'neotree-mode "md" 'neotree-delete-node)
+  (evil-leader/set-key-for-mode 'neotree-mode "mr" 'neotree-rename-node)
+  (evil-leader/set-key-for-mode 'neotree-mode "mc" 'neotree-create-node)
   (setq neo-theme 'nerd)
   (setq neo-window-fixed-size nil)
   (setq neo-smart-open t))
   (setq neo-window-width 40)
+  (setq neo-default-system-application "open")
 
 (require 'org-agenda)
 (define-key org-agenda-mode-map "c" 'org-agenda-columns)
@@ -206,6 +211,10 @@ If the universal prefix argument is used then will the windows too."
     "od" 'org-deadline
     "oa" 'org-agenda
     "os" 'org-schedule)
+(evil-define-key 'normal org-mode-map
+  ">" 'org-shiftmetaright
+  "<" 'org-shiftmetaleft
+)
 (evil-leader/set-key-for-mode 'org-capture-mode "c" 'org-capture-finalize)
 (evil-leader/set-key-for-mode 'org-capture-mode "k" 'org-capture-kill)
 (setq org-capture-templates

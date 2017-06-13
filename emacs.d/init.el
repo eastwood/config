@@ -36,7 +36,7 @@
  '(org-agenda-files (quote ("~/Dropbox/notes/gtd.org")))
  '(package-selected-packages
    (quote
-    (spacemacs-theme org-agenda yasnippet tern-auto-complete magit ivy counsel ace-window auto-complete org-bullets which-key use-package)))
+    (markdown-mode+ markdown-mode spacemacs-theme org-agenda yasnippet tern-auto-complete magit ivy counsel ace-window auto-complete org-bullets which-key use-package)))
  '(pdf-view-midnight-colors (quote ("#DCDCCC" . "#383838")))
  '(vc-annotate-background "#2B2B2B")
  '(vc-annotate-color-map
