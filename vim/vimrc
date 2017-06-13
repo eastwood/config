@@ -40,6 +40,7 @@ set guifont=Source\ Code\ Pro:h12
 let &t_8f = "\<Esc>[38:2:%lu:%lu:%lum"
 let &t_8b = "\<Esc>[48:2:%lu:%lu:%lum"
 set mouse=a
+set ttymouse=xterm2
 " 100 characters wide column
 set colorcolumn=120
 " User Interface
