@@ -15,7 +15,7 @@ Plug 'ajh17/VimCompletesMe' " Lightweight tab completion
 Plug 'w0rp/ale' " Linting engine
 Plug 'altercation/vim-colors-solarized' " Solar powered colorschemes
 Plug 'rakr/vim-one'
-Plug 'junegunn/fzf'
+Plug 'kien/ctrlp.vim'
 Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets' " Snippets
 call plug#end()
 
@@ -105,7 +105,8 @@ set nowrap
   autocmd CompleteDone * pclose
 
   " Project management
-  nmap <leader>pf :FZF<CR>
+  nmap <leader>pf :CtrlP<CR>
+  nmap <leader>bb :CtrlPBuffer<CR>
   nmap <leader>ft :NERDTreeFind<cr>
   nmap <leader>pt :NERDTreeCWD<cr>
   nmap <leader>pp :source ~/Dropbox/sessions/
@@ -132,7 +133,7 @@ set nowrap
   " Buffer bindings
   nmap <leader>d :bd!<CR>
   nmap <leader>bd :bp<bar>sp<bar>bn<bar>bd<CR>
-  nmap <leader>bb :buffers<CR>
+  nmap <leader>bb :CtrlPBuffer<CR>
   nmap <leader>bn :bn!<CR>
   nmap <leader>bp :bp!<CR>
 
@@ -162,23 +163,3 @@ set nowrap
   " Ctrlp
   let g:ctrlp_working_path_mode = 'ra'
   let g:ctrlp_custom_ignore='node_modules\|dist'
-
-  
-  " FZF functions
-  function! s:buflist()
-    redir => ls
-    silent ls
-    redir END
-    return split(ls, '\n')
-  endfunction
-
-  function! s:bufopen(e)
-    execute 'buffer' matchstr(a:e, '^[ 0-9]*')
-  endfunction
-
-  nnoremap <silent> <leader>bb :call fzf#run({
-  \   'source':  reverse(<sid>buflist()),
-  \   'sink':    function('<sid>bufopen'),
-  \   'options': '+m',
-  \   'down':    len(<sid>buflist()) + 2
-  \ })<CR>
