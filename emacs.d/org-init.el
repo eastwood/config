@@ -85,7 +85,8 @@
   (setq-default flycheck-disabled-checker 'javascript-jshint)
   (setq-default flycheck-disabled-checker 'json-jsonlist)
   (setq-default flycheck-javascript-eslint-executable "eslint-project-relative")
-  (flycheck-add-mode 'javascript-eslint 'web-mode))
+ (with-eval-after-load 'flycheck
+  (advice-add 'flycheck-eslint-config-exists-p :override (lambda() t))) (flycheck-add-mode 'javascript-eslint 'web-mode))
 
 (setq-default indent-tabs-mode nil)
 (global-set-key (kbd "<f5>") 'revert-buffer)
@@ -135,6 +136,8 @@ If the universal prefix argument is used then will the windows too."
   :config
   (ivy-mode 1)
   (setq ivy-use-virtual-buffers t)
+  (setq ivy-re-builders-alist
+   '((t . ivy--regex-ignore-order)))
   :bind
   ("s-f" . swiper)
   ("M-x" . counsel-M-x)
