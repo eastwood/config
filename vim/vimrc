@@ -11,7 +11,7 @@ Plug 'scrooloose/nerdtree' " File tree
 Plug 'pangloss/vim-javascript' " Javascript support
 Plug 'mxw/vim-jsx' " JSX support
 Plug 'ternjs/tern_for_vim' " Javascript autocomplete
-Plug 'ajh17/VimCompletesMe' " Lightweight tab completion
+Plug 'maxboisvert/vim-simple-complete' " Lightweight tab completion
 Plug 'w0rp/ale' " Linting engine
 Plug 'altercation/vim-colors-solarized' " Solar powered colorschemes
 Plug 'rakr/vim-one'
@@ -163,3 +163,8 @@ set nowrap
   " Ctrlp
   let g:ctrlp_working_path_mode = 'ra'
   let g:ctrlp_custom_ignore='node_modules\|dist'
+
+  " MuComplete
+  let g:mucomplete#enable_auto_at_startup = 1
+
+
