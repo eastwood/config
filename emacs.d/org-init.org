@@ -19,6 +19,11 @@ on first install. On first install it's worth setting:
 (setq custom-file "~/.emacs.d/custom-settings.el")
 (load custom-file t)
 #+END_SRC
+* Personal Information
+#+BEGIN_SRC emacs-lisp
+(setq user-full-name "Clint Ryan"
+      user-mail-address "")
+#+END_SRC
 * Interface
 Just some nice user interfaces tweaks. Bread and butter stuff!
 #+BEGIN_SRC emacs-lisp
@@ -30,31 +35,19 @@ Just some nice user interfaces tweaks. Bread and butter stuff!
 (tool-bar-mode -1)
 (fset 'yes-or-no-p 'y-or-n-p)
 #+END_SRC
-* Ace Window
-I usually don't have many split windows, but ace makes it super convenient to navigate around windows and across frames
-#+BEGIN_SRC emacs-lisp
-(use-package ace-window
-  :init
-  (progn
-    (global-set-key [remap other-window] 'ace-window)
-    (custom-set-faces
-     '(aw-leading-char-face
-      ((t (:inherit ace-jump-face-foreground :height 3.0)))))))
-#+END_SRC
-  
 * Company
 #+BEGIN_SRC emacs-lisp
 (use-package company-mode
+  :mode 
   :diminish company-mode
-  :init
-  (global-company-mode t))
+  :config (add-hook 'prog-mode-hook 'company-mode))
 #+END_SRC
 * Color Theme
 Solarized everything!
 #+BEGIN_SRC emacs-lisp
 (use-package solarized-theme
-  :init 
-    (load-theme 'solarized-dark t))
+  :config
+  (load-theme 'solarized-dark t))
 #+END_SRC
 * Evil
 Evil complements the emacs ecosystem perfectly. The first thing I do is get this set up!
@@ -105,16 +98,14 @@ I like to throw in magit support and surround support too (kudos to Tim Pope as 
 * Expand Region
 #+BEGIN_SRC emacs-lisp
 (use-package expand-region
-  :bind
-  ("C-=" . er/expand-region))
+  :bind ("C-=" . er/expand-region))
 #+END_SRC
 * FlyCheck
 #+BEGIN_SRC emacs-lisp
 (use-package flycheck
   :diminish flycheck-mode
   :config
-  (require 'flycheck)
-  (global-flycheck-mode)
+  (add-hook 'prog-mode-hook 'flycheck-mode)
   (setq-default flycheck-disabled-checker 'javascript-jshint)
   (setq-default flycheck-disabled-checker 'json-jsonlist)
   (setq-default flycheck-javascript-eslint-executable "eslint-project-relative")
@@ -129,7 +120,6 @@ I like to throw in magit support and surround support too (kudos to Tim Pope as 
 (setq backup-directory-alist '(("." . "~/.emacs.d/backups")))
 (global-set-key (kbd "s-p") 'counsel-M-x)
 #+END_SRC
-
 * Helper Functions
 #+BEGIN_SRC emacs-lisp
 ;; OSX fix for eslint lookup
@@ -223,12 +213,12 @@ If the universal prefix argument is used then will the windows too."
 * Magit
 #+BEGIN_SRC emacs-lisp
 (use-package magit
-  :config
+  :commands magit-status
+  :init
   (use-package evil-magit)
   (evil-leader/set-key
    "gs" 'magit-status))
 #+END_SRC
-
 * Markdown
 #+begin_src emacs-lisp
 (use-package markdown-mode
@@ -316,7 +306,6 @@ Just give me nice bullet points!
 #+BEGIN_SRC emacs-lisp
 (use-package smartparens)
 #+END_SRC
-
 * Snippets
 #+BEGIN_SRC emacs-lisp
 (use-package yasnippet

@@ -11,6 +11,9 @@
 (setq custom-file "~/.emacs.d/custom-settings.el")
 (load custom-file t)
 
+(setq user-full-name "Clint Ryan"
+      user-mail-address "")
+
 (global-linum-mode 1)
 (scroll-bar-mode -1)
 (setq inhibit-startup-message t)
@@ -19,22 +22,14 @@
 (tool-bar-mode -1)
 (fset 'yes-or-no-p 'y-or-n-p)
 
-(use-package ace-window
-  :init
-  (progn
-    (global-set-key [remap other-window] 'ace-window)
-    (custom-set-faces
-     '(aw-leading-char-face
-      ((t (:inherit ace-jump-face-foreground :height 3.0)))))))
-
 (use-package company-mode
+  :mode 
   :diminish company-mode
-  :init
-  (global-company-mode t))
+  :config (add-hook 'prog-mode-hook 'company-mode))
 
 (use-package solarized-theme
-  :init 
-    (load-theme 'solarized-dark t))
+  :config
+  (load-theme 'solarized-dark t))
 
 (use-package evil
   :diminish evil-mode
@@ -77,14 +72,12 @@
   (global-evil-surround-mode))
 
 (use-package expand-region
-  :bind
-  ("C-=" . er/expand-region))
+  :bind ("C-=" . er/expand-region))
 
 (use-package flycheck
   :diminish flycheck-mode
   :config
-  (require 'flycheck)
-  (global-flycheck-mode)
+  (add-hook 'prog-mode-hook 'flycheck-mode)
   (setq-default flycheck-disabled-checker 'javascript-jshint)
   (setq-default flycheck-disabled-checker 'json-jsonlist)
   (setq-default flycheck-javascript-eslint-executable "eslint-project-relative")
@@ -178,7 +171,8 @@ If the universal prefix argument is used then will the windows too."
   (add-hook 'js-mode-hook 'tern-mode))
 
 (use-package magit
-  :config
+  :commands magit-status
+  :init
   (use-package evil-magit)
   (evil-leader/set-key
    "gs" 'magit-status))
