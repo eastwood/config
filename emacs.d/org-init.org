@@ -1,4 +1,18 @@
 #+STARTUP: overview
+* Startup
+#+BEGIN_SRC emacs-lisp
+(require 'package)
+(package-initialize)
+(setq package-enable-at-startup nil)
+(add-to-list 'package-archives
+	     '("melpa" . "https://melpa.org/packages/"))
+;; Bootstrap `use-package'
+(unless (package-installed-p 'use-package)
+	(package-refresh-contents)
+	(package-install 'use-package))
+(setq custom-file "~/.emacs.d/custom-settings.el")
+(load custom-file t)
+#+END_SRC
 * Interface
 Just some nice user interfaces tweaks. Bread and butter stuff!
 #+BEGIN_SRC emacs-lisp

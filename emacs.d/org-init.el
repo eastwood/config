@@ -1,4 +1,16 @@
 
+(require 'package)
+(package-initialize)
+(setq package-enable-at-startup nil)
+(add-to-list 'package-archives
+             '("melpa" . "https://melpa.org/packages/"))
+;; Bootstrap `use-package'
+(unless (package-installed-p 'use-package)
+        (package-refresh-contents)
+        (package-install 'use-package))
+(setq custom-file "~/.emacs.d/custom-settings.el")
+(load custom-file t)
+
 (global-linum-mode 1)
 (scroll-bar-mode -1)
 (setq inhibit-startup-message t)
