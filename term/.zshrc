@@ -5,6 +5,7 @@
 export ZSH=/Users/cryan/.oh-my-zsh
 export EDITOR="mvim -v"
 export TERM='xterm-256color'
+export GOPATH='/Users/cryan/Workspace/go'
 alias flushdns="mDNSResponder -HUP"
 alias vim="mvim -v"
 alias ec="emacsclient -q -c -n"
@@ -15,7 +16,7 @@ alias mux=tmuxinator
 alias rqpauth="~/Workspace/nib.com.au/bin/rqp auth"
 alias dockerlogin="AWS_REGION='us-east-1' AWS_DEFAULT_REGION='us-east-1' aws ecr get-login --registry-ids 441581275790 | sh"
 alias aws-login="rqpauth && dockerlogin"
-export MONO_FRAMEWORK="/Library/Frameworks/Mono.framework/Versions/Current/bin/"
+export MONO_FRAMEWORK="/Library/Frameworks/Mono.framework/Versions/Current/bin"
 
 # Set name of the theme to load. Optionally, if you set this to "random"
 # it'll load a random theme each time that oh-my-zsh is loaded.
@@ -69,8 +70,10 @@ plugins=(git tmuxinator nvm)
 source $ZSH/oh-my-zsh.sh
 
 # User configuration
+#
+export PYTHON_PATH='~/Library/Python/3.6/bin'
 
-export PATH=/usr/local/bin:~/Library/Python/3.6/bin/:$MONO_FRAMEWORK:$PATH
+export PATH=/usr/local/bin:$PYTHON_PATH:$MONO_FRAMEWORK:$GOPATH/bin:$PATH
 # export MANPATH="/usr/local/man:$MANPATH"
 
 # You may need to manually set your language environment

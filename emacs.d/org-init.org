@@ -23,14 +23,13 @@ I usually don't have many split windows, but ace makes it super convenient to na
       ((t (:inherit ace-jump-face-foreground :height 3.0)))))))
 #+END_SRC
   
-* Autocomplete
+* Company
 #+BEGIN_SRC emacs-lisp
-(use-package auto-complete
-  :diminish auto-complete-mode
+(use-package company-mode
+  :diminish company-mode
   :ensure t
   :init
-  (ac-config-default)
-  (global-auto-complete-mode t))
+  (global-company-mode t))
 #+END_SRC
 * Color Theme
 Solarized everything!
@@ -107,8 +106,8 @@ I like to throw in magit support and surround support too (kudos to Tim Pope as 
   (setq-default flycheck-disabled-checker 'javascript-jshint)
   (setq-default flycheck-disabled-checker 'json-jsonlist)
   (setq-default flycheck-javascript-eslint-executable "eslint-project-relative")
- (with-eval-after-load 'flycheck
-  (advice-add 'flycheck-eslint-config-exists-p :override (lambda() t))) (flycheck-add-mode 'javascript-eslint 'web-mode))
+  (with-eval-after-load 'flycheck
+    (advice-add 'flycheck-eslint-config-exists-p :override (lambda() t))) (flycheck-add-mode 'javascript-eslint 'web-mode))
 #+END_SRC
 * General 
 #+BEGIN_SRC emacs-lisp
@@ -116,6 +115,7 @@ I like to throw in magit support and surround support too (kudos to Tim Pope as 
 (global-set-key (kbd "<f5>") 'revert-buffer)
 (global-set-key (kbd "<f12>") 'ansi-term)
 (setq backup-directory-alist '(("." . "~/.emacs.d/backups")))
+(global-set-key (kbd "s-p") 'counsel-M-x)
 #+END_SRC
 
 * Helper Functions
@@ -174,6 +174,13 @@ If the universal prefix argument is used then will the windows too."
   ("M-x" . counsel-M-x)
   ("C-x C-f" . counsel-find-file))
 #+END_SRC
+* C#
+#+BEGIN_SRC emacs-lisp
+(use-package omnisharp
+  :ensure t
+  :config
+  (add-hook 'csharp-mode-hook 'omnisharp-mode))
+#+END_SRC 
 * Javascript
 #+BEGIN_SRC emacs-lisp
 (use-package json-mode
@@ -195,6 +202,15 @@ If the universal prefix argument is used then will the windows too."
     (setq web-mode-css-indent-offset 2)
     (setq web-mode-code-indent-offset 2))
   (add-hook 'web-mode-hook  'my-web-mode-hook))
+(use-package company-tern
+  :ensure t
+  :config
+  (add-to-list 'company-backends 'company-tern))
+(use-package tern
+  :diminish tern-mode
+  :ensure t
+  :config
+  (add-hook 'js-mode-hook 'tern-mode))
 #+END_SRC
 * Magit
 #+BEGIN_SRC emacs-lisp
@@ -284,7 +300,6 @@ Just give me nice bullet points!
   :diminish projectile-mode
   :ensure t
   :commands (projectile-find-file projectile-switch-project)
-  :bind ("s-p" . projectile-find-file)
   :init
   (evil-leader/set-key
     "pf" 'projectile-find-file
@@ -314,18 +329,6 @@ Just give me nice bullet points!
    "in" 'yas-new-snippet)
   (yas-global-mode 1))
 #+END_SRC
-* Tern
-#+BEGIN_SRC emacs-lisp
-(use-package tern-auto-complete
-  :ensure t
-  :config
-  (tern-ac-setup))
-(use-package tern
-  :diminish tern-mode
-  :ensure t
-  :config
-  (add-hook 'js-mode-hook 'tern-mode))
-#+END_SRC 
 * Which Key
 Awesome package for key discovery!
 #+BEGIN_SRC emacs-lisp

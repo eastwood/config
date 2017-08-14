@@ -11,7 +11,7 @@ Plug 'scrooloose/nerdtree' " File tree
 Plug 'pangloss/vim-javascript' " Javascript support
 Plug 'mxw/vim-jsx' " JSX support
 Plug 'ternjs/tern_for_vim' " Javascript autocomplete
-Plug 'ajh17/VimCompletesMe' " Lightweight tab completion
+Plug 'lifepillar/vim-mucomplete'
 Plug 'w0rp/ale' " Linting engine
 Plug 'altercation/vim-colors-solarized' " Solar powered colorschemes
 Plug 'rakr/vim-one'
@@ -23,8 +23,7 @@ set nocompatible
 let mapleader = " "
 
 set clipboard=unnamed " system clipboard
-
-set completeopt=menu,preview,longest
+set completeopt=menuone,preview,longest,noinsert
 set backspace=2
 set ttyfast
 set modelines=0
@@ -156,6 +155,9 @@ set nowrap
   let g:UltiSnipsExpandTrigger="<C-j>"
   let g:UltiSnipsJumpForwardTrigger="<C-j>"
   let g:UltiSnipsJumpBackwardTrigger="<C-k>"
+  inoremap <expr> <c-e> mucomplete#popup_exit("\<c-e>")
+  inoremap <expr> <c-y> mucomplete#popup_exit("\<c-y>")
+  inoremap <expr>  <cr> mucomplete#popup_exit("\<cr>")
 
   " Tern
   autocmd FileType javascript nnoremap <buffer> <F12> :TernDef<CR>
@@ -163,3 +165,6 @@ set nowrap
   " Ctrlp
   let g:ctrlp_working_path_mode = 'ra'
   let g:ctrlp_custom_ignore='node_modules\|dist'
+
+  " MuComplete
+  let g:mucomplete#enable_auto_at_startup = 1

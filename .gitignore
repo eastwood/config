@@ -10,3 +10,5 @@ npm-debug.log
 /emacs.d/projectile-bookmarks.eld
 /emacs.d/elpa/ace-window-20170421.428/ace-window-autoloads.el
 /emacs.d/network-security.data
+/term/tmuxinator/arhi-sales.yml
+/term/tmuxinator/*.yml

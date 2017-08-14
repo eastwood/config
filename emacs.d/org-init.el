@@ -16,12 +16,11 @@
      '(aw-leading-char-face
       ((t (:inherit ace-jump-face-foreground :height 3.0)))))))
 
-(use-package auto-complete
-  :diminish auto-complete-mode
+(use-package company-mode
+  :diminish company-mode
   :ensure t
   :init
-  (ac-config-default)
-  (global-auto-complete-mode t))
+  (global-company-mode t))
 
 (use-package solarized-theme
   :ensure t
@@ -85,13 +84,14 @@
   (setq-default flycheck-disabled-checker 'javascript-jshint)
   (setq-default flycheck-disabled-checker 'json-jsonlist)
   (setq-default flycheck-javascript-eslint-executable "eslint-project-relative")
- (with-eval-after-load 'flycheck
-  (advice-add 'flycheck-eslint-config-exists-p :override (lambda() t))) (flycheck-add-mode 'javascript-eslint 'web-mode))
+  (with-eval-after-load 'flycheck
+    (advice-add 'flycheck-eslint-config-exists-p :override (lambda() t))) (flycheck-add-mode 'javascript-eslint 'web-mode))
 
 (setq-default indent-tabs-mode nil)
 (global-set-key (kbd "<f5>") 'revert-buffer)
 (global-set-key (kbd "<f12>") 'ansi-term)
 (setq backup-directory-alist '(("." . "~/.emacs.d/backups")))
+(global-set-key (kbd "s-p") 'counsel-M-x)
 
 ;; OSX fix for eslint lookup
 (use-package exec-path-from-shell
@@ -143,6 +143,11 @@ If the universal prefix argument is used then will the windows too."
   ("M-x" . counsel-M-x)
   ("C-x C-f" . counsel-find-file))
 
+(use-package omnisharp
+  :ensure t
+  :config
+  (add-hook 'csharp-mode-hook 'omnisharp-mode))
+
 (use-package json-mode
   :ensure t)
 (use-package js2-mode
@@ -162,6 +167,15 @@ If the universal prefix argument is used then will the windows too."
     (setq web-mode-css-indent-offset 2)
     (setq web-mode-code-indent-offset 2))
   (add-hook 'web-mode-hook  'my-web-mode-hook))
+(use-package company-tern
+  :ensure t
+  :config
+  (add-to-list 'company-backends 'company-tern))
+(use-package tern
+  :diminish tern-mode
+  :ensure t
+  :config
+  (add-hook 'js-mode-hook 'tern-mode))
 
 (use-package magit
   :ensure t
@@ -237,7 +251,6 @@ If the universal prefix argument is used then will the windows too."
   :diminish projectile-mode
   :ensure t
   :commands (projectile-find-file projectile-switch-project)
-  :bind ("s-p" . projectile-find-file)
   :init
   (evil-leader/set-key
     "pf" 'projectile-find-file
@@ -261,16 +274,6 @@ If the universal prefix argument is used then will the windows too."
    "is" 'yas-insert-snippet
    "in" 'yas-new-snippet)
   (yas-global-mode 1))
-
-(use-package tern-auto-complete
-  :ensure t
-  :config
-  (tern-ac-setup))
-(use-package tern
-  :diminish tern-mode
-  :ensure t
-  :config
-  (add-hook 'js-mode-hook 'tern-mode))
 
 (use-package which-key
   :ensure t 
