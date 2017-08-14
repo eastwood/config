@@ -103,6 +103,10 @@
   (when (memq window-system '(mac ns))
     (exec-path-from-shell-initialize)))
 
+(defun init-install()
+  (setq use-package-always-ensure t)
+  reload-config-file())
+
 (defun neotree-find-project-root()
   (interactive)
   (if (neo-global--window-exists-p)
