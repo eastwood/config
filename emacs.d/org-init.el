@@ -8,7 +8,6 @@
 (fset 'yes-or-no-p 'y-or-n-p)
 
 (use-package ace-window
-  :ensure t
   :init
   (progn
     (global-set-key [remap other-window] 'ace-window)
@@ -18,24 +17,20 @@
 
 (use-package company-mode
   :diminish company-mode
-  :ensure t
   :init
   (global-company-mode t))
 
 (use-package solarized-theme
-  :ensure t
   :init 
     (load-theme 'solarized-dark t))
 
 (use-package evil
   :diminish evil-mode
-  :ensure t
   :init 
   (setq evil-want-C-u-scroll t)
   :config
   (evil-mode 1))
 (use-package evil-leader
-  :ensure t
   :config
   (evil-leader/set-leader "SPC")
   (evil-leader/set-key
@@ -66,18 +61,15 @@
    "ws" 'evil-window-split)
   (global-evil-leader-mode))
 (use-package evil-surround
-  :ensure t
   :config
   (global-evil-surround-mode))
 
 (use-package expand-region
-  :ensure t
   :bind
   ("C-=" . er/expand-region))
 
 (use-package flycheck
   :diminish flycheck-mode
-  :ensure t
   :config
   (require 'flycheck)
   (global-flycheck-mode)
@@ -95,7 +87,6 @@
 
 ;; OSX fix for eslint lookup
 (use-package exec-path-from-shell
-  :ensure t
   :config
   (when (memq window-system '(mac ns))
     (exec-path-from-shell-initialize)))
@@ -131,7 +122,6 @@ If the universal prefix argument is used then will the windows too."
     (message "Buffers deleted!")))
 
 (use-package counsel
-  :ensure t
   :diminish ivy-mode
   :config
   (ivy-mode 1)
@@ -144,21 +134,17 @@ If the universal prefix argument is used then will the windows too."
   ("C-x C-f" . counsel-find-file))
 
 (use-package omnisharp
-  :ensure t
   :config
   (add-hook 'csharp-mode-hook 'omnisharp-mode))
 
-(use-package json-mode
-  :ensure t)
+(use-package json-mode)
 (use-package js2-mode
   :diminish js2-mode
-  :ensure t
   :config
   (setq js2-basic-offset 2)
   (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
   (add-to-list 'auto-mode-alist '("\\.jsx\\'" . js2-jsx-mode)))
 (use-package web-mode
-  :ensure t
   :config
   (defun my-web-mode-hook ()
     "Hooks for Web mode. Adjust indents"
@@ -168,29 +154,23 @@ If the universal prefix argument is used then will the windows too."
     (setq web-mode-code-indent-offset 2))
   (add-hook 'web-mode-hook  'my-web-mode-hook))
 (use-package company-tern
-  :ensure t
   :config
   (add-to-list 'company-backends 'company-tern))
 (use-package tern
   :diminish tern-mode
-  :ensure t
   :config
   (add-hook 'js-mode-hook 'tern-mode))
 
 (use-package magit
-  :ensure t
   :config
-  (use-package evil-magit
-    :ensure t)
+  (use-package evil-magit)
   (evil-leader/set-key
    "gs" 'magit-status))
 
 (use-package markdown-mode
-  :ensure t
   :commands (markdown-mode))
 
 (use-package neotree
-  :ensure t
   :config
   ;; Some nice bindings for evil
   (evil-define-key 'normal neotree-mode-map (kbd "TAB") 'neotree-enter)
@@ -243,13 +223,11 @@ If the universal prefix argument is used then will the windows too."
              "* %?\nEntered on %U\n  %i\n  %a")))
 
 (use-package org-bullets
-  :ensure t
   :config
   (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
 
 (use-package projectile
   :diminish projectile-mode
-  :ensure t
   :commands (projectile-find-file projectile-switch-project)
   :init
   (evil-leader/set-key
@@ -261,11 +239,9 @@ If the universal prefix argument is used then will the windows too."
   (setq projectile-completion-system 'ivy)
   (projectile-global-mode))
 
-(use-package smartparens
-  :ensure t)
+(use-package smartparens)
 
 (use-package yasnippet
-  :ensure t
   :diminish yas-minor-mode
   :config
   (define-key yas-minor-mode-map (kbd "<tab>") nil)
@@ -276,6 +252,5 @@ If the universal prefix argument is used then will the windows too."
   (yas-global-mode 1))
 
 (use-package which-key
-  :ensure t 
   :config
   (which-key-mode))

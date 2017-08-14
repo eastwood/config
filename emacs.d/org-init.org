@@ -14,7 +14,6 @@ Just some nice user interfaces tweaks. Bread and butter stuff!
 I usually don't have many split windows, but ace makes it super convenient to navigate around windows and across frames
 #+BEGIN_SRC emacs-lisp
 (use-package ace-window
-  :ensure t
   :init
   (progn
     (global-set-key [remap other-window] 'ace-window)
@@ -27,7 +26,6 @@ I usually don't have many split windows, but ace makes it super convenient to na
 #+BEGIN_SRC emacs-lisp
 (use-package company-mode
   :diminish company-mode
-  :ensure t
   :init
   (global-company-mode t))
 #+END_SRC
@@ -35,7 +33,6 @@ I usually don't have many split windows, but ace makes it super convenient to na
 Solarized everything!
 #+BEGIN_SRC emacs-lisp
 (use-package solarized-theme
-  :ensure t
   :init 
     (load-theme 'solarized-dark t))
 #+END_SRC
@@ -47,13 +44,11 @@ I like to throw in magit support and surround support too (kudos to Tim Pope as 
 #+BEGIN_SRC emacs-lisp
 (use-package evil
   :diminish evil-mode
-  :ensure t
   :init 
   (setq evil-want-C-u-scroll t)
   :config
   (evil-mode 1))
 (use-package evil-leader
-  :ensure t
   :config
   (evil-leader/set-leader "SPC")
   (evil-leader/set-key
@@ -84,14 +79,12 @@ I like to throw in magit support and surround support too (kudos to Tim Pope as 
    "ws" 'evil-window-split)
   (global-evil-leader-mode))
 (use-package evil-surround
-  :ensure t
   :config
   (global-evil-surround-mode))
 #+END_SRC
 * Expand Region
 #+BEGIN_SRC emacs-lisp
 (use-package expand-region
-  :ensure t
   :bind
   ("C-=" . er/expand-region))
 #+END_SRC
@@ -99,7 +92,6 @@ I like to throw in magit support and surround support too (kudos to Tim Pope as 
 #+BEGIN_SRC emacs-lisp
 (use-package flycheck
   :diminish flycheck-mode
-  :ensure t
   :config
   (require 'flycheck)
   (global-flycheck-mode)
@@ -122,7 +114,6 @@ I like to throw in magit support and surround support too (kudos to Tim Pope as 
 #+BEGIN_SRC emacs-lisp
 ;; OSX fix for eslint lookup
 (use-package exec-path-from-shell
-  :ensure t
   :config
   (when (memq window-system '(mac ns))
     (exec-path-from-shell-initialize)))
@@ -162,7 +153,6 @@ If the universal prefix argument is used then will the windows too."
 * Ivy/Swiper
 #+BEGIN_SRC emacs-lisp
 (use-package counsel
-  :ensure t
   :diminish ivy-mode
   :config
   (ivy-mode 1)
@@ -177,23 +167,19 @@ If the universal prefix argument is used then will the windows too."
 * C#
 #+BEGIN_SRC emacs-lisp
 (use-package omnisharp
-  :ensure t
   :config
   (add-hook 'csharp-mode-hook 'omnisharp-mode))
 #+END_SRC 
 * Javascript
 #+BEGIN_SRC emacs-lisp
-(use-package json-mode
-  :ensure t)
+(use-package json-mode)
 (use-package js2-mode
   :diminish js2-mode
-  :ensure t
   :config
   (setq js2-basic-offset 2)
   (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
   (add-to-list 'auto-mode-alist '("\\.jsx\\'" . js2-jsx-mode)))
 (use-package web-mode
-  :ensure t
   :config
   (defun my-web-mode-hook ()
     "Hooks for Web mode. Adjust indents"
@@ -203,22 +189,18 @@ If the universal prefix argument is used then will the windows too."
     (setq web-mode-code-indent-offset 2))
   (add-hook 'web-mode-hook  'my-web-mode-hook))
 (use-package company-tern
-  :ensure t
   :config
   (add-to-list 'company-backends 'company-tern))
 (use-package tern
   :diminish tern-mode
-  :ensure t
   :config
   (add-hook 'js-mode-hook 'tern-mode))
 #+END_SRC
 * Magit
 #+BEGIN_SRC emacs-lisp
 (use-package magit
-  :ensure t
   :config
-  (use-package evil-magit
-    :ensure t)
+  (use-package evil-magit)
   (evil-leader/set-key
    "gs" 'magit-status))
 #+END_SRC
@@ -226,14 +208,12 @@ If the universal prefix argument is used then will the windows too."
 * Markdown
 #+begin_src emacs-lisp
 (use-package markdown-mode
-  :ensure t
   :commands (markdown-mode))
 #+end_src 
 * NeoTree
 We need an evil tree!
 #+BEGIN_SRC emacs-lisp
 (use-package neotree
-  :ensure t
   :config
   ;; Some nice bindings for evil
   (evil-define-key 'normal neotree-mode-map (kbd "TAB") 'neotree-enter)
@@ -290,7 +270,6 @@ We need an evil tree!
 Just give me nice bullet points!
 #+BEGIN_SRC emacs-lisp
 (use-package org-bullets
-  :ensure t
   :config
   (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
 #+END_SRC
@@ -298,7 +277,6 @@ Just give me nice bullet points!
 #+BEGIN_SRC emacs-lisp
 (use-package projectile
   :diminish projectile-mode
-  :ensure t
   :commands (projectile-find-file projectile-switch-project)
   :init
   (evil-leader/set-key
@@ -312,14 +290,12 @@ Just give me nice bullet points!
 #+END_SRC
 * Smart Parenthesis
 #+BEGIN_SRC emacs-lisp
-(use-package smartparens
-  :ensure t)
+(use-package smartparens)
 #+END_SRC
 
 * Snippets
 #+BEGIN_SRC emacs-lisp
 (use-package yasnippet
-  :ensure t
   :diminish yas-minor-mode
   :config
   (define-key yas-minor-mode-map (kbd "<tab>") nil)
@@ -333,7 +309,6 @@ Just give me nice bullet points!
 Awesome package for key discovery!
 #+BEGIN_SRC emacs-lisp
 (use-package which-key
-  :ensure t 
   :config
   (which-key-mode))
 #+END_SRC

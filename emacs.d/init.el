@@ -1,5 +1,4 @@
-;;; package --- Summary
-;;; Commentary:
+;;; package --- Summary ;;; Commentary:
 ;;; Sweet configuration file -> uses babel for loading org based config
 
 ;;; Code:
@@ -36,7 +35,7 @@
  '(org-agenda-files (quote ("~/Dropbox/notes/gtd.org")))
  '(package-selected-packages
    (quote
-    (company-tern company-mode omnisharp markdown-mode+ markdown-mode spacemacs-theme org-agenda yasnippet tern-auto-complete magit ivy counsel ace-window auto-complete org-bullets which-key use-package)))
+    (company-mode yasnippet which-key web-mode use-package tern-auto-complete solarized-theme smartparens projectile org-bullets omnisharp neotree markdown-mode json-mode js2-mode expand-region exec-path-from-shell evil-surround evil-magit evil-leader counsel company-tern ace-window)))
  '(pdf-view-midnight-colors (quote ("#DCDCCC" . "#383838")))
  '(vc-annotate-background "#2B2B2B")
  '(vc-annotate-color-map
