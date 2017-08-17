@@ -12,3 +12,6 @@ npm-debug.log
 /emacs.d/network-security.data
 /term/tmuxinator/arhi-sales.yml
 /term/tmuxinator/*.yml
+/emacs.d/org-init.el
+/emacs.d/custom-settings.el
+/emacs.d/custom-settings.el
