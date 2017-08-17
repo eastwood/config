@@ -178,13 +178,15 @@ If the universal prefix argument is used then will the windows too."
   ("M-x" . counsel-M-x)
   ("C-x C-f" . counsel-find-file))
 #+END_SRC
-* C#
+* Code
+  Our favourite languages!
+** C#
 #+BEGIN_SRC emacs-lisp
 (use-package omnisharp
   :config
   (add-hook 'csharp-mode-hook 'omnisharp-mode))
 #+END_SRC 
-* Javascript
+** Javascript
 #+BEGIN_SRC emacs-lisp
 (use-package json-mode)
 (use-package js2-mode
@@ -210,6 +212,12 @@ If the universal prefix argument is used then will the windows too."
   :config
   (add-hook 'js-mode-hook 'tern-mode))
 #+END_SRC
+** Rust
+ #+BEGIN_SRC emacs-lisp
+ (use-package rust-mode
+   :ensure t
+   :mode ("\\.rs\\'" . rust-mode))
+ #+END_SRC
 * Magit
 #+BEGIN_SRC emacs-lisp
 (use-package magit
