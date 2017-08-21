@@ -275,12 +275,13 @@ We need an evil tree!
     "md" 'org-deadline
     "me" 'org-set-effort
     "mn" 'org-narrow-to-subtree
-    "ow" 'widen)
+    "mw" 'widen)
 
 (evil-define-key 'normal org-mode-map
   ">" 'org-shiftmetaright
   "<" 'org-shiftmetaleft
-  "t" 'org-toggle-checkbox
+  "c" 'org-toggle-checkbox
+  "t" 'org-todo
   "gs" 'org-goto
 )
 (evil-leader/set-key-for-mode 'org-capture-mode "c" 'org-capture-finalize)
