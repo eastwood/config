@@ -38,9 +38,7 @@ Just some nice user interfaces tweaks. Bread and butter stuff!
 * Company
 #+BEGIN_SRC emacs-lisp
 (use-package company-mode
-  :mode 
-  :diminish company-mode
-  :config (add-hook 'prog-mode-hook 'company-mode))
+  :init (add-hook 'prog-mode-hook 'global-company-mode))
 #+END_SRC
 * Color Theme
 Solarized everything!
@@ -206,9 +204,9 @@ If the universal prefix argument is used then will the windows too."
   :config
   (add-to-list 'company-backends 'company-tern))
 (use-package tern
-  :diminish tern-mode
   :config
-  (add-hook 'js-mode-hook 'tern-mode))
+  (evil-leader/set-key-for-mode 'js2-mode "mf" 'tern-find-definition)
+  (add-hook 'js2-mode-hook 'tern-mode))
 #+END_SRC
 ** Rust
  #+BEGIN_SRC emacs-lisp

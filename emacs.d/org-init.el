@@ -23,9 +23,7 @@
 (fset 'yes-or-no-p 'y-or-n-p)
 
 (use-package company-mode
-  :mode 
-  :diminish company-mode
-  :config (add-hook 'prog-mode-hook 'company-mode))
+  :init (add-hook 'prog-mode-hook 'global-company-mode))
 
 (use-package solarized-theme
   :config
@@ -164,9 +162,9 @@ If the universal prefix argument is used then will the windows too."
   :config
   (add-to-list 'company-backends 'company-tern))
 (use-package tern
-  :diminish tern-mode
   :config
-  (add-hook 'js-mode-hook 'tern-mode))
+  (evil-leader/set-key-for-mode 'js2-mode "mf" 'tern-find-definition)
+  (add-hook 'js2-mode-hook 'tern-mode))
 
 (use-package rust-mode
   :ensure t
@@ -222,7 +220,7 @@ If the universal prefix argument is used then will the windows too."
     "md" 'org-deadline
     "me" 'org-set-effort
     "mn" 'org-narrow-to-subtree
-    "ow" 'widen)
+    "mw" 'widen)
 
 (evil-define-key 'normal org-mode-map
   ">" 'org-shiftmetaright
