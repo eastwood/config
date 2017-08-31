@@ -22,20 +22,24 @@
 (tool-bar-mode -1)
 (fset 'yes-or-no-p 'y-or-n-p)
 
-(use-package company-mode
+(use-package company
+  :ensure t
   :init (add-hook 'prog-mode-hook 'global-company-mode))
 
 (use-package solarized-theme
+  :ensure t
   :config
   (load-theme 'solarized-dark t))
 
 (use-package evil
+  :ensure t
   :diminish evil-mode
   :init 
   (setq evil-want-C-u-scroll t)
   :config
   (evil-mode 1))
 (use-package evil-leader
+  :ensure t
   :config
   (evil-leader/set-leader "SPC")
   (evil-leader/set-key
@@ -66,13 +70,16 @@
    "ws" 'evil-window-split)
   (global-evil-leader-mode))
 (use-package evil-surround
+  :ensure t
   :config
   (global-evil-surround-mode))
 
 (use-package expand-region
+  :ensure t
   :bind ("C-=" . er/expand-region))
 
 (use-package flycheck
+  :ensure t
   :diminish flycheck-mode
   :config
   (add-hook 'prog-mode-hook 'flycheck-mode)
@@ -90,6 +97,7 @@
 
 ;; OSX fix for eslint lookup
 (use-package exec-path-from-shell
+  :ensure t
   :config
   (when (memq window-system '(mac ns))
     (exec-path-from-shell-initialize)))
@@ -129,6 +137,7 @@ If the universal prefix argument is used then will the windows too."
     (message "Buffers deleted!")))
 
 (use-package counsel
+  :ensure t
   :diminish ivy-mode
   :config
   (ivy-mode 1)
@@ -139,17 +148,21 @@ If the universal prefix argument is used then will the windows too."
   ("s-f" . swiper))
 
 (use-package omnisharp
+  :ensure t
   :config
   (add-hook 'csharp-mode-hook 'omnisharp-mode))
 
-(use-package json-mode)
+(use-package json-mode
+  :ensure t)
 (use-package js2-mode
+  :ensure t
   :diminish js2-mode
   :config
   (setq js2-basic-offset 2)
   (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
   (add-to-list 'auto-mode-alist '("\\.jsx\\'" . js2-jsx-mode)))
 (use-package web-mode
+  :ensure t
   :config
   (defun my-web-mode-hook ()
     "Hooks for Web mode. Adjust indents"
@@ -159,9 +172,11 @@ If the universal prefix argument is used then will the windows too."
     (setq web-mode-code-indent-offset 2))
   (add-hook 'web-mode-hook  'my-web-mode-hook))
 (use-package company-tern
+  :ensure t
   :config
   (add-to-list 'company-backends 'company-tern))
 (use-package tern
+  :ensure t
   :config
   (evil-leader/set-key-for-mode 'js2-mode "mf" 'tern-find-definition)
   (add-hook 'js2-mode-hook 'tern-mode))
@@ -170,17 +185,32 @@ If the universal prefix argument is used then will the windows too."
   :ensure t
   :mode ("\\.rs\\'" . rust-mode))
 
+(use-package flycheck-rust
+  :ensure t)
+
+(use-package racer
+  :ensure t
+  :config
+  (evil-define-key 'insert rust-mode-map
+    (kbd "TAB") 'company-indent-or-complete-common)
+  (add-hook 'rust-mode-hook #'racer-mode)
+  (add-hook 'racer-mode-hook #'eldoc-mode))
+
 (use-package magit
+  :ensure t
   :commands magit-status
   :init
-  (use-package evil-magit)
+  (use-package evil-magit
+    :ensure t)
   (evil-leader/set-key
    "gs" 'magit-status))
 
 (use-package markdown-mode
+  :ensure t
   :commands (markdown-mode))
 
 (use-package neotree
+  :ensure t
   :config
   ;; Some nice bindings for evil
   (evil-define-key 'normal neotree-mode-map (kbd "TAB") 'neotree-enter)
@@ -240,12 +270,14 @@ If the universal prefix argument is used then will the windows too."
              "* %?\nEntered on %U\n  %i\n  %a")))
 
 (use-package org-bullets
+  :ensure t
   :config
   (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
 
 (setq org-use-speed-commands t)
 
 (use-package projectile
+  :ensure t
   :diminish projectile-mode
   :commands (projectile-find-file projectile-switch-project)
   :init
@@ -258,9 +290,11 @@ If the universal prefix argument is used then will the windows too."
   (setq projectile-completion-system 'ivy)
   (projectile-global-mode))
 
-(use-package smartparens)
+(use-package smartparens
+  :ensure t)
 
 (use-package yasnippet
+  :ensure t
   :diminish yas-minor-mode
   :config
   (define-key yas-minor-mode-map (kbd "<tab>") nil)
@@ -271,5 +305,6 @@ If the universal prefix argument is used then will the windows too."
   (yas-global-mode 1))
 
 (use-package which-key
+  :ensure t
   :config
   (which-key-mode))
