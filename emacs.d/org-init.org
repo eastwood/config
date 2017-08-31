@@ -37,13 +37,15 @@ Just some nice user interfaces tweaks. Bread and butter stuff!
 #+END_SRC
 * Company
 #+BEGIN_SRC emacs-lisp
-(use-package company-mode
+(use-package company
+  :ensure t
   :init (add-hook 'prog-mode-hook 'global-company-mode))
 #+END_SRC
 * Color Theme
 Solarized everything!
 #+BEGIN_SRC emacs-lisp
 (use-package solarized-theme
+  :ensure t
   :config
   (load-theme 'solarized-dark t))
 #+END_SRC
@@ -54,12 +56,14 @@ A lot of these keybindings have been heavily influenced from spacemacs.
 I like to throw in magit support and surround support too (kudos to Tim Pope as always).
 #+BEGIN_SRC emacs-lisp
 (use-package evil
+  :ensure t
   :diminish evil-mode
   :init 
   (setq evil-want-C-u-scroll t)
   :config
   (evil-mode 1))
 (use-package evil-leader
+  :ensure t
   :config
   (evil-leader/set-leader "SPC")
   (evil-leader/set-key
@@ -90,17 +94,20 @@ I like to throw in magit support and surround support too (kudos to Tim Pope as 
    "ws" 'evil-window-split)
   (global-evil-leader-mode))
 (use-package evil-surround
+  :ensure t
   :config
   (global-evil-surround-mode))
 #+END_SRC
 * Expand Region
 #+BEGIN_SRC emacs-lisp
 (use-package expand-region
+  :ensure t
   :bind ("C-=" . er/expand-region))
 #+END_SRC
 * FlyCheck
 #+BEGIN_SRC emacs-lisp
 (use-package flycheck
+  :ensure t
   :diminish flycheck-mode
   :config
   (add-hook 'prog-mode-hook 'flycheck-mode)
@@ -122,6 +129,7 @@ I like to throw in magit support and surround support too (kudos to Tim Pope as 
 #+BEGIN_SRC emacs-lisp
 ;; OSX fix for eslint lookup
 (use-package exec-path-from-shell
+  :ensure t
   :config
   (when (memq window-system '(mac ns))
     (exec-path-from-shell-initialize)))
@@ -165,6 +173,7 @@ If the universal prefix argument is used then will the windows too."
 * Ivy/Swiper
 #+BEGIN_SRC emacs-lisp
 (use-package counsel
+  :ensure t
   :diminish ivy-mode
   :config
   (ivy-mode 1)
@@ -179,19 +188,23 @@ If the universal prefix argument is used then will the windows too."
 ** C#
 #+BEGIN_SRC emacs-lisp
 (use-package omnisharp
+  :ensure t
   :config
   (add-hook 'csharp-mode-hook 'omnisharp-mode))
 #+END_SRC 
 ** Javascript
 #+BEGIN_SRC emacs-lisp
-(use-package json-mode)
+(use-package json-mode
+  :ensure t)
 (use-package js2-mode
+  :ensure t
   :diminish js2-mode
   :config
   (setq js2-basic-offset 2)
   (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
   (add-to-list 'auto-mode-alist '("\\.jsx\\'" . js2-jsx-mode)))
 (use-package web-mode
+  :ensure t
   :config
   (defun my-web-mode-hook ()
     "Hooks for Web mode. Adjust indents"
@@ -201,9 +214,11 @@ If the universal prefix argument is used then will the windows too."
     (setq web-mode-code-indent-offset 2))
   (add-hook 'web-mode-hook  'my-web-mode-hook))
 (use-package company-tern
+  :ensure t
   :config
   (add-to-list 'company-backends 'company-tern))
 (use-package tern
+  :ensure t
   :config
   (evil-leader/set-key-for-mode 'js2-mode "mf" 'tern-find-definition)
   (add-hook 'js2-mode-hook 'tern-mode))
@@ -213,25 +228,41 @@ If the universal prefix argument is used then will the windows too."
  (use-package rust-mode
    :ensure t
    :mode ("\\.rs\\'" . rust-mode))
+
+ (use-package flycheck-rust
+   :ensure t)
+ 
+ (use-package racer
+   :ensure t
+   :config
+   (evil-define-key 'insert rust-mode-map
+     (kbd "TAB") 'company-indent-or-complete-common)
+   (add-hook 'rust-mode-hook #'racer-mode)
+   (add-hook 'racer-mode-hook #'eldoc-mode))
+
  #+END_SRC
 * Magit
 #+BEGIN_SRC emacs-lisp
 (use-package magit
+  :ensure t
   :commands magit-status
   :init
-  (use-package evil-magit)
+  (use-package evil-magit
+    :ensure t)
   (evil-leader/set-key
    "gs" 'magit-status))
 #+END_SRC
 * Markdown
 #+begin_src emacs-lisp
 (use-package markdown-mode
+  :ensure t
   :commands (markdown-mode))
 #+end_src 
 * NeoTree
 We need an evil tree!
 #+BEGIN_SRC emacs-lisp
 (use-package neotree
+  :ensure t
   :config
   ;; Some nice bindings for evil
   (evil-define-key 'normal neotree-mode-map (kbd "TAB") 'neotree-enter)
@@ -295,6 +326,7 @@ We need an evil tree!
 Just give me nice bullet points!
 #+BEGIN_SRC emacs-lisp
 (use-package org-bullets
+  :ensure t
   :config
   (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
 #+END_SRC
@@ -307,6 +339,7 @@ Create speed commands for editing org files
 * Projectile
 #+BEGIN_SRC emacs-lisp
 (use-package projectile
+  :ensure t
   :diminish projectile-mode
   :commands (projectile-find-file projectile-switch-project)
   :init
@@ -321,11 +354,13 @@ Create speed commands for editing org files
 #+END_SRC
 * Smart Parenthesis
 #+BEGIN_SRC emacs-lisp
-(use-package smartparens)
+(use-package smartparens
+  :ensure t)
 #+END_SRC
 * Snippets
 #+BEGIN_SRC emacs-lisp
 (use-package yasnippet
+  :ensure t
   :diminish yas-minor-mode
   :config
   (define-key yas-minor-mode-map (kbd "<tab>") nil)
@@ -339,6 +374,7 @@ Create speed commands for editing org files
 Awesome package for key discovery!
 #+BEGIN_SRC emacs-lisp
 (use-package which-key
+  :ensure t
   :config
   (which-key-mode))
 #+END_SRC

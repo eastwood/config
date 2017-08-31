@@ -16,6 +16,7 @@ Plug 'altercation/vim-colors-solarized' " Solar powered colorschemes
 Plug 'rakr/vim-one'
 Plug 'kien/ctrlp.vim'
 Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets' " Snippets
+Plug 'OmniSharp/omnisharp-vim'
 call plug#end()
 
 set nocompatible
