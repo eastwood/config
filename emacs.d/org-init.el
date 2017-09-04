@@ -186,7 +186,9 @@ If the universal prefix argument is used then will the windows too."
   :mode ("\\.rs\\'" . rust-mode))
 
 (use-package flycheck-rust
-  :ensure t)
+  :ensure t
+  :config
+  (add-hook 'flycheck-mode-hook #'flycheck-rust-setup))
 
 (use-package racer
   :ensure t
@@ -195,6 +197,15 @@ If the universal prefix argument is used then will the windows too."
     (kbd "TAB") 'company-indent-or-complete-common)
   (add-hook 'rust-mode-hook #'racer-mode)
   (add-hook 'racer-mode-hook #'eldoc-mode))
+
+ (use-package cargo
+   :ensure t
+   :config
+   (add-hook 'rust-mode-hook 'cargo-minor-mode)
+   (evil-leader/set-key-for-mode 'rust-mode
+     "mb" 'cargo-process-build
+     "mr" 'cargo-process-run
+     "mt" 'cargo-process-test))
 
 (use-package magit
   :ensure t

@@ -44,7 +44,7 @@
  '(org-agenda-files (quote ("~/Dropbox/notes/gtd.org")))
  '(package-selected-packages
    (quote
-    (flycheck-rust racer magit flycheck evil rust-mode yasnippet yaml-mode which-key web-mode use-package tern-auto-complete solarized-theme smartparens projectile org-bullets omnisharp neotree markdown-mode json-mode js2-mode expand-region exec-path-from-shell evil-surround evil-magit evil-leader counsel company-tern ace-window)))
+    (cargo flycheck-rust racer magit flycheck evil rust-mode yasnippet yaml-mode which-key web-mode use-package tern-auto-complete solarized-theme smartparens projectile org-bullets omnisharp neotree markdown-mode json-mode js2-mode expand-region exec-path-from-shell evil-surround evil-magit evil-leader counsel company-tern ace-window)))
  '(pos-tip-background-color "#073642")
  '(pos-tip-foreground-color "#93a1a1")
  '(smartrep-mode-line-active-bg (solarized-color-blend "#859900" "#073642" 0.2))
