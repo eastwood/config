@@ -246,11 +246,23 @@ If the universal prefix argument is used then will the windows too."
 (setq org-global-properties '(("Effort_ALL". "0 0:10 0:20 0:30 1:00 2:00 3:00 4:00 6:00 8:00")))
 (setq org-columns-default-format '"%25ITEM %10Effort(Est){+} %TODO %TAGS")
 (org-agenda-files '"~/Dropbox/notes/gtd.org")
-
 (setq org-tag-alist '((:startgroup . nil)
-                      ("WORK" . ?w) ("HOME" . ?h)
                       (:endgroup . nil)
-                      ("COMPUTER" . ?l) ("MOVIES" . ?m) ("READING" . ?r) ("PROJECT" . ?p)))
+                      ("WORK" . ?w) ("HOME" . ?h) ("COMPUTER" . ?l) ("GOALS" . ?g) ("READING" . ?r) ("PROJECT" . ?p)))
+(setq org-agenda-custom-commands
+      '(("g" . "GTD contexts")
+        ("gw" "Work" tags-todo "WORK")
+        ("gc" "Computer" tags-todo "COMPUTER")
+        ("gg" "Goals" tags-todo "GOALS")
+        ("gh" "Home" tags-todo "HOME")
+        ("gt" "Tasks" tags-todo "TASKS")
+        ("G" "GTD Block Agenda"
+         ((tags-todo "WORK")
+          (tags-todo "COMPUTER")
+          (tags-todo "GOALS")
+          (tags-todo "TASKS"))
+         nil                      ;; i.e., no local settings
+         )))
 (evil-leader/set-key
     "oc" 'org-capture
     "oa" 'org-agenda
@@ -261,6 +273,7 @@ If the universal prefix argument is used then will the windows too."
     "md" 'org-deadline
     "me" 'org-set-effort
     "mn" 'org-narrow-to-subtree
+    "mr" 'org-refile
     "mw" 'widen)
 
 (evil-define-key 'normal org-mode-map
@@ -276,6 +289,8 @@ If the universal prefix argument is used then will the windows too."
       '(("t" "Todo" entry (file+headline "~/Dropbox/notes/gtd.org" "Inbox")
              "* TODO %?\n%T" :prepend T)
         ("i" "Ideas" entry (file+headline "~/Dropbox/notes/gtd.org" "Ideas")
+             "* %?\n%T" :prepend T)
+        ("g" "Goals" entry (file+headline "~/Dropbox/notes/gtd.org" "Goals")
              "* %?\n%T" :prepend T)
         ("j" "Journal" entry (file+datetree "~/Dropbox/notes/journal.org")
              "* %?\nEntered on %U\n  %i\n  %a")))
