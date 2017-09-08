@@ -221,6 +221,7 @@ If the universal prefix argument is used then will the windows too."
   :ensure t
   :config
   (evil-leader/set-key-for-mode 'js2-mode "mf" 'tern-find-definition)
+  (evil-leader/set-key-for-mode 'js2-jsx-mode "mf" 'tern-find-definition)
   (add-hook 'js2-mode-hook 'tern-mode))
 #+END_SRC
 ** Rust
