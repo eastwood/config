@@ -53,7 +53,7 @@ Solarized everything!
 Evil complements the emacs ecosystem perfectly. The first thing I do is get this set up!
 It's super important to have the leader keymap as well, so that I can perform all my combinations super fast.
 A lot of these keybindings have been heavily influenced from spacemacs.
-I like to throw in magit support and surround support too (kudos to Tim Pope as always).
+I like to throw in magit support and surround support too.
 #+BEGIN_SRC emacs-lisp
 (use-package evil
   :ensure t
@@ -276,21 +276,25 @@ We need an evil tree!
 (use-package neotree
   :ensure t
   :config
-  ;; Some nice bindings for evil
-  (evil-define-key 'normal neotree-mode-map (kbd "TAB") 'neotree-enter)
-  (evil-define-key 'normal neotree-mode-map (kbd "H") 'neotree-hidden-file-toggle)
-  (evil-define-key 'normal neotree-mode-map (kbd "q") 'neotree-hide)
-  (evil-define-key 'normal neotree-mode-map (kbd "RET") 'neotree-enter)
-  (evil-leader/set-key-for-mode 'neotree-mode "mo" 'neotree-open-file-in-system-application)
-  (evil-leader/set-key-for-mode 'neotree-mode "md" 'neotree-delete-node)
-  (evil-leader/set-key-for-mode 'neotree-mode "mr" 'neotree-rename-node)
-  (evil-leader/set-key-for-mode 'neotree-mode "mc" 'neotree-create-node)
+  (evil-define-key 'normal neotree-mode-map 
+    (kbd "TAB") 'neotree-enter
+    "H" 'neotree-hidden-file-toggle
+    "q" 'neotree-hide
+    (kbd "RET") 'neotree-enter)
+
+  (evil-leader/set-key-for-mode 'neotree-mode 
+    "mo" 'neotree-open-file-in-system-application
+    "md" 'neotree-delete-node
+    "mr" 'neotree-rename-node
+    "mc" 'neotree-create-node)
+
   (setq neo-theme 'nerd)
   (setq neo-window-fixed-size nil)
   (setq neo-smart-open t))
   (setq neo-window-width 40)
   (setq neo-default-system-application "open")
 #+END_SRC
+
 * Org
 #+BEGIN_SRC emacs-lisp
 (require 'org-agenda)

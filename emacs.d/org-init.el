@@ -224,15 +224,18 @@ If the universal prefix argument is used then will the windows too."
 (use-package neotree
   :ensure t
   :config
-  ;; Some nice bindings for evil
-  (evil-define-key 'normal neotree-mode-map (kbd "TAB") 'neotree-enter)
-  (evil-define-key 'normal neotree-mode-map (kbd "H") 'neotree-hidden-file-toggle)
-  (evil-define-key 'normal neotree-mode-map (kbd "q") 'neotree-hide)
-  (evil-define-key 'normal neotree-mode-map (kbd "RET") 'neotree-enter)
-  (evil-leader/set-key-for-mode 'neotree-mode "mo" 'neotree-open-file-in-system-application)
-  (evil-leader/set-key-for-mode 'neotree-mode "md" 'neotree-delete-node)
-  (evil-leader/set-key-for-mode 'neotree-mode "mr" 'neotree-rename-node)
-  (evil-leader/set-key-for-mode 'neotree-mode "mc" 'neotree-create-node)
+  (evil-define-key 'normal neotree-mode-map 
+    (kbd "TAB") 'neotree-enter
+    "H" 'neotree-hidden-file-toggle
+    "q" 'neotree-hide
+    (kbd "RET") 'neotree-enter)
+
+  (evil-leader/set-key-for-mode 'neotree-mode 
+    "mo" 'neotree-open-file-in-system-application
+    "md" 'neotree-delete-node
+    "mr" 'neotree-rename-node
+    "mc" 'neotree-create-node)
+
   (setq neo-theme 'nerd)
   (setq neo-window-fixed-size nil)
   (setq neo-smart-open t))
