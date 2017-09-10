@@ -1,14 +1,14 @@
-
 (require 'package)
 (package-initialize)
 (setq package-enable-at-startup nil)
 (add-to-list 'package-archives
-             '("melpa" . "https://melpa.org/packages/"))
+	     '("melpa" . "https://melpa.org/packages/"))
 ;; Bootstrap `use-package'
 (unless (package-installed-p 'use-package)
-        (package-refresh-contents)
-        (package-install 'use-package))
+	(package-refresh-contents)
+	(package-install 'use-package))
 (setq custom-file "~/.emacs.d/custom-settings.el")
+(load-file "~/Dropbox/Keys/emacs_secret.el")
 (load custom-file t)
 
 (setq user-full-name "Clint Ryan"
@@ -179,6 +179,7 @@ If the universal prefix argument is used then will the windows too."
   :ensure t
   :config
   (evil-leader/set-key-for-mode 'js2-mode "mf" 'tern-find-definition)
+  (evil-leader/set-key-for-mode 'js2-jsx-mode "mf" 'tern-find-definition)
   (add-hook 'js2-mode-hook 'tern-mode))
 
 (use-package rust-mode
@@ -301,6 +302,14 @@ If the universal prefix argument is used then will the windows too."
   (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
 
 (setq org-use-speed-commands t)
+
+(use-package org-gcal
+  :ensure t
+  :config 
+  (setq org-gcal-client-id "95243140966-d8b059mb4ug8a996ecgie0ovkpjmsk7q.apps.googleusercontent.com"
+      org-gcal-client-secret '(my/google-secrets())
+      org-gcal-file-alist '(("clint.ryan3@gmail.com" .  "~/Dropbox/notes/calendar.org")))
+)
 
 (use-package projectile
   :ensure t

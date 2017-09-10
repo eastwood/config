@@ -1,4 +1,3 @@
-#+STARTUP: overview
 * Init
 This is our initialisation script. This basically sets MELPA packages and ensures that user-package is installed
 on first install. On first install it's worth setting:
@@ -17,6 +16,7 @@ on first install. On first install it's worth setting:
 	(package-refresh-contents)
 	(package-install 'use-package))
 (setq custom-file "~/.emacs.d/custom-settings.el")
+(load-file "~/Dropbox/Keys/emacs_secret.el")
 (load custom-file t)
 #+END_SRC
 * Personal Information
@@ -363,6 +363,16 @@ Create speed commands for editing org files
 (setq org-use-speed-commands t)
 #+END_SRC
 
+Setup google calendar sync
+#+BEGIN_SRC emacs-lisp
+(use-package org-gcal
+  :ensure t
+  :config 
+  (setq org-gcal-client-id "95243140966-d8b059mb4ug8a996ecgie0ovkpjmsk7q.apps.googleusercontent.com"
+      org-gcal-client-secret '(my/google-secrets())
+      org-gcal-file-alist '(("clint.ryan3@gmail.com" .  "~/Dropbox/notes/calendar.org")))
+)
+#+END_SRC
 * Projectile
 #+BEGIN_SRC emacs-lisp
 (use-package projectile
