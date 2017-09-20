@@ -312,7 +312,6 @@ We need an evil tree!
   (setq neo-window-width 40)
   (setq neo-default-system-application "open")
 #+END_SRC
-
 * Org
 #+BEGIN_SRC emacs-lisp
 (require 'org-agenda)
@@ -358,10 +357,12 @@ We need an evil tree!
   "<" 'org-shiftmetaleft
   "c" 'org-toggle-checkbox
   "t" 'org-todo
-  "gs" 'org-goto
-)
-(evil-leader/set-key-for-mode 'org-capture-mode "c" 'org-capture-finalize)
-(evil-leader/set-key-for-mode 'org-capture-mode "k" 'org-capture-kill)
+  "gs" 'org-goto)
+
+(evil-leader/set-key-for-mode 'org-capture-mode 
+  "c" 'org-capture-finalize
+  "k" 'org-capture-kill)
+
 (setq org-capture-templates
       '(("t" "Todo" entry (file+headline "~/Dropbox/notes/gtd.org" "Inbox")
              "* TODO %?\n%T" :prepend T)
