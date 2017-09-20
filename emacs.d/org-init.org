@@ -18,10 +18,6 @@ on first install. On first install it's worth setting:
 (setq custom-file "~/.emacs.d/custom-settings.el")
 (load custom-file t)
 #+END_SRC
-Loads shared and local secrets
-#+BEGIN_SRC emacs-lisp
-(load-file "~/.emacs.d/secrets/gcal.el")
-#+END_SRC
 * Personal Information
 #+BEGIN_SRC emacs-lisp
 (setq user-full-name "Clint Ryan"
@@ -393,6 +389,7 @@ Setup google calendar sync
 (use-package org-gcal
   :ensure t
   :config 
+  (load-file "~/Dropbox/Keys/gcal.el")
   (setq org-gcal-client-id my/google-secrets-client
       org-gcal-client-secret my/google-secrets-secret
       org-gcal-file-alist '(("clint.ryan3@gmail.com" .  "~/Dropbox/notes/calendar.org")))

@@ -10,7 +10,7 @@
 (setq custom-file "~/.emacs.d/custom-settings.el")
 (load custom-file t)
 
-(load-file "~/.emacs.d/secrets/gcal.el")
+
 
 (setq user-full-name "Clint Ryan"
       user-mail-address "")
@@ -299,10 +299,12 @@ If the universal prefix argument is used then will the windows too."
   "<" 'org-shiftmetaleft
   "c" 'org-toggle-checkbox
   "t" 'org-todo
-  "gs" 'org-goto
-)
-(evil-leader/set-key-for-mode 'org-capture-mode "c" 'org-capture-finalize)
-(evil-leader/set-key-for-mode 'org-capture-mode "k" 'org-capture-kill)
+  "gs" 'org-goto)
+
+(evil-leader/set-key-for-mode 'org-capture-mode 
+  "c" 'org-capture-finalize
+  "k" 'org-capture-kill)
+
 (setq org-capture-templates
       '(("t" "Todo" entry (file+headline "~/Dropbox/notes/gtd.org" "Inbox")
              "* TODO %?\n%T" :prepend T)
@@ -325,6 +327,7 @@ If the universal prefix argument is used then will the windows too."
 (use-package org-gcal
   :ensure t
   :config 
+  (load-file "~/Dropbox/Keys/gcal.el")
   (setq org-gcal-client-id my/google-secrets-client
       org-gcal-client-secret my/google-secrets-secret
       org-gcal-file-alist '(("clint.ryan3@gmail.com" .  "~/Dropbox/notes/calendar.org")))
