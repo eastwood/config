@@ -8,8 +8,9 @@
 	(package-refresh-contents)
 	(package-install 'use-package))
 (setq custom-file "~/.emacs.d/custom-settings.el")
-(load-file "~/Dropbox/Keys/emacs_secret.el")
 (load custom-file t)
+
+(load-file "~/.emacs.d/secrets/gcal.el")
 
 (setq user-full-name "Clint Ryan"
       user-mail-address "")
@@ -54,6 +55,7 @@
    "er" 'eval-region
    "fs" 'save-buffer
    "fo" 'open-org-file
+   "fc" 'open-calendar-file
    "ff" 'counsel-find-file
    "fr" 'counsel-recentf
    "fed" 'open-config-file
@@ -85,9 +87,11 @@
   (add-hook 'prog-mode-hook 'flycheck-mode)
   (setq-default flycheck-disabled-checker 'javascript-jshint)
   (setq-default flycheck-disabled-checker 'json-jsonlist)
+  (setq-default flycheck-disabled-checker 'javascript-eslint)
   (setq-default flycheck-javascript-eslint-executable "eslint-project-relative")
-  (with-eval-after-load 'flycheck
-    (advice-add 'flycheck-eslint-config-exists-p :override (lambda() t))) (flycheck-add-mode 'javascript-eslint 'web-mode))
+  ;;;(with-eval-after-load 'flycheck
+  ;;;(advice-add 'flycheck-eslint-config-exists-p :override (lambda() t))) (flycheck-add-mode 'javascript-eslint 'web-mode))
+)
 
 (setq-default indent-tabs-mode nil)
 (global-set-key (kbd "<f5>") 'revert-buffer)
@@ -126,6 +130,10 @@
   (interactive)
   (find-file "~/Dropbox/notes/gtd.org"))
 
+(defun open-calendar-file()
+  (interactive)
+  (find-file "~/Dropbox/notes/calendar.org"))
+
 (defun kill-other-buffers (&optional arg)
   "Kill all other buffers.
 If the universal prefix argument is used then will the windows too."
@@ -154,13 +162,16 @@ If the universal prefix argument is used then will the windows too."
 
 (use-package json-mode
   :ensure t)
+(use-package npm-mode
+  :ensure t)
 (use-package js2-mode
   :ensure t
   :diminish js2-mode
   :config
   (setq js2-basic-offset 2)
-  (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
-  (add-to-list 'auto-mode-alist '("\\.jsx\\'" . js2-jsx-mode)))
+  (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode)))
+(use-package rjsx-mode
+  :ensure t)
 (use-package web-mode
   :ensure t
   :config
@@ -169,7 +180,8 @@ If the universal prefix argument is used then will the windows too."
     (setq web-mode-markup-indent-offset 2)
     (setq web-mode-attr-indent-offset 2)
     (setq web-mode-css-indent-offset 2)
-    (setq web-mode-code-indent-offset 2))
+    (setq web-mode-code-indent-offset 2)
+    (setq css-indent-offset 2))
   (add-hook 'web-mode-hook  'my-web-mode-hook))
 (use-package company-tern
   :ensure t
@@ -179,7 +191,7 @@ If the universal prefix argument is used then will the windows too."
   :ensure t
   :config
   (evil-leader/set-key-for-mode 'js2-mode "mf" 'tern-find-definition)
-  (evil-leader/set-key-for-mode 'js2-jsx-mode "mf" 'tern-find-definition)
+  (evil-leader/set-key-for-mode 'rjsx-mode "mf" 'tern-find-definition)
   (add-hook 'js2-mode-hook 'tern-mode))
 
 (use-package rust-mode
@@ -207,6 +219,8 @@ If the universal prefix argument is used then will the windows too."
      "mb" 'cargo-process-build
      "mr" 'cargo-process-run
      "mt" 'cargo-process-test))
+
+(setq css-indent-offset 2)
 
 (use-package magit
   :ensure t
@@ -292,6 +306,8 @@ If the universal prefix argument is used then will the windows too."
 (setq org-capture-templates
       '(("t" "Todo" entry (file+headline "~/Dropbox/notes/gtd.org" "Inbox")
              "* TODO %?\n%T" :prepend T)
+        ("e" "Event" entry (file "~/Dropbox/notes/calendar.org")
+             "* %?\n%T" :prepend T)
         ("i" "Ideas" entry (file+headline "~/Dropbox/notes/gtd.org" "Ideas")
              "* %?\n%T" :prepend T)
         ("g" "Goals" entry (file+headline "~/Dropbox/notes/gtd.org" "Goals")
@@ -309,8 +325,8 @@ If the universal prefix argument is used then will the windows too."
 (use-package org-gcal
   :ensure t
   :config 
-  (setq org-gcal-client-id "95243140966-d8b059mb4ug8a996ecgie0ovkpjmsk7q.apps.googleusercontent.com"
-      org-gcal-client-secret '(my/google-secrets())
+  (setq org-gcal-client-id my/google-secrets-client
+      org-gcal-client-secret my/google-secrets-secret
       org-gcal-file-alist '(("clint.ryan3@gmail.com" .  "~/Dropbox/notes/calendar.org")))
 )
 
@@ -335,8 +351,6 @@ If the universal prefix argument is used then will the windows too."
   :ensure t
   :diminish yas-minor-mode
   :config
-  (define-key yas-minor-mode-map (kbd "<tab>") nil)
-  (define-key yas-minor-mode-map (kbd "TAB") nil)
   (evil-leader/set-key
    "is" 'yas-insert-snippet
    "in" 'yas-new-snippet)
