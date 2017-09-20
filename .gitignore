@@ -21,3 +21,5 @@ npm-debug.log
 /emacs.d/org-gcal/org.png
 /emacs.d/secrets/emacs_secret.el
 /emacs.d/secrets/gcal.el
+/emacs.d/.cache/omnisharp/server/v1.22.0/Esent.Interop.dll
+/emacs.d/.cache/omnisharp/server/v1.22.0/Microsoft.AspNetCore.Diagnostics.Abstractions.dll
