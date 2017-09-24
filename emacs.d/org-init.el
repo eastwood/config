@@ -46,6 +46,7 @@
   (evil-leader/set-key
    "SPC" 'counsel-M-x
    "bb" 'ivy-switch-buffer
+   "bl" 'dired
    "bd" 'kill-buffer
    "bk" 'kill-this-buffer
    "bD" 'kill-other-buffers
@@ -98,6 +99,12 @@
 (global-set-key (kbd "<f12>") 'ansi-term)
 (setq backup-directory-alist '(("." . "~/.emacs.d/backups")))
 (global-set-key (kbd "s-p") 'counsel-M-x)
+(add-hook 'dired-mode-hook
+ (lambda ()
+  (define-key dired-mode-map (kbd "^")
+    (lambda () (interactive) (find-alternate-file "..")))
+  ; was dired-up-directory
+ ))
 
 ;; OSX fix for eslint lookup
 (use-package exec-path-from-shell
