@@ -1,4 +1,27 @@
-* Init This is our initialisation script. This basically sets MELPA packages and ensures that user-package is installed on first install. On first install it's worth setting: #+BEGIN_SRC (setq use-package-always-ensure t) #+END_SRC #+BEGIN_SRC emacs-lisp (require 'package) (package-initialize) (setq package-enable-at-startup nil) (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/")) ;; Bootstrap `use-package' (unless (package-installed-p 'use-package) (package-refresh-contents) (package-install 'use-package)) (setq custom-file "~/.emacs.d/custom-settings.el") (load custom-file t) #+END_SRC
+* Init
+This is our initialisation script. This basically sets MELPA packages and ensures that user-package is installed
+on first install. On first install it's worth setting:
+#+BEGIN_SRC
+(setq use-package-always-ensure t)
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+(require 'package)
+(package-initialize)
+(setq package-enable-at-startup nil)
+(add-to-list 'package-archives
+	     '("melpa" . "https://melpa.org/packages/"))
+;; Bootstrap `use-package'
+(unless (package-installed-p 'use-package)
+	(package-refresh-contents)
+	(package-install 'use-package))
+(setq custom-file "~/.emacs.d/custom-settings.el")
+(load custom-file t)
+#+END_SRC
+Loads shared and local secrets
+#+BEGIN_SRC emacs-lisp
+(load-file "~/.emacs.d/secrets/gcal.el")
+#+END_SRC
 * Personal Information
 #+BEGIN_SRC emacs-lisp
 (setq user-full-name "Clint Ryan"
@@ -295,6 +318,7 @@ We need an evil tree!
   (setq neo-window-width 40)
   (setq neo-default-system-application "open")
 #+END_SRC
+
 * Org
 #+BEGIN_SRC emacs-lisp
 (require 'org-agenda)
