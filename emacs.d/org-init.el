@@ -10,8 +10,6 @@
 (setq custom-file "~/.emacs.d/custom-settings.el")
 (load custom-file t)
 
-(load-file "~/.emacs.d/secrets/gcal.el")
-
 (setq user-full-name "Clint Ryan"
       user-mail-address "")
 
@@ -25,7 +23,9 @@
 
 (use-package company
   :ensure t
-  :init (add-hook 'prog-mode-hook 'global-company-mode))
+  :config 
+  (add-hook 'prog-mode-hook 'global-company-mode)
+  (setq company-tooltip-align-annotations t))
 
 (use-package solarized-theme
   :ensure t
@@ -190,16 +190,13 @@ If the universal prefix argument is used then will the windows too."
     (setq web-mode-code-indent-offset 2)
     (setq css-indent-offset 2))
   (add-hook 'web-mode-hook  'my-web-mode-hook))
-(use-package company-tern
+(use-package tide
   :ensure t
   :config
-  (add-to-list 'company-backends 'company-tern))
-(use-package tern
-  :ensure t
-  :config
-  (evil-leader/set-key-for-mode 'js2-mode "mf" 'tern-find-definition)
-  (evil-leader/set-key-for-mode 'rjsx-mode "mf" 'tern-find-definition)
-  (add-hook 'js2-mode-hook 'tern-mode))
+  (defun setup-tide-mode ()
+    (tide-setup)
+    (tide-hl-identifier-mode +1))
+  (add-hook 'js2-mode-hook 'setup-tide-mode))
 
 (use-package rust-mode
   :ensure t
@@ -306,10 +303,12 @@ If the universal prefix argument is used then will the windows too."
   "<" 'org-shiftmetaleft
   "c" 'org-toggle-checkbox
   "t" 'org-todo
-  "gs" 'org-goto
-)
-(evil-leader/set-key-for-mode 'org-capture-mode "c" 'org-capture-finalize)
-(evil-leader/set-key-for-mode 'org-capture-mode "k" 'org-capture-kill)
+  "gs" 'org-goto)
+
+(evil-leader/set-key-for-mode 'org-capture-mode 
+  "c" 'org-capture-finalize
+  "k" 'org-capture-kill)
+
 (setq org-capture-templates
       '(("t" "Todo" entry (file+headline "~/Dropbox/notes/gtd.org" "Inbox")
              "* TODO %?\n%T" :prepend T)
@@ -332,6 +331,7 @@ If the universal prefix argument is used then will the windows too."
 (use-package org-gcal
   :ensure t
   :config 
+  (load-file "~/Dropbox/Keys/gcal.el")
   (setq org-gcal-client-id my/google-secrets-client
       org-gcal-client-secret my/google-secrets-secret
       org-gcal-file-alist '(("clint.ryan3@gmail.com" .  "~/Dropbox/notes/calendar.org")))
@@ -358,6 +358,8 @@ If the universal prefix argument is used then will the windows too."
   :ensure t
   :diminish yas-minor-mode
   :config
+  (define-key yas-minor-mode-map (kbd "<tab>") nil)
+  (define-key yas-minor-mode-map (kbd "TAB") nil)
   (evil-leader/set-key
    "is" 'yas-insert-snippet
    "in" 'yas-new-snippet)
