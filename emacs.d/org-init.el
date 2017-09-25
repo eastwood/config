@@ -10,8 +10,6 @@
 (setq custom-file "~/.emacs.d/custom-settings.el")
 (load custom-file t)
 
-(load-file "~/.emacs.d/secrets/gcal.el")
-
 (setq user-full-name "Clint Ryan"
       user-mail-address "")
 
