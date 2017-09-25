@@ -10,6 +10,8 @@
 (setq custom-file "~/.emacs.d/custom-settings.el")
 (load custom-file t)
 
+(load-file "~/.emacs.d/secrets/gcal.el")
+
 (setq user-full-name "Clint Ryan"
       user-mail-address "")
 
@@ -61,6 +63,7 @@
    "fr" 'counsel-recentf
    "fed" 'open-config-file
    "feR" 'reload-config-file
+   "sg" 'counsel-git-grep
    "tl" 'toggle-truncate-lines
    "wc" 'evil-window-delete
    "ww" 'ace-window
@@ -176,7 +179,11 @@ If the universal prefix argument is used then will the windows too."
   :diminish js2-mode
   :config
   (setq js2-basic-offset 2)
-  (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode)))
+  (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
+  (evil-leader/set-key-for-mode 'js2-mode
+    "mf" 'tide-jump-to-definition
+    "mb" 'tide-jump-back)
+)
 (use-package rjsx-mode
   :ensure t)
 (use-package web-mode
@@ -194,9 +201,17 @@ If the universal prefix argument is used then will the windows too."
   :ensure t
   :config
   (defun setup-tide-mode ()
+    (interactive)
     (tide-setup)
-    (tide-hl-identifier-mode +1))
-  (add-hook 'js2-mode-hook 'setup-tide-mode))
+    (flycheck-mode +1)
+    (setq flycheck-check-syntax-automatically '(save mode-enabled))
+    (eldoc-mode +1)
+    (tide-hl-identifier-mode +1)
+    (tide-setup)
+    (tide-hl-identifier-mode +1)
+   )
+  (add-hook 'js2-mode-hook  #'setup-tide-mode)
+)
 
 (use-package rust-mode
   :ensure t
