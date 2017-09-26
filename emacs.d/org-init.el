@@ -91,8 +91,21 @@
   (setq-default flycheck-disabled-checker 'json-jsonlist)
   (setq-default flycheck-disabled-checker 'javascript-eslint)
   (setq-default flycheck-javascript-eslint-executable "eslint-project-relative")
-  ;;;(with-eval-after-load 'flycheck
-  ;;;(advice-add 'flycheck-eslint-config-exists-p :override (lambda() t))) (flycheck-add-mode 'javascript-eslint 'web-mode))
+
+  (defun my/use-eslint-from-node-modules ()
+    (let* ((root (locate-dominating-file
+    (or (buffer-file-name) default-directory)
+      "node_modules"))
+      (eslint (and root
+      (expand-file-name "node_modules/eslint/bin/eslint.js"
+        root))))
+      (when (and eslint (file-executable-p eslint))
+    (setq-local flycheck-javascript-eslint-executable eslint))))
+
+  (add-hook 'flycheck-mode-hook #'my/use-eslint-from-node-modules)
+  ;;; (with-eval-after-load 'flycheck
+  ;;;  (advice-add 'flycheck-eslint-config-exists-p :override (lambda() t))) 
+  (flycheck-add-mode 'javascript-eslint 'web-mode)
 )
 
 (setq-default indent-tabs-mode nil)
@@ -358,6 +371,7 @@ If the universal prefix argument is used then will the windows too."
   (evil-leader/set-key
     "pf" 'projectile-find-file
     "pp" 'projectile-switch-project
+    "pb" 'projectile-switch-buffer
     "ft" 'neotree-toggle
     "pt" 'neotree-find-project-root)
   :config
