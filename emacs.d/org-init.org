@@ -18,10 +18,6 @@ on first install. On first install it's worth setting:
 (setq custom-file "~/.emacs.d/custom-settings.el")
 (load custom-file t)
 #+END_SRC
-Loads shared and local secrets
-#+BEGIN_SRC emacs-lisp
-(load-file "~/.emacs.d/secrets/gcal.el")
-#+END_SRC
 * Personal Information
 #+BEGIN_SRC emacs-lisp
 (setq user-full-name "Clint Ryan"
