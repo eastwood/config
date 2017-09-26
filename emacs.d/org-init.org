@@ -225,7 +225,9 @@ If the universal prefix argument is used then will the windows too."
     "mb" 'tide-jump-back)
 )
 (use-package rjsx-mode
-  :ensure t)
+  :ensure t
+  :config
+  (define-key evil-insert-state-map (kbd "C-d") nil))
 (use-package web-mode
   :ensure t
   :config
