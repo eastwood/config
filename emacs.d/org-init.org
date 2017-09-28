@@ -244,8 +244,8 @@ Our favourite languages!
   (evil-leader/set-key-for-mode 'rjsx-mode
     "mf" 'tide-jump-to-definition
     "mb" 'tide-jump-back)
+  (define-key evil-insert-state-map (kbd "C-d") nil)
 )
-  (define-key evil-insert-state-map (kbd "C-d") nil))
 (use-package web-mode
   :ensure t
   :config
@@ -356,7 +356,7 @@ We need an evil tree!
   (setq neo-default-system-application "open")
 #+END_SRC
 
-* Org
+ Org
 #+BEGIN_SRC emacs-lisp
 (require 'org-agenda)
 (define-key org-agenda-mode-map "c" 'org-agenda-columns)
