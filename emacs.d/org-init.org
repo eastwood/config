@@ -393,6 +393,8 @@ We need an evil tree!
     "me" 'org-set-effort
     "mn" 'org-narrow-to-subtree
     "mr" 'org-refile
+    "mss" 'org-store-link
+    "msp" 'org-insert-last-stored-link
     "mw" 'widen)
 
 (evil-define-key 'normal org-mode-map
