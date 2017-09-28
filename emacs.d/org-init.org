@@ -355,8 +355,7 @@ We need an evil tree!
   (setq neo-window-width 40)
   (setq neo-default-system-application "open")
 #+END_SRC
-
- Org
+* Org
 #+BEGIN_SRC emacs-lisp
 (require 'org-agenda)
 (define-key org-agenda-mode-map "c" 'org-agenda-columns)
