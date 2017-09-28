@@ -123,6 +123,7 @@ I like to throw in magit support and surround support too.
   (setq-default flycheck-disabled-checker 'json-jsonlist)
   (setq-default flycheck-disabled-checker 'javascript-eslint)
   (setq-default flycheck-javascript-eslint-executable "eslint-project-relative")
+  (flycheck-add-mode 'javascript-eslint 'web-mode)
 
   (defun my/use-eslint-from-node-modules ()
     (let* ((root (locate-dominating-file
@@ -137,7 +138,7 @@ I like to throw in magit support and surround support too.
   (add-hook 'flycheck-mode-hook #'my/use-eslint-from-node-modules)
   ;;; (with-eval-after-load 'flycheck
   ;;;  (advice-add 'flycheck-eslint-config-exists-p :override (lambda() t))) 
-  (flycheck-add-mode 'javascript-eslint 'web-mode)
+
 )
 #+END_SRC
 * General 
@@ -217,7 +218,7 @@ If the universal prefix argument is used then will the windows too."
   ("s-f" . swiper))
 #+END_SRC
 * Code
-  Our favourite languages!
+Our favourite languages!
 ** C#
 #+BEGIN_SRC emacs-lisp
 (use-package omnisharp
@@ -242,7 +243,12 @@ If the universal prefix argument is used then will the windows too."
     "mb" 'tide-jump-back)
 )
 (use-package rjsx-mode
-  :ensure t)
+  :ensure t
+  :config
+  (evil-leader/set-key-for-mode 'rjsx-mode
+    "mf" 'tide-jump-to-definition
+    "mb" 'tide-jump-back)
+)
 (use-package web-mode
   :ensure t
   :config
@@ -302,6 +308,14 @@ If the universal prefix argument is used then will the windows too."
 ** CSS
 #+BEGIN_SRC emacs-lisp
 (setq css-indent-offset 2)
+#+END_SRC
+** Yaml
+Let's get all our yamls in order
+#+BEGIN_SRC emacs-lisp
+(use-package yaml-mode
+  :ensure t
+  :mode ("\\.yml\\'" . yaml-mode)
+)
 #+END_SRC
 * Magit
 #+BEGIN_SRC emacs-lisp
