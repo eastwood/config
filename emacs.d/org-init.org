@@ -460,6 +460,7 @@ Setup google calendar sync
     "pt" 'neotree-find-project-root)
   :config
   (setq projectile-completion-system 'ivy)
+  (add-to-list 'projectile-globally-ignored-directories "node_modules")
   (projectile-global-mode))
 #+END_SRC
 * Smart Parenthesis
