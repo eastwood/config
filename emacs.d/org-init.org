@@ -228,16 +228,16 @@ Our favourite languages!
   :ensure t)
 (use-package npm-mode
   :ensure t)
-(use-package js2-mode
-  :ensure t
-  :diminish js2-mode
-  :config
-  (setq js2-basic-offset 2)
-  (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
-  (evil-leader/set-key-for-mode 'js2-mode
-    "mf" 'tide-jump-to-definition
-    "mb" 'tide-jump-back)
-)
+;; (use-package js2-mode
+;;  :ensure t
+;;  :diminish js2-mode
+;;  :config
+;;  (setq js2-basic-offset 2)
+;;  (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
+;;  (evil-leader/set-key-for-mode 'js2-mode
+;;    "mf" 'tide-jump-to-definition
+;;    "mb" 'tide-jump-back)
+;;)
 (use-package rjsx-mode
   :ensure t
   :config
@@ -245,6 +245,7 @@ Our favourite languages!
     "mf" 'tide-jump-to-definition
     "mb" 'tide-jump-back)
   (define-key evil-insert-state-map (kbd "C-d") nil)
+  (add-to-list 'auto-mode-alist '("\\.js\\'" . rjsx-mode))
 )
 (use-package web-mode
   :ensure t
