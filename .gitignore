@@ -24,3 +24,6 @@ npm-debug.log
 /emacs.d/.cache/omnisharp/server/v1.22.0/Esent.Interop.dll
 /emacs.d/.cache/omnisharp/server/v1.22.0/Microsoft.AspNetCore.Diagnostics.Abstractions.dll
 /emacs.d/org-init.el
+/emacs.d/eshell
+/emacs.d/projectile.cache
+/emacs.d/server/
