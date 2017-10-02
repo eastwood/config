@@ -223,9 +223,14 @@ Our favourite languages!
   (add-hook 'csharp-mode-hook 'omnisharp-mode))
 #+END_SRC 
 ** Javascript
+Everybody uses JSON now, this make things look very pretty
 #+BEGIN_SRC emacs-lisp
 (use-package json-mode
   :ensure t)
+#+END_SRC
+
+NPM mode lets us run our npm scripts directly from emacs
+#+BEGIN_SRC emacs-lisp
 (use-package npm-mode
   :ensure t)
 ;; (use-package js2-mode
@@ -238,15 +243,24 @@ Our favourite languages!
 ;;    "mf" 'tide-jump-to-definition
 ;;    "mb" 'tide-jump-back)
 ;;)
+#+END_SRC
+RJSX mode inherits js2-mode and supports jsx well. In my experience it's better than js2-jsx-mode, so I use it instead.
+We set basic offsets and also unmap vim C-d in insert mode, so that we can use the nice tag completion
+We also integrate with Tide here, so that we can jump back and forth across definitions
+#+BEGIN_SRC emacs-lisp
 (use-package rjsx-mode
   :ensure t
   :config
   (evil-leader/set-key-for-mode 'rjsx-mode
     "mf" 'tide-jump-to-definition
     "mb" 'tide-jump-back)
+  (setq js2-basic-offset 2)
   (define-key evil-insert-state-map (kbd "C-d") nil)
   (add-to-list 'auto-mode-alist '("\\.js\\'" . rjsx-mode))
 )
+#+END_SRC
+Bread and butter web-mode. Highlighting for all things html/css
+#+BEGIN_SRC emacs-lisp
 (use-package web-mode
   :ensure t
   :config
@@ -258,6 +272,9 @@ Our favourite languages!
     (setq web-mode-code-indent-offset 2)
     (setq css-indent-offset 2))
   (add-hook 'web-mode-hook  'my-web-mode-hook))
+#+END_SRC
+Tide mode utilises Microsoft's excellent typescript tooling. Tide mode provides excellent code completion, formatting and syntax checking.
+#+BEGIN_SRC emacs-lisp
 (use-package tide
   :ensure t
   :config
@@ -279,12 +296,16 @@ Our favourite languages!
  (use-package rust-mode
    :ensure t
    :mode ("\\.rs\\'" . rust-mode))
-
+ #+END_SRC
+ Let flycheck hook into rust tooling
+ #+BEGIN_SRC emacs-lisp
  (use-package flycheck-rust
    :ensure t
    :config
    (add-hook 'flycheck-mode-hook #'flycheck-rust-setup))
- 
+ #+END_SRC
+ Autocompletion for rust. I love how new languages provide tooling like this that are editor agnostic.
+ #+BEGIN_SRC emacs-lisp
  (use-package racer
    :ensure t
    :config
@@ -292,7 +313,9 @@ Our favourite languages!
      (kbd "TAB") 'company-indent-or-complete-common)
    (add-hook 'rust-mode-hook #'racer-mode)
    (add-hook 'racer-mode-hook #'eldoc-mode))
-
+ #+END_SRC
+ Cargo lets us build, test and run our rust applications from within emacs. Super useful when developing
+ #+BEGIN_SRC emacs-lisp
   (use-package cargo
     :ensure t
     :config
@@ -301,7 +324,6 @@ Our favourite languages!
       "mb" 'cargo-process-build
       "mr" 'cargo-process-run
       "mt" 'cargo-process-test))
-
  #+END_SRC
 ** CSS
 #+BEGIN_SRC emacs-lisp
@@ -316,6 +338,8 @@ Let's get all our yamls in order
 )
 #+END_SRC
 * Magit
+Magit is quite magical. I'm a huge fan of shelling out to command line when possible, but magit is a lot more intuitive, helpful and efficient.
+Combined with evil-magit and this is my favourite way of doing version control.
 #+BEGIN_SRC emacs-lisp
 (use-package magit
   :ensure t
@@ -327,13 +351,14 @@ Let's get all our yamls in order
    "gs" 'magit-status))
 #+END_SRC
 * Markdown
-#+begin_src emacs-lisp
+I try to use org files where possible, but markdown is super useful sometimes for projects. You can install live export tools as well, but I tend not to.
+#+BEGIN_SRC EMACS-LISP
 (use-package markdown-mode
   :ensure t
   :commands (markdown-mode))
-#+end_src 
+#+END_SRC 
 * NeoTree
-We need an evil tree!
+We need an evil tree! Coupled with some major mode evil bindings and we're in action
 #+BEGIN_SRC emacs-lisp
 (use-package neotree
   :ensure t
@@ -357,6 +382,16 @@ We need an evil tree!
   (setq neo-default-system-application "open")
 #+END_SRC
 * Org
+Org mode is an extremely productive way of organising your text files. I have org mode setup in basically a few files:
+ - GTD.org
+ - Calendar.org
+   
+We use org-capture to easily capture events, ideas and todo items without context switching from what I'm doing.
+I also use gcal.el to organise and synchronise with my google calendar. I generally will create an event in google calendar, or from within emacs (and sync).
+Then I'll create a link from my ~calendar.org~ file to my ~gtd.org~ file with a TODO item against it and the schedule.
+
+A better way might be to just use org-agenda and use the calendar file as well, but I'll probably experiment with it a little before doing that. 
+
 #+BEGIN_SRC emacs-lisp
 (require 'org-agenda)
 (define-key org-agenda-mode-map "c" 'org-agenda-columns)
@@ -434,7 +469,7 @@ Create speed commands for editing org files
 (setq org-use-speed-commands t)
 #+END_SRC
 
-Setup google calendar sync
+Setup google calendar sync. I keep a secrets file in my Dropbox that I load here as well. Secrets file contains a few variables for secrets and client tokens
 #+BEGIN_SRC emacs-lisp
 (use-package org-gcal
   :ensure t
@@ -446,6 +481,8 @@ Setup google calendar sync
 )
 #+END_SRC
 * Projectile
+Projectile is awesome for searching and handling projects.
+I ignore ~node_modules~ naturally and also have some evil bindings for easily accessing projects using leader keys
 #+BEGIN_SRC emacs-lisp
 (use-package projectile
   :ensure t
@@ -464,11 +501,14 @@ Setup google calendar sync
   (projectile-global-mode))
 #+END_SRC
 * Smart Parenthesis
+Hightlight parens smartly :P
 #+BEGIN_SRC emacs-lisp
 (use-package smartparens
   :ensure t)
 #+END_SRC
 * Snippets
+YaSnippet allows us to insert snippets easily. We disable the <TAB> completion because we use that for other things, but we can insert snippets still using leader bindings.
+
 #+BEGIN_SRC emacs-lisp
 (use-package yasnippet
   :ensure t
