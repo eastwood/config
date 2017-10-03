@@ -43,12 +43,10 @@ Just some nice user interfaces tweaks. Bread and butter stuff!
   (setq company-tooltip-align-annotations t))
 #+END_SRC
 * Color Theme
-Solarized everything!
+Dracula is my new hot theme!
 #+BEGIN_SRC emacs-lisp
-(use-package solarized-theme
-  :ensure t
-  :config
-  (load-theme 'solarized-dark t))
+(use-package dracula-theme
+  :ensure t)
 #+END_SRC
 * Evil
 Evil complements the emacs ecosystem perfectly. The first thing I do is get this set up!
