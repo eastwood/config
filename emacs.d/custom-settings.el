@@ -12,7 +12,7 @@
  '(cua-read-only-cursor-color "#859900")
  '(custom-safe-themes
    (quote
-    ("8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" default)))
+    ("a8245b7cc985a0610d71f9852e9f2767ad1b852c2bdea6f4aadc12cce9c4d6d0" "5dc0ae2d193460de979a463b907b4b2c6d2c9c4657b2e9e66b8898d2592e3de5" "98cc377af705c0f2133bb6d340bf0becd08944a588804ee655809da5d8140de6" "ff7625ad8aa2615eae96d6b4469fcc7d3d20b2e1ebc63b761a349bebbb9d23cb" "67e998c3c23fe24ed0fb92b9de75011b92f35d3e89344157ae0d544d50a63a72" "d677ef584c6dfc0697901a44b885cc18e206f05114c8a3b7fde674fce6180879" "8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" default)))
  '(fci-rule-color "#073642")
  '(highlight-changes-colors (quote ("#d33682" "#6c71c4")))
  '(highlight-symbol-colors
@@ -38,6 +38,7 @@
    (quote
     ("#002b36" "#002b36" "#002b36" "#002b36" "#002b36" "#002b36" "#002b36" "#002b36")))
  '(magit-diff-use-overlays nil)
+ '(magit-dispatch-arguments nil)
  '(nrepl-message-colors
    (quote
     ("#dc322f" "#cb4b16" "#b58900" "#546E00" "#B4C342" "#00629D" "#2aa198" "#d33682" "#6c71c4")))
@@ -46,9 +47,10 @@
     ("~/Dropbox/notes/calendar.org" "~/Dropbox/notes/gtd.org")))
  '(package-selected-packages
    (quote
-    (tide npm-mode rjsx-mode org-gcal cargo flycheck-rust racer magit flycheck evil rust-mode yasnippet yaml-mode which-key web-mode use-package tern-auto-complete solarized-theme smartparens projectile org-bullets omnisharp neotree markdown-mode json-mode js2-mode expand-region exec-path-from-shell evil-surround evil-magit evil-leader counsel company-tern ace-window)))
+    (zenburn solarized material-theme dracula-theme zenburn-theme tide npm-mode rjsx-mode org-gcal cargo flycheck-rust racer magit flycheck evil rust-mode yasnippet yaml-mode which-key web-mode use-package tern-auto-complete solarized-theme smartparens projectile org-bullets omnisharp neotree markdown-mode json-mode js2-mode expand-region exec-path-from-shell evil-surround evil-magit evil-leader counsel company-tern ace-window)))
  '(pos-tip-background-color "#073642")
  '(pos-tip-foreground-color "#93a1a1")
+ '(send-mail-function (quote smtpmail-send-it))
  '(smartrep-mode-line-active-bg (solarized-color-blend "#859900" "#073642" 0.2))
  '(term-default-bg-color "#002b36")
  '(term-default-fg-color "#839496")

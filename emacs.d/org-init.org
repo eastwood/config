@@ -17,6 +17,7 @@ on first install. On first install it's worth setting:
 	(package-install 'use-package))
 (setq custom-file "~/.emacs.d/custom-settings.el")
 (load custom-file t)
+(setq ad-redefinition-action 'accept)
 #+END_SRC
 * Personal Information
 #+BEGIN_SRC emacs-lisp
@@ -43,10 +44,11 @@ Just some nice user interfaces tweaks. Bread and butter stuff!
   (setq company-tooltip-align-annotations t))
 #+END_SRC
 * Color Theme
-Dracula is my new hot theme!
+Solarize everything!
 #+BEGIN_SRC emacs-lisp
-(use-package dracula-theme
-  :ensure t)
+(use-package zenburn-theme
+  :ensure t
+  :config)
 #+END_SRC
 * Evil
 Evil complements the emacs ecosystem perfectly. The first thing I do is get this set up!
@@ -67,6 +69,8 @@ I like to throw in magit support and surround support too.
   (evil-leader/set-leader "SPC")
   (evil-leader/set-key
    "SPC" 'counsel-M-x
+   "[" 'previous-error
+   "]" 'next-error
    "bb" 'ivy-switch-buffer
    "bl" 'dired
    "bd" 'kill-buffer
