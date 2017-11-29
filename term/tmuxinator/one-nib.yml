@@ -31,28 +31,20 @@ root: ~/Workspace/nib.com.au/cryan/one-nib/
 # post: tmux -CC attach -t one-nib
 
 windows:
-  - editor:
-      layout: even-horizontal
-      # Synchronize all panes of this window, can be enabled before or after the pane commands run.
-      # 'before' represents legacy functionality and will be deprecated in a future release, in favour of 'after'
-      panes:
-        - vim
   - one-nib: 
       layout: even-horizontal
       main-pane-width: 100
       panes:
-        - npm run start.devauth
-        - psql postgres://onenibuser:onenibpassword@localhost:5432/one-nib
+        - npm run start.devsoup
+        - bundle exec rake start_devsoup
+        - npm run build.client -- --watch
+        - npm run build.server -- --watch
   - auth:
       root: ~/Workspace/nib.com.au/cryan/auth/
       layout: even-horizontal
       panes:
-        - npm run start.local
-        - psql postgres://onenibuser:onenibpassword@localhost:5432/auth
+        - echo 'Enjoy your day'
   - database: 
       layout: even-horizontal
       panes:
         - postgres -D /usr/local/var/postgres
-  - other:
-      root: ~/Workspace/nib.com.au/cryan/rqp-proxy/
-      layout: main-horizontal

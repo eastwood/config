@@ -15,16 +15,7 @@ Plug 'mxw/vim-jsx'
 Plug 'vim-ruby/vim-ruby'
 Plug 'fatih/vim-go'
 Plug 'tpope/vim-surround'
-" Plug 'altercation/vim-colors-solarized'
-" Plug 'zchee/deoplete-go'
-" Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-" Plug 'carlitux/deoplete-ternjs', { 'do': 'npm install' }
-" Plug 'vim-airline/vim-airline'
-" Plug 'vim-airline/vim-airline-themes'
-" Plug 'tpope/vim-fugitive'
-" Plug 'airblade/vim-gitgutter'
-" Plug 'neomake/neomake'
-" Plug 'benjie/neomake-local-eslint.vim'
+Plug 'altercation/vim-colors-solarized'
 call plug#end()
 
 filetype plugin indent on

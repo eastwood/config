@@ -31,6 +31,7 @@ Just some nice user interfaces tweaks. Bread and butter stuff!
 (scroll-bar-mode -1)
 (setq inhibit-startup-message t)
 (setq-default indent-tabs-mode nil)
+(setq-default line-spacing 5)
 (setq ring-bell-function 'ignore)
 (tool-bar-mode -1)
 (fset 'yes-or-no-p 'y-or-n-p)
@@ -46,9 +47,7 @@ Just some nice user interfaces tweaks. Bread and butter stuff!
 * Color Theme
 Solarize everything!
 #+BEGIN_SRC emacs-lisp
-(use-package zenburn-theme
-  :ensure t
-  :config)
+(use-package leuven-theme)
 #+END_SRC
 * Evil
 Evil complements the emacs ecosystem perfectly. The first thing I do is get this set up!
@@ -81,6 +80,7 @@ I like to throw in magit support and surround support too.
    "eb" 'eval-buffer
    "er" 'eval-region
    "fs" 'save-buffer
+   "fj" 'open-journal-file
    "fo" 'open-org-file
    "fc" 'open-calendar-file
    "ff" 'counsel-find-file
@@ -185,6 +185,10 @@ I like to throw in magit support and surround support too.
 (defun open-org-file()
   (interactive)
   (find-file "~/Dropbox/notes/gtd.org"))
+
+(defun open-journal-file()
+  (interactive)
+  (find-file "~/Dropbox/notes/journal.org"))
 
 (defun open-calendar-file()
   (interactive)
