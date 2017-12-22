@@ -45,9 +45,10 @@ Just some nice user interfaces tweaks. Bread and butter stuff!
   (setq company-tooltip-align-annotations t))
 #+END_SRC
 * Color Theme
-Solarize everything!
 #+BEGIN_SRC emacs-lisp
-(use-package leuven-theme)
+(use-package gruvbox-theme
+  :config
+  (load-theme 'gruvbox))
 #+END_SRC
 * Evil
 Evil complements the emacs ecosystem perfectly. The first thing I do is get this set up!
@@ -372,6 +373,8 @@ We need an evil tree! Coupled with some major mode evil bindings and we're in ac
   (evil-define-key 'normal neotree-mode-map 
     (kbd "TAB") 'neotree-enter
     "H" 'neotree-hidden-file-toggle
+    "i" 'neotree-enter-horizontal-split
+    "s" 'neotree-enter-vertical-split
     "q" 'neotree-hide
     (kbd "RET") 'neotree-enter)
 
@@ -444,6 +447,7 @@ A better way might be to just use org-agenda and use the calendar file as well, 
   "<" 'org-shiftmetaleft
   "c" 'org-toggle-checkbox
   "t" 'org-todo
+  (kbd "TAB") 'org-cycle
   "gs" 'org-goto)
 
 (evil-leader/set-key-for-mode 'org-capture-mode 
@@ -535,3 +539,4 @@ Awesome package for key discovery!
   :config
   (which-key-mode))
 #+END_SRC
+

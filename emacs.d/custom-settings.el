@@ -12,7 +12,7 @@
  '(cua-read-only-cursor-color "#859900")
  '(custom-safe-themes
    (quote
-    ("a8245b7cc985a0610d71f9852e9f2767ad1b852c2bdea6f4aadc12cce9c4d6d0" "5dc0ae2d193460de979a463b907b4b2c6d2c9c4657b2e9e66b8898d2592e3de5" "98cc377af705c0f2133bb6d340bf0becd08944a588804ee655809da5d8140de6" "ff7625ad8aa2615eae96d6b4469fcc7d3d20b2e1ebc63b761a349bebbb9d23cb" "67e998c3c23fe24ed0fb92b9de75011b92f35d3e89344157ae0d544d50a63a72" "d677ef584c6dfc0697901a44b885cc18e206f05114c8a3b7fde674fce6180879" "8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" default)))
+    ("8e4efc4bed89c4e67167fdabff77102abeb0b1c203953de1e6ab4d2e3a02939a" "7c49651e62ee04b5f6d8fca78bca6f31730d982901fc1e1c651e464fa0ecfea4" "b67cb8784f6a2d1a3f605e39d2c376937f3bf8460cb8a0d6fc625c0331c00c83" "fd24b2c570dbd976e17a63ba515967600acb7d2f9390793859cb82f6a2d5dacd" "c63a789fa2c6597da31f73d62b8e7fad52c9420784e6ec34701ae8e8f00071f6" "82fce2cada016f736dbcef237780516063a17c2436d1ee7f42e395e38a15793b" "858a353233c58b69dbe3a06087fc08905df2d8755a0921ad4c407865f17ab52f" "a8245b7cc985a0610d71f9852e9f2767ad1b852c2bdea6f4aadc12cce9c4d6d0" "5dc0ae2d193460de979a463b907b4b2c6d2c9c4657b2e9e66b8898d2592e3de5" "98cc377af705c0f2133bb6d340bf0becd08944a588804ee655809da5d8140de6" "ff7625ad8aa2615eae96d6b4469fcc7d3d20b2e1ebc63b761a349bebbb9d23cb" "67e998c3c23fe24ed0fb92b9de75011b92f35d3e89344157ae0d544d50a63a72" "d677ef584c6dfc0697901a44b885cc18e206f05114c8a3b7fde674fce6180879" "8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" default)))
  '(fci-rule-color "#073642")
  '(highlight-changes-colors (quote ("#d33682" "#6c71c4")))
  '(highlight-symbol-colors
@@ -47,7 +47,7 @@
     ("~/Dropbox/notes/calendar.org" "~/Dropbox/notes/gtd.org")))
  '(package-selected-packages
    (quote
-    (zenburn solarized material-theme dracula-theme zenburn-theme tide npm-mode rjsx-mode org-gcal cargo flycheck-rust racer magit flycheck evil rust-mode yasnippet yaml-mode which-key web-mode use-package tern-auto-complete solarized-theme smartparens projectile org-bullets omnisharp neotree markdown-mode json-mode js2-mode expand-region exec-path-from-shell evil-surround evil-magit evil-leader counsel company-tern ace-window)))
+    (gruvbox-theme zenburn solarized material-theme dracula-theme zenburn-theme tide npm-mode rjsx-mode org-gcal cargo flycheck-rust racer magit flycheck evil rust-mode yasnippet yaml-mode which-key web-mode use-package tern-auto-complete solarized-theme smartparens projectile org-bullets omnisharp neotree markdown-mode json-mode js2-mode expand-region exec-path-from-shell evil-surround evil-magit evil-leader counsel company-tern ace-window)))
  '(pos-tip-background-color "#073642")
  '(pos-tip-foreground-color "#93a1a1")
  '(send-mail-function (quote smtpmail-send-it))
