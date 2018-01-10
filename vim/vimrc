@@ -59,7 +59,7 @@ endif
 set title
 set number
 set relativenumber
-set cursorline
+set lazyredraw
 set showcmd
 set hidden
 set showmode
