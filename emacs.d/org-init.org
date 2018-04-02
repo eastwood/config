@@ -7,6 +7,7 @@ on first install. On first install it's worth setting:
 
 #+BEGIN_SRC emacs-lisp
 (require 'package)
+(setq exec-path-from-shell-check-startup-files nil)
 (package-initialize)
 (setq package-enable-at-startup nil)
 (add-to-list 'package-archives
@@ -89,6 +90,7 @@ I like to throw in magit support and surround support too.
    "fed" 'open-config-file
    "feR" 'reload-config-file
    "sg" 'counsel-git-grep
+   "sr" 'rgrep
    "tl" 'toggle-truncate-lines
    "wc" 'evil-window-delete
    "ww" 'ace-window
@@ -346,6 +348,12 @@ Let's get all our yamls in order
   :ensure t
   :mode ("\\.yml\\'" . yaml-mode)
 )
+#+END_SRC
+** Lisp
+#+BEGIN_SRC emacs-lisp
+(use-package slime
+     :ensure t
+     :config)
 #+END_SRC
 * Magit
 Magit is quite magical. I'm a huge fan of shelling out to command line when possible, but magit is a lot more intuitive, helpful and efficient.
