@@ -32,8 +32,6 @@ set autoread
 set showmatch
 set splitbelow splitright
 
-set statusline=%<\ %F%=\ %{ALEGetStatusLine()}\ \|\ %{&fileformat}\ \|\ %{&fileencoding}\ \|\ %{&filetype}\ \|\ %p%%\ \|\ LN\ %l:%c\ 
-
 " Fonts and Colours
 set guifont=Source\ Code\ Pro:h12
 let &t_8f = "\<Esc>[38:2:%lu:%lu:%lum"
@@ -48,6 +46,7 @@ set bg=dark
 hi StatusLine ctermfg=0 ctermbg=4 guifg=#002b36 guibg=#268bd2
 hi StatusLineNC ctermfg=0 guifg=#002b36
 hi VertSplit ctermbg=0 guibg=#002b36
+
 if has("gui_running")
   set guioptions-=m " no menu
   set guioptions-=T " no toolbar
@@ -58,7 +57,6 @@ endif
 
 set title
 set number
-set relativenumber
 set lazyredraw
 set showcmd
 set hidden
@@ -158,6 +156,12 @@ set nowrap
 
   " Tern
   autocmd FileType javascript nnoremap <buffer> <F12> :TernDef<CR>
+
+  " NerdTree
+  autocmd FileType nerdtree call SetConfig()
+  function SetConfig()
+    nmap <TAB> *@:call nerdtree#ui_glue#invokeKeyMap("o")<CR>
+  endfunction
 
   " Ctrlp
   let g:ctrlp_working_path_mode = 'ra'

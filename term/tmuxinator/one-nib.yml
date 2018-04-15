@@ -31,9 +31,13 @@ root: ~/Workspace/nib.com.au/cryan/one-nib/
 # post: tmux -CC attach -t one-nib
 
 windows:
+  - vim:
+      layout: tiled
+      panes:
+        - vim
   - one-nib: 
-      layout: even-horizontal
-      main-pane-width: 100
+      layout: tiled
+      main-pane-width: 50%
       panes:
         - npm run start.devsoup
         - bundle exec rake start_devsoup
