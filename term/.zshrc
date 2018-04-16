@@ -16,6 +16,8 @@ alias mux=tmuxinator
 alias rqpauth="~/Workspace/nib.com.au/bin/rqp auth --display-credentials"
 alias rqp="~/Workspace/nib.com.au/bin/rqp"
 alias dockerlogin="AWS_REGION='us-east-1' AWS_DEFAULT_REGION='us-east-1' aws ecr get-login --registry-ids 441581275790 | sh"
+alias dockerrmc="docker rm -f $(docker ps -aq)"
+alias dockerrmi="docker rmi $(docker images)"
 alias aws-login="rqpauth && dockerlogin"
 export MONO_FRAMEWORK="/Library/Frameworks/Mono.framework/Versions/Current/bin"
 
