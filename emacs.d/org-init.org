@@ -36,9 +36,12 @@ on first install. On first install it's worth setting:
 * Interface
 Just some nice user interfaces tweaks. Bread and butter stuff!
 #+BEGIN_SRC emacs-lisp
-  (load-theme 'zenburn)
+  (use-package zenburn-theme
+    :config
+    (load-theme 'zenburn))
   (scroll-bar-mode -1)
-  (menu-bar-mode -1)
+  (unless (memq window-system '(mac ns))
+    (menu-bar-mode -1))
   (setq inhibit-startup-message t)
   (setq-default indent-tabs-mode nil)
   (setq-default line-spacing 5)
@@ -142,6 +145,7 @@ I like to throw in magit support and surround support too.
         (when (and eslint (file-executable-p eslint))
       (setq-local flycheck-javascript-eslint-executable eslint))))
     (add-hook 'flycheck-mode-hook #'my/use-eslint-from-node-modules)
+    (global-flycheck-mode)
   )
 #+END_SRC
 * Mac specific
