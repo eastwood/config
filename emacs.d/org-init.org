@@ -20,7 +20,7 @@ on first install. On first install it's worth setting:
 #+BEGIN_SRC emacs-lisp
   (setq-default indent-tabs-mode nil)
   (global-set-key (kbd "<f5>") 'revert-buffer)
-  (global-set-key (kbd "<f12>") 'ansi-term)
+  (global-set-key (kbd "<f12>") 'shell)
   (setq backup-directory-alist '(("." . "~/.emacs.d/backups")))
   (global-set-key (kbd "s-p") 'counsel-M-x)
   (add-hook 'dired-mode-hook
@@ -404,17 +404,10 @@ A better way might be to just use org-agenda and use the calendar file as well, 
             ("j" "Journal" entry (file+datetree "~/Dropbox/notes/journal.org")
              "* %?\nEntered on %U\n  %i\n  %a"))))
 #+END_SRC
-Just give me nice bullet points!
-#+BEGIN_SRC emacs-lisp
-  (use-package org-bullets
-    :commands (org-mode)
-    :config
-    (org-bullets-mode 1))
-#+END_SRC
 Setup google calendar sync. I keep a secrets file in my Dropbox that I load here as well. Secrets file contains a few variables for secrets and client tokens
 #+BEGIN_SRC emacs-lisp
   (use-package org-gcal
-    :commands (org-mode)
+    :after org
     :config 
     (load-file "~/Dropbox/Keys/gcal.el")
     (setq org-gcal-client-id my/google-secrets-client

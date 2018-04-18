@@ -27,3 +27,4 @@ npm-debug.log
 /emacs.d/eshell
 /emacs.d/projectile.cache
 /emacs.d/server/
+emacs.d/custom-settings.el
