@@ -22,7 +22,6 @@ on first install. On first install it's worth setting:
   (global-set-key (kbd "<f5>") 'revert-buffer)
   (global-set-key (kbd "<f12>") 'shell)
   (setq backup-directory-alist '(("." . "~/.emacs.d/backups")))
-  (global-set-key (kbd "s-p") 'counsel-M-x)
   (add-hook 'dired-mode-hook
    (lambda ()
     (define-key dired-mode-map (kbd "^")
@@ -36,7 +35,6 @@ on first install. On first install it's worth setting:
 * Interface
 Just some nice user interfaces tweaks. Bread and butter stuff!
 #+BEGIN_SRC emacs-lisp
-  (load-theme 'zenburn)
   (scroll-bar-mode -1)
   (menu-bar-mode -1)
   (setq inhibit-startup-message t)
@@ -55,6 +53,7 @@ Just some nice user interfaces tweaks. Bread and butter stuff!
 #+END_SRC
 * Color Theme
 #+BEGIN_SRC emacs-lisp
+  (load-theme 'zenburn)
 #+END_SRC
 * Evil
 Evil complements the emacs ecosystem perfectly. The first thing I do is get this set up!
@@ -148,6 +147,7 @@ I like to throw in magit support and surround support too.
 OSX fix for eslint lookup
 #+BEGIN_SRC emacs-lisp
   (when (memq window-system '(mac ns))
+    (global-set-key (kbd "s-p") 'counsel-M-x)
     (use-package exec-path-from-shell
       :ensure t
       :config
@@ -208,6 +208,7 @@ Our favourite languages!
   (use-package omnisharp
     :commands csharp-mode
     :config
+    (add-hook 'csharp-mode-hook 'omnisharp-mode)
     (add-to-list 'company-backends 'company-omnisharp))
 #+END_SRC 
 ** Javascript
@@ -296,7 +297,7 @@ I try to use org files where possible, but markdown is super useful sometimes fo
 #+BEGIN_SRC emacs-lisp
   (use-package markdown-mode)
 #+END_SRC 
-* NeoTree
+
 We need an evil tree! Coupled with some major mode evil bindings and we're in action
 #+BEGIN_SRC emacs-lisp
 (use-package neotree
