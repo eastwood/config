@@ -97,8 +97,6 @@ set nowrap
   " Menu settings
   inoremap <expr><Esc>      pumvisible() ? "\<C-e>" : "\<Esc>"
   inoremap <expr><CR>       pumvisible() ? "\<C-y>" : "\<CR>"
-  "inoremap <expr><C-j>      pumvisible() ? "\<C-n>" : "\<C-j>"
-  "inoremap <expr><C-k>      pumvisible() ? "\<C-p>" : "\<C-k>"
   autocmd CompleteDone * pclose
 
   " Project management
