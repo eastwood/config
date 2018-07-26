@@ -223,6 +223,7 @@ Our favourite languages!
   (use-package omnisharp
     :commands csharp-mode
     :config
+    (add-hook 'csharp-mode-hook 'omnisharp-mode)
     (add-to-list 'company-backends 'company-omnisharp))
 #+END_SRC
 ** Javascript
