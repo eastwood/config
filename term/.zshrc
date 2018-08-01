@@ -8,16 +8,16 @@ export TERM='xterm-256color'
 export GOPATH='/Users/cryan/Workspace/go'
 alias flushdns="mDNSResponder -HUP"
 alias vim="mvim -v"
-alias ec="emacsclient -q -c -n"
+alias ec="emacsclient -t"
 alias ls="ls -lsaG"
 alias grep="grep --color=auto"
 alias debug-chrome="/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --remote-debugging-port=9222"
 alias mux=tmuxinator
 alias rqpauth="~/Workspace/nib.com.au/bin/rqp auth --display-credentials"
 alias rqp="~/Workspace/nib.com.au/bin/rqp"
-alias dockerlogin="AWS_REGION='us-east-1' AWS_DEFAULT_REGION='us-east-1' aws ecr get-login --registry-ids 441581275790 | sh"
 alias dockerrmc="docker rm -f $(docker ps -aq)"
 alias dockerrmi="docker rmi $(docker images)"
+alias create-loopback="sudo ifconfig lo0 alias 10.100.10.1"
 alias aws-login="rqpauth && dockerlogin"
 export MONO_FRAMEWORK="/Library/Frameworks/Mono.framework/Versions/Current/bin"
 
@@ -99,3 +99,6 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+
+test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+

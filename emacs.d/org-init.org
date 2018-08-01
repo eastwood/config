@@ -15,8 +15,9 @@ on first install. On first install it's worth setting:
     (require 'use-package))
   (setq custom-file "~/.emacs.d/custom-settings.el")
   (load custom-file t)
+  (server-start)
 #+END_SRC
-* General 
+* General
 #+BEGIN_SRC emacs-lisp
   (setq-default indent-tabs-mode nil)
   (global-set-key (kbd "<f5>") 'revert-buffer)
@@ -37,6 +38,7 @@ on first install. On first install it's worth setting:
 Just some nice user interfaces tweaks. Bread and butter stuff!
 #+BEGIN_SRC emacs-lisp
   (use-package zenburn-theme
+    :ensure t
     :config
     (load-theme 'zenburn))
   (scroll-bar-mode -1)
@@ -46,18 +48,16 @@ Just some nice user interfaces tweaks. Bread and butter stuff!
   (setq-default indent-tabs-mode nil)
   (setq-default line-spacing 5)
   (setq ring-bell-function 'ignore)
+  (xterm-mouse-mode 1)
   (tool-bar-mode -1)
   (fset 'yes-or-no-p 'y-or-n-p)
 #+END_SRC
 * Company
 #+BEGIN_SRC emacs-lisp
   (use-package company
-    :config 
+    :config
     (global-company-mode t)
     (setq company-tooltip-align-annotations t))
-#+END_SRC
-* Color Theme
-#+BEGIN_SRC emacs-lisp
 #+END_SRC
 * Evil
 Evil complements the emacs ecosystem perfectly. The first thing I do is get this set up!
@@ -105,6 +105,8 @@ I like to throw in magit support and surround support too.
      "pt" 'neotree-find-project-root
      "sg" 'counsel-git-grep
      "tl" 'toggle-truncate-lines
+     "qc" 'delete-frame
+     "qq" 'save-buffers-kill-terminal
      "wc" 'evil-window-delete
      "ww" 'ace-window
      "wo" 'delete-other-windows
@@ -159,8 +161,17 @@ OSX fix for eslint lookup
     (use-package exec-path-from-shell
       :ensure t
       :config
-      (exec-path-from-shell-initialize)))
-#+END_SRC  
+      (exec-path-from-shell-initialize))
+    (defun copy-from-osx ()
+      :interactive
+      (shell-command-to-string "pbpaste"))
+    (defun paste-to-osx (text &optional push)
+      :interactive
+      (let ((process-connection-type nil))
+        (let ((proc (start-process "pbcopy" "*Messages*" "pbcopy")))
+          (process-send-string proc text)
+          (process-send-eof proc)))))
+#+END_SRC
 * Helper Functions
 #+BEGIN_SRC emacs-lisp
   (defun neotree-find-project-root()
@@ -218,13 +229,12 @@ Our favourite languages!
     :config
     (add-hook 'csharp-mode-hook 'omnisharp-mode)
     (add-to-list 'company-backends 'company-omnisharp))
-#+END_SRC 
+#+END_SRC
 ** Javascript
 Everybody uses JSON now, this make things look very pretty
 #+BEGIN_SRC emacs-lisp
   (use-package json-mode)
 #+END_SRC
-
 RJSX mode inherits js2-mode and supports jsx well. In my experience it's better than js2-jsx-mode, so I use it instead.
 We set basic offsets and also unmap vim C-d in insert mode, so that we can use the nice tag completion
 We also integrate with Tide here, so that we can jump back and forth across definitions
@@ -232,6 +242,7 @@ We also integrate with Tide here, so that we can jump back and forth across defi
   (use-package rjsx-mode
     :config
     (setq js2-basic-offset 2)
+    (setq typescript-indent-level 2)
     (define-key evil-insert-state-map (kbd "C-d") nil)
     (add-to-list 'auto-mode-alist '("\\.js\\'" . rjsx-mode)))
 #+END_SRC
@@ -248,19 +259,6 @@ Tide mode utilises Microsoft's excellent typescript tooling. Tide mode provides 
     :config
     (setq company-tooltip-align-annotations t)
     (add-hook 'rjsx-mode-hook #'setup-tide-mode))
-#+END_SRC
-Bread and butter web-mode. Highlighting for all things html/css
-#+BEGIN_SRC emacs-lisp
-  (use-package web-mode
-    :config
-    (defun my-web-mode-hook ()
-      "Hooks for Web mode. Adjust indents"
-      (setq web-mode-markup-indent-offset 2)
-      (setq web-mode-attr-indent-offset 2)
-      (setq web-mode-css-indent-offset 2)
-      (setq web-mode-code-indent-offset 2)
-      (setq css-indent-offset 2))
-    (add-hook 'web-mode-hook  'my-web-mode-hook))
 #+END_SRC
 ** Rust
  #+BEGIN_SRC emacs-lisp
@@ -291,6 +289,21 @@ Let's get all our yamls in order
 #+BEGIN_SRC emacs-lisp
   (use-package yaml-mode)
 #+END_SRC
+** Web
+Bread and butter web-mode. Highlighting for all things html/css
+#+BEGIN_SRC emacs-lisp
+(use-package web-mode
+  :config
+  (defun my-web-mode-hook ()
+  "Hooks for Web mode. Adjust indents"
+  (setq web-mode-markup-indent-offset 2)
+  (setq web-mode-attr-indent-offset 2)
+  (setq web-mode-css-indent-offset 2)
+  (setq web-mode-code-indent-offset 2)
+  (setq css-indent-offset 2))
+  (add-to-list 'auto-mode-alist '("\\.cshtml\\'" . web-mode))
+  (add-hook 'web-mode-hook  'my-web-mode-hook))
+#+END_SRC
 * Magit
 Magit is quite magical. I'm a huge fan of shelling out to command line when possible, but magit is a lot more intuitive, helpful and efficient.
 Combined with evil-magit and this is my favourite way of doing version control.
@@ -303,15 +316,17 @@ Combined with evil-magit and this is my favourite way of doing version control.
 * Markdown
 I try to use org files where possible, but markdown is super useful sometimes for projects. You can install live export tools as well, but I tend not to.
 #+BEGIN_SRC emacs-lisp
-  (use-package markdown-mode)
-#+END_SRC 
+  (use-package markdown-mode
+   :config
+   (setq-default markdown-split-window-direction 'right))
+#+END_SRC
 * NeoTree
 We need an evil tree! Coupled with some major mode evil bindings and we're in action
 #+BEGIN_SRC emacs-lisp
 (use-package neotree
   :commands (neotree-toggle neotree-find-project-root)
   :config
-  (evil-define-key 'normal neotree-mode-map 
+  (evil-define-key 'normal neotree-mode-map
     (kbd "TAB") 'neotree-enter
     "H" 'neotree-hidden-file-toggle
     "i" 'neotree-enter-horizontal-split
@@ -319,7 +334,7 @@ We need an evil tree! Coupled with some major mode evil bindings and we're in ac
     "q" 'neotree-hide
     (kbd "RET") 'neotree-enter)
 
-  (evil-leader/set-key-for-mode 'neotree-mode 
+  (evil-leader/set-key-for-mode 'neotree-mode
     "mo" 'neotree-open-file-in-system-application
     "md" 'neotree-delete-node
     "mr" 'neotree-rename-node
@@ -335,17 +350,17 @@ We need an evil tree! Coupled with some major mode evil bindings and we're in ac
 Org mode is an extremely productive way of organising your text files. I have org mode setup in basically a few files:
  - GTD.org
  - Calendar.org
-   
+
 We use org-capture to easily capture events, ideas and todo items without context switching from what I'm doing.
 I also use gcal.el to organise and synchronise with my google calendar. I generally will create an event in google calendar, or from within emacs (and sync).
 Then I'll create a link from my ~calendar.org~ file to my ~gtd.org~ file with a TODO item against it and the schedule.
 
-A better way might be to just use org-agenda and use the calendar file as well, but I'll probably experiment with it a little before doing that. 
+A better way might be to just use org-agenda and use the calendar file as well, but I'll probably experiment with it a little before doing that.
 
 #+BEGIN_SRC emacs-lisp
   (use-package org
     :mode ("\\.org\\'" . org-mode)
-    :init 
+    :init
     (evil-leader/set-key
       "oc" 'org-capture
       "oa" 'org-agenda
@@ -369,7 +384,7 @@ A better way might be to just use org-agenda and use the calendar file as well, 
       (kbd "TAB") 'org-cycle
       "gs" 'org-goto)
 
-    (evil-leader/set-key-for-mode 'org-capture-mode 
+    (evil-leader/set-key-for-mode 'org-capture-mode
       "c" 'org-capture-finalize
       "k" 'org-capture-kill)
     :config
@@ -413,12 +428,21 @@ Setup google calendar sync. I keep a secrets file in my Dropbox that I load here
 #+BEGIN_SRC emacs-lisp
   (use-package org-gcal
     :after org
-    :config 
+    :config
     (load-file "~/Dropbox/Keys/gcal.el")
     (setq org-gcal-client-id my/google-secrets-client
         org-gcal-client-secret my/google-secrets-secret
         org-gcal-file-alist '(("clint.ryan3@gmail.com" .  "~/Dropbox/notes/calendar.org")))
   )
+#+END_SRC
+Org presentation software
+#+BEGIN_SRC emacs-lisp
+  (use-package htmlize)
+  (use-package ox-reveal
+    :ensure t
+    :config
+    (setq org-reveal-title-slide nil)
+    (setq org-reveal-root "http://cdn.jsdelivr.net/reveal.js/3.0.0/"))
 #+END_SRC
 * Projectile
 Projectile is awesome for searching and handling projects.
@@ -442,7 +466,7 @@ I ignore ~node_modules~ naturally and also have some evil bindings for easily ac
 #+BEGIN_SRC emacs-lisp
   (use-package yasnippet
     :commands (yas-insert-snippet)
-    :init 
+    :init
     (evil-leader/set-key
      "is" 'yas-insert-snippet
      "in" 'yas-new-snippet)
