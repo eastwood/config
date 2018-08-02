@@ -157,16 +157,17 @@ OSX fix for eslint lookup
     (use-package exec-path-from-shell
       :ensure t
       :config
-      (exec-path-from-shell-initialize))
-    (defun copy-from-osx ()
-      :interactive
-      (shell-command-to-string "pbpaste"))
-    (defun paste-to-osx (text &optional push)
-      :interactive
-      (let ((process-connection-type nil))
-        (let ((proc (start-process "pbcopy" "*Messages*" "pbcopy")))
-          (process-send-string proc text)
-          (process-send-eof proc)))))
+      (exec-path-from-shell-initialize)))
+
+  (defun mac-copy()
+    (interactive)
+    (shell-command-on-region (region-beginning) (region-end) "pbcopy"))
+  (defun mac-paste()
+    (interactive)
+    (shell-command-on-region pbpaste))
+  (evil-define-key 'normal
+    "C-+" 'mac-copy
+    "C--" 'mac-paste)
 #+END_SRC
 * Helper Functions
 #+BEGIN_SRC emacs-lisp
