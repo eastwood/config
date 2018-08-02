@@ -154,6 +154,10 @@ I like to throw in magit support and surround support too.
 OSX fix for eslint lookup
 #+BEGIN_SRC emacs-lisp
   (when (memq window-system '(mac ns))
+    (add-to-list 'default-frame-alist
+                 '(ns-transparent-titlebar . t))
+    (add-to-list 'default-frame-alist
+                 '(ns-appearance . dark)) ;; or dark - depending on your theme
     (use-package exec-path-from-shell
       :ensure t
       :config
