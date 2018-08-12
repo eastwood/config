@@ -435,15 +435,6 @@ Setup google calendar sync. I keep a secrets file in my Dropbox that I load here
         org-gcal-file-alist '(("clint.ryan3@gmail.com" .  "~/Dropbox/notes/calendar.org")))
   )
 #+END_SRC
-Org presentation software
-#+BEGIN_SRC emacs-lisp
-  (use-package htmlize)
-  (use-package ox-reveal
-    :ensure t
-    :config
-    (setq org-reveal-title-slide nil)
-    (setq org-reveal-root "http://cdn.jsdelivr.net/reveal.js/3.0.0/"))
-#+END_SRC
 * Projectile
 Projectile is awesome for searching and handling projects.
 I ignore ~node_modules~ naturally and also have some evil bindings for easily accessing projects using leader keys
