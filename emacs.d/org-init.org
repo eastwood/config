@@ -259,7 +259,8 @@ Tide mode utilises Microsoft's excellent typescript tooling. Tide mode provides 
     :ensure t
     :config
     (setq company-tooltip-align-annotations t)
-    (add-hook 'rjsx-mode-hook #'setup-tide-mode))
+    (add-hook 'rjsx-mode-hook #'setup-tide-mode)
+    (add-hook 'typescript-mode #'setup-tide-mode))
 #+END_SRC
 ** Rust
  #+BEGIN_SRC emacs-lisp
@@ -364,17 +365,19 @@ A better way might be to just use org-agenda and use the calendar file as well, 
     :init
     (evil-leader/set-key
       "oc" 'org-capture
-      "oa" 'org-agenda
-      "os" 'org-schedule)
+      "oa" 'org-agenda)
 
     (evil-leader/set-key-for-mode 'org-mode
+      "mci" 'org-clock-in
+      "mco" 'org-clock-out
       "mt" 'org-set-tags-command
       "md" 'org-deadline
       "me" 'org-set-effort
+      "mls" 'org-store-link
+      "mlp" 'org-insert-last-stored-link
       "mn" 'org-narrow-to-subtree
       "mr" 'org-refile
-      "mss" 'org-store-link
-      "msp" 'org-insert-last-stored-link
+      "ms" 'org-schedule
       "mw" 'widen)
 
     (evil-define-key 'normal org-mode-map
@@ -388,6 +391,7 @@ A better way might be to just use org-agenda and use the calendar file as well, 
     (evil-leader/set-key-for-mode 'org-capture-mode
       "c" 'org-capture-finalize
       "k" 'org-capture-kill)
+
     :config
     (setq org-use-speed-commands t)
     (setq org-directory "~/Dropbox/notes")
@@ -399,7 +403,7 @@ A better way might be to just use org-agenda and use the calendar file as well, 
     (setq org-tag-alist
           '((:startgroup . nil)
             (:endgroup . nil)
-            ("WORK" . ?w) ("HOME" . ?h) ("COMPUTER" . ?l) ("GOALS" . ?g) ("READING" . ?r) ("PROJECT" . ?p)))
+            ("WORK" . ?w) ("HOME" . ?h) ("WORK" . ?w) ("COMPUTER" . ?l) ("GOALS" . ?g) ("READING" . ?r) ("PROJECT" . ?p)))
     (setq org-agenda-custom-commands
           '(("g" . "GTD contexts")
             ("gw" "Work" tags-todo "WORK")
@@ -415,7 +419,7 @@ A better way might be to just use org-agenda and use the calendar file as well, 
              nil)))
     (setq org-capture-templates
           '(("t" "Todo" entry (file+headline "~/Dropbox/notes/gtd.org" "Inbox")
-             "* TODO %?\n%T" :prepend T)
+             "* TODO %?\n:CREATED: %T\n" :prepend T)
             ("e" "Event" entry (file "~/Dropbox/notes/calendar.org")
              "* %?\n%T" :prepend T)
             ("i" "Ideas" entry (file+headline "~/Dropbox/notes/gtd.org" "Ideas")
@@ -435,15 +439,6 @@ Setup google calendar sync. I keep a secrets file in my Dropbox that I load here
         org-gcal-client-secret my/google-secrets-secret
         org-gcal-file-alist '(("clint.ryan3@gmail.com" .  "~/Dropbox/notes/calendar.org")))
   )
-#+END_SRC
-Org presentation software
-#+BEGIN_SRC emacs-lisp
-  (use-package htmlize)
-  (use-package ox-reveal
-    :ensure t
-    :config
-    (setq org-reveal-title-slide nil)
-    (setq org-reveal-root "http://cdn.jsdelivr.net/reveal.js/3.0.0/"))
 #+END_SRC
 * Projectile
 Projectile is awesome for searching and handling projects.
