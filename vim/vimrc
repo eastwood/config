@@ -41,7 +41,7 @@ set ttymouse=xterm2
 " 100 characters wide column
 set colorcolumn=120
 " User Interface
-colorscheme solarized
+colorscheme default 
 set bg=dark
 hi StatusLine ctermfg=0 ctermbg=4 guifg=#002b36 guibg=#268bd2
 hi StatusLineNC ctermfg=0 guifg=#002b36
