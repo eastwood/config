@@ -1,6 +1,9 @@
 .DS_Store
 npm-debug.log
 
+/emacs.d/emacs.el
+/emacs.d/emacs.elc
+/emacs.d/init.elc
 /emacs.d/org-init.el
 /emacs.d/ac-comphist.dat
 /emacs.d/recentf
