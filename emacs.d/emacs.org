@@ -133,10 +133,10 @@ I like to throw in magit support and surround support too.
 #+BEGIN_SRC emacs-lisp
   (use-package flycheck
     :config
+    (autoload 'pkg-info-version-info "pkg-info")
     (setq-default flycheck-disabled-checker 'javascript-jshint)
     (setq-default flycheck-disabled-checker 'json-jsonlist)
     (setq-default flycheck-disabled-checker 'javascript-eslint)
-    (setq-default flycheck-javascript-eslint-executable "eslint-project-relative")
     (flycheck-add-mode 'javascript-eslint 'web-mode)
 
     (defun my/use-eslint-from-node-modules ()
@@ -164,16 +164,6 @@ OSX fix for eslint lookup
       :ensure t
       :config
       (exec-path-from-shell-initialize)))
-
-  (defun mac-copy()
-    (interactive)
-    (shell-command-on-region (region-beginning) (region-end) "pbcopy"))
-  (defun mac-paste()
-    (interactive)
-    (shell-command-on-region pbpaste))
-  (evil-define-key 'normal
-    "C-+" 'mac-copy
-    "C--" 'mac-paste)
 #+END_SRC
 * Helper Functions
 #+BEGIN_SRC emacs-lisp
@@ -239,22 +229,30 @@ Everybody uses JSON now, this make things look very pretty
 #+END_SRC
 Tide mode utilises Microsoft's excellent typescript tooling. Tide mode provides excellent code completion, formatting and syntax checking.
 #+BEGIN_SRC emacs-lisp
-  (defun setup-tide-mode ()
-    "Set up Tide mode."
-    (interactive)
-    (tide-setup)
-    (eldoc-mode +1)
-    (tide-hl-identifier-mode +1))
-  (use-package tide
-    :ensure t
-    :config
-    (setq company-tooltip-align-annotations t)
-    (add-to-list 'auto-mode-alist '("\\.jsx\\'" . web-mode))
-    (add-hook 'web-mode-hook
-              (lambda ()
-                (when (string-equal "jsx" (file-name-extension buffer-file-name))
-                  (setup-tide-mode))))
-    (add-hook 'typescript-mode #'setup-tide-mode))
+    (defun setup-tide-mode ()
+      "Set up Tide mode."
+      (interactive)
+      (tide-setup)
+      (eldoc-mode +1)
+      (tide-hl-identifier-mode +1))
+
+    (use-package tide
+      :ensure t
+      :config
+      (setq company-tooltip-align-annotations t)
+      ;; javascript configuration
+      (add-hook 'js-mode-hook #'setup-tide-mode)
+      (flycheck-add-next-checker 'javascript-eslint 'javascript-tide 'append)
+      ;; jsx configuration with web mode
+      (add-to-list 'auto-mode-alist '("\\.jsx\\'" . web-mode))
+      (add-hook 'web-mode-hook
+                (lambda ()
+                  (when (string-equal "jsx" (file-name-extension buffer-file-name))
+                    (setup-tide-mode))))
+      (flycheck-add-mode 'javascript-eslint 'web-mode)
+      (flycheck-add-next-checker 'javascript-eslint 'jsx-tide 'append)
+      ;; typescript support
+      (add-hook 'typescript-mode #'setup-tide-mode))
 #+END_SRC
 ** Rust
  #+BEGIN_SRC emacs-lisp
@@ -444,7 +442,7 @@ I ignore ~node_modules~ naturally and also have some evil bindings for easily ac
     :config
     (setq projectile-completion-system 'ivy)
     (add-to-list 'projectile-globally-ignored-directories "node_modules")
-    (projectile-global-mode))
+    (projectile-mode))
   #+END_SRC
 * Smart Parenthesis
   Hightlight parens smartly :P
@@ -473,11 +471,11 @@ I ignore ~node_modules~ naturally and also have some evil bindings for easily ac
     (which-key-mode))
 #+END_SRC
 
-
-** Post Initialization
+* Post Initialization
 Let's lower our GC thresholds back down to a sane level.
 
 #+BEGIN_SRC emacs-lisp
 (setq gc-cons-threshold 16777216
       gc-cons-percentage 0.1)
+(server-start)
 #+END_SRC
