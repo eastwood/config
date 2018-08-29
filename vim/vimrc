@@ -2,6 +2,7 @@
 
 " Install packages
 call plug#begin()
+Plug 'jnurmine/zenburn' " Color scheme
 Plug 'tpope/vim-sensible' " Smart defaults
 Plug 'tpope/vim-dispatch' " Dispatcher
 Plug 'tpope/vim-fugitive' " Git badassery
@@ -9,58 +10,57 @@ Plug 'tpope/vim-surround' " The Pope's gift to man
 Plug 'scrooloose/nerdcommenter' " Comment lines
 Plug 'scrooloose/nerdtree' " File tree
 Plug 'pangloss/vim-javascript' " Javascript support
+Plug 'leafgarland/typescript-vim' " Typescript lang
+Plug 'Quramy/tsuquyomi' " Typescript/javascript support
 Plug 'mxw/vim-jsx' " JSX support
-Plug 'ternjs/tern_for_vim' " Javascript autocomplete
 Plug 'w0rp/ale' " Linting engine
-Plug 'altercation/vim-colors-solarized' " Solar powered colorschemes
 Plug 'rakr/vim-one'
 Plug 'kien/ctrlp.vim'
 Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets' " Snippets
 Plug 'OmniSharp/omnisharp-vim'
 call plug#end()
 
-set nocompatible
-let mapleader = " "
 
-set clipboard=unnamed " system clipboard
-set completeopt=menuone,preview,longest,noinsert
-set backspace=2
-set ttyfast
-set modelines=0
-set history=500
-set autoread
-set showmatch
-set splitbelow splitright
+" Settings
+  set nocompatible
+  let mapleader = " "
+  set clipboard=unnamed " system clipboard
+  set completeopt=menu,preview,longest,noinsert
+  set backspace=2
+  set ttyfast
+  set modelines=0
+  set history=500
+  set autoread
+  set showmatch
+  set splitbelow splitright
+  set mouse=a
+  set ttymouse=xterm2
 
-" Fonts and Colours
-set guifont=Source\ Code\ Pro:h12
-let &t_8f = "\<Esc>[38:2:%lu:%lu:%lum"
-let &t_8b = "\<Esc>[48:2:%lu:%lu:%lum"
-set mouse=a
-set ttymouse=xterm2
-" 100 characters wide column
-set colorcolumn=120
 " User Interface
-colorscheme default 
-set bg=dark
-hi StatusLine ctermfg=0 ctermbg=4 guifg=#002b36 guibg=#268bd2
-hi StatusLineNC ctermfg=0 guifg=#002b36
-hi VertSplit ctermbg=0 guibg=#002b36
+  colorscheme zenburn
+  set colorcolumn=120
+  set bg=dark
+  hi StatusLine ctermfg=0 ctermbg=4 guibg=grey guifg=#444444
+  hi StatusLineNC ctermfg=0
+  hi LineNr ctermfg=grey ctermbg=none
+  hi LineNr guifg=grey guibg=#444444
+  hi VertSplit ctermbg=0 guibg=#002b36
 
-if has("gui_running")
-  set guioptions-=m " no menu
-  set guioptions-=T " no toolbar
-  set guioptions-=r " no scrollbar on the right
-  set guioptions-=L " no scrollbar on the right
-  set guioptions-=b " no scrollbar on the bottom
-endif
+  if has("gui_running")
+    set guifont=Source\ Code\ Pro:h12
+    set guioptions-=m " no menu
+    set guioptions-=T " no toolbar
+    set guioptions-=r " no scrollbar on the right
+    set guioptions-=L " no scrollbar on the right
+    set guioptions-=b " no scrollbar on the bottom
+  endif
 
-set title
-set number
-set lazyredraw
-set showcmd
-set hidden
-set showmode
+  set title
+  set number
+  set lazyredraw
+  set showcmd
+  set hidden
+  set showmode
 
 " Files and Backups
 set noswapfile
@@ -152,9 +152,6 @@ set nowrap
   let g:UltiSnipsJumpForwardTrigger="<C-j>"
   let g:UltiSnipsJumpBackwardTrigger="<C-k>"
 
-  " Tern
-  autocmd FileType javascript nnoremap <buffer> <F12> :TernDef<CR>
-
   " NerdTree
   autocmd FileType nerdtree call SetConfig()
   function SetConfig()
@@ -164,3 +161,6 @@ set nowrap
   " Ctrlp
   let g:ctrlp_working_path_mode = 'ra'
   let g:ctrlp_custom_ignore='node_modules\|dist'
+  
+  " Javascript/Typescript
+  let g:tsuquyomi_javascript_support=1

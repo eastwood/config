@@ -19,11 +19,14 @@ A few things going on here.
   (setq gc-cons-threshold 402653184
         gc-cons-percentage 0.6)
   (setq byte-compile-warnings '(not free-vars unresolved noruntime lexical make-local))
+  (setq custom-file "~/.emacs.d/custom.el")
   (setq load-prefer-newer t
         package-user-dir "~/.emacs.d/elpa"
         package--init-file-ensured t
         package-enable-at-startup nil)
-  (unless (file-directory-p package-user-dir)
+  (setq backup-directory-alist
+          `(("." . ,(concat user-emacs-directory "backups"))))
+(unless (file-directory-p package-user-dir)
     (make-directory package-user-dir t))
   (setq use-package-always-defer t
         use-package-verbose t)
@@ -48,6 +51,9 @@ Just some nice user interfaces tweaks. Bread and butter stuff!
   (use-package zenburn-theme
     :config
     (load-theme 'zenburn t))
+  (use-package linum-relative
+    :config
+    (linum-relative-on))
   (scroll-bar-mode -1)
   (unless (memq window-system '(mac ns))
     (menu-bar-mode -1))
@@ -65,6 +71,12 @@ Just some nice user interfaces tweaks. Bread and butter stuff!
     :config
     (global-company-mode t)
     (setq company-tooltip-align-annotations t))
+#+END_SRC
+* Clipboard
+#+BEGIN_SRC emacs-lisp
+  (use-package xclip
+    :config
+    (xclip-mode))
 #+END_SRC
 * Evil
 Evil complements the emacs ecosystem perfectly. The first thing I do is get this set up!
@@ -226,33 +238,36 @@ Our favourite languages!
 Everybody uses JSON now, this make things look very pretty
 #+BEGIN_SRC emacs-lisp
   (use-package json-mode)
+  (use-package js-doc)
 #+END_SRC
 Tide mode utilises Microsoft's excellent typescript tooling. Tide mode provides excellent code completion, formatting and syntax checking.
 #+BEGIN_SRC emacs-lisp
-    (defun setup-tide-mode ()
-      "Set up Tide mode."
-      (interactive)
-      (tide-setup)
-      (eldoc-mode +1)
-      (tide-hl-identifier-mode +1))
+  (defun setup-tide-mode ()
+    "Set up Tide mode."
+    (interactive)
+    (tide-setup)
+    (eldoc-mode +1)
+    (company-mode +1)
+    (tide-hl-identifier-mode +1))
 
-    (use-package tide
-      :ensure t
-      :config
-      (setq company-tooltip-align-annotations t)
-      ;; javascript configuration
-      (add-hook 'js-mode-hook #'setup-tide-mode)
-      (flycheck-add-next-checker 'javascript-eslint 'javascript-tide 'append)
-      ;; jsx configuration with web mode
-      (add-to-list 'auto-mode-alist '("\\.jsx\\'" . web-mode))
-      (add-hook 'web-mode-hook
-                (lambda ()
-                  (when (string-equal "jsx" (file-name-extension buffer-file-name))
-                    (setup-tide-mode))))
-      (flycheck-add-mode 'javascript-eslint 'web-mode)
-      (flycheck-add-next-checker 'javascript-eslint 'jsx-tide 'append)
-      ;; typescript support
-      (add-hook 'typescript-mode #'setup-tide-mode))
+  (use-package tide
+    :ensure t
+    :config
+    (setq company-tooltip-align-annotations t)
+    ;; javascript configuration
+    (add-hook 'js-mode-hook #'setup-tide-mode)
+    (flycheck-add-next-checker 'javascript-eslint 'javascript-tide 'append)
+    ;; jsx configuration with web mode
+    (add-to-list 'auto-mode-alist '("\\.jsx\\'" . web-mode))
+    (add-hook 'web-mode-hook
+              (lambda ()
+                (when (string-equal "jsx" (file-name-extension buffer-file-name))
+                  (setup-tide-mode))))
+    (flycheck-add-mode 'javascript-eslint 'web-mode)
+    (flycheck-add-next-checker 'javascript-eslint 'jsx-tide 'append)
+    ;; typescript support
+    (setq typescript-indent-level 2)
+    (add-hook 'typescript-mode-hook #'setup-tide-mode))
 #+END_SRC
 ** Rust
  #+BEGIN_SRC emacs-lisp
