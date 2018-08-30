@@ -25,8 +25,8 @@ A few things going on here.
         package--init-file-ensured t
         package-enable-at-startup nil)
   (setq backup-directory-alist
-          `(("." . ,(concat user-emacs-directory "backups"))))
-(unless (file-directory-p package-user-dir)
+        `(("." . ,(concat user-emacs-directory "backups"))))
+  (unless (file-directory-p package-user-dir)
     (make-directory package-user-dir t))
   (setq use-package-always-defer t
         use-package-verbose t)

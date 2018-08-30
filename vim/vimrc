@@ -1,23 +1,39 @@
-" Vim 8 configuration file
+" Vim 8 configuration 
 
 " Install packages
 call plug#begin()
-Plug 'jnurmine/zenburn' " Color scheme
-Plug 'tpope/vim-sensible' " Smart defaults
-Plug 'tpope/vim-dispatch' " Dispatcher
-Plug 'tpope/vim-fugitive' " Git badassery
+
+" Defaults
 Plug 'tpope/vim-surround' " The Pope's gift to man
-Plug 'scrooloose/nerdcommenter' " Comment lines
+Plug 'tpope/vim-sensible' " Smart defaults
+
+" UI
+Plug 'jnurmine/zenburn'
 Plug 'scrooloose/nerdtree' " File tree
+
+" Versioning
+Plug 'tpope/vim-fugitive' " Git badassery
+Plug 'airblade/vim-gitgutter' " Gutter for changes + hunks
+
+" Languages
 Plug 'pangloss/vim-javascript' " Javascript support
 Plug 'leafgarland/typescript-vim' " Typescript lang
-Plug 'Quramy/tsuquyomi' " Typescript/javascript support
 Plug 'mxw/vim-jsx' " JSX support
-Plug 'w0rp/ale' " Linting engine
-Plug 'rakr/vim-one'
-Plug 'kien/ctrlp.vim'
-Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets' " Snippets
 Plug 'OmniSharp/omnisharp-vim'
+Plug 'Quramy/tsuquyomi' " Typescript/javascript support
+
+" Commenting
+Plug 'scrooloose/nerdcommenter' " Comment lines
+
+" Linting Engine
+Plug 'w0rp/ale'
+
+" Searching
+Plug 'kien/ctrlp.vim'
+
+" Snippets
+Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
+
 call plug#end()
 
 
@@ -26,7 +42,6 @@ call plug#end()
   let mapleader = " "
   set clipboard=unnamed " system clipboard
   set completeopt=menu,preview,longest,noinsert
-  set backspace=2
   set ttyfast
   set modelines=0
   set history=500
@@ -40,6 +55,13 @@ call plug#end()
   colorscheme zenburn
   set colorcolumn=120
   set bg=dark
+  set title
+  set number
+  set lazyredraw
+  set showcmd
+  set hidden
+  set showmode
+
   hi StatusLine ctermfg=0 ctermbg=4 guibg=grey guifg=#444444
   hi StatusLineNC ctermfg=0
   hi LineNr ctermfg=grey ctermbg=none
@@ -55,12 +77,6 @@ call plug#end()
     set guioptions-=b " no scrollbar on the bottom
   endif
 
-  set title
-  set number
-  set lazyredraw
-  set showcmd
-  set hidden
-  set showmode
 
 " Files and Backups
 set noswapfile
@@ -91,6 +107,7 @@ set nowrap
   imap <C-s> <C-o>:w!<CR>
   imap <C-v> <ESC>"+gP
   vmap <C-c> "+y
+
   nnoremap / /\v
   map \ :NERDTreeToggle<cr>
 
@@ -101,19 +118,17 @@ set nowrap
 
   " Project management
   nmap <leader>pf :CtrlP<CR>
-  nmap <leader>bb :CtrlPBuffer<CR>
-  nmap <leader>ft :NERDTreeFind<cr>
-  nmap <leader>pt :NERDTreeCWD<cr>
   nmap <leader>pp :source ~/Dropbox/sessions/
   nmap <leader>ps :mksession! ~/Dropbox/sessions/
+  nmap <leader>pt :NERDTreeCWD<cr>
   
   " Git/Fugitive keybindings
-  nnoremap <leader>gs :Gstatus<cr>
+  nnoremap <leader>gc :Gcommit<cr>
+  nnoremap <leader>gC :Git checkout
   nnoremap <leader>gf :Gfetch<cr>
   nnoremap <leader>gF :!git pull --rebase<cr>
   nnoremap <leader>gP :Gpush
-  nnoremap <leader>gc :Gcommit<cr>
-  nnoremap <leader>gC :Git checkout
+  nnoremap <leader>gs :Gstatus<cr>
 
   " Window bindings
   nnoremap <leader>wh <C-w>h
@@ -126,8 +141,8 @@ set nowrap
   nnoremap <leader>wv <C-w>v
 
   " Buffer bindings
-  nmap <leader>d :bd!<CR>
-  nmap <leader>bd :bp<bar>sp<bar>bn<bar>bd<CR>
+  nmap <leader>d :bp<bar>sp<bar>bn<bar>bd<CR>
+  nmap <leader>bd :bd!<CR>
   nmap <leader>bb :CtrlPBuffer<CR>
   nmap <leader>bn :bn!<CR>
   nmap <leader>bp :bp!<CR>
@@ -138,7 +153,8 @@ set nowrap
 
   nmap <leader>ff :edit 
   nmap <leader>fs :w!<CR>
-  nmap <leader>feR :source ~/.vimrc
+  nmap <leader>ft :NERDTreeFind<cr>
+  nmap <leader>feR :source ~/.vimrc<CR>
   nmap <leader>fed :edit ~/.vimrc<CR>
 
   " Tab Management
@@ -152,15 +168,14 @@ set nowrap
   let g:UltiSnipsJumpForwardTrigger="<C-j>"
   let g:UltiSnipsJumpBackwardTrigger="<C-k>"
 
-  " NerdTree
-  autocmd FileType nerdtree call SetConfig()
-  function SetConfig()
-    nmap <TAB> *@:call nerdtree#ui_glue#invokeKeyMap("o")<CR>
-  endfunction
-
   " Ctrlp
   let g:ctrlp_working_path_mode = 'ra'
   let g:ctrlp_custom_ignore='node_modules\|dist'
   
   " Javascript/Typescript
   let g:tsuquyomi_javascript_support=1
+
+  " Searching
+  nnoremap <Leader>sw :grep -R "\<<C-r><C-w>\>"
+  nnoremap <Leader>sg :grep -R "" . <Left><Left><Left><Left>
+
