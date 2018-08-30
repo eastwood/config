@@ -221,6 +221,7 @@ OSX fix for eslint lookup
 * Ivy/Swiper
 #+BEGIN_SRC emacs-lisp
   (use-package counsel)
+  (use-package counsel-projectile)
   (setq ivy-use-virtual-buffers t)
   (setq ivy-re-builders-alist '((t . ivy--regex-ignore-order)))
 #+END_SRC
@@ -228,8 +229,9 @@ OSX fix for eslint lookup
 Our favourite languages!
 ** C#
 #+BEGIN_SRC emacs-lisp
+  (use-package csharp-mode
+    :defer t)
   (use-package omnisharp
-    :commands csharp-mode
     :config
     (add-hook 'csharp-mode-hook 'omnisharp-mode)
     (add-to-list 'company-backends 'company-omnisharp))
@@ -455,6 +457,7 @@ I ignore ~node_modules~ naturally and also have some evil bindings for easily ac
     :diminish projectile-mode
     :commands (projectile-switch-project projectile-switch-buffer)
     :config
+    (setq projectile-enable-caching t)
     (setq projectile-completion-system 'ivy)
     (add-to-list 'projectile-globally-ignored-directories "node_modules")
     (projectile-mode))
