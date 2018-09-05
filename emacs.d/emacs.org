@@ -1,4 +1,4 @@
-#+TITLE: Emacs Configuration
++TITLE: Emacs Configuration
 #+AUTHOR: Clinton Ryan
 #+PROPERTY: header-args :tangle yes
 
@@ -24,6 +24,7 @@ A few things going on here.
         package-user-dir "~/.emacs.d/elpa"
         package--init-file-ensured t
         package-enable-at-startup nil)
+  (auto-save-visited-mode)
   (setq backup-directory-alist
         `(("." . ,(concat user-emacs-directory "backups"))))
   (unless (file-directory-p package-user-dir)
@@ -48,9 +49,10 @@ A few things going on here.
 * Interface
 Just some nice user interfaces tweaks. Bread and butter stuff!
 #+BEGIN_SRC emacs-lisp
-  (use-package zenburn-theme
+  (use-package zenburn-theme)
+  (use-package monokai-theme
     :config
-    (load-theme 'zenburn t))
+    (load-theme 'monokai t))
   (use-package linum-relative
     :config
     (linum-relative-on))
@@ -122,8 +124,8 @@ I like to throw in magit support and surround support too.
      "pp" 'projectile-switch-project
      "pb" 'projectile-switch-buffer
      "pt" 'neotree-find-project-root
-     "sg" 'counsel-git-grep
      "tl" 'toggle-truncate-lines
+     "ts" 'eshell
      "qc" 'delete-frame
      "qq" 'save-buffers-kill-terminal
      "wc" 'evil-window-delete
@@ -218,9 +220,16 @@ OSX fix for eslint lookup
       (message "Buffers deleted!")))
 
 #+END_SRC
-* Ivy/Swiper
+* Ivy/Swiper - Searching
 #+BEGIN_SRC emacs-lisp
-  (use-package counsel)
+  (use-package counsel
+    :config
+    (evil-leader/set-key
+     "sb" 'swiper
+     "sg" 'counsel-git-grep)
+     (counsel-mode)
+     (ivy-mode)
+  )
   (use-package counsel-projectile)
   (setq ivy-use-virtual-buffers t)
   (setq ivy-re-builders-alist '((t . ivy--regex-ignore-order)))
@@ -269,6 +278,7 @@ Tide mode utilises Microsoft's excellent typescript tooling. Tide mode provides 
     (flycheck-add-next-checker 'javascript-eslint 'jsx-tide 'append)
     ;; typescript support
     (setq typescript-indent-level 2)
+    (setq js-indent-level 2)
     (add-hook 'typescript-mode-hook #'setup-tide-mode))
 #+END_SRC
 ** Rust

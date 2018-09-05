@@ -15,3 +15,4 @@
     (org-babel-load-file (expand-file-name "emacs.org" user-emacs-directory))))
 
 ;;; init.el ends here
+(put 'dired-find-alternate-file 'disabled nil)
