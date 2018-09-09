@@ -5,8 +5,8 @@
 * Personal Information
 Let's set some variables with basic user information.
 #+BEGIN_SRC emacs-lisp
-(setq user-full-name "Clint Ryan"
-      user-mail-address "clint.ryan3@gmail.com")
+  (setq user-full-name "Clint Ryan"
+        user-mail-address "clint.ryan3@gmail.com")
 #+END_SRC
 * Initialization
 A few things going on here. 
@@ -51,11 +51,11 @@ Just some nice user interfaces tweaks. Bread and butter stuff!
 #+BEGIN_SRC emacs-lisp
   (use-package zenburn-theme)
   (use-package monokai-theme
-    :config
-    (load-theme 'monokai t))
+               :config
+               (load-theme 'monokai t))
   (use-package linum-relative
-    :config
-    (linum-relative-on))
+               :config
+               (linum-relative-on))
   (scroll-bar-mode -1)
   (unless (memq window-system '(mac ns))
     (menu-bar-mode -1))
@@ -70,15 +70,15 @@ Just some nice user interfaces tweaks. Bread and butter stuff!
 * Company
 #+BEGIN_SRC emacs-lisp
   (use-package company
-    :config
-    (global-company-mode t)
-    (setq company-tooltip-align-annotations t))
+               :config
+               (global-company-mode t)
+               (setq company-tooltip-align-annotations t))
 #+END_SRC
 * Clipboard
 #+BEGIN_SRC emacs-lisp
   (use-package xclip
-    :config
-    (xclip-mode))
+               :config
+               (xclip-mode))
 #+END_SRC
 * Evil
 Evil complements the emacs ecosystem perfectly. The first thing I do is get this set up!
@@ -87,9 +87,13 @@ A lot of these keybindings have been heavily influenced from spacemacs.
 I like to throw in magit support and surround support too.
 #+BEGIN_SRC emacs-lisp
   (use-package evil
-    :config
-    (evil-mode 1)
-    (setq evil-want-C-u-scroll t))
+               :config
+               (evil-mode 1)
+               (setq evil-want-C-u-scroll t))
+
+  (use-package evil-collection
+               :custom (evil-collection-setup-minibuffer t)
+               :init (evil-collection-init))
 
   (use-package evil-leader
     :after evil
@@ -146,25 +150,25 @@ I like to throw in magit support and surround support too.
 * FlyCheck
 #+BEGIN_SRC emacs-lisp
   (use-package flycheck
-    :config
-    (autoload 'pkg-info-version-info "pkg-info")
-    (setq-default flycheck-disabled-checker 'javascript-jshint)
-    (setq-default flycheck-disabled-checker 'json-jsonlist)
-    (setq-default flycheck-disabled-checker 'javascript-eslint)
-    (flycheck-add-mode 'javascript-eslint 'web-mode)
+               :config
+               (autoload 'pkg-info-version-info "pkg-info")
+               (setq-default flycheck-disabled-checker 'javascript-jshint)
+               (setq-default flycheck-disabled-checker 'json-jsonlist)
+               (setq-default flycheck-disabled-checker 'javascript-eslint)
+               (flycheck-add-mode 'javascript-eslint 'web-mode)
 
-    (defun my/use-eslint-from-node-modules ()
-      (let* ((root (locate-dominating-file
-      (or (buffer-file-name) default-directory)
-        "node_modules"))
-        (eslint (and root
-        (expand-file-name "node_modules/eslint/bin/eslint.js"
-          root))))
-        (when (and eslint (file-executable-p eslint))
-      (setq-local flycheck-javascript-eslint-executable eslint))))
-    (add-hook 'flycheck-mode-hook #'my/use-eslint-from-node-modules)
-    (global-flycheck-mode)
-  )
+               (defun my/use-eslint-from-node-modules ()
+                 (let* ((root (locate-dominating-file
+                               (or (buffer-file-name) default-directory)
+                               "node_modules"))
+                        (eslint (and root
+                                     (expand-file-name "node_modules/eslint/bin/eslint.js"
+                                                       root))))
+                   (when (and eslint (file-executable-p eslint))
+                     (setq-local flycheck-javascript-eslint-executable eslint))))
+               (add-hook 'flycheck-mode-hook #'my/use-eslint-from-node-modules)
+               (global-flycheck-mode)
+               )
 #+END_SRC
 * Mac specific
 OSX fix for eslint lookup
@@ -175,9 +179,9 @@ OSX fix for eslint lookup
     (add-to-list 'default-frame-alist
                  '(ns-appearance . dark)) ;; or dark - depending on your theme
     (use-package exec-path-from-shell
-      :ensure t
-      :config
-      (exec-path-from-shell-initialize)))
+                 :ensure t
+                 :config
+                 (exec-path-from-shell-initialize)))
 #+END_SRC
 * Helper Functions
 #+BEGIN_SRC emacs-lisp
@@ -223,13 +227,12 @@ OSX fix for eslint lookup
 * Ivy/Swiper - Searching
 #+BEGIN_SRC emacs-lisp
   (use-package counsel
-    :config
-    (evil-leader/set-key
-     "sb" 'swiper
-     "sg" 'counsel-git-grep)
-     (counsel-mode)
-     (ivy-mode)
-  )
+               :config
+               (evil-leader/set-key
+                 "sb" 'swiper
+                 "sg" 'counsel-git-grep)
+               (counsel-mode)
+               (ivy-mode))
   (use-package counsel-projectile)
   (setq ivy-use-virtual-buffers t)
   (setq ivy-re-builders-alist '((t . ivy--regex-ignore-order)))
@@ -239,11 +242,11 @@ Our favourite languages!
 ** C#
 #+BEGIN_SRC emacs-lisp
   (use-package csharp-mode
-    :defer t)
+               :defer t)
   (use-package omnisharp
-    :config
-    (add-hook 'csharp-mode-hook 'omnisharp-mode)
-    (add-to-list 'company-backends 'company-omnisharp))
+               :config
+               (add-hook 'csharp-mode-hook 'omnisharp-mode)
+               (add-to-list 'company-backends 'company-omnisharp))
 #+END_SRC
 ** Javascript
 Everybody uses JSON now, this make things look very pretty
@@ -262,44 +265,44 @@ Tide mode utilises Microsoft's excellent typescript tooling. Tide mode provides 
     (tide-hl-identifier-mode +1))
 
   (use-package tide
-    :ensure t
-    :config
-    (setq company-tooltip-align-annotations t)
-    ;; javascript configuration
-    (add-hook 'js-mode-hook #'setup-tide-mode)
-    (flycheck-add-next-checker 'javascript-eslint 'javascript-tide 'append)
-    ;; jsx configuration with web mode
-    (add-to-list 'auto-mode-alist '("\\.jsx\\'" . web-mode))
-    (add-hook 'web-mode-hook
-              (lambda ()
-                (when (string-equal "jsx" (file-name-extension buffer-file-name))
-                  (setup-tide-mode))))
-    (flycheck-add-mode 'javascript-eslint 'web-mode)
-    (flycheck-add-next-checker 'javascript-eslint 'jsx-tide 'append)
-    ;; typescript support
-    (setq typescript-indent-level 2)
-    (setq js-indent-level 2)
-    (add-hook 'typescript-mode-hook #'setup-tide-mode))
+               :ensure t
+               :config
+               (setq company-tooltip-align-annotations t)
+               ;; javascript configuration
+               (add-hook 'js-mode-hook #'setup-tide-mode)
+               (flycheck-add-next-checker 'javascript-eslint 'javascript-tide 'append)
+               ;; jsx configuration with web mode
+               (add-to-list 'auto-mode-alist '("\\.jsx\\'" . web-mode))
+               (add-hook 'web-mode-hook
+                         (lambda ()
+                           (when (string-equal "jsx" (file-name-extension buffer-file-name))
+                             (setup-tide-mode))))
+               (flycheck-add-mode 'javascript-eslint 'web-mode)
+               (flycheck-add-next-checker 'javascript-eslint 'jsx-tide 'append)
+               ;; typescript support
+               (setq typescript-indent-level 2)
+               (setq js-indent-level 2)
+               (add-hook 'typescript-mode-hook #'setup-tide-mode))
 #+END_SRC
 ** Rust
  #+BEGIN_SRC emacs-lisp
    (use-package rust-mode
-     :mode ("\\.rs\\'" . rust-mode))
+                :mode ("\\.rs\\'" . rust-mode))
  #+END_SRC
  Let flycheck hook into rust tooling
  #+BEGIN_SRC emacs-lisp
    (use-package flycheck-rust
-     :commands (rust-mode))
+                :commands (rust-mode))
  #+END_SRC
  Autocompletion for rust. I love how new languages provide tooling like this that are editor agnostic.
  #+BEGIN_SRC emacs-lisp
    (use-package racer
-     :commands (rust-mode)
-     :config
-     (evil-define-key 'insert rust-mode-map
-       (kbd "TAB") 'company-indent-or-complete-common)
-     (add-hook 'rust-mode-hook #'racer-mode)
-     (add-hook 'racer-mode-hook #'eldoc-mode))
+                :commands (rust-mode)
+                :config
+                (evil-define-key 'insert rust-mode-map
+                  (kbd "TAB") 'company-indent-or-complete-common)
+                (add-hook 'rust-mode-hook #'racer-mode)
+                (add-hook 'racer-mode-hook #'eldoc-mode))
  #+END_SRC
 ** CSS
 #+BEGIN_SRC emacs-lisp
@@ -313,57 +316,57 @@ Let's get all our yamls in order
 ** Web
 Bread and butter web-mode. Highlighting for all things html/css
 #+BEGIN_SRC emacs-lisp
-(use-package web-mode
-  :config
-  (defun my-web-mode-hook ()
-  "Hooks for Web mode. Adjust indents"
-  (setq web-mode-markup-indent-offset 2)
-  (setq web-mode-attr-indent-offset 2)
-  (setq web-mode-css-indent-offset 2)
-  (setq web-mode-code-indent-offset 2)
-  (setq css-indent-offset 2))
-  (add-to-list 'auto-mode-alist '("\\.cshtml\\'" . web-mode))
-  (add-hook 'web-mode-hook  'my-web-mode-hook))
+  (use-package web-mode
+               :config
+               (defun my-web-mode-hook ()
+                 "Hooks for Web mode. Adjust indents"
+                 (setq web-mode-markup-indent-offset 2)
+                 (setq web-mode-attr-indent-offset 2)
+                 (setq web-mode-css-indent-offset 2)
+                 (setq web-mode-code-indent-offset 2)
+                 (setq css-indent-offset 2))
+               (add-to-list 'auto-mode-alist '("\\.cshtml\\'" . web-mode))
+               (add-hook 'web-mode-hook  'my-web-mode-hook))
 #+END_SRC
 * Magit
 Magit is quite magical. I'm a huge fan of shelling out to command line when possible, but magit is a lot more intuitive, helpful and efficient.
 Combined with evil-magit and this is my favourite way of doing version control.
 #+BEGIN_SRC emacs-lisp
   (use-package magit
-    :commands magit-status)
+               :commands magit-status)
   (use-package evil-magit
-    :after magit)
+               :after magit)
 #+END_SRC
 * Markdown
 I try to use org files where possible, but markdown is super useful sometimes for projects. You can install live export tools as well, but I tend not to.
 #+BEGIN_SRC emacs-lisp
   (use-package markdown-mode
-   :config
-   (setq-default markdown-split-window-direction 'right))
+               :config
+               (setq-default markdown-split-window-direction 'right))
 #+END_SRC
 * NeoTree
 We need an evil tree! Coupled with some major mode evil bindings and we're in action
 #+BEGIN_SRC emacs-lisp
-(use-package neotree
-  :commands (neotree-toggle neotree-find-project-root)
-  :config
-  (evil-define-key 'normal neotree-mode-map
-    (kbd "TAB") 'neotree-enter
-    "H" 'neotree-hidden-file-toggle
-    "i" 'neotree-enter-horizontal-split
-    "s" 'neotree-enter-vertical-split
-    "q" 'neotree-hide
-    (kbd "RET") 'neotree-enter)
+  (use-package neotree
+               :commands (neotree-toggle neotree-find-project-root)
+               :config
+               (evil-define-key 'normal neotree-mode-map
+                 (kbd "TAB") 'neotree-enter
+                 "H" 'neotree-hidden-file-toggle
+                 "i" 'neotree-enter-horizontal-split
+                 "s" 'neotree-enter-vertical-split
+                 "q" 'neotree-hide
+                 (kbd "RET") 'neotree-enter)
 
-  (evil-leader/set-key-for-mode 'neotree-mode
-    "mo" 'neotree-open-file-in-system-application
-    "md" 'neotree-delete-node
-    "mr" 'neotree-rename-node
-    "mc" 'neotree-create-node)
+               (evil-leader/set-key-for-mode 'neotree-mode
+                 "mo" 'neotree-open-file-in-system-application
+                 "md" 'neotree-delete-node
+                 "mr" 'neotree-rename-node
+                 "mc" 'neotree-create-node)
 
-  (setq neo-theme 'nerd)
-  (setq neo-window-fixed-size nil)
-  (setq neo-smart-open t))
+               (setq neo-theme 'nerd)
+               (setq neo-window-fixed-size nil)
+               (setq neo-smart-open t))
   (setq neo-window-width 40)
   (setq neo-default-system-application "open")
 #+END_SRC
@@ -380,97 +383,96 @@ A better way might be to just use org-agenda and use the calendar file as well, 
 
 #+BEGIN_SRC emacs-lisp
   (use-package org
-    :mode ("\\.org\\'" . org-mode)
-    :init
-    (evil-leader/set-key
-      "oc" 'org-capture
-      "oa" 'org-agenda)
+               :mode ("\\.org\\'" . org-mode)
+               :init
+               (evil-leader/set-key
+                 "oc" 'org-capture
+                 "oa" 'org-agenda)
 
-    (evil-leader/set-key-for-mode 'org-mode
-      "mci" 'org-clock-in
-      "mco" 'org-clock-out
-      "mt" 'org-set-tags-command
-      "md" 'org-deadline
-      "me" 'org-set-effort
-      "mls" 'org-store-link
-      "mlp" 'org-insert-last-stored-link
-      "mn" 'org-narrow-to-subtree
-      "mr" 'org-refile
-      "ms" 'org-schedule
-      "mw" 'widen)
+               (evil-leader/set-key-for-mode 'org-mode
+                 "mci" 'org-clock-in
+                 "mco" 'org-clock-out
+                 "mt" 'org-set-tags-command
+                 "md" 'org-deadline
+                 "me" 'org-set-effort
+                 "mls" 'org-store-link
+                 "mlp" 'org-insert-last-stored-link
+                 "mn" 'org-narrow-to-subtree
+                 "mr" 'org-refile
+                 "ms" 'org-schedule
+                 "mw" 'widen)
 
-    (evil-define-key 'normal org-mode-map
-      ">" 'org-shiftmetaright
-      "<" 'org-shiftmetaleft
-      "c" 'org-toggle-checkbox
-      "t" 'org-todo
-      (kbd "TAB") 'org-cycle
-      "gs" 'org-goto)
+               (evil-define-key 'normal org-mode-map
+                 ">" 'org-shiftmetaright
+                 "<" 'org-shiftmetaleft
+                 "c" 'org-toggle-checkbox
+                 "t" 'org-todo
+                 (kbd "TAB") 'org-cycle
+                 "gs" 'org-goto)
 
-    (evil-leader/set-key-for-mode 'org-capture-mode
-      "c" 'org-capture-finalize
-      "k" 'org-capture-kill)
+               (evil-leader/set-key-for-mode 'org-capture-mode
+                 "c" 'org-capture-finalize
+                 "k" 'org-capture-kill)
 
-    :config
-    (setq org-use-speed-commands t)
-    (setq org-directory "~/Dropbox/notes")
-    (setq org-default-notes-file (concat org-directory "/gtd.org"))
-    (define-key global-map "\C-cc" 'org-capture)
-    (setq org-global-properties '(("Effort_ALL". "0 0:10 0:20 0:30 1:00 2:00 3:00 4:00 6:00 8:00")))
-    (setq org-columns-default-format '"%25ITEM %10Effort(Est){+} %TODO %TAGS")
-    (org-agenda-files '"~/Dropbox/notes/gtd.org")
-    (setq org-tag-alist
-          '((:startgroup . nil)
-            (:endgroup . nil)
-            ("WORK" . ?w) ("HOME" . ?h) ("WORK" . ?w) ("COMPUTER" . ?l) ("GOALS" . ?g) ("READING" . ?r) ("PROJECT" . ?p)))
-    (setq org-agenda-custom-commands
-          '(("g" . "GTD contexts")
-            ("gw" "Work" tags-todo "WORK")
-            ("gc" "Computer" tags-todo "COMPUTER")
-            ("gg" "Goals" tags-todo "GOALS")
-            ("gh" "Home" tags-todo "HOME")
-            ("gt" "Tasks" tags-todo "TASKS")
-            ("G" "GTD Block Agenda"
-             ((tags-todo "WORK")
-              (tags-todo "COMPUTER")
-              (tags-todo "GOALS")
-              (tags-todo "TASKS"))
-             nil)))
-    (setq org-capture-templates
-          '(("t" "Todo" entry (file+headline "~/Dropbox/notes/gtd.org" "Inbox")
-             "* TODO %?\n:CREATED: %T\n" :prepend T)
-            ("e" "Event" entry (file "~/Dropbox/notes/calendar.org")
-             "* %?\n%T" :prepend T)
-            ("i" "Ideas" entry (file+headline "~/Dropbox/notes/gtd.org" "Ideas")
-             "* %?\n%T" :prepend T)
-            ("g" "Goals" entry (file+headline "~/Dropbox/notes/gtd.org" "Goals")
-             "* %?\n%T" :prepend T)
-            ("j" "Journal" entry (file+datetree "~/Dropbox/notes/journal.org")
-             "* %?\nEntered on %U\n  %i\n  %a"))))
+               :config
+               (setq org-use-speed-commands t)
+               (setq org-directory "~/Dropbox/notes")
+               (setq org-default-notes-file (concat org-directory "/gtd.org"))
+               (define-key global-map "\C-cc" 'org-capture)
+               (setq org-global-properties '(("Effort_ALL". "0 0:10 0:20 0:30 1:00 2:00 3:00 4:00 6:00 8:00")))
+               (setq org-columns-default-format '"%25ITEM %10Effort(Est){+} %TODO %TAGS")
+               (org-agenda-files '"~/Dropbox/notes/gtd.org")
+               (setq org-tag-alist
+                     '((:startgroup . nil)
+                       (:endgroup . nil)
+                       ("WORK" . ?w) ("HOME" . ?h) ("WORK" . ?w) ("COMPUTER" . ?l) ("GOALS" . ?g) ("READING" . ?r) ("PROJECT" . ?p)))
+               (setq org-agenda-custom-commands
+                     '(("g" . "GTD contexts")
+                       ("gw" "Work" tags-todo "WORK")
+                       ("gc" "Computer" tags-todo "COMPUTER")
+                       ("gg" "Goals" tags-todo "GOALS")
+                       ("gh" "Home" tags-todo "HOME")
+                       ("gt" "Tasks" tags-todo "TASKS")
+                       ("G" "GTD Block Agenda"
+                        ((tags-todo "WORK")
+                         (tags-todo "COMPUTER")
+                         (tags-todo "GOALS")
+                         (tags-todo "TASKS"))
+                        nil)))
+               (setq org-capture-templates
+                     '(("t" "Todo" entry (file+headline "~/Dropbox/notes/gtd.org" "Inbox")
+                        "* TODO %?\n:CREATED: %T\n" :prepend T)
+                       ("e" "Event" entry (file "~/Dropbox/notes/calendar.org")
+                        "* %?\n%T" :prepend T)
+                       ("i" "Ideas" entry (file+headline "~/Dropbox/notes/gtd.org" "Ideas")
+                        "* %?\n%T" :prepend T)
+                       ("g" "Goals" entry (file+headline "~/Dropbox/notes/gtd.org" "Goals")
+                        "* %?\n%T" :prepend T)
+                       ("j" "Journal" entry (file+datetree "~/Dropbox/notes/journal.org")
+                        "* %?\nEntered on %U\n  %i\n  %a"))))
 #+END_SRC
 Setup google calendar sync. I keep a secrets file in my Dropbox that I load here as well. Secrets file contains a few variables for secrets and client tokens
 #+BEGIN_SRC emacs-lisp
   (use-package org-gcal
-    :after org
-    :config
-    (load-file "~/Dropbox/Keys/gcal.el")
-    (setq org-gcal-client-id my/google-secrets-client
-        org-gcal-client-secret my/google-secrets-secret
-        org-gcal-file-alist '(("clint.ryan3@gmail.com" .  "~/Dropbox/notes/calendar.org")))
-  )
+               :after org
+               :config
+               (load-file "~/Dropbox/Keys/gcal.el")
+               (setq org-gcal-client-id my/google-secrets-client
+                     org-gcal-client-secret my/google-secrets-secret
+                     org-gcal-file-alist '(("clint.ryan3@gmail.com" .  "~/Dropbox/notes/calendar.org"))))
 #+END_SRC
 * Projectile
 Projectile is awesome for searching and handling projects.
 I ignore ~node_modules~ naturally and also have some evil bindings for easily accessing projects using leader keys
 #+BEGIN_SRC emacs-lisp
   (use-package projectile
-    :diminish projectile-mode
-    :commands (projectile-switch-project projectile-switch-buffer)
-    :config
-    (setq projectile-enable-caching t)
-    (setq projectile-completion-system 'ivy)
-    (add-to-list 'projectile-globally-ignored-directories "node_modules")
-    (projectile-mode))
+               :diminish projectile-mode
+               :commands (projectile-switch-project projectile-switch-buffer)
+               :config
+               (setq projectile-enable-caching t)
+               (setq projectile-completion-system 'ivy)
+               (add-to-list 'projectile-globally-ignored-directories "node_modules")
+               (projectile-mode))
   #+END_SRC
 * Smart Parenthesis
   Hightlight parens smartly :P
@@ -481,29 +483,29 @@ I ignore ~node_modules~ naturally and also have some evil bindings for easily ac
   YaSnippet allows us to insert snippets easily. We disable the <TAB> completion because we use that for other things, but we can insert snippets still using leader bindings.
 #+BEGIN_SRC emacs-lisp
   (use-package yasnippet
-    :commands (yas-insert-snippet)
-    :init
-    (evil-leader/set-key
-     "is" 'yas-insert-snippet
-     "in" 'yas-new-snippet)
-    :config
-    (define-key yas-minor-mode-map (kbd "<tab>") nil)
-    (define-key yas-minor-mode-map (kbd "TAB") nil)
-    (yas-global-mode 1))
+               :commands (yas-insert-snippet)
+               :init
+               (evil-leader/set-key
+                 "is" 'yas-insert-snippet
+                 "in" 'yas-new-snippet)
+               :config
+               (define-key yas-minor-mode-map (kbd "<tab>") nil)
+               (define-key yas-minor-mode-map (kbd "TAB") nil)
+               (yas-global-mode 1))
   #+END_SRC
 * Which Key
   Awesome package for key discovery!
 #+BEGIN_SRC emacs-lisp
   (use-package which-key
-    :config
-    (which-key-mode))
+               :config
+               (which-key-mode))
 #+END_SRC
 
 * Post Initialization
 Let's lower our GC thresholds back down to a sane level.
 
 #+BEGIN_SRC emacs-lisp
-(setq gc-cons-threshold 16777216
-      gc-cons-percentage 0.1)
-(server-start)
+  (setq gc-cons-threshold 16777216
+        gc-cons-percentage 0.1)
+  (server-start)
 #+END_SRC
