@@ -9,8 +9,8 @@ Let's set some variables with basic user information.
         user-mail-address "clint.ryan3@gmail.com")
 #+END_SRC
 * Initialization
-A few things going on here. 
- - add resources for compilation. 
+A few things going on here.
+ - add resources for compilation.
  - set load-path manually (performance optimisation)
  - compile-only: sets up package repos
  - compile-only: sets up use-package
@@ -24,7 +24,6 @@ A few things going on here.
         package-user-dir "~/.emacs.d/elpa"
         package--init-file-ensured t
         package-enable-at-startup nil)
-  (auto-save-visited-mode)
   (setq backup-directory-alist
         `(("." . ,(concat user-emacs-directory "backups"))))
   (unless (file-directory-p package-user-dir)
@@ -73,12 +72,6 @@ Just some nice user interfaces tweaks. Bread and butter stuff!
                :config
                (global-company-mode t)
                (setq company-tooltip-align-annotations t))
-#+END_SRC
-* Clipboard
-#+BEGIN_SRC emacs-lisp
-  (use-package xclip
-               :config
-               (xclip-mode))
 #+END_SRC
 * Evil
 Evil complements the emacs ecosystem perfectly. The first thing I do is get this set up!
@@ -178,6 +171,9 @@ OSX fix for eslint lookup
                  '(ns-transparent-titlebar . t))
     (add-to-list 'default-frame-alist
                  '(ns-appearance . dark)) ;; or dark - depending on your theme
+  (use-package xclip
+               :config
+               (xclip-mode))
     (use-package exec-path-from-shell
                  :ensure t
                  :config
