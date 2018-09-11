@@ -86,66 +86,73 @@ It's super important to have the leader keymap as well, so that I can perform al
 A lot of these keybindings have been heavily influenced from spacemacs.
 I like to throw in magit support and surround support too.
 #+BEGIN_SRC emacs-lisp
-  (use-package evil
-               :config
-               (evil-mode 1)
-               (setq evil-want-C-u-scroll t))
+    (use-package evil
+                 :ensure t
+                 :init
+                 (setq evil-want-integration nil)
+                 :config
+                 (evil-mode 1)
+                 (setq evil-want-C-u-scroll t))
 
-  (use-package evil-collection
-               :custom (evil-collection-setup-minibuffer t)
-               :init (evil-collection-init))
+    (use-package evil-collection
+                 :custom 
+                 (evil-collection-company-use-tng nil)
+                 (evil-collection-setup-minibuffer t)
+                 :after evil
+                 :config 
+                 (evil-collection-init))
 
-  (use-package evil-leader
-    :after evil
-    :config
-    (evil-leader/set-leader "SPC")
-    (evil-leader/set-key
-     "SPC" 'counsel-M-x
-     "[" 'previous-error
-     "]" 'next-error
-     "bb" 'ivy-switch-buffer
-     "bl" 'dired
-     "bd" 'kill-buffer
-     "bk" 'kill-this-buffer
-     "bD" 'kill-other-buffers
-     "bn" 'next-buffer
-     "bp" 'previous-buffer
-     "eb" 'eval-buffer
-     "er" 'eval-region
-     "fs" 'save-buffer
-     "fj" 'open-journal-file
-     "fo" 'open-org-file
-     "fc" 'open-calendar-file
-     "ff" 'counsel-find-file
-     "fr" 'counsel-recentf
-     "fed" 'open-config-file
-     "feR" 'reload-config-file
-     "ft" 'neotree-toggle
-     "gs" 'magit-status
-     "mf" 'tide-jump-to-definition
-     "mb" 'tide-jump-back
-     "pf" 'projectile-find-file
-     "pp" 'projectile-switch-project
-     "pb" 'projectile-switch-buffer
-     "pt" 'neotree-find-project-root
-     "tl" 'toggle-truncate-lines
-     "ts" 'eshell
-     "qc" 'delete-frame
-     "qq" 'save-buffers-kill-terminal
-     "wc" 'evil-window-delete
-     "ww" 'ace-window
-     "wo" 'delete-other-windows
-     "wj" 'evil-window-down
-     "wk" 'evil-window-up
-     "wh" 'evil-window-left
-     "wl" 'evil-window-right
-     "wv" 'evil-window-vsplit
-     "ws" 'evil-window-split)
-    (global-evil-leader-mode))
-  (use-package evil-surround
-    :after evil
-    :config
-    (global-evil-surround-mode))
+    (use-package evil-leader
+      :after evil
+      :config
+      (evil-leader/set-leader "SPC")
+      (evil-leader/set-key
+       "SPC" 'counsel-M-x
+       "[" 'previous-error
+       "]" 'next-error
+       "bb" 'ivy-switch-buffer
+       "bl" 'dired
+       "bd" 'kill-buffer
+       "bk" 'kill-this-buffer
+       "bD" 'kill-other-buffers
+       "bn" 'next-buffer
+       "bp" 'previous-buffer
+       "eb" 'eval-buffer
+       "er" 'eval-region
+       "fs" 'save-buffer
+       "fj" 'open-journal-file
+       "fo" 'open-org-file
+       "fc" 'open-calendar-file
+       "ff" 'counsel-find-file
+       "fr" 'counsel-recentf
+       "fed" 'open-config-file
+       "feR" 'reload-config-file
+       "ft" 'neotree-toggle
+       "gs" 'magit-status
+       "mf" 'tide-jump-to-definition
+       "mb" 'tide-jump-back
+       "pf" 'projectile-find-file
+       "pp" 'projectile-switch-project
+       "pb" 'projectile-switch-buffer
+       "pt" 'neotree-find-project-root
+       "tl" 'toggle-truncate-lines
+       "ts" 'eshell
+       "qc" 'delete-frame
+       "qq" 'save-buffers-kill-terminal
+       "wc" 'evil-window-delete
+       "ww" 'ace-window
+       "wo" 'delete-other-windows
+       "wj" 'evil-window-down
+       "wk" 'evil-window-up
+       "wh" 'evil-window-left
+       "wl" 'evil-window-right
+       "wv" 'evil-window-vsplit
+       "ws" 'evil-window-split)
+      (global-evil-leader-mode))
+    (use-package evil-surround
+      :after evil
+      :config
+      (global-evil-surround-mode))
 #+END_SRC
 * FlyCheck
 #+BEGIN_SRC emacs-lisp
