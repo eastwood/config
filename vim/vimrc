@@ -6,10 +6,9 @@ call plug#begin()
 " Defaults
 Plug 'tpope/vim-surround' " The Pope's gift to man
 Plug 'tpope/vim-sensible' " Smart defaults
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 
 " UI
-Plug 'jnurmine/zenburn'
+Plug 'icymind/NeoSolarized'
 Plug 'scrooloose/nerdtree' " File tree
 
 " Versioning
@@ -23,6 +22,19 @@ Plug 'mxw/vim-jsx' " JSX support
 Plug 'OmniSharp/omnisharp-vim'
 Plug 'Quramy/tsuquyomi' " Typescript/javascript support
 
+" LSP
+Plug 'autozimu/LanguageClient-neovim', {
+      \ 'branch': 'next',
+      \ 'do': 'bash install.sh',
+      \ }
+
+" Autocompletion
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+if !has('nvim')
+  Plug 'roxma/nvim-yarp'
+  Plug 'roxma/vim-hug-neovim-rpc'
+endif
+
 " Commenting
 Plug 'scrooloose/nerdcommenter' " Comment lines
 
@@ -30,7 +42,7 @@ Plug 'scrooloose/nerdcommenter' " Comment lines
 Plug 'w0rp/ale'
 
 " Searching
-Plug 'kien/ctrlp.vim'
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 
 " Snippets
 Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
@@ -58,7 +70,7 @@ else
 endif
 
 " User Interface
-colorscheme zenburn
+colorscheme NeoSolarized
 set colorcolumn=120
 set bg=dark
 set title
@@ -67,12 +79,6 @@ set lazyredraw
 set showcmd
 set hidden
 set showmode
-
-hi StatusLine ctermfg=0 ctermbg=4 guibg=grey guifg=#444444
-hi StatusLineNC ctermfg=0
-hi LineNr ctermfg=grey ctermbg=none
-hi LineNr guifg=grey guibg=#444444
-hi VertSplit ctermbg=0 guibg=#002b36
 
 if has("gui_running")
   set guifont=Source\ Code\ Pro:h12
@@ -123,7 +129,8 @@ inoremap <expr><CR>       pumvisible() ? "\<C-y>" : "\<CR>"
 autocmd CompleteDone * pclose
 
 " Project management
-nmap <leader>pf :CtrlP<CR>
+nmap <leader>pf :FZF<CR>
+
 nmap <leader>pp :source ~/Dropbox/sessions/
 nmap <leader>ps :mksession! ~/Dropbox/sessions/
 nmap <leader>pt :NERDTreeCWD<cr>
@@ -168,6 +175,8 @@ nnoremap <leader>tn :tabn<cr>
 nnoremap <leader>tp :tabp<cr>
 
 " Plugins
+" Deoplete
+let g:deoplete#enable_at_startup=1
 
 " UltiSnips
 let g:UltiSnipsExpandTrigger="<C-j>"
@@ -188,3 +197,9 @@ nnoremap <Leader>sg :grep -R "" . <Left><Left><Left><Left>
 let g:OmniSharp_server_use_mono=1
 let g:OmniSharp_server_path='~/.omnisharp/omnisharp-roslyn/OmniSharp.exe'
 let g:OmniSharp_port=2000
+
+" Language Servers
+let g:LanguageClient_serverCommands = {
+      \ 'javascript': ['/usr/local/bin/javascript-typescript-stdio'],
+      \ 'javascript.jsx': ['/usr/local/bin/javascript-typescript-stdio'],
+      \ }

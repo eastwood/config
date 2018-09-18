@@ -1,4 +1,4 @@
-# Install git to get this up and running
+# Install git and ruby to get this up and running
 
 # Install brew
 ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
@@ -10,9 +10,11 @@ mkdir -p ~/Workspace/nib.com.au/cryan
 # Brew install
 brew install tmux
 brew install python3
+brew install python@2
 brew install ruby
 brew install reattach-to-user-namespace
 brew install tmuxinator
+brew install node
 
 # Install config
 cd ~/Workspace/github.com/eastwood/
@@ -31,21 +33,8 @@ ln -s ~/Workspace/github.com/eastwood/config/term ~/.config/term/
 mkdir -p ~/.config/nvim
 brew install neovim/neovim/neovim
 pip3 install --index-url=http://pypi.python.org/simple/ --trusted-host pypi.python.org neovim
-ln -s ~/Workspace/github.com/eastwood/config/vimfiles/init.vim ~/.config/nvim/init.vim
-ln -s ~/Workspace/github.com/eastwood/config/vimfiles/autoload ~/.config/nvim/autoload
+ln -s ~/Workspace/github.com/eastwood/config/vim/init.vim ~/.config/nvim/init.vim
 
-# Install node.js
-brew install node
-npm config set strict-ssl false
 
 # Install git bash
 ln -s ~/Workspace/github.com/eastwood/config/term/profile ~/.bash_profile
-
-# Install vagrant
-brew cask install virtualbox
-brew cask install vagrant
-brew cask install vagrant-manager
-
-# Install dropbox
-# Install slack
-# Install visual studio code
