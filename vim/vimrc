@@ -39,44 +39,47 @@ call plug#end()
 
 
 " Settings
-  set nocompatible
-  let mapleader = " "
-  set clipboard=unnamed " system clipboard
-  set completeopt=menu,preview,longest,noinsert
-  set ttyfast
-  set modelines=0
-  set history=500
-  set autoread
-  set showmatch
-  set splitbelow splitright
-  set mouse=a
-  set ttymouse=xterm2
+set nocompatible
+let mapleader = " "
+set clipboard=unnamed " system clipboard
+set completeopt=menu,preview,longest,noinsert
+set ttyfast
+set modelines=0
+set history=500
+set autoread
+set showmatch
+set splitbelow splitright
+set mouse=a
+
+if !has('nvim')
+	set ttymouse=xterm2
+endif
 
 " User Interface
-  colorscheme zenburn
-  set colorcolumn=120
-  set bg=dark
-  set title
-  set number
-  set lazyredraw
-  set showcmd
-  set hidden
-  set showmode
+colorscheme zenburn
+set colorcolumn=120
+set bg=dark
+set title
+set number
+set lazyredraw
+set showcmd
+set hidden
+set showmode
 
-  hi StatusLine ctermfg=0 ctermbg=4 guibg=grey guifg=#444444
-  hi StatusLineNC ctermfg=0
-  hi LineNr ctermfg=grey ctermbg=none
-  hi LineNr guifg=grey guibg=#444444
-  hi VertSplit ctermbg=0 guibg=#002b36
+hi StatusLine ctermfg=0 ctermbg=4 guibg=grey guifg=#444444
+hi StatusLineNC ctermfg=0
+hi LineNr ctermfg=grey ctermbg=none
+hi LineNr guifg=grey guibg=#444444
+hi VertSplit ctermbg=0 guibg=#002b36
 
-  if has("gui_running")
-    set guifont=Source\ Code\ Pro:h12
-    set guioptions-=m " no menu
-    set guioptions-=T " no toolbar
-    set guioptions-=r " no scrollbar on the right
-    set guioptions-=L " no scrollbar on the right
-    set guioptions-=b " no scrollbar on the bottom
-  endif
+if has("gui_running")
+  set guifont=Source\ Code\ Pro:h12
+  set guioptions-=m " no menu
+  set guioptions-=T " no toolbar
+  set guioptions-=r " no scrollbar on the right
+  set guioptions-=L " no scrollbar on the right
+  set guioptions-=b " no scrollbar on the bottom
+endif
 
 
 " Files and Backups
@@ -99,87 +102,87 @@ set nowrap
 
 " Keybindings
 
-  " General Keybindings
-  map <leader><leader> :
-  imap jk <ESC>
-  nnoremap <backspace> <C-^>
-  nnoremap ` '
-  nnoremap ' `
-  imap <C-s> <C-o>:w!<CR>
-  imap <C-v> <ESC>"+gP
-  vmap <C-c> "+y
+" General Keybindings
+map <leader><leader> :
+imap jk <ESC>
+nnoremap <backspace> <C-^>
+nnoremap ` '
+nnoremap ' `
+imap <C-s> <C-o>:w!<CR>
+imap <C-v> <ESC>"+gP
+vmap <C-c> "+y
 
-  nnoremap / /\v
-  map \ :NERDTreeToggle<cr>
+nnoremap / /\v
+map \ :NERDTreeToggle<cr>
 
-  " Menu settings
-  inoremap <expr><Esc>      pumvisible() ? "\<C-e>" : "\<Esc>"
-  inoremap <expr><CR>       pumvisible() ? "\<C-y>" : "\<CR>"
-  autocmd CompleteDone * pclose
+" Menu settings
+inoremap <expr><Esc>      pumvisible() ? "\<C-e>" : "\<Esc>"
+inoremap <expr><CR>       pumvisible() ? "\<C-y>" : "\<CR>"
+autocmd CompleteDone * pclose
 
-  " Project management
-  nmap <leader>pf :CtrlP<CR>
-  nmap <leader>pp :source ~/Dropbox/sessions/
-  nmap <leader>ps :mksession! ~/Dropbox/sessions/
-  nmap <leader>pt :NERDTreeCWD<cr>
-  
-  " Git/Fugitive keybindings
-  nnoremap <leader>gc :Gcommit<cr>
-  nnoremap <leader>gC :Git checkout
-  nnoremap <leader>gf :Gfetch<cr>
-  nnoremap <leader>gF :!git pull --rebase<cr>
-  nnoremap <leader>gP :Gpush
-  nnoremap <leader>gs :Gstatus<cr>
+" Project management
+nmap <leader>pf :CtrlP<CR>
+nmap <leader>pp :source ~/Dropbox/sessions/
+nmap <leader>ps :mksession! ~/Dropbox/sessions/
+nmap <leader>pt :NERDTreeCWD<cr>
 
-  " Window bindings
-  nnoremap <leader>wh <C-w>h
-  nnoremap <leader>wj <C-w>j
-  nnoremap <leader>wk <C-w>k
-  nnoremap <leader>wl <C-w>l
-  nnoremap <leader>wo <C-w>o
-  nnoremap <leader>wc <C-w>c
-  nnoremap <leader>ws <C-w>s
-  nnoremap <leader>wv <C-w>v
+" Git/Fugitive keybindings
+nnoremap <leader>gc :Gcommit<cr>
+nnoremap <leader>gC :Git checkout
+nnoremap <leader>gf :Gfetch<cr>
+nnoremap <leader>gF :!git pull --rebase<cr>
+nnoremap <leader>gP :Gpush
+nnoremap <leader>gs :Gstatus<cr>
 
-  " Buffer bindings
-  nmap <leader>d :bp<bar>sp<bar>bn<bar>bd<CR>
-  nmap <leader>bd :bd!<CR>
-  nmap <leader>bb :CtrlPBuffer<CR>
-  nmap <leader>bn :bn!<CR>
-  nmap <leader>bp :bp!<CR>
+" Window bindings
+nnoremap <leader>wh <C-w>h
+nnoremap <leader>wj <C-w>j
+nnoremap <leader>wk <C-w>k
+nnoremap <leader>wl <C-w>l
+nnoremap <leader>wo <C-w>o
+nnoremap <leader>wc <C-w>c
+nnoremap <leader>ws <C-w>s
+nnoremap <leader>wv <C-w>v
 
-  nmap <leader>qq :wqa!<CR>
-  nmap <leader><Esc> :q!<CR>
-  nmap <leader>/ :noh<CR>
+" Buffer bindings
+nmap <leader>d :bp<bar>sp<bar>bn<bar>bd<CR>
+nmap <leader>bd :bd!<CR>
+nmap <leader>bb :CtrlPBuffer<CR>
+nmap <leader>bn :bn!<CR>
+nmap <leader>bp :bp!<CR>
 
-  nmap <leader>ff :edit 
-  nmap <leader>fs :w!<CR>
-  nmap <leader>ft :NERDTreeFind<cr>
-  nmap <leader>feR :source ~/.vimrc<CR>
-  nmap <leader>fed :edit ~/.vimrc<CR>
+nmap <leader>qq :wqa!<CR>
+nmap <leader><Esc> :q!<CR>
+nmap <leader>/ :noh<CR>
 
-  " Tab Management
-  nnoremap <leader>tn :tabn<cr>
-  nnoremap <leader>tp :tabp<cr>
+nmap <leader>ff :edit 
+nmap <leader>fs :w!<CR>
+nmap <leader>ft :NERDTreeFind<cr>
+nmap <leader>feR :source ~/.vimrc<CR>
+nmap <leader>fed :edit ~/.vimrc<CR>
 
- " Plugins
- 
-  " UltiSnips
-  let g:UltiSnipsExpandTrigger="<C-j>"
-  let g:UltiSnipsJumpForwardTrigger="<C-j>"
-  let g:UltiSnipsJumpBackwardTrigger="<C-k>"
+" Tab Management
+nnoremap <leader>tn :tabn<cr>
+nnoremap <leader>tp :tabp<cr>
 
-  " Ctrlp
-  let g:ctrlp_working_path_mode = 'ra'
-  let g:ctrlp_custom_ignore='node_modules\|dist'
-  
-  " Javascript/Typescript
-  let g:tsuquyomi_javascript_support=1
+" Plugins
 
-  " Searching
-  nnoremap <Leader>sw :grep -R "\<<C-r><C-w>\>"
-  nnoremap <Leader>sg :grep -R "" . <Left><Left><Left><Left>
+" UltiSnips
+let g:UltiSnipsExpandTrigger="<C-j>"
+let g:UltiSnipsJumpForwardTrigger="<C-j>"
+let g:UltiSnipsJumpBackwardTrigger="<C-k>"
 
-  let g:OmniSharp_server_use_mono=1
-  let g:OmniSharp_server_path='~/.omnisharp/omnisharp-roslyn/OmniSharp.exe'
-  let g:OmniSharp_port=2000
+" Ctrlp
+let g:ctrlp_working_path_mode = 'ra'
+let g:ctrlp_custom_ignore='node_modules\|dist'
+
+" Javascript/Typescript
+let g:tsuquyomi_javascript_support=1
+
+" Searching
+nnoremap <Leader>sw :grep -R "\<<C-r><C-w>\>"
+nnoremap <Leader>sg :grep -R "" . <Left><Left><Left><Left>
+
+let g:OmniSharp_server_use_mono=1
+let g:OmniSharp_server_path='~/.omnisharp/omnisharp-roslyn/OmniSharp.exe'
+let g:OmniSharp_port=2000
