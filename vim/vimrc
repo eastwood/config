@@ -53,6 +53,8 @@ set mouse=a
 
 if !has('nvim')
 	set ttymouse=xterm2
+else
+  set termguicolors
 endif
 
 " User Interface
