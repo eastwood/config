@@ -18,17 +18,31 @@ Plug 'tpope/vim-fugitive' " Git badassery
 Plug 'pangloss/vim-javascript' " Javascript support
 Plug 'leafgarland/typescript-vim' " Typescript lang
 Plug 'mxw/vim-jsx' " JSX support
-Plug 'OmniSharp/omnisharp-vim'
-Plug 'Quramy/tsuquyomi' " Typescript/javascript support
 
-" LSP
+Plug 'OmniSharp/omnisharp-vim'
+let g:OmniSharp_server_use_mono=1
+let g:OmniSharp_server_path='~/.omnisharp/omnisharp-roslyn/OmniSharp.exe'
+let g:OmniSharp_port=2000
+
+" Javascript/Typescript
+Plug 'Quramy/tsuquyomi' " Typescript/javascript support
+let g:tsuquyomi_javascript_support=1
+
+" Language Servers
 Plug 'autozimu/LanguageClient-neovim', {
-      \ 'branch': 'next',
-      \ 'do': 'bash install.sh',
-      \ }
+\ 'branch': 'next',
+\ 'do': 'bash install.sh',
+\ }
+
+let g:LanguageClient_serverCommands = {
+\ 'javascript': ['/usr/local/bin/javascript-typescript-stdio'],
+\ 'javascript.jsx': ['/usr/local/bin/javascript-typescript-stdio'],
+\ }
 
 " Autocompletion
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+let g:deoplete#enable_at_startup=1
+
 if !has('nvim')
   Plug 'roxma/nvim-yarp'
   Plug 'roxma/vim-hug-neovim-rpc'
@@ -46,6 +60,9 @@ Plug 'junegunn/fzf.vim'
 
 " Snippets
 Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
+let g:UltiSnipsExpandTrigger="<C-j>"
+let g:UltiSnipsJumpForwardTrigger="<C-j>"
+let g:UltiSnipsJumpBackwardTrigger="<C-k>"
 
 call plug#end()
 
@@ -112,7 +129,7 @@ set nowrap
 " Keybindings
 
 " General Keybindings
-map <leader><leader
+map <leader><leader> :Commands<CR>
 imap jk <ESC>
 nnoremap <backspace> <C-^>
 nnoremap ` '
@@ -175,33 +192,8 @@ nmap <leader>fed :edit ~/.vimrc<CR>
 nnoremap <leader>tn :tabn<cr>
 nnoremap <leader>tp :tabp<cr>
 
-" Plugins
-
-" Deoplete
-let g:deoplete#enable_at_startup=1
-
-" UltiSnips
-let g:UltiSnipsExpandTrigger="<C-j>"
-let g:UltiSnipsJumpForwardTrigger="<C-j>"
-let g:UltiSnipsJumpBackwardTrigger="<C-k>"
-
-" Ctrlp
-let g:ctrlp_working_path_mode = 'ra'
-let g:ctrlp_custom_ignore='node_modules\|dist'
-
-" Javascript/Typescript
-let g:tsuquyomi_javascript_support=1
-
 " Searching
 nnoremap <Leader>sw :grep -R "\<<C-r><C-w>\>"
 nnoremap <Leader>sg :grep -R "" . <Left><Left><Left><Left>
 
-let g:OmniSharp_server_use_mono=1
-let g:OmniSharp_server_path='~/.omnisharp/omnisharp-roslyn/OmniSharp.exe'
-let g:OmniSharp_port=2000
 
-" Language Servers
-let g:LanguageClient_serverCommands = {
-      \ 'javascript': ['/usr/local/bin/javascript-typescript-stdio'],
-      \ 'javascript.jsx': ['/usr/local/bin/javascript-typescript-stdio'],
-      \ }
