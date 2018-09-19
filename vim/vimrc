@@ -8,12 +8,11 @@ Plug 'tpope/vim-surround' " The Pope's gift to man
 Plug 'tpope/vim-sensible' " Smart defaults
 
 " UI
-Plug 'icymind/NeoSolarized'
+Plug 'jnurmine/zenburn'
 Plug 'scrooloose/nerdtree' " File tree
 
 " Versioning
 Plug 'tpope/vim-fugitive' " Git badassery
-Plug 'airblade/vim-gitgutter' " Gutter for changes + hunks
 
 " Languages
 Plug 'pangloss/vim-javascript' " Javascript support
@@ -43,6 +42,7 @@ Plug 'w0rp/ale'
 
 " Searching
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
 
 " Snippets
 Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
@@ -70,7 +70,7 @@ else
 endif
 
 " User Interface
-colorscheme NeoSolarized
+colorscheme zenburn
 set colorcolumn=120
 set bg=dark
 set title
@@ -89,6 +89,7 @@ if has("gui_running")
   set guioptions-=b " no scrollbar on the bottom
 endif
 
+highlight LineNr guibg=none
 
 " Files and Backups
 set noswapfile
@@ -111,7 +112,7 @@ set nowrap
 " Keybindings
 
 " General Keybindings
-map <leader><leader> :
+map <leader><leader
 imap jk <ESC>
 nnoremap <backspace> <C-^>
 nnoremap ` '
@@ -124,8 +125,8 @@ nnoremap / /\v
 map \ :NERDTreeToggle<cr>
 
 " Menu settings
-inoremap <expr><Esc>      pumvisible() ? "\<C-e>" : "\<Esc>"
-inoremap <expr><CR>       pumvisible() ? "\<C-y>" : "\<CR>"
+inoremap <expr><Esc> pumvisible() ? "\<C-e>" : "\<Esc>"
+inoremap <expr><CR>  pumvisible() ? "\<C-y>" : "\<CR>"
 autocmd CompleteDone * pclose
 
 " Project management
@@ -156,7 +157,7 @@ nnoremap <leader>wv <C-w>v
 " Buffer bindings
 nmap <leader>d :bp<bar>sp<bar>bn<bar>bd<CR>
 nmap <leader>bd :bd!<CR>
-nmap <leader>bb :CtrlPBuffer<CR>
+nmap <leader>bb :Buffers<CR>
 nmap <leader>bn :bn!<CR>
 nmap <leader>bp :bp!<CR>
 
@@ -175,6 +176,7 @@ nnoremap <leader>tn :tabn<cr>
 nnoremap <leader>tp :tabp<cr>
 
 " Plugins
+
 " Deoplete
 let g:deoplete#enable_at_startup=1
 
