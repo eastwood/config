@@ -4,3 +4,6 @@
 [submodule "term/tmux-resurrect"]
 	path = term/tmux-resurrect
 	url = https://github.com/tmux-plugins/tmux-resurrect
+[submodule "term/oh-my-zsh"]
+	path = term/oh-my-zsh
+	url = https://github.com/robbyrussell/oh-my-zsh.git
