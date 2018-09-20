@@ -1,6 +1,6 @@
 " Vim 8 configuration 
 
-" Install packages
+" Install packages and configuration
 call plug#begin()
 
 " Defaults
@@ -9,39 +9,39 @@ Plug 'tpope/vim-sensible' " Smart defaults
 
 " UI
 Plug 'jnurmine/zenburn'
-Plug 'scrooloose/nerdtree' " File tree
+
+" File tree
+Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 
 " Versioning
-Plug 'tpope/vim-fugitive' " Git badassery
+Plug 'tpope/vim-fugitive', { 'on': 'Gstatus' } " Git badassery
 
 " Languages
-Plug 'pangloss/vim-javascript' " Javascript support
+Plug 'pangloss/vim-javascript', { 'for': 'javascript' } " Javascript support
 Plug 'leafgarland/typescript-vim' " Typescript lang
-Plug 'mxw/vim-jsx' " JSX support
+Plug 'mxw/vim-jsx', { 'for': 'javascript.jsx' } " JSX support
 
 Plug 'OmniSharp/omnisharp-vim'
 let g:OmniSharp_server_use_mono=1
 let g:OmniSharp_server_path='~/.omnisharp/omnisharp-roslyn/OmniSharp.exe'
 let g:OmniSharp_port=2000
 
-" Javascript/Typescript
-Plug 'Quramy/tsuquyomi' " Typescript/javascript support
-let g:tsuquyomi_javascript_support=1
-
 " Language Servers
 Plug 'autozimu/LanguageClient-neovim', {
-\ 'branch': 'next',
-\ 'do': 'bash install.sh',
-\ }
+      \ 'branch': 'next',
+      \ 'do': 'bash install.sh',
+      \ }
 
 let g:LanguageClient_serverCommands = {
-\ 'javascript': ['/usr/local/bin/javascript-typescript-stdio'],
-\ 'javascript.jsx': ['/usr/local/bin/javascript-typescript-stdio'],
+\ 'javascript': ['javascript-typescript-stdio'],
+\ 'javascript.jsx': ['javascript-typescript-stdio'],
 \ }
 
 " Autocompletion
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 let g:deoplete#enable_at_startup=1
+" Make tab autocomplete when the pum is visible, otherwise do as normal
+inoremap <expr><tab> pumvisible() ? "\<c-y>" : "\<tab>"
 
 if !has('nvim')
   Plug 'roxma/nvim-yarp'
@@ -66,11 +66,13 @@ let g:UltiSnipsJumpBackwardTrigger="<C-k>"
 
 call plug#end()
 
-
 " Settings
 set nocompatible
 let mapleader = " "
-set clipboard=unnamed " system clipboard
+if has('mac')
+  let g:clipboard = {'copy': {'+': 'pbcopy', '*': 'pbcopy'}, 'paste': {'+': 'pbpaste', '*': 'pbpaste'}, 'name': 'pbcopy', 'cache_enabled': 0}
+endif
+set clipboard+=unnamedplus
 set completeopt=menu,preview,longest,noinsert
 set ttyfast
 set modelines=0
@@ -142,13 +144,10 @@ nnoremap / /\v
 map \ :NERDTreeToggle<cr>
 
 " Menu settings
-inoremap <expr><Esc> pumvisible() ? "\<C-e>" : "\<Esc>"
-inoremap <expr><CR>  pumvisible() ? "\<C-y>" : "\<CR>"
 autocmd CompleteDone * pclose
 
 " Project management
 nmap <leader>pf :FZF<CR>
-
 nmap <leader>pp :source ~/Dropbox/sessions/
 nmap <leader>ps :mksession! ~/Dropbox/sessions/
 nmap <leader>pt :NERDTreeCWD<cr>
@@ -195,5 +194,7 @@ nnoremap <leader>tp :tabp<cr>
 " Searching
 nnoremap <Leader>sw :grep -R "\<<C-r><C-w>\>"
 nnoremap <Leader>sg :grep -R "" . <Left><Left><Left><Left>
+" Buffer Search
+nnoremap <Leader>sb :BLines<CR>
 
 
