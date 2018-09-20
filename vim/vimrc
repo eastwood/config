@@ -84,8 +84,6 @@ set mouse=a
 
 if !has('nvim')
 	set ttymouse=xterm2
-else
-  set termguicolors
 endif
 
 " User Interface
@@ -108,7 +106,8 @@ if has("gui_running")
   set guioptions-=b " no scrollbar on the bottom
 endif
 
-highlight LineNr guibg=none
+highlight LineNr guibg=NONE
+highlight LineNr ctermbg=NONE
 
 " Files and Backups
 set noswapfile
