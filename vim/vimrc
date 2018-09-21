@@ -12,6 +12,8 @@ Plug 'jnurmine/zenburn'
 
 " File tree
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
+" Tab now opens dirs in nerdtree
+autocmd FileType nerdtree map <buffer> <tab> <CR>
 
 " Versioning
 Plug 'tpope/vim-fugitive', { 'on': 'Gstatus' } " Git badassery
@@ -20,6 +22,7 @@ Plug 'tpope/vim-fugitive', { 'on': 'Gstatus' } " Git badassery
 Plug 'pangloss/vim-javascript', { 'for': 'javascript' } " Javascript support
 Plug 'leafgarland/typescript-vim' " Typescript lang
 Plug 'mxw/vim-jsx', { 'for': 'javascript.jsx' } " JSX support
+Plug 'vim-ruby/vim-ruby'
 
 Plug 'OmniSharp/omnisharp-vim'
 let g:OmniSharp_server_use_mono=1
