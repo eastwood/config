@@ -35,9 +35,8 @@ Plug 'autozimu/LanguageClient-neovim', {
       \ 'do': 'bash install.sh',
       \ }
 
-
-
 let g:LanguageClient_serverCommands = {
+\ 'ruby': ['solargraph', 'stdio'],
 \ 'javascript': ['javascript-typescript-stdio'],
 \ 'javascript.jsx': ['javascript-typescript-stdio'],
 \ 'typescript': ['javascript-typescript-stdio'],
@@ -199,9 +198,8 @@ nmap <leader>fed :edit ~/.vimrc<CR>
 nmap <leader>fo :edit ~/Dropbox/notes/gth.md<CR>
 
 " Searching
-nnoremap <Leader>sw :grep -R "\<<C-r><C-w>\>"
-nnoremap <Leader>sg :grep -R "" . <Left><Left><Left><Left>
+nnoremap <Leader>sw :Rg <C-r><C-w>
+nnoremap <Leader>sg :Rg<CR>
 " Buffer Search
 nnoremap <Leader>sb :BLines<CR>
-
-
+tnoremap <Esc> <C-\><C-n>

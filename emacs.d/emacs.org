@@ -48,10 +48,12 @@ A few things going on here.
 * Interface
 Just some nice user interfaces tweaks. Bread and butter stuff!
 #+BEGIN_SRC emacs-lisp
-  (use-package zenburn-theme)
-  (use-package monokai-theme
-               :config
-               (load-theme 'monokai t))
+  ;; (use-package zenburn-theme)
+  ;; (use-package monokai-theme)
+  (use-package solarized-theme
+    :ensure t
+    :config 
+    (load-theme 'solarized-light t))
   (use-package linum-relative
                :config
                (linum-relative-on))
@@ -233,7 +235,7 @@ OSX fix for eslint lookup
                :config
                (evil-leader/set-key
                  "sb" 'swiper
-                 "sg" 'counsel-git-grep)
+                 "sg" 'counsel-rg)
                (counsel-mode)
                (ivy-mode))
   (use-package counsel-projectile)
@@ -242,6 +244,15 @@ OSX fix for eslint lookup
 #+END_SRC
 * Code
 Our favourite languages!
+** Ruby
+#+BEGIN_SRC emacs-lisp
+(setq-default ruby-flymake-use-rubocop-if-available nil)
+#+END_SRC
+** LSP
+#+BEGIN_SRC emacs-lisp
+  (use-package eglot
+    :ensure t)
+#+END_SRC
 ** C#
 #+BEGIN_SRC emacs-lisp
   (use-package csharp-mode

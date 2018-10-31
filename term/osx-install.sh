@@ -17,6 +17,7 @@ brew install tmuxinator
 brew install nvm
 brew install neovim
 
+
 # Install config
 cd ~/Workspace/github.com/eastwood/
 git clone https://github.com/eastwood/config
