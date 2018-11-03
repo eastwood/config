@@ -96,7 +96,7 @@ if !has('nvim')
 endif
 
 " User Interface
-colorscheme zenburn
+colorscheme solarized
 set colorcolumn=120
 set bg=dark
 set title

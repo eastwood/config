@@ -49,11 +49,10 @@ A few things going on here.
 Just some nice user interfaces tweaks. Bread and butter stuff!
 #+BEGIN_SRC emacs-lisp
   ;; (use-package zenburn-theme)
-  ;; (use-package monokai-theme)
   (use-package solarized-theme
     :ensure t
     :config 
-    (load-theme 'solarized-light t))
+    (load-theme 'solarized-dark t))
   (use-package linum-relative
                :config
                (linum-relative-on))
