@@ -48,15 +48,15 @@ A few things going on here.
 * Interface
 Just some nice user interfaces tweaks. Bread and butter stuff!
 #+BEGIN_SRC emacs-lisp
-  ;; (use-package zenburn-theme)
   (use-package solarized-theme
-    :ensure t
-    :config 
+    :ensure t)
+  (use-package zenburn-theme
+    :ensure t)
+  (when (display-graphic-p)
     (load-theme 'solarized-dark t))
-  (use-package linum-relative
-               :config
-               (linum-relative-on))
   (scroll-bar-mode -1)
+  (setq display-line-numbers-type 'visual)
+  (global-display-line-numbers-mode t)
   (unless (memq window-system '(mac ns))
     (menu-bar-mode -1))
   (setq inhibit-startup-message t)

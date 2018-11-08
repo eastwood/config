@@ -13,6 +13,7 @@ Plug 'altercation/vim-colors-solarized'
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 " Tab now opens dirs in nerdtree
 autocmd FileType nerdtree map <buffer> <tab> <CR>
+let NERDTreeShowHidden = 1
 
 " Versioning
 Plug 'tpope/vim-fugitive', { 'on': 'Gstatus' } " Git badassery
@@ -66,6 +67,13 @@ Plug 'w0rp/ale'
 " Searching
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
+
+command! -bang -nargs=* Rg
+  \ call fzf#vim#grep(
+  \   'rg --column --line-number --no-heading --color=always '.shellescape(<q-args>), 1,
+  \   <bang>0 ? fzf#vim#with_preview({'options': '--delimiter : --nth 4..'}, 'up:60%')
+  \           : fzf#vim#with_preview({'options': '--delimiter : --nth 4..'},'right:50%:hidden', '?'),
+  \   <bang>0)
 
 " Snippets
 Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
