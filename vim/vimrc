@@ -68,6 +68,11 @@ Plug 'w0rp/ale'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 
+" Files with preview
+command! -bang -nargs=? -complete=dir Files
+  \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
+
+" Grep with preview
 command! -bang -nargs=* Rg
   \ call fzf#vim#grep(
   \   'rg --column --line-number --no-heading --color=always '.shellescape(<q-args>), 1,
@@ -162,7 +167,7 @@ nnoremap / /\v
 autocmd CompleteDone * pclose
 
 " Project management
-nmap <leader>pf :FZF<CR>
+nmap <leader>pf :Files<CR>
 nmap <leader>pp :source ~/Dropbox/sessions/
 nmap <leader>ps :mksession! ~/Dropbox/sessions/
 nmap <leader>pt :NERDTreeToggle<CR>
