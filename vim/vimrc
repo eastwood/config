@@ -69,16 +69,12 @@ Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 
 " Files with preview
-command! -bang -nargs=? -complete=dir Files
-  \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
+command! -bang -nargs=? -complete=dir Files call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
 
 " Grep with preview
-command! -bang -nargs=* Rg
-  \ call fzf#vim#grep(
-  \   'rg --column --line-number --no-heading --color=always '.shellescape(<q-args>), 1,
-  \   <bang>0 ? fzf#vim#with_preview({'options': '--delimiter : --nth 4..'}, 'up:60%')
-  \           : fzf#vim#with_preview({'options': '--delimiter : --nth 4..'},'right:50%:hidden', '?'),
-  \   <bang>0)
+command! -bang -nargs=* Rg call fzf#vim#grep(
+      \ 'rg --column --line-number --no-heading --color=always '.shellescape(<q-args>), 1,
+      \ fzf#vim#with_preview({'options': '--delimiter : --nth 4..'},'right:50%'))
 
 " Snippets
 Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
@@ -183,13 +179,13 @@ nnoremap <leader>gP :Gpush
 nnoremap <leader>gs :Gstatus<CR>
 
 " Window bindings
-nnoremap <leader>wh <C-w>h
-nnoremap <leader>wj <C-w>j
-nnoremap <leader>wk <C-w>k
-nnoremap <leader>wl <C-w>l
+nnoremap <leader>h <C-w>h
+nnoremap <leader>j <C-w>j
+nnoremap <leader>k <C-w>k
+nnoremap <leader>l <C-w>l
 nnoremap <leader>wo <C-w>o
 nnoremap <leader>wc <C-w>c
-nnoremap <leader>ws <C-w>s
+nnoremap <leader>wh <C-w>s
 nnoremap <leader>wv <C-w>v
 
 " Buffer bindings
