@@ -69,12 +69,11 @@ Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 
 " Files with preview
-command! -bang -nargs=? -complete=dir Files call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
-
+command! -bang -nargs=? -complete=dir Files call fzf#vim#files(<q-args>, fzf#vim#with_preview('right:50%:hidden', '?'), <bang>0)
 " Grep with preview
 command! -bang -nargs=* Rg call fzf#vim#grep(
       \ 'rg --column --line-number --no-heading --color=always '.shellescape(<q-args>), 1,
-      \ fzf#vim#with_preview({'options': '--delimiter : --nth 4..'},'right:50%'))
+      \ fzf#vim#with_preview({'options': '--delimiter : --nth 4..'},'right:50%:hidden', '?'))
 
 " Snippets
 Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
@@ -126,6 +125,7 @@ endif
 
 highlight LineNr guibg=NONE
 highlight LineNr ctermbg=NONE
+highlight SignColumn ctermbg=NONE guibg=NONE
 
 " Files and Backups
 set noswapfile
