@@ -199,7 +199,7 @@ nmap <leader>qq :wqa!<CR>
 nmap <leader><Esc> :q!<CR>
 nmap <leader>/ :noh<CR>
 
-nmap <leader>ff :edit 
+nmap <leader>ff :edit
 nmap <leader>fs :w!<CR>
 nmap <leader>ft :NERDTreeFind<CR>
 nmap <leader>feR :source ~/.vimrc<CR>
