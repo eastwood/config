@@ -126,6 +126,7 @@ endif
 highlight LineNr guibg=NONE
 highlight LineNr ctermbg=NONE
 highlight SignColumn ctermbg=NONE guibg=NONE
+highlight VertSplit guibg=NONE ctermbg=NONE
 
 " Files and Backups
 set noswapfile
@@ -179,13 +180,13 @@ nnoremap <leader>gP :Gpush
 nnoremap <leader>gs :Gstatus<CR>
 
 " Window bindings
-nnoremap <leader>h <C-w>h
-nnoremap <leader>j <C-w>j
-nnoremap <leader>k <C-w>k
-nnoremap <leader>l <C-w>l
+nnoremap <leader>wh <C-w>h
+nnoremap <leader>wj <C-w>j
+nnoremap <leader>wk <C-w>k
+nnoremap <leader>wl <C-w>l
 nnoremap <leader>wo <C-w>o
 nnoremap <leader>wc <C-w>c
-nnoremap <leader>wh <C-w>s
+nnoremap <leader>ws <C-w>s
 nnoremap <leader>wv <C-w>v
 
 " Buffer bindings
