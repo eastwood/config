@@ -362,7 +362,6 @@ I try to use org files where possible, but markdown is super useful sometimes fo
 We need an evil tree! Coupled with some major mode evil bindings and we're in action
 #+BEGIN_SRC emacs-lisp
   (use-package neotree
-               :commands (neotree-toggle neotree-find-project-root)
                :config
                (evil-define-key 'normal neotree-mode-map
                  (kbd "TAB") 'neotree-enter

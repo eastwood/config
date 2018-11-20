@@ -90,6 +90,7 @@ source $ZSH/oh-my-zsh.sh
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
+alias cdw="cd ~/Workspace/nib.com.au/cryan"
 alias flushdns="mDNSResponder -HUP"
 alias vim="nvim"
 alias ec="emacsclient -t"
