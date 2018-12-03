@@ -53,7 +53,7 @@ Just some nice user interfaces tweaks. Bread and butter stuff!
   (use-package zenburn-theme
     :ensure t)
   (when (display-graphic-p)
-    (load-theme 'solarized-dark t))
+    (load-theme 'zenburn t))
   (scroll-bar-mode -1)
   (setq display-line-numbers-type 'visual)
   (global-display-line-numbers-mode t)
@@ -135,7 +135,6 @@ I like to throw in magit support and surround support too.
        "qc" 'delete-frame
        "qq" 'save-buffers-kill-terminal
        "wc" 'evil-window-delete
-       "ww" 'ace-window
        "wo" 'delete-other-windows
        "wj" 'evil-window-down
        "wk" 'evil-window-up
