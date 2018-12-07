@@ -9,6 +9,7 @@ export GOPATH='/Users/cryan/Workspace/go'
 export PYTHON_PATH='~/Library/Python/3.6/bin'
 export PATH=/usr/local/bin:$PYTHON_PATH:$MONO_FRAMEWORK:$GOPATH/bin:$PATH
 
+
 # Set name of the theme to load. Optionally, if you set this to "random"
 # it'll load a random theme each time that oh-my-zsh is loaded.
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
@@ -56,7 +57,8 @@ ZSH_THEME="minimal"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git osx)
+plugins=(git osx nvm)
+source $ZSH/oh-my-zsh.sh
 
 alias cdw="cd ~/Workspace/nib.com.au/cryan"
 alias flushdns="mDNSResponder -HUP"
@@ -74,5 +76,4 @@ alias dockerrmi="docker rmi $(docker images)"
 alias create-loopback="sudo ifconfig lo0 alias 10.100.10.1"
 alias aws-login="rqpauth && dockerlogin"
 
-source $ZSH/oh-my-zsh.sh
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

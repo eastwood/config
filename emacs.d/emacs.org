@@ -124,8 +124,6 @@ I like to throw in magit support and surround support too.
        "feR" 'reload-config-file
        "ft" 'neotree-toggle
        "gs" 'magit-status
-       "mf" 'tide-jump-to-definition
-       "mb" 'tide-jump-back
        "pf" 'projectile-find-file
        "pp" 'projectile-switch-project
        "pb" 'projectile-switch-buffer
@@ -155,21 +153,16 @@ I like to throw in magit support and surround support too.
                (autoload 'pkg-info-version-info "pkg-info")
                (setq-default flycheck-disabled-checker 'javascript-jshint)
                (setq-default flycheck-disabled-checker 'json-jsonlist)
-               (setq-default flycheck-disabled-checker 'javascript-eslint)
                (flycheck-add-mode 'javascript-eslint 'web-mode)
 
                (defun my/use-eslint-from-node-modules ()
-                 (let* ((root (locate-dominating-file
-                               (or (buffer-file-name) default-directory)
-                               "node_modules"))
-                        (eslint (and root
-                                     (expand-file-name "node_modules/eslint/bin/eslint.js"
-                                                       root))))
-                   (when (and eslint (file-executable-p eslint))
-                     (setq-local flycheck-javascript-eslint-executable eslint))))
-               (add-hook 'flycheck-mode-hook #'my/use-eslint-from-node-modules)
-               (global-flycheck-mode)
-               )
+                 (interactive)
+                 (let (eslint)
+                   (setq eslint (projectile-expand-root "node_modules/eslint/bin/eslint.js"))
+                   (setq-local flycheck-javascript-eslint-executable eslint)))
+
+                 (add-hook 'flycheck-mode-hook #'my/use-eslint-from-node-modules)
+                 (global-flycheck-mode))
 #+END_SRC
 * Mac specific
 OSX fix for eslint lookup
@@ -267,35 +260,11 @@ Everybody uses JSON now, this make things look very pretty
   (use-package json-mode)
   (use-package js-doc)
 #+END_SRC
-Tide mode utilises Microsoft's excellent typescript tooling. Tide mode provides excellent code completion, formatting and syntax checking.
+Javascript setup 
 #+BEGIN_SRC emacs-lisp
-  (defun setup-tide-mode ()
-    "Set up Tide mode."
-    (interactive)
-    (tide-setup)
-    (eldoc-mode +1)
-    (company-mode +1)
-    (tide-hl-identifier-mode +1))
-
-  (use-package tide
-               :ensure t
-               :config
-               (setq company-tooltip-align-annotations t)
-               ;; javascript configuration
-               (add-hook 'js-mode-hook #'setup-tide-mode)
-               (flycheck-add-next-checker 'javascript-eslint 'javascript-tide 'append)
-               ;; jsx configuration with web mode
-               (add-to-list 'auto-mode-alist '("\\.jsx\\'" . web-mode))
-               (add-hook 'web-mode-hook
-                         (lambda ()
-                           (when (string-equal "jsx" (file-name-extension buffer-file-name))
-                             (setup-tide-mode))))
-               (flycheck-add-mode 'javascript-eslint 'web-mode)
-               (flycheck-add-next-checker 'javascript-eslint 'jsx-tide 'append)
-               ;; typescript support
-               (setq typescript-indent-level 2)
-               (setq js-indent-level 2)
-               (add-hook 'typescript-mode-hook #'setup-tide-mode))
+  (add-to-list 'auto-mode-alist '("\\.jsx\\'" . web-mode))
+  (setq typescript-indent-level 2)
+  (setq js-indent-level 2)
 #+END_SRC
 ** Rust
  #+BEGIN_SRC emacs-lisp
