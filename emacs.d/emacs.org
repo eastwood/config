@@ -1,7 +1,6 @@
 +TITLE: Emacs Configuration
 #+AUTHOR: Clinton Ryan
 #+PROPERTY: header-args :tangle yes
-
 * Personal Information
 Let's set some variables with basic user information.
 #+BEGIN_SRC emacs-lisp
@@ -83,7 +82,6 @@ I like to throw in magit support and surround support too.
     (use-package evil
                  :ensure t
                  :init
-                 (setq evil-want-integration t)
                  (setq evil-want-keybinding nil)
                  :config
                  (evil-mode 1)
@@ -462,6 +460,11 @@ A better way might be to just use org-agenda and use the calendar file as well, 
                         "* %?\n%T" :prepend T)
                        ("j" "Journal" entry (file+datetree "~/Dropbox/notes/journal.org")
                         "* %?\nEntered on %U\n  %i\n  %a"))))
+#+END_SRC
+Setup nice UTF-8 bullets in org mode
+#+BEGIN_SRC emacs-lisp
+  (use-package org-bullets
+               :hook (org-mode . org-bullets-mode))
 #+END_SRC
 Setup google calendar sync. I keep a secrets file in my Dropbox that I load here as well. Secrets file contains a few variables for secrets and client tokens
 #+BEGIN_SRC emacs-lisp
