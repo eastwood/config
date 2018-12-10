@@ -1,4 +1,4 @@
-+TITLE: Emacs Configuration
+#+TITLE: Emacs Configuration
 #+AUTHOR: Clinton Ryan
 #+PROPERTY: header-args :tangle yes
 * Personal Information
@@ -80,7 +80,6 @@ A lot of these keybindings have been heavily influenced from spacemacs.
 I like to throw in magit support and surround support too.
 #+BEGIN_SRC emacs-lisp
     (use-package evil
-                 :ensure t
                  :init
                  (setq evil-want-keybinding nil)
                  :config
@@ -258,11 +257,12 @@ Everybody uses JSON now, this make things look very pretty
   (use-package json-mode)
   (use-package js-doc)
 #+END_SRC
-Javascript setup 
+Javascript/Typescript setup 
 #+BEGIN_SRC emacs-lisp
   (add-to-list 'auto-mode-alist '("\\.jsx\\'" . web-mode))
   (setq typescript-indent-level 2)
   (setq js-indent-level 2)
+  (use-package typescript-mode)
 #+END_SRC
 ** Rust
  #+BEGIN_SRC emacs-lisp
