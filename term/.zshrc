@@ -77,3 +77,10 @@ alias create-loopback="sudo ifconfig lo0 alias 10.100.10.1"
 alias aws-login="rqpauth && dockerlogin"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# tabtab source for serverless package
+# uninstall by removing these lines or running `tabtab uninstall serverless`
+[[ -f /Users/cryan/Workspace/nib.com.au/cryan/join-api-to-on-prem-lambda/node_modules/tabtab/.completions/serverless.zsh ]] && . /Users/cryan/Workspace/nib.com.au/cryan/join-api-to-on-prem-lambda/node_modules/tabtab/.completions/serverless.zsh
+# tabtab source for sls package
+# uninstall by removing these lines or running `tabtab uninstall sls`
+[[ -f /Users/cryan/Workspace/nib.com.au/cryan/join-api-to-on-prem-lambda/node_modules/tabtab/.completions/sls.zsh ]] && . /Users/cryan/Workspace/nib.com.au/cryan/join-api-to-on-prem-lambda/node_modules/tabtab/.completions/sls.zsh
