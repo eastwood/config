@@ -247,10 +247,7 @@ Our favourite languages!
 #+END_SRC
 ** LSP
 #+BEGIN_SRC emacs-lisp
-  (use-package eglot
-    :config 
-    (add-hook 'js-mode-hook 'eglot-ensure)
-    (add-hook 'typescript-mode-hook 'elot-ensure))
+  (use-package eglot)
 #+END_SRC
 ** C#
 #+BEGIN_SRC emacs-lisp
