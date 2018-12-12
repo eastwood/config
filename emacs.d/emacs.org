@@ -229,6 +229,14 @@ OSX fix for eslint lookup
   (setq ivy-use-virtual-buffers t)
   (setq ivy-re-builders-alist '((t . ivy--regex-ignore-order)))
 #+END_SRC
+* UML
+  Use plant UML to draw diagrams in org
+#+BEGIN_SRC emacs-lisp
+(use-package plantuml-mode
+  :config
+  (setq org-plantuml-jar-path (expand-file-name "~/plantuml.jar"))
+  (setq plantuml-jar-path (expand-file-name "~/plantuml.jar")))
+#+END_SRC
 * Code
 Our favourite languages!
 ** Ruby
@@ -237,8 +245,7 @@ Our favourite languages!
 #+END_SRC
 ** LSP
 #+BEGIN_SRC emacs-lisp
-  (use-package eglot
-    :ensure t)
+  (use-package eglot)
 #+END_SRC
 ** C#
 #+BEGIN_SRC emacs-lisp
@@ -257,6 +264,9 @@ Everybody uses JSON now, this make things look very pretty
 #+END_SRC
 Javascript/Typescript setup 
 #+BEGIN_SRC emacs-lisp
+  (use-package js2-mode
+    :config
+    (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode)))
   (add-to-list 'auto-mode-alist '("\\.jsx\\'" . web-mode))
   (setq typescript-indent-level 2)
   (setq js-indent-level 2)
@@ -392,6 +402,19 @@ A better way might be to just use org-agenda and use the calendar file as well, 
                  "k" 'org-capture-kill)
 
                :config
+               (setq org-display-inline-images t)
+               (setq org-redisplay-inline-images t)
+               (setq org-startup-with-inline-images "inlineimages")
+               (defvar +org-babel-languages
+                 '(emacs-lisp
+                   plantuml
+                   ))
+
+               (org-babel-do-load-languages
+                'org-babel-load-languages
+                (cl-loop for sym in +org-babel-languages
+                         collect (cons sym t)))
+
                (setq org-use-speed-commands t)
                (setq org-directory "~/Dropbox/notes")
                (setq org-default-notes-file (concat org-directory "/gtd.org"))
