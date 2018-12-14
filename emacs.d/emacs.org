@@ -481,6 +481,9 @@ I ignore ~node_modules~ naturally and also have some evil bindings for easily ac
                (setq projectile-completion-system 'ivy)
                (add-to-list 'projectile-globally-ignored-directories "node_modules")
                (projectile-mode))
+  (defun refresh-neotree ()
+    (interactive)
+    (neotree-dir (projectile-project-root)))
   #+END_SRC
 * Smart Parenthesis
   Hightlight parens smartly :P
@@ -516,4 +519,5 @@ Let's lower our GC thresholds back down to a sane level.
   (setq gc-cons-threshold 16777216
         gc-cons-percentage 0.1)
   (server-start)
+  (toggle-frame-maximized)
 #+END_SRC
