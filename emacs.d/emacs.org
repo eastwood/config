@@ -511,7 +511,14 @@ I ignore ~node_modules~ naturally and also have some evil bindings for easily ac
                :config
                (which-key-mode))
 #+END_SRC
-
+* Utility
+Some utility functions, helpful for just everyday shit
+#+BEGIN_SRC emacs-lisp
+  (defun renew-dhcp ()
+    (interactive)
+    (when (memq window-system '(win32))
+      (eshell-command "ipconfig /renew")))
+#+END_SRC
 * Post Initialization
 Let's lower our GC thresholds back down to a sane level.
 
