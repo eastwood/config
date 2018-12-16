@@ -1,11 +1,12 @@
 ;;; emacs.el --- Emacs configuration
 
 ;;; Commentary:
-;; A simple, fast and no-nonsense emacs configuration reduced down over the years.
+;; A simple, fast and no-nonsense Emacs configuration reduced down over the years.
 ;; Mantra of the config:
 
 ;; 1. We autoload and byte compile all packages.
 ;; 2. We subscribe to the way of vim, our flow should be evil.
+
 ;; 3. We let LSP handle all our coding needs
 ;; 4. We value performance over laziness
 
@@ -31,8 +32,8 @@
     (package-install 'use-package))
   (require 'use-package)
   (setq use-package-expand-minimally byte-compile-current-file)
-  (setq use-package-verbose t)
   (setq use-package-always-defer t)
+  (setq use-package-verbose t)
   (setq use-package-always-ensure t))
 
 (use-package zenburn-theme)
@@ -53,15 +54,15 @@
 (fset 'yes-or-no-p 'y-or-n-p)
 
 (use-package company
-  :config
+  :init
   (global-company-mode t)
   (setq company-tooltip-align-annotations t))
 
 (use-package evil
   :init
   (setq evil-want-keybinding nil)
-  :config
   (evil-mode 1)
+  :config
   (setq evil-want-C-u-scroll t))
 
 (use-package evil-collection
@@ -69,7 +70,7 @@
   (evil-collection-company-use-tng nil)
   (evil-collection-setup-minibuffer t)
   :after evil
-  :config
+  :init
   (evil-collection-init))
 
 (use-package evil-leader
@@ -129,7 +130,7 @@
   (setq-default flycheck-disabled-checker 'json-jsonlist)
   (flycheck-add-mode 'javascript-eslint 'web-mode)
 
-  (declare-function my/use-eslint-from-node-modules ()
+  (defun my/use-eslint-from-node-modules ()
     "Gets eslint exe from local path."
     (let (eslint)
       (setq eslint (projectile-expand-root "node_modules/eslint/bin/eslint.js"))
@@ -154,11 +155,7 @@
 (defun neotree-find-project-root()
   "Find the root of neotree."
   (interactive)
-  (if (neo-global--window-exists-p)
-      (neotree-hide)
-    (let ((origin-buffer-file-name (buffer-file-name)))
-      (neotree-find (projectile-project-root))
-      (neotree-find origin-buffer-file-name))))
+  (neotree-find (projectile-project-root)))
 
 (defun reload-config-file()
   "Reload our configuration file."
@@ -226,12 +223,16 @@
 (use-package json-mode)
 
 (use-package js2-mode
-  :config
+  :init
   (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode)))
+
 (add-to-list 'auto-mode-alist '("\\.jsx\\'" . web-mode))
-(setq-default typescript-indent-level 2)
 (setq js-indent-level 2)
-(use-package typescript-mode)
+
+(use-package typescript-mode
+  :init
+  (setq-default typescript-indent-level 2)
+  (add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-mode)))
 
 (use-package rust-mode
   :mode ("\\.rs\\'" . rust-mode))
@@ -264,16 +265,21 @@
   (add-hook 'web-mode-hook  'my-web-mode-hook))
 
 (use-package magit
-  :commands magit-status)
-(use-package evil-magit
-  :after magit)
+  :commands magit-status
+  :init
+  (setq with-editor-emacsclient-executable "/usr/local/bin/emacsclient")
+  :config
+  (use-package evil-magit
+    :init
+    (evil-magit-init)))
 
 (use-package markdown-mode
   :config
   (setq-default markdown-split-window-direction 'right))
 
 (use-package neotree
-  :config
+  :commands (projectile-switch-project)
+  :init
   (evil-define-key 'normal neotree-mode-map
     (kbd "TAB") 'neotree-enter
     "H" 'neotree-hidden-file-toggle
@@ -412,7 +418,7 @@
 (use-package yasnippet-snippets)
 
 (use-package which-key
-  :config
+  :init
   (which-key-mode))
 
 (defun renew-dhcp ()
