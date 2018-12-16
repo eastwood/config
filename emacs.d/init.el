@@ -124,33 +124,35 @@
   (global-evil-surround-mode))
 
 (use-package flycheck
+  :commands (projectile-switch-project)
+  :init
+  (global-flycheck-mode)
   :config
-  (autoload 'pkg-info-version-info "pkg-info")
   (setq-default flycheck-disabled-checker 'javascript-jshint)
   (setq-default flycheck-disabled-checker 'json-jsonlist)
+  (add-hook 'js2-mode-hook #'my/use-eslint-from-node-modules)
   (flycheck-add-mode 'javascript-eslint 'web-mode)
 
   (defun my/use-eslint-from-node-modules ()
     "Gets eslint exe from local path."
     (let (eslint)
       (setq eslint (projectile-expand-root "node_modules/eslint/bin/eslint.js"))
-      (setq-local flycheck-javascript-eslint-executable eslint)))
-
-  (add-hook 'flycheck-mode-hook #'my/use-eslint-from-node-modules)
-  (global-flycheck-mode))
+      (setq-local flycheck-javascript-eslint-executable eslint))))
 
 (when (memq window-system '(mac ns))
   (add-to-list 'default-frame-alist
                '(ns-transparent-titlebar . t))
   (add-to-list 'default-frame-alist
-               '(ns-appearance . dark)) ;; or dark - depending on your theme
+               '(ns-appearance . dark))) ;; or dark - depending on your theme
+
   (use-package xclip
-    :config
+    :init
     (xclip-mode))
+
   (use-package exec-path-from-shell
-    :ensure t
-    :config
-    (exec-path-from-shell-initialize)))
+    :init
+    (setq-default exec-path-from-shell-shell-name "/bin/bash")
+    (exec-path-from-shell-initialize))
 
 (defun neotree-find-project-root()
   "Find the root of neotree."
