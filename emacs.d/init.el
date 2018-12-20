@@ -6,7 +6,6 @@
 
 ;; 1. We autoload and byte compile all packages.
 ;; 2. We subscribe to the way of vim, our flow should be evil.
-
 ;; 3. We let LSP handle all our coding needs
 ;; 4. We value performance over laziness
 
@@ -150,9 +149,10 @@
     :init
     (xclip-mode))
 
+(when (memq window-system '(mac ns))
   (use-package exec-path-from-shell
     :init
-    (exec-path-from-shell-initialize))
+    (exec-path-from-shell-initialize)))
 
 (defun neotree-find-project-root()
   "Find the root of neotree."
@@ -278,8 +278,6 @@
 (use-package magit
   :commands magit-status
   :init
-  (setq with-editor-emacsclient-executable "/usr/local/bin/emacsclient")
-  :config
   (use-package evil-magit
     :init
     (evil-magit-init)))
