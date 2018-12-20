@@ -126,7 +126,6 @@
   (global-evil-surround-mode))
 
 (use-package flycheck
-  :functions my/use-eslint-from-mode-modules
   :commands (projectile-switch-project)
   :init
   (add-hook 'after-init-hook #'global-flycheck-mode)
@@ -405,7 +404,7 @@
   (setq projectile-enable-caching t)
   (setq projectile-completion-system 'ivy)
   (add-to-list 'projectile-globally-ignored-directories "node_modules")
-  (projectile-mode))
+  (projectile-mode 1))
 
 (use-package smartparens)
 
