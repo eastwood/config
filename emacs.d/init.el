@@ -19,6 +19,7 @@
       gc-cons-percentage 0.6)
 (setq byte-compile-warnings '(not free-vars unresolved noruntime lexical make-local))
 (setq custom-file "~/.emacs.d/custom.el")
+(setq backup-directory-alist `(("." . "~/.emacs.d/backups")))
 
 (eval-when-compile
   (require 'package)
@@ -31,7 +32,6 @@
     (package-refresh-contents)
     (package-install 'use-package))
   (require 'use-package)
-  (setq use-package-expand-minimally byte-compile-current-file)
   (setq use-package-always-defer t)
   (setq use-package-verbose t)
   (setq use-package-always-ensure t))
@@ -99,6 +99,8 @@
     "fed" 'open-config-file
     "feR" 'reload-config-file
     "ft" 'neotree-toggle
+    "is" 'yas-insert-snippet
+    "in" 'yas-new-snippet
     "gs" 'magit-status
     "pf" 'projectile-find-file
     "pp" 'projectile-switch-project
@@ -120,24 +122,24 @@
 
 (use-package evil-surround
   :after evil
-  :config
+  :init
   (global-evil-surround-mode))
 
 (use-package flycheck
+  :functions my/use-eslint-from-mode-modules
   :commands (projectile-switch-project)
   :init
-  (global-flycheck-mode)
+  (add-hook 'after-init-hook #'global-flycheck-mode)
   :config
-  (setq-default flycheck-disabled-checker 'javascript-jshint)
-  (setq-default flycheck-disabled-checker 'json-jsonlist)
-  (add-hook 'js2-mode-hook #'my/use-eslint-from-node-modules)
-  (flycheck-add-mode 'javascript-eslint 'web-mode)
-
   (defun my/use-eslint-from-node-modules ()
     "Gets eslint exe from local path."
     (let (eslint)
       (setq eslint (projectile-expand-root "node_modules/eslint/bin/eslint.js"))
-      (setq-local flycheck-javascript-eslint-executable eslint))))
+      (setq-local flycheck-javascript-eslint-executable eslint)))
+  (setq-default flycheck-disabled-checker 'javascript-jshint)
+  (setq-default flycheck-disabled-checker 'json-jsonlist)
+  (add-hook 'js2-mode-hook #'my/use-eslint-from-node-modules)
+  (flycheck-add-mode 'javascript-eslint 'web-mode))
 
 (when (memq window-system '(mac ns))
   (add-to-list 'default-frame-alist
@@ -151,7 +153,6 @@
 
   (use-package exec-path-from-shell
     :init
-    (setq-default exec-path-from-shell-shell-name "/bin/bash")
     (exec-path-from-shell-initialize))
 
 (defun neotree-find-project-root()
@@ -194,7 +195,7 @@
     (message "Buffers deleted!")))
 
 (use-package counsel
-  :config
+  :init
   (evil-leader/set-key
     "sb" 'swiper
     "sg" 'counsel-rg)
@@ -212,9 +213,18 @@
 (setq-default ruby-flymake-use-rubocop-if-available nil)
 
 (use-package lsp-mode
-  :config
+  :init
+  (add-hook 'js2-mode-hook 'lsp)
+  (add-hook 'typescript-mode-hook 'lsp)
+  (setq lsp-auto-guess-root t)
+  (setq lsp-auto-configure nil)
+  (setq lsp-prefer-flymake nil)
   (require 'lsp-clients))
-(use-package company-lsp)
+
+(use-package company-lsp
+  :after company
+  :init
+  (add-to-list 'company-backends 'company-lsp))
 
 (use-package csharp-mode)
 (use-package omnisharp
@@ -281,7 +291,7 @@
 
 (use-package neotree
   :commands (projectile-switch-project)
-  :init
+  :config
   (evil-define-key 'normal neotree-mode-map
     (kbd "TAB") 'neotree-enter
     "H" 'neotree-hidden-file-toggle
@@ -305,7 +315,7 @@
 
 (use-package org
   :mode ("\\.org\\'" . org-mode)
-  :init
+  :config
   (evil-leader/set-key
     "oc" 'org-capture
     "oa" 'org-agenda)
@@ -335,13 +345,13 @@
     "c" 'org-capture-finalize
     "k" 'org-capture-kill)
 
-  :config
   (setq-default org-display-inline-images t)
   (setq-default org-redisplay-inline-images t)
   (setq org-startup-with-inline-images "inlineimages")
   (defvar +org-babel-languages
     '(emacs-lisp
       plantuml
+      shell
       ))
 
   (org-babel-do-load-languages
@@ -388,15 +398,6 @@
 (use-package org-bullets
   :hook (org-mode . org-bullets-mode))
 
-(use-package org-gcal
-  :after org
-  :config
-  (load-file "~/Dropbox/Keys/gcal.el")
-  (require 'gcal)
-  (setq org-gcal-client-id my/google-secrets-client
-        org-gcal-client-secret my/google-secrets-secret
-        org-gcal-file-alist '(("clint.ryan3@gmail.com" .  "~/Dropbox/notes/calendar.org"))))
-
 (use-package projectile
   :diminish projectile-mode
   :commands (projectile-switch-project projectile-switch-buffer)
@@ -410,10 +411,6 @@
 
 (use-package yasnippet
   :commands (yas-insert-snippet)
-  :init
-  (evil-leader/set-key
-    "is" 'yas-insert-snippet
-    "in" 'yas-new-snippet)
   :config
   (yas-global-mode 1))
 
