@@ -11,6 +11,9 @@
 
 ;;; Code:
 
+(defconst my/WINDOWS (memq window-system '(win32)))
+(defconst my/OSX (memq window-system '(ns mac)))
+
 (setq user-full-name "Clint Ryan"
       user-mail-address "clint.ryan3@gmail.com")
 
@@ -42,8 +45,7 @@
 (scroll-bar-mode -1)
 (setq-default display-line-numbers-type 'visual)
 (global-display-line-numbers-mode t)
-(unless (memq window-system '(mac ns))
-  (menu-bar-mode -1))
+(unless my/OSX (menu-bar-mode -1))
 (setq inhibit-startup-message t)
 (setq-default indent-tabs-mode nil)
 (setq-default line-spacing 5)
@@ -139,7 +141,7 @@
   (add-hook 'js2-mode-hook #'my/use-eslint-from-node-modules)
   (flycheck-add-mode 'javascript-eslint 'web-mode))
 
-(when (memq window-system '(mac ns))
+(when my/OSX
   (add-to-list 'default-frame-alist
                '(ns-transparent-titlebar . t))
   (add-to-list 'default-frame-alist
@@ -149,7 +151,7 @@
     :init
     (xclip-mode))
 
-(when (memq window-system '(mac ns))
+(when my/OSX
   (use-package exec-path-from-shell
     :init
     (exec-path-from-shell-initialize)))
@@ -226,12 +228,16 @@
   (add-to-list 'company-backends 'company-lsp))
 
 (use-package csharp-mode)
+
 (use-package omnisharp
   :config
   (add-hook 'csharp-mode-hook 'omnisharp-mode)
   (add-to-list 'company-backends 'company-omnisharp))
 
-(use-package json-mode)
+(use-package json-mode
+  :init
+  (evil-leader/set-key-for-mode 'json-mode
+    "m=" 'json-pretty-print-buffer))
 
 (use-package js2-mode
   :init
@@ -277,7 +283,7 @@
 
 (use-package magit
   :commands magit-status
-  :init
+  :config
   (use-package evil-magit
     :init
     (evil-magit-init)))
@@ -420,8 +426,7 @@
 (defun renew-dhcp ()
   "Renews my DHCP lease on windows."
   (interactive)
-  (when (memq window-system '(win32))
-    (eshell-command "ipconfig /renew")))
+  (when-windows (eshell-command "ipconfig /renew")))
 
 (setq gc-cons-threshold 16777216
       gc-cons-percentage 0.1)
