@@ -38,12 +38,17 @@
   (setq use-package-verbose t)
   (setq use-package-always-ensure t))
 
-(use-package zenburn-theme)
-(when (display-graphic-p)
-  (load-theme 'zenburn t))
+(use-package all-the-icons)
+(use-package doom-themes
+  :init
+  (when (display-graphic-p)
+    (load-theme 'doom-solarized-light t)
+    (doom-themes-org-config))
+  :config
+  (setq-default doom-neotree-file-icons t)
+  (doom-themes-neotree-config))
 
 (scroll-bar-mode -1)
-(setq-default display-line-numbers-type 'visual)
 (global-display-line-numbers-mode t)
 (unless my/OSX (menu-bar-mode -1))
 (setq inhibit-startup-message t)
@@ -309,7 +314,7 @@
     "mr" 'neotree-rename-node
     "mc" 'neotree-create-node)
 
-  (setq neo-theme 'nerd)
+  (setq neo-theme (if (display-graphic-p) 'icons 'nerd))
   (setq neo-window-fixed-size nil)
   (setq neo-smart-open t))
 
