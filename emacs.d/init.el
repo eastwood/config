@@ -116,7 +116,6 @@
     "gs" 'magit-status
     "pf" 'projectile-find-file
     "pp" 'projectile-switch-project
-    "pb" 'projectile-switch-buffer
     "pt" 'neotree-find-project-root
     "tl" 'toggle-truncate-lines
     "ts" 'eshell
@@ -416,7 +415,7 @@
 
 (use-package projectile
   :diminish projectile-mode
-  :commands (projectile-switch-project projectile-switch-buffer)
+  :commands (projectile-switch-project)
   :config
   (setq projectile-enable-caching t)
   (setq projectile-completion-system 'ivy)
