@@ -40,13 +40,16 @@
 
 (use-package diminish)
 (use-package all-the-icons)
+(use-package doom-modeline
+  :hook
+  (after-init . doom-modeline-init))
+
 (use-package doom-themes
   :init
-  (when (display-graphic-p)
-    (load-theme 'doom-solarized-light t)
-    (doom-themes-org-config))
+  (load-theme 'doom-one-light 'doom-one)
   :config
   (setq-default doom-neotree-file-icons t)
+  (doom-themes-org-config)
   (doom-themes-neotree-config))
 
 (scroll-bar-mode -1)
@@ -134,16 +137,17 @@
   :init
   (global-evil-surround-mode))
 
+(defun my/use-eslint-from-node-modules ()
+  "Gets eslint exe from local path."
+  (let (eslint)
+    (setq eslint (projectile-expand-root "node_modules/eslint/bin/eslint.js"))
+    (setq-default flycheck-javascript-eslint-executable eslint)))
+
 (use-package flycheck
   :commands (projectile-switch-project)
   :init
   (add-hook 'after-init-hook #'global-flycheck-mode)
   :config
-  (defun my/use-eslint-from-node-modules ()
-    "Gets eslint exe from local path."
-    (let (eslint)
-      (setq eslint (projectile-expand-root "node_modules/eslint/bin/eslint.js"))
-      (setq-local flycheck-javascript-eslint-executable eslint)))
   (setq-default flycheck-disabled-checker 'javascript-jshint)
   (setq-default flycheck-disabled-checker 'json-jsonlist)
   (add-hook 'js2-mode-hook #'my/use-eslint-from-node-modules)
