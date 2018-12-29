@@ -38,6 +38,7 @@
   (setq use-package-verbose t)
   (setq use-package-always-ensure t))
 
+(use-package diminish)
 (use-package all-the-icons)
 (use-package doom-themes
   :init
@@ -60,11 +61,13 @@
 (fset 'yes-or-no-p 'y-or-n-p)
 
 (use-package company
+  :diminish company-mode
   :init
   (global-company-mode t)
   (setq company-tooltip-align-annotations t))
 
 (use-package evil
+  :diminish undo-tree-mode
   :init
   (setq evil-want-keybinding nil)
   (evil-mode 1)
@@ -201,6 +204,7 @@
     (message "Buffers deleted!")))
 
 (use-package counsel
+  :diminish ivy-mode counsel-mode
   :init
   (evil-leader/set-key
     "sb" 'swiper
@@ -425,13 +429,14 @@
 (use-package yasnippet-snippets)
 
 (use-package which-key
+  :diminish which-key-mode
   :init
   (which-key-mode))
 
 (defun renew-dhcp ()
   "Renews my DHCP lease on windows."
   (interactive)
-  (when-windows (eshell-command "ipconfig /renew")))
+  (when my/WINDOWS (eshell-command "ipconfig /renew")))
 
 (setq gc-cons-threshold 16777216
       gc-cons-percentage 0.1)
