@@ -239,6 +239,11 @@
   :init
   (add-to-list 'company-backends 'company-lsp))
 
+(use-package slime
+  :config
+  (setq inferior-lisp-program "/usr/local/bin/sbcl")
+  (add-to-list 'slime-contribs 'slime-fancy 'slime-repl))
+
 (use-package csharp-mode)
 
 (use-package omnisharp
