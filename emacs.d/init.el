@@ -11,7 +11,7 @@
 
 ;;; Code:
 
-(defconst my/WINDOWS (memq window-system '(win32)))
+(defconst my/WINDOWS (memq window-system '(w32)))
 (defconst my/OSX (memq window-system '(ns mac)))
 
 (setq user-full-name "Clint Ryan"
@@ -242,6 +242,7 @@
 (use-package slime
   :config
   (setq inferior-lisp-program "/usr/local/bin/sbcl")
+  (when my/WINDOWS (setq inferior-lisp-program "sbcl.exe"))
   (add-to-list 'slime-contribs 'slime-fancy 'slime-repl))
 
 (use-package csharp-mode)
