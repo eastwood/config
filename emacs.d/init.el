@@ -46,7 +46,7 @@
 
 (use-package doom-themes
   :init
-  (load-theme 'doom-one-light 'doom-one)
+  (load-theme 'doom-one 't)
   :config
   (setq-default doom-neotree-file-icons t)
   (doom-themes-org-config)
