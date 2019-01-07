@@ -105,7 +105,6 @@
     "fs" 'save-buffer
     "fj" 'open-journal-file
     "fo" 'open-org-file
-    "fw" 'open-work-todo
     "fc" 'open-calendar-file
     "ff" 'counsel-find-file
     "fr" 'counsel-recentf
@@ -189,11 +188,6 @@
   (cond
    ((null my/WINDOWS) "~/Workspace/github.com/eastwood/blog")
    (t "C:/code/blog")))
-
-(defun open-work-todo()
-  "Open our GTD org file."
-  (interactive)
-  (find-file (concat (blog-base-url) "/content/todo.org")))
 
 (defun open-org-file()
   "Open our GTD org file."
