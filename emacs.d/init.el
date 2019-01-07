@@ -348,7 +348,7 @@
 (defun deploy-blog ()
   "Deploy my hugo blog."
   (interactive)
-  (let ((blogCommand (concat "cd " (blog-base-url) " && ./deploy.sh")))
+  (let ((blogCommand (format "cd %s && ./deploy.sh" (blog-base-url))))
     (async-shell-command blogCommand)))
   
 
