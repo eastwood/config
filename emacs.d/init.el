@@ -342,7 +342,7 @@
   "Deploy my hugo blog."
   (interactive)
   (let ((blogDir "~/Workspace/github.com/eastwood/blog"))
-    (async-shell-command (concat blogDir "/deploy.sh"))))
+    (call-process (concat blogDir "/deploy.sh") nil "*hugo-deploy*")))
   
 
 (use-package org
