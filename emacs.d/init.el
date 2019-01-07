@@ -105,6 +105,7 @@
     "fs" 'save-buffer
     "fj" 'open-journal-file
     "fo" 'open-org-file
+    "fw" 'open-work-todo
     "fc" 'open-calendar-file
     "ff" 'counsel-find-file
     "fr" 'counsel-recentf
@@ -181,6 +182,18 @@
   "Open our configuration file."
   (interactive)
   (find-file "~/.emacs.d/init.el"))
+
+(defun blog-base-url ()
+  "Get blog base url."
+  (interactive)
+  (cond
+   ((null my/WINDOWS) "~/Workspace/github.com/eastwood/blog")
+   (t "C:/code/blog")))
+
+(defun open-work-todo()
+  "Open our GTD org file."
+  (interactive)
+  (find-file (concat (blog-base-url) "/content/todo.org")))
 
 (defun open-org-file()
   "Open our GTD org file."
@@ -341,8 +354,8 @@
 (defun deploy-blog ()
   "Deploy my hugo blog."
   (interactive)
-  (let ((blogDir "~/Workspace/github.com/eastwood/blog"))
-    (call-process (concat blogDir "/deploy.sh") nil "*hugo-deploy*" t)))
+  (let ((blogCommand (concat "cd " (blog-base-url) " && ./deploy.sh")))
+    (async-shell-command blogCommand)))
   
 
 (use-package org
