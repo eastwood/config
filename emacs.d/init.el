@@ -46,7 +46,7 @@
 
 (use-package doom-themes
   :init
-  (load-theme 'doom-one-light 'doom-one)
+  (load-theme 'doom-one 't)
   :config
   (setq-default doom-neotree-file-icons t)
   (doom-themes-org-config)
@@ -229,6 +229,7 @@
   :init
   (add-hook 'js2-mode-hook 'lsp)
   (add-hook 'typescript-mode-hook 'lsp)
+  (add-hook 'ruby-mode-hook 'lsp)
   (setq lsp-auto-guess-root t)
   (setq lsp-auto-configure nil)
   (setq lsp-prefer-flymake nil)
@@ -257,16 +258,17 @@
   (evil-leader/set-key-for-mode 'json-mode
     "m=" 'json-pretty-print-buffer))
 
-(use-package js2-mode
-  :init
-  (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode)))
+(use-package js2-mode)
+  ;; (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode)))
 
 (add-to-list 'auto-mode-alist '("\\.jsx\\'" . web-mode))
+(setq js2-basic-offset 2)
 (setq js-indent-level 2)
 
 (use-package typescript-mode
   :init
   (setq-default typescript-indent-level 2)
+  (add-to-list 'auto-mode-alist '("\\.js\\'" . typescript-mode))
   (add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-mode)))
 
 (use-package rust-mode
@@ -333,6 +335,8 @@
 
 (setq neo-window-width 40)
 (setq neo-default-system-application "open")
+
+(use-package htmlize)
 
 (use-package org
   :mode ("\\.org\\'" . org-mode)
