@@ -348,9 +348,11 @@
 (defun deploy-blog ()
   "Deploy my hugo blog."
   (interactive)
-  (let ((blogCommand (format "cd %s && ./deploy.sh" (blog-base-url))))
+  (let ((blogCommand
+         (cond
+          (my/WINDOWS (format "powershell C:/code/blog/deploy.ps1"))
+          (t (format "cd %s && ./deploy.sh" (blog-base-url))))))
     (async-shell-command blogCommand)))
-  
 
 (use-package org
   :mode ("\\.org\\'" . org-mode)
