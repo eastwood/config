@@ -75,6 +75,8 @@
   (setq evil-want-keybinding nil)
   (evil-mode 1)
   :config
+  (evil-define-key 'normal 'global "j" 'evil-next-visual-line)
+  (evil-define-key 'normal 'global "k" 'evil-previous-visual-line)
   (setq evil-want-C-u-scroll t))
 
 (use-package evil-collection
