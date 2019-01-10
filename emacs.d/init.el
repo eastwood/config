@@ -21,6 +21,7 @@
       gc-cons-percentage 0.6)
 (setq byte-compile-warnings '(not free-vars unresolved noruntime lexical make-local))
 (setq custom-file "~/.emacs.d/custom.el")
+(load-file "~/.emacs.d/custom.el")
 (setq backup-directory-alist `(("." . "~/.emacs.d/backups")))
 
 (eval-when-compile
@@ -428,9 +429,9 @@
                    nil)))
   (setq-default org-capture-templates
                 '(("t" "Todo" entry (file+headline "~/Dropbox/notes/gtd.org" "Inbox")
-                   "* TODO %?\n:CREATED: %T\n" :prepend T)
-                  ("e" "Event" entry (file "~/Dropbox/notes/calendar.org")
-                   "* %?\n%T" :prepend T)
+                   "* TODO %?\n" :prepend T)
+                  ("e" "Event" entry (file+headline "~/Dropbox/notes/gtd.org" "Inbox")
+                   "* %?\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+0d\"))" :prepend T)
                   ("i" "Ideas" entry (file+headline "~/Dropbox/notes/gtd.org" "Ideas")
                    "* %?\n%T" :prepend T)
                   ("g" "Goals" entry (file+headline "~/Dropbox/notes/gtd.org" "Goals")
