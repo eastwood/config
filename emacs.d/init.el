@@ -22,6 +22,7 @@
 (setq byte-compile-warnings '(not free-vars unresolved noruntime lexical make-local))
 (setq custom-file "~/.emacs.d/custom.el")
 (setq backup-directory-alist `(("." . "~/.emacs.d/backups")))
+(setq auto-save-file-name-transforms '((".*" "~/.emacs.d/auto-save-list/\\1" t)))
 
 (eval-when-compile
   (require 'package)
@@ -322,6 +323,7 @@
 (use-package neotree
   :commands (projectile-switch-project)
   :config
+  (setq neo-autorefresh t)
   (evil-define-key 'normal neotree-mode-map
     (kbd "TAB") 'neotree-enter
     "H" 'neotree-hidden-file-toggle
@@ -425,7 +427,7 @@
   (setq-default org-capture-templates
                 '(("t" "Todo" entry (file+headline "~/Dropbox/notes/gtd.org" "Inbox")
                    "* TODO %?\n:CREATED: %T\n" :prepend T)
-                  ("e" "Event" entry (file "~/Dropbox/notes/calendar.org")
+                  ("a" "Action" entry (file+headline "~/Dropbox/notes/gtd.org" "Actions")
                    "* %?\n%T" :prepend T)
                   ("i" "Ideas" entry (file+headline "~/Dropbox/notes/gtd.org" "Ideas")
                    "* %?\n%T" :prepend T)
