@@ -21,6 +21,7 @@
       gc-cons-percentage 0.6)
 (setq byte-compile-warnings '(not free-vars unresolved noruntime lexical make-local))
 (setq custom-file "~/.emacs.d/custom.el")
+(load-file "~/.emacs.d/custom.el")
 (setq backup-directory-alist `(("." . "~/.emacs.d/backups")))
 (setq auto-save-file-name-transforms '((".*" "~/.emacs.d/auto-save-list/\\1" t)))
 
@@ -76,6 +77,8 @@
   (setq evil-want-keybinding nil)
   (evil-mode 1)
   :config
+  (evil-define-key 'normal 'global "j" 'evil-next-visual-line)
+  (evil-define-key 'normal 'global "k" 'evil-previous-visual-line)
   (setq evil-want-C-u-scroll t))
 
 (use-package evil-collection
@@ -350,9 +353,11 @@
 (defun deploy-blog ()
   "Deploy my hugo blog."
   (interactive)
-  (let ((blogCommand (concat "cd " (blog-base-url) " && ./deploy.sh")))
+  (let ((blogCommand
+         (cond
+          (my/WINDOWS (format "powershell C:/code/blog/deploy.ps1"))
+          (t (format "cd %s && ./deploy.sh" (blog-base-url))))))
     (async-shell-command blogCommand)))
-  
 
 (use-package org
   :mode ("\\.org\\'" . org-mode)
