@@ -71,6 +71,7 @@
   (global-company-mode t)
   (setq company-tooltip-align-annotations t))
 
+(use-package restclient)
 (use-package evil
   :diminish undo-tree-mode
   :init
