@@ -43,8 +43,7 @@
 (use-package diminish)
 (use-package all-the-icons)
 (use-package doom-modeline
-  :hook
-  (after-init . doom-modeline-init))
+  :hook (after-init . doom-modeline-init))
 
 (use-package doom-themes
   :init
@@ -246,6 +245,8 @@
   (setq lsp-auto-configure nil)
   (setq lsp-prefer-flymake nil)
   (require 'lsp-clients))
+
+(electric-pair-mode)
 
 (use-package company-lsp
   :after company
@@ -454,7 +455,14 @@
   (add-to-list 'projectile-globally-ignored-directories "node_modules")
   (projectile-mode 1))
 
-(use-package smartparens)
+(use-package multiple-cursors
+  :init
+  (global-set-key (kbd "C-j") 'mc/mark-next-like-this)
+  (global-set-key (kbd "C-k") 'mc/mark-previous-like-this))
+
+(use-package expand-region
+  :init
+  (global-set-key (kbd "C-=") 'er/expand-region))
 
 (use-package yasnippet
   :commands (yas-insert-snippet)
