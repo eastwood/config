@@ -107,6 +107,7 @@
     "bn" 'next-buffer
     "bp" 'previous-buffer
     "eb" 'eval-buffer
+    "ee" 'eval-last-sexp
     "er" 'eval-region
     "fs" 'save-buffer
     "fj" 'open-journal-file
