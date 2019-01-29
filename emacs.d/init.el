@@ -81,6 +81,8 @@
   (evil-define-key 'normal 'global "k" 'evil-previous-visual-line)
   (setq evil-want-C-u-scroll t))
 
+(use-package evil-mc)
+
 (use-package evil-collection
   :custom
   (evil-collection-company-use-tng nil)
@@ -157,14 +159,14 @@
   (flycheck-add-mode 'javascript-eslint 'web-mode))
 
 (when my/OSX
+  (use-package xclip
+    :init
+    (xclip-mode))
   (add-to-list 'default-frame-alist
                '(ns-transparent-titlebar . t))
   (add-to-list 'default-frame-alist
                '(ns-appearance . dark))) ;; or dark - depending on your theme
 
-  (use-package xclip
-    :init
-    (xclip-mode))
 
 (when my/OSX
   (use-package exec-path-from-shell
@@ -454,11 +456,6 @@
   (setq projectile-completion-system 'ivy)
   (add-to-list 'projectile-globally-ignored-directories "node_modules")
   (projectile-mode 1))
-
-(use-package multiple-cursors
-  :init
-  (global-set-key (kbd "C-j") 'mc/mark-next-like-this)
-  (global-set-key (kbd "C-k") 'mc/mark-previous-like-this))
 
 (use-package expand-region
   :init
