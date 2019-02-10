@@ -43,8 +43,7 @@
 (use-package diminish)
 (use-package all-the-icons)
 (use-package doom-modeline
-  :hook
-  (after-init . doom-modeline-init))
+  :hook (after-init . doom-modeline-init))
 
 (use-package doom-themes
   :init
@@ -71,6 +70,7 @@
   (global-company-mode t)
   (setq company-tooltip-align-annotations t))
 
+(use-package restclient)
 (use-package evil
   :diminish undo-tree-mode
   :init
@@ -80,6 +80,8 @@
   (evil-define-key 'normal 'global "j" 'evil-next-visual-line)
   (evil-define-key 'normal 'global "k" 'evil-previous-visual-line)
   (setq evil-want-C-u-scroll t))
+
+(use-package evil-mc)
 
 (use-package evil-collection
   :custom
@@ -105,6 +107,7 @@
     "bn" 'next-buffer
     "bp" 'previous-buffer
     "eb" 'eval-buffer
+    "ee" 'eval-last-sexp
     "er" 'eval-region
     "fs" 'save-buffer
     "fj" 'open-journal-file
@@ -157,14 +160,14 @@
   (flycheck-add-mode 'javascript-eslint 'web-mode))
 
 (when my/OSX
+  (use-package xclip
+    :init
+    (xclip-mode))
   (add-to-list 'default-frame-alist
                '(ns-transparent-titlebar . t))
   (add-to-list 'default-frame-alist
                '(ns-appearance . dark))) ;; or dark - depending on your theme
 
-  (use-package xclip
-    :init
-    (xclip-mode))
 
 (when my/OSX
   (use-package exec-path-from-shell
@@ -245,6 +248,8 @@
   (setq lsp-auto-configure nil)
   (setq lsp-prefer-flymake nil)
   (require 'lsp-clients))
+
+(electric-pair-mode)
 
 (use-package company-lsp
   :after company
@@ -454,7 +459,9 @@
   (add-to-list 'projectile-globally-ignored-directories "node_modules")
   (projectile-mode 1))
 
-(use-package smartparens)
+(use-package expand-region
+  :init
+  (global-set-key (kbd "C-=") 'er/expand-region))
 
 (use-package yasnippet
   :commands (yas-insert-snippet)
