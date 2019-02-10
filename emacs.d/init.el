@@ -282,11 +282,12 @@
   (add-to-list 'auto-mode-alist '("\\.js\\'" . typescript-mode))
   (add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-mode)))
 
-(use-package rust-mode
-  :mode ("\\.rs\\'" . rust-mode))
+(use-package flycheck-rust)
 
-(use-package flycheck-rust
-  :commands (rust-mode))
+(use-package rust-mode
+  :mode ("\\.rs\\'" . rust-mode)
+  :config
+  (add-hook 'flycheck-mode-hook #'flycheck-rust-setup))
 
 (use-package racer
   :commands (rust-mode)

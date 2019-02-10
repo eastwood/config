@@ -7,6 +7,8 @@ Plug 'tpope/vim-sensible' " Smart defaults
 " UI
 Plug 'jnurmine/zenburn'
 Plug 'altercation/vim-colors-solarized'
+Plug 'chriskempson/base16-vim'
+
 
 " File tree
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
@@ -125,6 +127,7 @@ if has("gui_running")
   set guioptions-=L " no scrollbar on the right
   set guioptions-=b " no scrollbar on the bottom
 endif
+colorscheme base16-onedark
 
 highlight LineNr guibg=NONE
 highlight LineNr ctermbg=NONE
