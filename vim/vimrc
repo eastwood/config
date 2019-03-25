@@ -26,11 +26,6 @@ Plug 'mxw/vim-jsx', { 'for': 'javascript.jsx' } " JSX support
 Plug 'vim-ruby/vim-ruby'
 Plug 'gabrielelana/vim-markdown'
 
-Plug 'OmniSharp/omnisharp-vim'
-let g:OmniSharp_server_use_mono=1
-let g:OmniSharp_server_path='~/.omnisharp/omnisharp-roslyn/OmniSharp.exe'
-let g:OmniSharp_port=2000
-
 " Language Servers
 Plug 'autozimu/LanguageClient-neovim', {
       \ 'branch': 'next',
@@ -43,6 +38,8 @@ let g:LanguageClient_serverCommands = {
 \ 'javascript.jsx': ['javascript-typescript-stdio'],
 \ 'typescript': ['javascript-typescript-stdio'],
 \ }
+
+let g:LanguageClient_useVirtualText = 0
 
 nnoremap <silent> gh :call LanguageClient#textDocument_hover()<CR>
 nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
@@ -61,9 +58,6 @@ endif
 
 " Commenting
 Plug 'scrooloose/nerdcommenter' " Comment lines
-
-" Linting Engine
-Plug 'w0rp/ale'
 
 " Searching
 Plug '/usr/local/opt/fzf'
@@ -111,7 +105,7 @@ endif
 
 " User Interface
 set colorcolumn=120
-set bg=dark
+set bg=light
 set title
 set number
 set lazyredraw
@@ -127,12 +121,8 @@ if has("gui_running")
   set guioptions-=L " no scrollbar on the right
   set guioptions-=b " no scrollbar on the bottom
 endif
-colorscheme base16-onedark
+colorscheme solarized
 
-highlight LineNr guibg=NONE
-highlight LineNr ctermbg=NONE
-highlight SignColumn ctermbg=NONE guibg=NONE
-highlight VertSplit guibg=NONE ctermbg=NONE
 
 " Files and Backups
 set noswapfile
@@ -219,3 +209,9 @@ nnoremap <Leader>sg :Rg<CR>
 " Buffer Search
 nnoremap <Leader>sb :BLines<CR>
 tnoremap <Esc> <C-\><C-n>
+
+highlight LineNr guibg=NONE |
+highlight LineNr ctermbg=NONE |
+highlight SignColumn ctermbg=NONE guibg=NONE |
+highlight VertSplit guibg=NONE ctermbg=NONE |
+highlight StatusLine ctermbg=white ctermbg=black

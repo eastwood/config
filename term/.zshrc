@@ -5,15 +5,13 @@
 export ZSH=/Users/cryan/.oh-my-zsh
 export EDITOR="nvim"
 export TERM='xterm-256color'
-export GOPATH='/Users/cryan/Workspace/go'
-export PYTHON_PATH='~/Library/Python/3.6/bin'
-export PATH=/usr/local/bin:$PYTHON_PATH:$MONO_FRAMEWORK:$GOPATH/bin:$PATH
-
+export NIB_PATH='/Users/cryan/Workspace/nib.com.au/cryan/bin'
+export PATH=/usr/local/bin:$PATH:$NIB_PATH
 
 # Set name of the theme to load. Optionally, if you set this to "random"
 # it'll load a random theme each time that oh-my-zsh is loaded.
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
-ZSH_THEME="gnzh"
+ZSH_THEME="lambda"
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
@@ -66,14 +64,14 @@ alias vim="nvim"
 alias ec="emacsclient -t"
 alias ls="ls -lsaG"
 alias grep="grep --color=auto"
-alias git="hub"
 alias debug-chrome="/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --remote-debugging-port=9222"
 alias mux=tmuxinator
-alias rqpauth="~/Workspace/nib.com.au/bin/rqp auth --display-credentials"
-alias rqp="~/Workspace/nib.com.au/bin/rqp"
 alias dockerrmc="docker rm -f $(docker ps -aq)"
 alias dockerrmi="docker rmi $(docker images)"
 alias create-loopback="sudo ifconfig lo0 alias 10.100.10.1"
-alias aws-login="rqpauth && dockerlogin"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
