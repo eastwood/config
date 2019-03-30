@@ -2,13 +2,11 @@
 call plug#begin()
 " Defaults
 Plug 'tpope/vim-surround' " The Pope's gift to man
-Plug 'tpope/vim-sensible' " Smart defaults
 
 " UI
 Plug 'jnurmine/zenburn'
-Plug 'altercation/vim-colors-solarized'
-Plug 'chriskempson/base16-vim'
-
+Plug 'rakr/vim-one'
+Plug 'NLKNguyen/papercolor-theme'
 
 " File tree
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
@@ -54,6 +52,7 @@ inoremap <expr><tab> pumvisible() ? "\<c-y>" : "\<tab>"
 if !has('nvim')
   Plug 'roxma/nvim-yarp'
   Plug 'roxma/vim-hug-neovim-rpc'
+  Plug 'tpope/vim-sensible' " Smart defaults
 endif
 
 " Commenting
@@ -105,7 +104,6 @@ endif
 
 " User Interface
 set colorcolumn=120
-set bg=light
 set title
 set number
 set lazyredraw
@@ -121,7 +119,10 @@ if has("gui_running")
   set guioptions-=L " no scrollbar on the right
   set guioptions-=b " no scrollbar on the bottom
 endif
-colorscheme solarized
+
+set termguicolors
+colorscheme one
+set bg=dark
 
 
 " Files and Backups

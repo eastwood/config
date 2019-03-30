@@ -6,7 +6,8 @@ export ZSH=/Users/cryan/.oh-my-zsh
 export EDITOR="nvim"
 export TERM='xterm-256color'
 export NIB_PATH='/Users/cryan/Workspace/nib.com.au/cryan/bin'
-export PATH=/usr/local/bin:$PATH:$NIB_PATH
+export PYTHON_PATH='/Users/cryan/Library/Python/3.7/bin/'
+export PATH=/usr/local/bin:$PATH:$NIB_PATH:$PYTHON_PATH
 
 # Set name of the theme to load. Optionally, if you set this to "random"
 # it'll load a random theme each time that oh-my-zsh is loaded.

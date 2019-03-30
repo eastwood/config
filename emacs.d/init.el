@@ -47,7 +47,7 @@
 
 (use-package doom-themes
   :init
-  (load-theme 'doom-solarized-light 't)
+  (load-theme 'doom-one 't)
   :config
   (setq-default doom-neotree-file-icons t)
   (doom-themes-org-config)
@@ -149,6 +149,12 @@
     (setq eslint (projectile-expand-root "node_modules/eslint/bin/eslint.js"))
     (setq-default flycheck-javascript-eslint-executable eslint)))
 
+(defun my/use-tslint-from-node-modules ()
+  "Gets eslint exe from local path."
+  (let (tslint)
+    (setq tslint (projectile-expand-root "node_modules/tslint/bin/tslint"))
+    (setq-default flycheck-typescript-tslint-executable tslint)))
+
 (use-package flycheck
   :commands (projectile-switch-project)
   :init
@@ -157,6 +163,7 @@
   (setq-default flycheck-disabled-checker 'javascript-jshint)
   (setq-default flycheck-disabled-checker 'json-jsonlist)
   (add-hook 'js2-mode-hook #'my/use-eslint-from-node-modules)
+  (add-hook 'typescript-mode-hook #'my/use-tslint-from-node-modules)
   (flycheck-add-mode 'javascript-eslint 'web-mode))
 
 (when my/OSX
@@ -167,7 +174,6 @@
                '(ns-transparent-titlebar . t))
   (add-to-list 'default-frame-alist
                '(ns-appearance . dark))) ;; or dark - depending on your theme
-
 
 (when my/OSX
   (use-package exec-path-from-shell
