@@ -43,7 +43,7 @@
 (use-package diminish)
 (use-package all-the-icons)
 (use-package doom-modeline
-  :hook (after-init . doom-modeline-init))
+  :hook (after-init . doom-modeline-mode))
 
 (use-package doom-themes
   :init
@@ -71,6 +71,7 @@
   (setq company-tooltip-align-annotations t))
 
 (use-package restclient)
+
 (use-package evil
   :diminish undo-tree-mode
   :init
@@ -80,8 +81,6 @@
   (evil-define-key 'normal 'global "j" 'evil-next-visual-line)
   (evil-define-key 'normal 'global "k" 'evil-previous-visual-line)
   (setq evil-want-C-u-scroll t))
-
-(use-package evil-mc)
 
 (use-package evil-collection
   :custom
@@ -253,6 +252,8 @@
   (setq lsp-auto-guess-root t)
   (setq lsp-auto-configure nil)
   (setq lsp-prefer-flymake nil)
+  (evil-define-key 'normal lsp-mode-map
+    "gh" 'lsp-describe-thing-at-point)
   (require 'lsp-clients))
 
 (electric-pair-mode)
@@ -339,6 +340,7 @@
   :commands (projectile-switch-project)
   :config
   (setq neo-autorefresh t)
+  (define-key evil-motion-state-map "\\" 'neotree-toggle)
   (evil-define-key 'normal neotree-mode-map
     (kbd "TAB") 'neotree-enter
     "H" 'neotree-hidden-file-toggle
