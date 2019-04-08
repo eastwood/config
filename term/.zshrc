@@ -4,10 +4,11 @@
 # Path to your oh-my-zsh installation.
 export ZSH=/Users/cryan/.oh-my-zsh
 export EDITOR="nvim"
+export TEX_PATH="/usr/local/texlive/2018/bin/x86_64-darwin"
 export TERM='xterm-256color'
 export NIB_PATH='/Users/cryan/Workspace/nib.com.au/cryan/bin'
 export PYTHON_PATH='/Users/cryan/Library/Python/3.7/bin/'
-export PATH=/usr/local/bin:$PATH:$NIB_PATH:$PYTHON_PATH
+export PATH=/usr/local/bin:$PATH:$NIB_PATH:$PYTHON_PATH:$TEX_PATH
 
 # Set name of the theme to load. Optionally, if you set this to "random"
 # it'll load a random theme each time that oh-my-zsh is loaded.
@@ -67,8 +68,6 @@ alias ls="ls -lsaG"
 alias grep="grep --color=auto"
 alias debug-chrome="/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --remote-debugging-port=9222"
 alias mux=tmuxinator
-alias dockerrmc="docker rm -f $(docker ps -aq)"
-alias dockerrmi="docker rmi $(docker images)"
 alias create-loopback="sudo ifconfig lo0 alias 10.100.10.1"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

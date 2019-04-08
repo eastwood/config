@@ -1,85 +1,19 @@
 " Install packages and configuration
 call plug#begin()
-" Defaults
 Plug 'tpope/vim-surround' " The Pope's gift to man
-
-" UI
-Plug 'jnurmine/zenburn'
-Plug 'rakr/vim-one'
-Plug 'NLKNguyen/papercolor-theme'
-
-" File tree
-Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
-" Tab now opens dirs in nerdtree
-autocmd FileType nerdtree map <buffer> <tab> <CR>
-let NERDTreeShowHidden = 1
-
-" Versioning
+Plug 'jnurmine/zenburn' " Nice theme for reading
+Plug 'rakr/vim-one' " Atom themes
+Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' } " We want that tree action
 Plug 'tpope/vim-fugitive', { 'on': 'Gstatus' } " Git badassery
-
-" Languages
 Plug 'pangloss/vim-javascript', { 'for': 'javascript' } " Javascript support
 Plug 'leafgarland/typescript-vim' " Typescript lang
 Plug 'mxw/vim-jsx', { 'for': 'javascript.jsx' } " JSX support
-Plug 'vim-ruby/vim-ruby'
-Plug 'gabrielelana/vim-markdown'
-
-" Language Servers
-Plug 'autozimu/LanguageClient-neovim', {
-      \ 'branch': 'next',
-      \ 'do': 'bash install.sh',
-      \ }
-
-let g:LanguageClient_serverCommands = {
-\ 'ruby': ['solargraph', 'stdio'],
-\ 'javascript': ['javascript-typescript-stdio'],
-\ 'javascript.jsx': ['javascript-typescript-stdio'],
-\ 'typescript': ['javascript-typescript-stdio'],
-\ }
-
-let g:LanguageClient_useVirtualText = 0
-
-nnoremap <silent> gh :call LanguageClient#textDocument_hover()<CR>
-nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
-nnoremap <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
-
-" Autocompletion
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-let g:deoplete#enable_at_startup=1
-" Make tab autocomplete when the pum is visible, otherwise do as normal
-inoremap <expr><tab> pumvisible() ? "\<c-y>" : "\<tab>"
-
-if !has('nvim')
-  Plug 'roxma/nvim-yarp'
-  Plug 'roxma/vim-hug-neovim-rpc'
-  Plug 'tpope/vim-sensible' " Smart defaults
-endif
-
-" Commenting
+Plug 'vim-ruby/vim-ruby' " Ruby support
+Plug 'gabrielelana/vim-markdown' " Markdown suport
+Plug 'neoclide/coc.nvim', {'do': 'yarn install --frozen-lockfile'} " Language Servers
 Plug 'scrooloose/nerdcommenter' " Comment lines
-
-" Searching
-Plug '/usr/local/opt/fzf'
-Plug 'junegunn/fzf.vim'
-
-let $FZF_DEFAULT_COMMAND = 'rg --hidden --files'
-
-" Files with preview
-command! -bang -nargs=* -complete=dir Files 
-      \ call fzf#vim#files(<q-args>, fzf#vim#with_preview('right:50%:hidden', '?'), <bang>0)
-
-" Grep with preview
-command! -bang -nargs=* Rg 
-      \ call fzf#vim#grep(
-      \ 'rg --column --line-number --no-heading --color=always '.shellescape(<q-args>), 1,
-      \ fzf#vim#with_preview({'options': '--delimiter : --nth 4..'},'right:50%:hidden', '?'))
-
-" Snippets
-Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
-let g:UltiSnipsExpandTrigger="<C-j>"
-let g:UltiSnipsJumpForwardTrigger="<C-j>"
-let g:UltiSnipsJumpBackwardTrigger="<C-k>"
-
+Plug '/usr/local/opt/fzf' " Searching, need to install fzf first
+Plug 'junegunn/fzf.vim' " Fzf plugin to interact with cmd tool
 call plug#end()
 
 " Settings
@@ -107,6 +41,7 @@ set colorcolumn=120
 set title
 set number
 set lazyredraw
+set signcolumn=yes
 set showcmd
 set hidden
 set showmode
@@ -124,6 +59,12 @@ set termguicolors
 colorscheme one
 set bg=dark
 
+"General UI
+highlight LineNr guibg=NONE |
+highlight LineNr ctermbg=NONE |
+highlight SignColumn ctermbg=NONE guibg=NONE |
+highlight VertSplit guibg=NONE ctermbg=NONE |
+highlight StatusLine ctermbg=white ctermbg=black
 
 " Files and Backups
 set noswapfile
@@ -154,8 +95,8 @@ nnoremap ' `
 imap <C-s> <C-o>:w!<CR>
 imap <C-v> <ESC>"+gP
 vmap <C-c> "+y
-
 nnoremap / /\v
+inoremap <expr><tab> pumvisible() ? "\<c-y>" : "\<tab>"
 
 " Menu settings
 autocmd CompleteDone * pclose
@@ -193,10 +134,12 @@ nmap <leader>bb :Buffers<CR>
 nmap <leader>bn :bn!<CR>
 nmap <leader>bp :bp!<CR>
 
+" To avoid generating too much entropy
 nmap <leader>qq :wqa!<CR>
 nmap <leader><Esc> :q!<CR>
 nmap <leader>/ :noh<CR>
 
+" File based 
 nmap <leader>ff :edit
 nmap <leader>fs :w!<CR>
 nmap <leader>ft :NERDTreeFind<CR>
@@ -207,12 +150,37 @@ nmap <leader>fo :edit ~/Dropbox/notes/gth.md<CR>
 " Searching
 nnoremap <Leader>sw :Rg <C-r><C-w>
 nnoremap <Leader>sg :Rg<CR>
-" Buffer Search
 nnoremap <Leader>sb :BLines<CR>
 tnoremap <Esc> <C-\><C-n>
 
-highlight LineNr guibg=NONE |
-highlight LineNr ctermbg=NONE |
-highlight SignColumn ctermbg=NONE guibg=NONE |
-highlight VertSplit guibg=NONE ctermbg=NONE |
-highlight StatusLine ctermbg=white ctermbg=black
+" FZF configuration
+let $FZF_DEFAULT_COMMAND = 'rg --hidden --files'
+" Files with preview
+command! -bang -nargs=* -complete=dir Files 
+      \ call fzf#vim#files(<q-args>, fzf#vim#with_preview('right:50%:hidden', '?'), <bang>0)
+" Grep with preview
+command! -bang -nargs=* Rg 
+      \ call fzf#vim#grep(
+      \ 'rg --column --line-number --no-heading --color=always '.shellescape(<q-args>), 1,
+      \ fzf#vim#with_preview({'options': '--delimiter : --nth 4..'},'right:50%:hidden', '?'))
+
+" LSP configuration
+inoremap <silent><expr> <c-space> coc#refresh()
+nmap <silent> [c <Plug>(coc-diagnostic-prev)
+nmap <silent> ]c <Plug>(coc-diagnostic-next)
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gh <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+nmap <silent> <F2> <Plug>(coc-rename)
+nmap <leader>qf  <Plug>(coc-fix-current)
+
+" Tab now opens dirs in nerdtree
+autocmd FileType nerdtree map <buffer> <tab> <CR>
+let NERDTreeShowHidden = 1
+
+" Snippets - Really don't use these enough
+Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
+let g:UltiSnipsExpandTrigger="<C-j>"
+let g:UltiSnipsJumpForwardTrigger="<C-j>"
+let g:UltiSnipsJumpBackwardTrigger="<C-k>"

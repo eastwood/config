@@ -47,7 +47,7 @@
 
 (use-package doom-themes
   :init
-  (load-theme 'doom-one 't)
+  (load-theme 'doom-tomorrow-night 't)
   :config
   (setq-default doom-neotree-file-icons t)
   (doom-themes-org-config)
@@ -282,16 +282,15 @@
     "m=" 'json-pretty-print-buffer))
 
 (use-package js2-mode)
-  ;; (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode)))
+(use-package rjsx-mode)
 
-(add-to-list 'auto-mode-alist '("\\.jsx\\'" . web-mode))
 (setq js2-basic-offset 2)
 (setq js-indent-level 2)
 
 (use-package typescript-mode
   :init
   (setq-default typescript-indent-level 2)
-  (add-to-list 'auto-mode-alist '("\\.js\\'" . typescript-mode))
+  (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
   (add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-mode)))
 
 (use-package flycheck-rust)
@@ -380,7 +379,15 @@
     "oc" 'org-capture
     "oa" 'org-agenda)
 
+  (defun my/org-archive ()
+    "Archives and saves file."
+    (interactive)
+    (org-archive-subtree)
+    (save-some-buffers 'always (lambda ()
+                                 (string-match-p "gtd.org_archive" buffer-file-name))))
+
   (evil-leader/set-key-for-mode 'org-mode
+    "ma" 'my/org-archive
     "mci" 'org-clock-in
     "mco" 'org-clock-out
     "mt" 'org-set-tags-command
@@ -398,6 +405,8 @@
     "<" 'org-shiftmetaleft
     "c" 'org-toggle-checkbox
     "t" 'org-todo
+    (kbd "C-j") 'org-next-item
+    (kbd "C-k") 'org-previous-item
     (kbd "TAB") 'org-cycle
     "gs" 'org-goto)
 
