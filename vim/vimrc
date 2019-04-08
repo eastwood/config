@@ -10,7 +10,7 @@ Plug 'leafgarland/typescript-vim' " Typescript lang
 Plug 'mxw/vim-jsx', { 'for': 'javascript.jsx' } " JSX support
 Plug 'vim-ruby/vim-ruby' " Ruby support
 Plug 'gabrielelana/vim-markdown' " Markdown suport
-Plug 'neoclide/coc.nvim', {'do': 'yarn install --frozen-lockfile'} " Language Servers
+Plug 'neoclide/coc.nvim', {'do': 'yarn install --frozen-lockfile'} " Language Servers 
 Plug 'scrooloose/nerdcommenter' " Comment lines
 Plug '/usr/local/opt/fzf' " Searching, need to install fzf first
 Plug 'junegunn/fzf.vim' " Fzf plugin to interact with cmd tool
@@ -45,6 +45,7 @@ set signcolumn=yes
 set showcmd
 set hidden
 set showmode
+set updatetime=300
 
 if has("gui_running")
   set guifont=Source\ Code\ Pro:h12
@@ -96,7 +97,9 @@ imap <C-s> <C-o>:w!<CR>
 imap <C-v> <ESC>"+gP
 vmap <C-c> "+y
 nnoremap / /\v
-inoremap <expr><tab> pumvisible() ? "\<c-y>" : "\<tab>"
+inoremap <silent><expr> <TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 
 " Menu settings
 autocmd CompleteDone * pclose
@@ -173,7 +176,17 @@ nmap <silent> gh <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
 nmap <silent> <F2> <Plug>(coc-rename)
-nmap <leader>qf  <Plug>(coc-fix-current)
+nmap <leader>qf <Plug>(coc-fix-current)
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+
+autocmd CursorHold * silent call CocActionAsync('highlight')
+function! s:show_documentation()
+  if &filetype == 'vim'
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endfunction
 
 " Tab now opens dirs in nerdtree
 autocmd FileType nerdtree map <buffer> <tab> <CR>
