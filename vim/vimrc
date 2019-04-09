@@ -17,7 +17,6 @@ Plug 'junegunn/fzf.vim' " Fzf plugin to interact with cmd tool
 call plug#end()
 
 " Settings
-set nocompatible
 let mapleader = " "
 if has('mac')
   let g:clipboard = {'copy': {'+': 'pbcopy', '*': 'pbcopy'}, 'paste': {'+': 'pbpaste', '*': 'pbpaste'}, 'name': 'pbcopy', 'cache_enabled': 0}
@@ -127,7 +126,7 @@ nnoremap <leader>wk <C-w>k
 nnoremap <leader>wl <C-w>l
 nnoremap <leader>wo <C-w>o
 nnoremap <leader>wc <C-w>c
-nnoremap <leader>ws <C-w>s
+" nnoremap <leader>ws <C-w>s
 nnoremap <leader>wv <C-w>v
 
 " Buffer bindings
@@ -168,6 +167,7 @@ command! -bang -nargs=* Rg
       \ fzf#vim#with_preview({'options': '--delimiter : --nth 4..'},'right:50%:hidden', '?'))
 
 " LSP configuration
+let g:coc_force_debug = 1
 inoremap <silent><expr> <c-space> coc#refresh()
 nmap <silent> [c <Plug>(coc-diagnostic-prev)
 nmap <silent> ]c <Plug>(coc-diagnostic-next)
@@ -178,13 +178,13 @@ nmap <silent> gr <Plug>(coc-references)
 nmap <silent> <F2> <Plug>(coc-rename)
 nmap <leader>qf <Plug>(coc-fix-current)
 nnoremap <silent> K :call <SID>show_documentation()<CR>
-
 autocmd CursorHold * silent call CocActionAsync('highlight')
+
 function! s:show_documentation()
   if &filetype == 'vim'
     execute 'h '.expand('<cword>')
   else
-    call CocAction('doHover')
+    call CocActionAsync('doHover')
   endif
 endfunction
 
@@ -193,7 +193,6 @@ autocmd FileType nerdtree map <buffer> <tab> <CR>
 let NERDTreeShowHidden = 1
 
 " Snippets - Really don't use these enough
-Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 let g:UltiSnipsExpandTrigger="<C-j>"
 let g:UltiSnipsJumpForwardTrigger="<C-j>"
 let g:UltiSnipsJumpBackwardTrigger="<C-k>"
