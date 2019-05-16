@@ -1,5 +1,6 @@
 " Install packages and configuration
 call plug#begin()
+Plug 'mhinz/vim-startify'
 Plug 'tpope/vim-surround' " The Pope's gift to man
 Plug 'jnurmine/zenburn' " Nice theme for reading
 Plug 'rakr/vim-one' " Atom themes
@@ -9,11 +10,11 @@ Plug 'pangloss/vim-javascript', { 'for': 'javascript' } " Javascript support
 Plug 'leafgarland/typescript-vim' " Typescript lang
 Plug 'mxw/vim-jsx', { 'for': 'javascript.jsx' } " JSX support
 Plug 'vim-ruby/vim-ruby' " Ruby support
-Plug 'gabrielelana/vim-markdown' " Markdown suport
 Plug 'neoclide/coc.nvim', {'do': 'yarn install --frozen-lockfile'} " Language Servers 
 Plug 'scrooloose/nerdcommenter' " Comment lines
 Plug '/usr/local/opt/fzf' " Searching, need to install fzf first
 Plug 'junegunn/fzf.vim' " Fzf plugin to interact with cmd tool
+Plug 'shime/vim-livedown'
 call plug#end()
 
 " Settings
@@ -96,8 +97,8 @@ imap <C-s> <C-o>:w!<CR>
 imap <C-v> <ESC>"+gP
 vmap <C-c> "+y
 nnoremap / /\v
-inoremap <silent><expr> <TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+inoremap <expr> <TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
+inoremap <expr> <S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 
 " Menu settings
@@ -105,8 +106,8 @@ autocmd CompleteDone * pclose
 
 " Project management
 nmap <leader>pf :Files<CR>
-nmap <leader>pp :source ~/Dropbox/sessions/
-nmap <leader>ps :mksession! ~/Dropbox/sessions/
+nmap <leader>pp :source ~/.vim/sessions/
+nmap <leader>ps :mksession! ~/.vim/sessions/
 nmap <leader>pt :NERDTreeToggle<CR>
 
 map \ :NERDTreeToggle<CR>
@@ -196,3 +197,5 @@ let NERDTreeShowHidden = 1
 let g:UltiSnipsExpandTrigger="<C-j>"
 let g:UltiSnipsJumpForwardTrigger="<C-j>"
 let g:UltiSnipsJumpBackwardTrigger="<C-k>"
+
+let g:startify_session_dir = "~/.vim/sessions"

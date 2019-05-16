@@ -47,7 +47,7 @@
 
 (use-package doom-themes
   :init
-  (load-theme 'doom-tomorrow-night 't)
+  (load-theme 'doom-one 't)
   :config
   (setq-default doom-neotree-file-icons t)
   (doom-themes-org-config)
@@ -58,7 +58,7 @@
 (unless my/OSX (menu-bar-mode -1))
 (setq inhibit-startup-message t)
 (setq-default indent-tabs-mode nil)
-(setq-default line-spacing 5)
+(setq-default line-spacing nil)
 (setq ring-bell-function 'ignore)
 (xterm-mouse-mode 1)
 (tool-bar-mode -1)
@@ -225,10 +225,16 @@
     (when (equal '(4) arg) (delete-other-windows))
     (message "Buffers deleted!")))
 
+(defun my/rg-word ()
+  "RG with word on current selection."
+  (interactive)
+  (counsel-rg (current-word)))
+
 (use-package counsel
   :diminish ivy-mode counsel-mode
   :init
   (evil-leader/set-key
+    "sw" 'my/rg-word
     "sb" 'swiper
     "sg" 'counsel-rg)
   (counsel-mode)
@@ -265,6 +271,8 @@
 
 (use-package slime
   :config
+  (evil-leader/set-key-for-mode 'lisp-mode
+    "eb" 'slime-eval-buffer)
   (setq inferior-lisp-program "/usr/local/bin/sbcl")
   (when my/WINDOWS (setq inferior-lisp-program "sbcl.exe"))
   (add-to-list 'slime-contribs 'slime-fancy 'slime-repl))
