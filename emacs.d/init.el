@@ -5,6 +5,8 @@
 ;; Mantra of the config:
 
 ;; 1. We autoload and byte compile all packages.
+
+
 ;; 2. We subscribe to the way of vim, our flow should be evil.
 ;; 3. We let LSP handle all our coding needs
 ;; 4. We value performance over laziness
@@ -13,6 +15,9 @@
 
 (defconst my/WINDOWS (memq window-system '(w32)))
 (defconst my/OSX (memq window-system '(ns mac)))
+(defconst my/CUSTOM-FILE-PATH "~/.emacs.d/custom.el")
+(defconst my/CONFIG-FILE "~/.emacs.d/init.el")
+(defconst my/ORG-PATH "~/Dropbox/notes")
 
 (setq user-full-name "Clint Ryan"
       user-mail-address "clint.ryan3@gmail.com")
@@ -20,8 +25,8 @@
 (setq gc-cons-threshold 402653184
       gc-cons-percentage 0.6)
 (setq byte-compile-warnings '(not free-vars unresolved noruntime lexical make-local))
-(setq custom-file "~/.emacs.d/custom.el")
-(load-file "~/.emacs.d/custom.el")
+(setq custom-file my/CUSTOM-FILE-PATH)
+(load-file my/CUSTOM-FILE-PATH)
 (setq backup-directory-alist `(("." . "~/.emacs.d/backups")))
 (setq auto-save-file-name-transforms '((".*" "~/.emacs.d/auto-save-list/\\1" t)))
 
@@ -55,6 +60,7 @@
 
 (scroll-bar-mode -1)
 (global-display-line-numbers-mode t)
+(global-hl-line-mode t)
 (unless my/OSX (menu-bar-mode -1))
 (setq inhibit-startup-message t)
 (setq-default indent-tabs-mode nil)
@@ -93,6 +99,13 @@
 (use-package evil-leader
   :after evil
   :config
+
+  (defmacro open-org-file (filename)
+    "Macro for opening files in org directory with FILENAME filepath."
+    `(lambda ()
+       (interactive)
+       (find-file (string-join (list my/ORG-PATH "/" ,filename) nil))))
+
   (evil-leader/set-leader "SPC")
   (evil-leader/set-key
     "SPC" 'counsel-M-x
@@ -109,9 +122,9 @@
     "ee" 'eval-last-sexp
     "er" 'eval-region
     "fs" 'save-buffer
-    "fj" 'open-journal-file
-    "fo" 'open-org-file
-    "fc" 'open-calendar-file
+    "fj" (open-org-file "journal.org")
+    "fo" (open-org-file "gtd.org")
+    "fc" (open-org-file "calendar.org")
     "ff" 'counsel-find-file
     "fr" 'counsel-recentf
     "fed" 'open-config-file
@@ -187,12 +200,12 @@
 (defun reload-config-file()
   "Reload our configuration file."
   (interactive)
-  (load-file "~/.emacs.d/init.el"))
+  (load-file my/CONFIG-FILE))
 
 (defun open-config-file()
   "Open our configuration file."
   (interactive)
-  (find-file "~/.emacs.d/init.el"))
+  (find-file my/CONFIG-FILE))
 
 (defun blog-base-url ()
   "Get blog base url."
@@ -201,20 +214,6 @@
    ((null my/WINDOWS) "~/Workspace/github.com/eastwood/blog")
    (t "C:/code/blog")))
 
-(defun open-org-file()
-  "Open our GTD org file."
-  (interactive)
-  (find-file "~/Dropbox/notes/gtd.org"))
-
-(defun open-journal-file()
-  "Open our journal org file."
-  (interactive)
-  (find-file "~/Dropbox/notes/journal.org"))
-
-(defun open-calendar-file()
-  "Open our calendar file."
-  (interactive)
-  (find-file "~/Dropbox/notes/calendar.org"))
 
 (defun kill-other-buffers (&optional arg)
   "Kill all other buffers.  If the universal prefix ARG is used then will the windows too."
@@ -289,13 +288,16 @@
   (evil-leader/set-key-for-mode 'json-mode
     "m=" 'json-pretty-print-buffer))
 
-(use-package js2-mode)
-(use-package rjsx-mode)
+(use-package js2-mode
+  :diminish js2-mode)
+(use-package rjsx-mode
+  :diminish rjsx-mode)
 
 (setq js2-basic-offset 2)
 (setq js-indent-level 2)
 
 (use-package typescript-mode
+  :diminish typescript-mode
   :init
   (setq-default typescript-indent-level 2)
   (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
