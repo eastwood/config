@@ -225,7 +225,7 @@
     (when (equal '(4) arg) (delete-other-windows))
     (message "Buffers deleted!")))
 
-(defun my/rg-word ()
+(defun my/search-current-word ()
   "RG with word on current selection."
   (interactive)
   (counsel-rg (current-word)))
@@ -234,7 +234,7 @@
   :diminish ivy-mode counsel-mode
   :init
   (evil-leader/set-key
-    "sw" 'my/rg-word
+    "sw" 'my/search-current-word
     "sb" 'swiper
     "sg" 'counsel-rg)
   (counsel-mode)
