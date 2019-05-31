@@ -15,6 +15,7 @@ Plug 'scrooloose/nerdcommenter' " Comment lines
 Plug '/usr/local/opt/fzf' " Searching, need to install fzf first
 Plug 'junegunn/fzf.vim' " Fzf plugin to interact with cmd tool
 Plug 'shime/vim-livedown'
+Plug 'aklt/plantuml-syntax'
 call plug#end()
 
 " Settings
@@ -199,3 +200,5 @@ let g:UltiSnipsJumpForwardTrigger="<C-j>"
 let g:UltiSnipsJumpBackwardTrigger="<C-k>"
 
 let g:startify_session_dir = "~/.vim/sessions"
+
+let g:plantuml_executable_script='java -jar ~/plantuml.jar -tsvg'

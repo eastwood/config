@@ -18,6 +18,7 @@
 (defconst my/CUSTOM-FILE-PATH "~/.emacs.d/custom.el")
 (defconst my/CONFIG-FILE "~/.emacs.d/init.el")
 (defconst my/ORG-PATH "~/Dropbox/notes")
+(defconst my/PLANTUML_JAR "~/plantuml.jar")
 
 (setq user-full-name "Clint Ryan"
       user-mail-address "clint.ryan3@gmail.com")
@@ -32,10 +33,12 @@
 
 (eval-when-compile
   (require 'package)
+  (unless (assoc-default "elpa" package-archives)
+    (add-to-list 'package-archives '("elpa" . "https://elpa.gnu.org/packages/") t))
   (unless (assoc-default "melpa" package-archives)
-    (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t))
+    (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t))
   (unless (assoc-default "org" package-archives)
-    (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t))
+    (add-to-list 'package-archives '("org" . "https://orgmode.org/elpa/") t))
   (package-initialize)
   (unless (package-installed-p 'use-package)
     (package-refresh-contents)
@@ -77,6 +80,7 @@
   (setq company-tooltip-align-annotations t))
 
 (use-package restclient)
+(use-package ob-restclient)
 
 (use-package evil
   :diminish undo-tree-mode
@@ -92,6 +96,7 @@
   :custom
   (evil-collection-company-use-tng nil)
   (evil-collection-setup-minibuffer t)
+  (evil-collection-outline-bind-tab-p nil)
   :after evil
   :init
   (evil-collection-init))
@@ -104,7 +109,11 @@
     "Macro for opening files in org directory with FILENAME filepath."
     `(lambda ()
        (interactive)
-       (find-file (string-join (list my/ORG-PATH "/" ,filename) nil))))
+       (find-file (concat my/ORG-PATH "/" ,filename) nil)))
+
+  (defun get-org-file (filename)
+    "Macro for opening files in org directory with FILENAME filepath."
+    (concat my/ORG-PATH "/" filename))
 
   (evil-leader/set-leader "SPC")
   (evil-leader/set-key
@@ -237,23 +246,25 @@
     "sb" 'swiper
     "sg" 'counsel-rg)
   (counsel-mode)
+  (counsel-projectile-mode)
   (ivy-mode))
-(use-package counsel-projectile)
+
+(use-package counsel-projectile
+  :commands counsel-projectile-mode
+  :config
+  (counsel-projectile-mode t))
+
 (setq ivy-use-virtual-buffers t)
 (setq ivy-re-builders-alist '((t . ivy--regex-ignore-order)))
 
-(use-package plantuml-mode
-  :config
-  (setq-default org-plantuml-jar-path (expand-file-name "~/plantuml.jar"))
-  (setq plantuml-jar-path (expand-file-name "~/plantuml.jar")))
-
-(setq-default ruby-flymake-use-rubocop-if-available nil)
-
 (use-package lsp-mode
+  :commands lsp
   :init
   (add-hook 'js2-mode-hook 'lsp)
   (add-hook 'typescript-mode-hook 'lsp)
   (add-hook 'ruby-mode-hook 'lsp)
+  (setq-default ruby-flymake-use-rubocop-if-available nil)
+  :config
   (setq lsp-auto-guess-root t)
   (setq lsp-auto-configure nil)
   (setq lsp-prefer-flymake nil)
@@ -267,6 +278,7 @@
   :after company
   :init
   (add-to-list 'company-backends 'company-lsp))
+                                    
 
 (use-package slime
   :config
@@ -384,11 +396,19 @@
 
 (use-package org
   :mode ("\\.org\\'" . org-mode)
-  :config
+  :init
   (evil-leader/set-key
     "oc" 'org-capture
     "oa" 'org-agenda)
-
+  :config
+  (add-hook 'org-mode-hook (lambda ()
+                             "Beautify Org Checkbox Symbol"
+                             (push '("[ ]" . "☐") prettify-symbols-alist)
+                             (push '("[X]" . "☑" ) prettify-symbols-alist)
+                             (push '("[-]" . "❍" ) prettify-symbols-alist)
+                             (push '("#+BEGIN_SRC" . "λ" ) prettify-symbols-alist)
+                             (push '("#+END_SRC" . "λ" ) prettify-symbols-alist)
+                             (prettify-symbols-mode)))
   (defun my/org-archive ()
     "Archives and saves file."
     (interactive)
@@ -424,31 +444,35 @@
     "c" 'org-capture-finalize
     "k" 'org-capture-kill)
 
-  (setq-default org-display-inline-images t)
-  (setq-default org-redisplay-inline-images t)
   (setq org-startup-with-inline-images "inlineimages")
-  (defvar +org-babel-languages
-    '(emacs-lisp
-      plantuml
-      shell
-      ))
+  (setq org-confirm-babel-evaluate nil)
+  (add-hook 'org-babel-after-execute-hook 'org-redisplay-inline-images)
 
-  (org-babel-do-load-languages
-   'org-babel-load-languages
-   (cl-loop for sym in +org-babel-languages
-            collect (cons sym t)))
+  (setq-default org-plantuml-jar-path (expand-file-name my/PLANTUML_JAR))
+  (defvar +org-babel-languages '(emacs-lisp
+                                 plantuml
+                                 restclient
+                                 shell))
+
+  (org-babel-do-load-languages 'org-babel-load-languages
+                               (cl-loop for sym in +org-babel-languages
+                                        collect (cons sym t)))
 
   (setq org-use-speed-commands t)
-  (setq org-directory "~/Dropbox/notes")
+  (setq org-directory my/ORG-PATH)
   (setq org-default-notes-file (concat org-directory "/gtd.org"))
   (define-key global-map "\C-cc" 'org-capture)
   (setq org-global-properties '(("Effort_ALL". "0 0:10 0:20 0:30 1:00 2:00 3:00 4:00 6:00 8:00")))
   (setq org-columns-default-format '"%25ITEM %10Effort(Est){+} %TODO %TAGS")
-  (org-agenda-files '"~/Dropbox/notes/gtd.org")
+  (org-agenda-files (concat org-directory "/gtd.org"))
   (setq org-tag-alist
         '((:startgroup . nil)
           (:endgroup . nil)
           ("WORK" . ?w) ("HOME" . ?h) ("WORK" . ?w) ("COMPUTER" . ?l) ("GOALS" . ?g) ("READING" . ?r) ("PROJECT" . ?p)))
+  (setq org-todo-keywords
+        '((sequence "TODO(t)" "IN-PROGRESS(i)" "|" "DONE(d)")
+          (sequence "REPORT(r)" "BUG(b)" "KNOWNCAUSE(k)" "|" "FIXED(f)")))
+
   (setq-default org-agenda-custom-commands
                 '(("g" . "GTD contexts")
                   ("gw" "Work" tags-todo "WORK")
@@ -463,15 +487,15 @@
                     (tags-todo "TASKS"))
                    nil)))
   (setq-default org-capture-templates
-                '(("t" "Todo" entry (file+headline "~/Dropbox/notes/gtd.org" "Inbox")
+                `(("t" "Todo" entry (file+headline ,(get-org-file "gtd.org") "Inbox")
                    "* TODO %?\n:CREATED: %T\n" :prepend T)
-                  ("a" "Action" entry (file+headline "~/Dropbox/notes/gtd.org" "Actions")
+                  ("a" "Action" entry (file+headline ,(get-org-file "gtd.org") "Actions")
                    "* %?\n%T" :prepend T)
-                  ("i" "Ideas" entry (file+headline "~/Dropbox/notes/gtd.org" "Ideas")
+                  ("i" "Ideas" entry (file+headline ,(get-org-file "gtd.org") "Ideas")
                    "* %?\n%T" :prepend T)
-                  ("g" "Goals" entry (file+headline "~/Dropbox/notes/gtd.org" "Goals")
+                  ("g" "Goals" entry (file+headline ,(get-org-file "gtd.org") "Goals")
                    "* %?\n%T" :prepend T)
-                  ("j" "Journal" entry (file+datetree "~/Dropbox/notes/journal.org")
+                  ("j" "Journal" entry (file+datetree ,(get-org-file "journal.org"))
                    "* %?\nEntered on %U\n  %i\n  %a"))))
 
 (use-package org-bullets
@@ -492,7 +516,7 @@
 
 (use-package yasnippet
   :commands (yas-insert-snippet)
-  :config
+  :init
   (yas-global-mode 1))
 
 (use-package yasnippet-snippets)
