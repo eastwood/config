@@ -1,12 +1,11 @@
 ;;; emacs.el --- Emacs configuration
 
 ;;; Commentary:
+
 ;; A simple, fast and no-nonsense Emacs configuration reduced down over the years.
 ;; Mantra of the config:
 
 ;; 1. We autoload and byte compile all packages.
-
-
 ;; 2. We subscribe to the way of vim, our flow should be evil.
 ;; 3. We let LSP handle all our coding needs
 ;; 4. We value performance over laziness
@@ -174,10 +173,10 @@
   "Gets eslint exe from local path."
   (let (tslint)
     (setq tslint (projectile-expand-root "node_modules/tslint/bin/tslint"))
+    ;; (setq-default flycheck-tslint-args `("--project" ,(projectile-expand-root "tsconfig.json") "--type-check"))
     (setq-default flycheck-typescript-tslint-executable tslint)))
 
 (use-package flycheck
-  :commands (projectile-switch-project)
   :init
   (add-hook 'after-init-hook #'global-flycheck-mode)
   :config
@@ -257,28 +256,40 @@
 (setq ivy-use-virtual-buffers t)
 (setq ivy-re-builders-alist '((t . ivy--regex-ignore-order)))
 
-(use-package lsp-mode
-  :commands lsp
+(defun setup-tide-mode ()
+  "Set up tide mode."
+  (interactive)
+  (tide-setup)
+  (flycheck-mode +1)
+  (setq flycheck-check-syntax-automatically '(save mode-enabled))
+  (eldoc-mode +1)
+  (tide-hl-identifier-mode +1)
+  (company-mode +1))
+
+;; Specifically for typescript as lsp mode isn't working well
+(use-package tide
+  :hook (typescript-mode . setup-tide-mode)
   :init
-  (add-hook 'js2-mode-hook 'lsp)
-  (add-hook 'typescript-mode-hook 'lsp)
-  (add-hook 'ruby-mode-hook 'lsp)
-  (setq-default ruby-flymake-use-rubocop-if-available nil)
+  (setq company-tooltip-align-annotations t))
+
+(use-package lsp-mode
+  :hook
+  (js2-mode . lsp)
+  (ruby-mode . lsp)
+  :commands lsp
   :config
+  (setq-default ruby-flymake-use-rubocop-if-available nil)
   (setq lsp-auto-guess-root t)
-  (setq lsp-auto-configure nil)
-  (setq lsp-prefer-flymake nil)
+  (setq lsp-auto-configure t)
+  (setq lsp-prefer-flymake t)
   (evil-define-key 'normal lsp-mode-map
     "gh" 'lsp-describe-thing-at-point)
   (require 'lsp-clients))
 
-(electric-pair-mode)
-
 (use-package company-lsp
-  :after company
-  :init
-  (add-to-list 'company-backends 'company-lsp))
-                                    
+  :after lsp-mode)
+
+(electric-pair-mode)
 
 (use-package slime
   :config
@@ -462,6 +473,10 @@
   (setq org-directory my/ORG-PATH)
   (setq org-default-notes-file (concat org-directory "/gtd.org"))
   (define-key global-map "\C-cc" 'org-capture)
+
+  (define-key global-map [?\s-F] 'replace-regexp)
+  (define-key global-map [?\s-l] 'goto-line)
+
   (setq org-global-properties '(("Effort_ALL". "0 0:10 0:20 0:30 1:00 2:00 3:00 4:00 6:00 8:00")))
   (setq org-columns-default-format '"%25ITEM %10Effort(Est){+} %TODO %TAGS")
   (org-agenda-files (concat org-directory "/gtd.org"))
@@ -504,6 +519,8 @@
 (use-package projectile
   :diminish projectile-mode
   :commands (projectile-switch-project)
+  :init
+  (define-key global-map [?\s-P] 'projectile-switch-project)
   :config
   (setq projectile-enable-caching t)
   (setq projectile-completion-system 'ivy)

@@ -79,3 +79,10 @@ export NVM_DIR="$HOME/.nvm"
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 export PATH="$HOME/.rbenv/bin:$PATH"
 eval "$(rbenv init -)"
+
+# tabtab source for serverless package
+# uninstall by removing these lines or running `tabtab uninstall serverless`
+[[ -f /Users/cryan/Workspace/nib.com.au/cryan/join-api-to-on-prem-lambda/node_modules/tabtab/.completions/serverless.zsh ]] && . /Users/cryan/Workspace/nib.com.au/cryan/join-api-to-on-prem-lambda/node_modules/tabtab/.completions/serverless.zsh
+# tabtab source for sls package
+# uninstall by removing these lines or running `tabtab uninstall sls`
+[[ -f /Users/cryan/Workspace/nib.com.au/cryan/join-api-to-on-prem-lambda/node_modules/tabtab/.completions/sls.zsh ]] && . /Users/cryan/Workspace/nib.com.au/cryan/join-api-to-on-prem-lambda/node_modules/tabtab/.completions/sls.zsh
