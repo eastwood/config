@@ -176,16 +176,6 @@
     ;; (setq-default flycheck-tslint-args `("--project" ,(projectile-expand-root "tsconfig.json") "--type-check"))
     (setq-default flycheck-typescript-tslint-executable tslint)))
 
-(use-package flycheck
-  :init
-  (add-hook 'after-init-hook #'global-flycheck-mode)
-  :config
-  (setq-default flycheck-disabled-checker 'javascript-jshint)
-  (setq-default flycheck-disabled-checker 'json-jsonlist)
-  (add-hook 'js2-mode-hook #'my/use-eslint-from-node-modules)
-  (add-hook 'typescript-mode-hook #'my/use-tslint-from-node-modules)
-  (flycheck-add-mode 'javascript-eslint 'web-mode))
-
 (when my/OSX
   (use-package xclip
     :init
@@ -268,20 +258,29 @@
 
 ;; Specifically for typescript as lsp mode isn't working well
 (use-package tide
-  :hook (typescript-mode . setup-tide-mode)
+  ;;:hook (typescript-mode . setup-tide-mode)
   :init
   (setq company-tooltip-align-annotations t))
+
+(defun my/use-tsserver-from-node-modules ()
+  "Gets eslint exe from local path."
+  (let (tslint)
+    (setq tslint (projectile-expand-root "node_modules/typescript/bin/tsserver"))
+    (setq-default lsp-clients-typescript-server-args `("--stdio" "--tsserver-path" ,tslint))))
 
 (use-package lsp-mode
   :hook
   (js2-mode . lsp)
   (ruby-mode . lsp)
+  (typescript-mode . lsp)
   :commands lsp
   :config
   (setq-default ruby-flymake-use-rubocop-if-available nil)
   (setq lsp-auto-guess-root t)
   (setq lsp-auto-configure t)
   (setq lsp-prefer-flymake t)
+  (setq lsp-print-io t)
+  (add-hook 'lsp-mode-hook #'my/use-tsserver-from-node-modules)
   (evil-define-key 'normal lsp-mode-map
     "gh" 'lsp-describe-thing-at-point)
   (require 'lsp-clients))
@@ -326,20 +325,17 @@
   (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
   (add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-mode)))
 
-(use-package flycheck-rust)
-
 (use-package rust-mode
-  :mode ("\\.rs\\'" . rust-mode)
-  :config
-  (add-hook 'flycheck-mode-hook #'flycheck-rust-setup))
+  :mode ("\\.rs\\'" . rust-mode))
 
 (use-package racer
+  :hook
+  (rust-mode . racer-mode)
+  (racer-mode . eldoc-mode)
   :commands (rust-mode)
   :config
   (evil-define-key 'insert rust-mode-map
-    (kbd "TAB") 'company-indent-or-complete-common)
-  (add-hook 'rust-mode-hook #'racer-mode)
-  (add-hook 'racer-mode-hook #'eldoc-mode))
+    (kbd "TAB") 'company-indent-or-complete-common))
 
 (setq-default css-indent-offset 2)
 
