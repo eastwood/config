@@ -64,6 +64,7 @@ alias cdw="cd ~/Workspace/nib.com.au/cryan"
 alias flushdns="mDNSResponder -HUP"
 alias vim="nvim"
 alias ec="emacsclient -t"
+alias em="emacsclient -t"
 alias ls="ls -lsaG"
 alias grep="grep --color=auto"
 alias debug-chrome="/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --remote-debugging-port=9222"
@@ -72,17 +73,12 @@ alias create-loopback="sudo ifconfig lo0 alias 10.100.10.1"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+# export NVM_DIR="$HOME/.nvm"
+# [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+# [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 export PATH="$HOME/.rbenv/bin:$PATH"
 eval "$(rbenv init -)"
 
-# tabtab source for serverless package
-# uninstall by removing these lines or running `tabtab uninstall serverless`
-[[ -f /Users/cryan/Workspace/nib.com.au/cryan/join-api-to-on-prem-lambda/node_modules/tabtab/.completions/serverless.zsh ]] && . /Users/cryan/Workspace/nib.com.au/cryan/join-api-to-on-prem-lambda/node_modules/tabtab/.completions/serverless.zsh
-# tabtab source for sls package
-# uninstall by removing these lines or running `tabtab uninstall sls`
-[[ -f /Users/cryan/Workspace/nib.com.au/cryan/join-api-to-on-prem-lambda/node_modules/tabtab/.completions/sls.zsh ]] && . /Users/cryan/Workspace/nib.com.au/cryan/join-api-to-on-prem-lambda/node_modules/tabtab/.completions/sls.zsh
+test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"

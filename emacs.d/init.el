@@ -52,17 +52,13 @@
 (use-package doom-modeline
   :hook (after-init . doom-modeline-mode))
 
-(use-package doom-themes
+(use-package atom-one-dark-theme
   :init
-  (load-theme 'doom-one 't)
-  :config
-  (setq-default doom-neotree-file-icons t)
-  (doom-themes-org-config)
-  (doom-themes-neotree-config))
+  (load-theme 'atom-one-dark t))
 
 (scroll-bar-mode -1)
-(global-display-line-numbers-mode t)
 (global-hl-line-mode t)
+(global-display-line-numbers-mode t)
 (unless my/OSX (menu-bar-mode -1))
 (setq inhibit-startup-message t)
 (setq-default indent-tabs-mode nil)
@@ -119,6 +115,7 @@
     "SPC" 'counsel-M-x
     "[" 'previous-error
     "]" 'next-error
+    "!" 'flycheck-list-errors
     "bb" 'ivy-switch-buffer
     "bl" 'dired
     "bd" 'kill-buffer
@@ -176,6 +173,17 @@
     ;; (setq-default flycheck-tslint-args `("--project" ,(projectile-expand-root "tsconfig.json") "--type-check"))
     (setq-default flycheck-typescript-tslint-executable tslint)))
 
+(use-package flycheck
+  :commands (projectile-switch-project)
+  :init
+  (add-hook 'after-init-hook #'global-flycheck-mode)
+  :config
+  (setq-default flycheck-disabled-checker 'javascript-jshint)
+  (setq-default flycheck-disabled-checker 'json-jsonlist)
+  (add-hook 'js2-mode-hook #'my/use-eslint-from-node-modules)
+  (add-hook 'typescript-mode-hook #'my/use-tslint-from-node-modules)
+  (flycheck-add-mode 'javascript-eslint 'web-mode))
+
 (when my/OSX
   (use-package xclip
     :init
@@ -211,7 +219,6 @@
   (cond
    ((null my/WINDOWS) "~/Workspace/github.com/eastwood/blog")
    (t "C:/code/blog")))
-
 
 (defun kill-other-buffers (&optional arg)
   "Kill all other buffers.  If the universal prefix ARG is used then will the windows too."
@@ -256,37 +263,22 @@
   (tide-hl-identifier-mode +1)
   (company-mode +1))
 
+
+(use-package eglot
+  :config
+  (add-hook 'js2-mode-hook 'eglot-ensure)
+  (add-hook 'typescript-mode-hook 'eglot-ensure))
+
 ;; Specifically for typescript as lsp mode isn't working well
 (use-package tide
-  ;;:hook (typescript-mode . setup-tide-mode)
+  :hook (typescript-mode . setup-tide-mode)
   :init
   (setq company-tooltip-align-annotations t))
 
 (defun my/use-tsserver-from-node-modules ()
   "Gets eslint exe from local path."
   (let (tslint)
-    (setq tslint (projectile-expand-root "node_modules/typescript/bin/tsserver"))
-    (setq-default lsp-clients-typescript-server-args `("--stdio" "--tsserver-path" ,tslint))))
-
-(use-package lsp-mode
-  :hook
-  (js2-mode . lsp)
-  (ruby-mode . lsp)
-  (typescript-mode . lsp)
-  :commands lsp
-  :config
-  (setq-default ruby-flymake-use-rubocop-if-available nil)
-  (setq lsp-auto-guess-root t)
-  (setq lsp-auto-configure t)
-  (setq lsp-prefer-flymake t)
-  (setq lsp-print-io t)
-  (add-hook 'lsp-mode-hook #'my/use-tsserver-from-node-modules)
-  (evil-define-key 'normal lsp-mode-map
-    "gh" 'lsp-describe-thing-at-point)
-  (require 'lsp-clients))
-
-(use-package company-lsp
-  :after lsp-mode)
+    (setq tslint (projectile-expand-root "node_modules/typescript/bin/tsserver"))))
 
 (electric-pair-mode)
 
@@ -408,6 +400,7 @@
     "oc" 'org-capture
     "oa" 'org-agenda)
   :config
+  (setq display-line-numbers nil)
   (add-hook 'org-mode-hook (lambda ()
                              "Beautify Org Checkbox Symbol"
                              (push '("[ ]" . "☐") prettify-symbols-alist)
@@ -510,7 +503,8 @@
                    "* %?\nEntered on %U\n  %i\n  %a"))))
 
 (use-package org-bullets
-  :hook (org-mode . org-bullets-mode))
+  :hook
+  (org-mode . org-bullets-mode))
 
 (use-package projectile
   :diminish projectile-mode

@@ -1,6 +1,5 @@
 " Install packages and configuration
 call plug#begin()
-Plug 'mhinz/vim-startify'
 Plug 'tpope/vim-surround' " The Pope's gift to man
 Plug 'jnurmine/zenburn' " Nice theme for reading
 Plug 'rakr/vim-one' " Atom themes
@@ -198,7 +197,5 @@ let NERDTreeShowHidden = 1
 let g:UltiSnipsExpandTrigger="<C-j>"
 let g:UltiSnipsJumpForwardTrigger="<C-j>"
 let g:UltiSnipsJumpBackwardTrigger="<C-k>"
-
-let g:startify_session_dir = "~/.vim/sessions"
 
 let g:plantuml_executable_script='java -jar ~/plantuml.jar -tsvg'
