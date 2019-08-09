@@ -30,12 +30,6 @@
 (setq backup-directory-alist `(("." . "~/.emacs.d/backups")))
 (setq auto-save-file-name-transforms '((".*" "~/.emacs.d/auto-save-list/\\1" t)))
 
-(setq locale-coding-system 'utf-8)
-(set-terminal-coding-system 'utf-8-unix)
-(set-keyboard-coding-system 'utf-8)
-(set-selection-coding-system 'utf-8)
-(prefer-coding-system 'utf-8)
-
 (eval-when-compile
   (require 'package)
   (unless (assoc-default "elpa" package-archives)
@@ -62,7 +56,8 @@
   :init
   (load-theme 'atom-one-dark t))
 
-(scroll-bar-mode -1) (global-hl-line-mode t)
+(scroll-bar-mode -1)
+(global-hl-line-mode t)
 (global-display-line-numbers-mode t)
 (unless my/OSX (menu-bar-mode -1))
 (setq inhibit-startup-message t)

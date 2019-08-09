@@ -57,7 +57,7 @@ ZSH_THEME="lambda"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git osx nvm emacs)
+plugins=(git osx nvm)
 source $ZSH/oh-my-zsh.sh
 
 alias cdw="cd ~/Workspace/nib.com.au/cryan"
@@ -82,8 +82,3 @@ export PATH="$HOME/.rbenv/bin:$PATH"
 eval "$(rbenv init -)"
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
-
-if [[ $TERM = dumb ]]; then
-  unset zle_bracketed_paste
-fi
-export EMACS="*term*"
