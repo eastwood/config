@@ -88,7 +88,7 @@ set nowrap
 " Keybindings
 
 " General Keybindings
-map <leader><leader> :Commands<CR>
+map <leader><leader> :
 imap jk <ESC>
 nnoremap <backspace> <C-^>
 nnoremap ` '
