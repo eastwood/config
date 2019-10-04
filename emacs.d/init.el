@@ -74,7 +74,10 @@
   (global-company-mode t)
   (setq company-tooltip-align-annotations t))
 
-(use-package restclient)
+(use-package restclient
+  :config
+  (add-to-list 'auto-mode-alist '("\\.rest\\'" . restclient-mode)))
+  
 (use-package ob-restclient)
 
 (use-package evil
@@ -116,6 +119,7 @@
     "[" 'previous-error
     "]" 'next-error
     "!" 'flycheck-list-errors
+    "." 'flycheck-display-error-at-point
     "bb" 'ivy-switch-buffer
     "bl" 'dired
     "bd" 'kill-buffer
@@ -127,9 +131,7 @@
     "ee" 'eval-last-sexp
     "er" 'eval-region
     "fs" 'save-buffer
-    "fj" (open-org-file "journal.org")
-    "fo" (open-org-file "gtd.org")
-    "fc" (open-org-file "calendar.org")
+    "fo" (open-org-file "inbox.org")
     "ff" 'counsel-find-file
     "fr" 'counsel-recentf
     "fed" 'open-config-file
@@ -177,6 +179,8 @@
   :commands (projectile-switch-project)
   :init
   (add-hook 'after-init-hook #'global-flycheck-mode)
+  (evil-define-key 'normal flycheck-mode-map
+    (kbd "gh") 'flycheck-display-error-at-point)
   :config
   (setq-default flycheck-disabled-checker 'javascript-jshint)
   (setq-default flycheck-disabled-checker 'json-jsonlist)
@@ -274,6 +278,8 @@
 (use-package tide
   :hook (typescript-mode . setup-tide-mode)
   :init
+  (evil-define-key 'normal tide-mode-map
+    (kbd "C-o") 'tide-jump-back)
   (setq company-tooltip-align-annotations t))
 
 (defun my/use-tsserver-from-node-modules ()
@@ -461,7 +467,7 @@
 
   (setq org-use-speed-commands t)
   (setq org-directory my/ORG-PATH)
-  (setq org-default-notes-file (concat org-directory "/gtd.org"))
+  (setq org-default-notes-file (concat org-directory "/inbox.org"))
   (define-key global-map "\C-cc" 'org-capture)
 
   (define-key global-map [?\s-F] 'replace-regexp)
@@ -469,7 +475,7 @@
 
   (setq org-global-properties '(("Effort_ALL". "0 0:10 0:20 0:30 1:00 2:00 3:00 4:00 6:00 8:00")))
   (setq org-columns-default-format '"%25ITEM %10Effort(Est){+} %TODO %TAGS")
-  (org-agenda-files (concat org-directory "/gtd.org"))
+  (setq org-agenda-files (directory-files-recursively my/ORG-PATH "\.org$"))
   (setq org-tag-alist
         '((:startgroup . nil)
           (:endgroup . nil)
@@ -491,17 +497,12 @@
                     (tags-todo "GOALS")
                     (tags-todo "TASKS"))
                    nil)))
+
   (setq-default org-capture-templates
-                `(("t" "Todo" entry (file+headline ,(get-org-file "gtd.org") "Inbox")
-                   "* TODO %?\n:CREATED: %T\n" :prepend T)
-                  ("a" "Action" entry (file+headline ,(get-org-file "gtd.org") "Actions")
-                   "* %?\n%T" :prepend T)
-                  ("i" "Ideas" entry (file+headline ,(get-org-file "gtd.org") "Ideas")
-                   "* %?\n%T" :prepend T)
-                  ("g" "Goals" entry (file+headline ,(get-org-file "gtd.org") "Goals")
-                   "* %?\n%T" :prepend T)
-                  ("j" "Journal" entry (file+datetree ,(get-org-file "journal.org"))
-                   "* %?\nEntered on %U\n  %i\n  %a"))))
+                `(("t" "Inbox" entry (file ,(get-org-file "inbox.org")) "* TODO %?\n:CREATED: %T\n" :prepend T)
+                  ("h" "Home" entry (file ,(get-org-file "home.org")) "* %?\n%T" :prepend T)
+                  ("w" "Work" entry (file ,(get-org-file "work.org")) "* %?\n%T" :prepend T)
+                  ("j" "Journal" entry (file+datetree ,(get-org-file "journal.org")) "* %?\nEntered on %U\n  %i\n  %a"))))
 
 (use-package org-bullets
   :hook

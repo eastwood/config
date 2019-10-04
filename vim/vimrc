@@ -15,6 +15,7 @@ Plug '/usr/local/opt/fzf' " Searching, need to install fzf first
 Plug 'junegunn/fzf.vim' " Fzf plugin to interact with cmd tool
 Plug 'shime/vim-livedown'
 Plug 'aklt/plantuml-syntax'
+Plug 'aquach/vim-http-client'
 call plug#end()
 
 " Settings
@@ -201,3 +202,7 @@ let g:UltiSnipsExpandTrigger="<C-j>"
 let g:UltiSnipsJumpForwardTrigger="<C-j>"
 let g:UltiSnipsJumpBackwardTrigger="<C-k>"
 let g:plantuml_executable_script='java -jar ~/plantuml.jar -tsvg'
+let g:http_client_verify_ssl=0
+
+" use python to format xml
+command! FormatXML :%!python3 -c "import xml.dom.minidom, sys; print(xml.dom.minidom.parse(sys.stdin).toprettyxml())"
