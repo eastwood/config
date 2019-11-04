@@ -7,6 +7,7 @@ Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' } " We want that tree actio
 Plug 'tpope/vim-fugitive', { 'on': 'Gstatus' } " Git badassery
 Plug 'pangloss/vim-javascript', { 'for': 'javascript' } " Javascript support
 Plug 'leafgarland/typescript-vim' " Typescript lang
+Plug 'ianks/vim-tsx'
 Plug 'mxw/vim-jsx', { 'for': 'javascript.jsx' } " JSX support
 Plug 'vim-ruby/vim-ruby' " Ruby support
 Plug 'neoclide/coc.nvim', {'do': 'yarn install --frozen-lockfile'} " Language Servers 
@@ -16,6 +17,8 @@ Plug 'junegunn/fzf.vim' " Fzf plugin to interact with cmd tool
 Plug 'shime/vim-livedown'
 Plug 'aklt/plantuml-syntax'
 Plug 'aquach/vim-http-client'
+Plug 'altercation/vim-colors-solarized' " Nice theme for reading
+Plug 'jnurmine/zenburn'
 call plug#end()
 
 " Settings
@@ -57,8 +60,9 @@ if has("gui_running")
   set guioptions-=b " no scrollbar on the bottom
 endif
 
+set t_Co=256
 set termguicolors
-colorscheme one
+colorscheme zenburn
 set bg=dark
 
 "General UI
@@ -70,7 +74,7 @@ highlight StatusLine ctermbg=white ctermbg=black
 
 " Files and Backups
 set noswapfile
-set backupdir=~/tmp,/tmp
+set backupdir=/tmp
 set undodir=~/.vim/.tmp,~/tmp,~/.tmp,/tmp
 set wildignore=.svn,CVS,.git,*.swp,*.jpg,*.png,*.gif,*.pdf,*.bak
 set suffixes+=.old

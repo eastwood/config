@@ -60,11 +60,12 @@ DISABLE_AUTO_TITLE="true"
 plugins=(git osx nvm git-open)
 source $ZSH/oh-my-zsh.sh
 
+alias emacsd="emacs --daemon"
 alias cdw="cd ~/Workspace/nib.com.au/cryan"
 alias flushdns="mDNSResponder -HUP"
 alias vim="nvim"
 alias ec="emacsclient -t"
-alias em="emacsclient -t"
+alias em="emacs -nw"
 alias ls="ls -lsaG"
 alias grep="grep --color=auto"
 alias debug-chrome="/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --remote-debugging-port=9222"

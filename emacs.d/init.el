@@ -2,6 +2,7 @@
 
 ;;; Commentary:
 
+
 ;; A simple, fast and no-nonsense Emacs configuration reduced down over the years.
 ;; Mantra of the config:
 
@@ -13,10 +14,10 @@
 ;;; Code:
 
 (defconst my/WINDOWS (memq window-system '(w32)))
-(defconst my/OSX (memq window-system '(ns mac)))
+(defconst my/OSX (memq window-system '(ns mac nil)))
 (defconst my/CUSTOM-FILE-PATH "~/.emacs.d/custom.el")
 (defconst my/CONFIG-FILE "~/.emacs.d/init.el")
-(defconst my/ORG-PATH "~/Dropbox/notes")
+(defconst my/ORG-PATH "~/Google Drive/Documents/notes")
 (defconst my/PLANTUML_JAR "~/plantuml.jar")
 
 (setq user-full-name "Clint Ryan"
@@ -29,6 +30,8 @@
 (load-file my/CUSTOM-FILE-PATH)
 (setq backup-directory-alist `(("." . "~/.emacs.d/backups")))
 (setq auto-save-file-name-transforms '((".*" "~/.emacs.d/auto-save-list/\\1" t)))
+(setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
+
 
 (eval-when-compile
   (require 'package)
@@ -52,14 +55,21 @@
 (use-package doom-modeline
   :hook (after-init . doom-modeline-mode))
 
-(use-package atom-one-dark-theme
+(use-package spacemacs-theme)
+(use-package atom-one-dark-theme)
+(use-package zenburn-theme
   :init
-  (load-theme 'atom-one-dark t))
+  (load-theme 'zenburn t))
 
 (scroll-bar-mode -1)
+
+(unless window-system
+  (global-set-key (kbd "<mouse-4>") 'scroll-down-line)
+  (global-set-key (kbd "<mouse-5>") 'scroll-up-line))
+
 (global-hl-line-mode t)
 (global-display-line-numbers-mode t)
-(unless my/OSX (menu-bar-mode -1))
+(when window-system (menu-bar-mode -1))
 (setq inhibit-startup-message t)
 (setq-default indent-tabs-mode nil)
 (setq-default line-spacing nil)
@@ -67,6 +77,11 @@
 (xterm-mouse-mode 1)
 (tool-bar-mode -1)
 (fset 'yes-or-no-p 'y-or-n-p)
+
+(use-package multi-term
+  :config
+  (define-key global-map (kbd "<f12>") 'multi-term-dedicated-toggle)
+  (setq multi-term-program "/usr/local/bin/zsh"))
 
 (use-package company
   :diminish company-mode
@@ -81,7 +96,6 @@
 (use-package ob-restclient)
 
 (use-package evil
-  :diminish undo-tree-mode
   :init
   (setq evil-want-keybinding nil)
   (evil-mode 1)
@@ -131,7 +145,7 @@
     "ee" 'eval-last-sexp
     "er" 'eval-region
     "fs" 'save-buffer
-    "fo" (open-org-file "inbox.org")
+    "fo" (open-org-file "gtd.org")
     "ff" 'counsel-find-file
     "fr" 'counsel-recentf
     "fed" 'open-config-file
@@ -266,8 +280,14 @@
   (setq flycheck-check-syntax-automatically '(save mode-enabled))
   (eldoc-mode +1)
   (tide-hl-identifier-mode +1)
+  ;; enable typescript-tslint checker
+  (flycheck-add-mode 'typescript-tslint 'web-mode)
   (company-mode +1))
 
+(defun setup-tsx-mode ()
+  "Set up tsx mode."
+  (when (string-equal "tsx" (file-name-extension buffer-file-name))
+    (setup-tide-mode)))
 
 (use-package eglot
   :config
@@ -277,7 +297,9 @@
 ;; Specifically for typescript as lsp mode isn't working well
 (use-package tide
   :hook (typescript-mode . setup-tide-mode)
+  :hook (web-mode . setup-tsx-mode)
   :init
+  (add-to-list 'auto-mode-alist '("\\.tsx\\'" . web-mode))
   (evil-define-key 'normal tide-mode-map
     (kbd "C-o") 'tide-jump-back)
   (setq company-tooltip-align-annotations t))
@@ -366,7 +388,7 @@
 (use-package neotree
   :commands (projectile-switch-project)
   :config
-  (setq neo-autorefresh t)
+  (setq neo-toggle-window-keep-p t)
   (define-key evil-motion-state-map "\\" 'neotree-toggle)
   (evil-define-key 'normal neotree-mode-map
     (kbd "TAB") 'neotree-enter
@@ -476,6 +498,7 @@
   (setq org-global-properties '(("Effort_ALL". "0 0:10 0:20 0:30 1:00 2:00 3:00 4:00 6:00 8:00")))
   (setq org-columns-default-format '"%25ITEM %10Effort(Est){+} %TODO %TAGS")
   (setq org-agenda-files (directory-files-recursively my/ORG-PATH "\.org$"))
+  (setq org-refile-targets '((org-agenda-files :maxlevel . 3)))
   (setq org-tag-alist
         '((:startgroup . nil)
           (:endgroup . nil)
