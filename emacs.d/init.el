@@ -7,12 +7,12 @@
 ;; Mantra of the config:
 
 ;; 1. We autoload and byte compile all packages.
+
 ;; 2. We subscribe to the way of vim, our flow should be evil.
 ;; 3. We let LSP handle all our coding needs
 ;; 4. We value performance over laziness
 
 ;;; Code:
-
 (defconst my/WINDOWS (memq window-system '(w32)))
 (defconst my/OSX (memq window-system '(ns mac nil)))
 (defconst my/CUSTOM-FILE-PATH "~/.emacs.d/custom.el")
@@ -31,7 +31,6 @@
 (setq backup-directory-alist `(("." . "~/.emacs.d/backups")))
 (setq auto-save-file-name-transforms '((".*" "~/.emacs.d/auto-save-list/\\1" t)))
 (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
-
 
 (eval-when-compile
   (require 'package)
@@ -55,15 +54,18 @@
 (use-package doom-modeline
   :hook (after-init . doom-modeline-mode))
 
-(use-package spacemacs-theme)
-(use-package atom-one-dark-theme)
-(use-package zenburn-theme
-  :init
-  (load-theme 'zenburn t))
-
+(add-to-list 'custom-theme-load-path "~/.emacs.d/solarized-theme")
+(load-theme 'solarized t)
+(add-hook 'after-make-frame-functions
+          (lambda (frame)
+            (let ((mode (if (display-graphic-p frame) 'light 'dark)))
+              (set-frame-parameter frame 'background-mode mode)
+              (set-terminal-parameter frame 'background-mode mode))
+            (enable-theme 'solarized)))
 (scroll-bar-mode -1)
 
 (unless window-system
+  (menu-bar-mode -1)
   (global-set-key (kbd "<mouse-4>") 'scroll-down-line)
   (global-set-key (kbd "<mouse-5>") 'scroll-up-line))
 
@@ -182,13 +184,6 @@
     (setq eslint (projectile-expand-root "node_modules/eslint/bin/eslint.js"))
     (setq-default flycheck-javascript-eslint-executable eslint)))
 
-(defun my/use-tslint-from-node-modules ()
-  "Gets eslint exe from local path."
-  (let (tslint)
-    (setq tslint (projectile-expand-root "node_modules/tslint/bin/tslint"))
-    ;; (setq-default flycheck-tslint-args `("--project" ,(projectile-expand-root "tsconfig.json") "--type-check"))
-    (setq-default flycheck-typescript-tslint-executable tslint)))
-
 (use-package flycheck
   :commands (projectile-switch-project)
   :init
@@ -280,6 +275,7 @@
   (setq flycheck-check-syntax-automatically '(save mode-enabled))
   (eldoc-mode +1)
   (tide-hl-identifier-mode +1)
+  (setq-default tide-tsserver-executable (projectile-expand-root "node_modules/typescript/bin/tsserver"))
   ;; enable typescript-tslint checker
   (flycheck-add-mode 'typescript-tslint 'web-mode)
   (company-mode +1))
@@ -300,14 +296,14 @@
   :hook (web-mode . setup-tsx-mode)
   :init
   (add-to-list 'auto-mode-alist '("\\.tsx\\'" . web-mode))
-  (evil-define-key 'normal tide-mode-map
-    (kbd "C-o") 'tide-jump-back)
   (setq company-tooltip-align-annotations t))
 
-(defun my/use-tsserver-from-node-modules ()
+(defun my/use-tslint-from-node-modules ()
   "Gets eslint exe from local path."
   (let (tslint)
-    (setq tslint (projectile-expand-root "node_modules/typescript/bin/tsserver"))))
+    (setq tslint (projectile-expand-root "node_modules/tslint/bin/tslint"))
+    ;; (setq-default flycheck-tslint-args `("--project" ,(projectile-expand-root "tsconfig.json") "--type-check"))
+    (setq-default flycheck-typescript-tslint-executable tslint)))
 
 (electric-pair-mode)
 
@@ -431,13 +427,15 @@
   :config
   (setq display-line-numbers nil)
   (add-hook 'org-mode-hook (lambda ()
-                             "Beautify Org Checkbox Symbol"
+                             "Beautify Org Checkbox Symbol :)"
                              (push '("[ ]" . "☐") prettify-symbols-alist)
                              (push '("[X]" . "☑" ) prettify-symbols-alist)
                              (push '("[-]" . "❍" ) prettify-symbols-alist)
                              (push '("#+BEGIN_SRC" . "λ" ) prettify-symbols-alist)
                              (push '("#+END_SRC" . "λ" ) prettify-symbols-alist)
                              (prettify-symbols-mode)))
+
+   
   (defun my/org-archive ()
     "Archives and saves file."
     (interactive)
@@ -570,6 +568,9 @@
 (setq gc-cons-threshold 16777216
       gc-cons-percentage 0.1)
 (toggle-frame-maximized)
-(server-start)
+
+(if (and (fboundp 'server-running-p)
+         (not (server-running-p)))
+   (server-start))
 
 ;;; init ends here

@@ -17,8 +17,7 @@ Plug 'junegunn/fzf.vim' " Fzf plugin to interact with cmd tool
 Plug 'shime/vim-livedown'
 Plug 'aklt/plantuml-syntax'
 Plug 'aquach/vim-http-client'
-Plug 'altercation/vim-colors-solarized' " Nice theme for reading
-Plug 'jnurmine/zenburn'
+Plug 'altercation/vim-colors-solarized'
 call plug#end()
 
 " Settings
@@ -60,9 +59,10 @@ if has("gui_running")
   set guioptions-=b " no scrollbar on the bottom
 endif
 
-set t_Co=256
-set termguicolors
-colorscheme zenburn
+if (has("termguicolors"))
+endif
+
+colorscheme solarized
 set bg=dark
 
 "General UI
