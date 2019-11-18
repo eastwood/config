@@ -75,12 +75,11 @@
 (use-package doom-modeline
   :hook (after-init . doom-modeline-mode))
 
-(use-package spacemacs-theme)
-(use-package zenburn-theme)
-(use-package minimal-theme
+(use-package spacemacs-theme
   :init
-  (load-theme 'minimal-light t))
-
+  (load-theme 'spacemacs-dark t))
+(use-package zenburn-theme)
+(use-package minimal-theme)
 
 (use-package multi-term
   :config
@@ -426,33 +425,23 @@
   (evil-leader/set-key
     "oc" 'org-capture
     "oa" 'org-agenda)
+
+  (custom-theme-set-faces
+   'user
+   '(variable-pitch ((t (:family "Source Sans Pro" :height 180 :weight light))))
+   '(fixed-pitch ((t ( :family "Fira Code" :slant normal :weight normal :height 1 :width normal)))))
+
+  (custom-theme-set-faces
+   'user
+   '(org-block                 ((t (:inherit fixed-pitch))))
+   '(org-document-info-keyword ((t (:inherit (shadow fixed-pitch)))))
+   '(org-property-value        ((t (:inherit fixed-pitch))) t)
+   '(org-special-keyword       ((t (:inherit (font-lock-comment-face fixed-pitch)))))
+   '(org-tag                   ((t (:inherit (shadow fixed-pitch) :weight bold))))
+   '(org-verbatim              ((t (:inherit (shadow fixed-pitch))))))
+
   :config
-
-  (let* ((variable-tuple
-	  (cond ((x-list-fonts "Source Sans Pro") '(:font "Source Sans Pro"))
-		((x-list-fonts "Lucida Grande")   '(:font "Lucida Grande"))
-		((x-list-fonts "Verdana")         '(:font "Verdana"))
-		((x-family-fonts "Sans Serif")    '(:family "Sans Serif"))
-		(nil (warn "Cannot find a Sans Serif Font.  Install Source Sans Pro."))))
-
-	 (headline `(:inherit default :weight bold)))
-
-    (custom-theme-set-faces
-     'user
-     `(org-level-8 ((t (,@headline ,@variable-tuple))))
-     `(org-level-7 ((t (,@headline ,@variable-tuple))))
-     `(org-level-6 ((t (,@headline ,@variable-tuple))))
-     `(org-level-5 ((t (,@headline ,@variable-tuple))))
-     `(org-level-4 ((t (,@headline ,@variable-tuple :height 1.1))))
-     `(org-level-3 ((t (,@headline ,@variable-tuple :height 1.25))))
-     `(org-level-2 ((t (,@headline ,@variable-tuple :height 1.5))))
-     `(org-level-1 ((t (,@headline ,@variable-tuple :height 1.75))))
-     '(variable-pitch ((t (:family "Source Sans Pro" :height 180 :weight light))))
-     '(fixed-pitch ((t ( :family "Fira Code" :slant normal :weight normal :height 1.0 :width normal))))
-     `(org-document-title ((t (,@headline ,@variable-tuple :height 2.0 :underline nil))))))
-
   (setq-default
-	org-ellipsis "  "
 	org-pretty-entities t
 	org-hide-emphasis-markers t
 	org-hide-leading-stars t
@@ -461,16 +450,15 @@
 	org-fontify-done-headline t
 	org-fontify-quote-and-verse-blocks t)
 
-
   (add-hook 'org-mode-hook (lambda ()
                              "Beautify Org Checkbox Symbol :)"
                              (push '("#+BEGIN_SRC" . "λ" ) prettify-symbols-alist)
                              (push '("#+END_SRC" . "λ" ) prettify-symbols-alist)
                              (global-display-line-numbers-mode -1)
+			     (variable-pitch-mode t)
 			     (org-indent-mode)
                              (prettify-symbols-mode)))
 
-   
   (defun my/org-archive ()
     "Archives and saves file."
     (interactive)
