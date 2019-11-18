@@ -429,26 +429,24 @@
   (custom-theme-set-faces
    'user
    '(variable-pitch ((t (:family "Source Sans Pro" :height 180 :weight light))))
-   '(fixed-pitch ((t ( :family "Fira Code" :slant normal :weight normal :height 1 :width normal)))))
-
-  (custom-theme-set-faces
-   'user
+   '(fixed-pitch ((t ( :family "Fira Code" :slant normal :weight normal :height 1 :width normal))))
    '(org-block                 ((t (:inherit fixed-pitch))))
    '(org-document-info-keyword ((t (:inherit (shadow fixed-pitch)))))
    '(org-property-value        ((t (:inherit fixed-pitch))) t)
    '(org-special-keyword       ((t (:inherit (font-lock-comment-face fixed-pitch)))))
    '(org-tag                   ((t (:inherit (shadow fixed-pitch) :weight bold))))
-   '(org-verbatim              ((t (:inherit (shadow fixed-pitch))))))
+   '(org-verbatim              ((t (:inherit (shadow fixed-pitch)))))
+   '(org-indent                ((t (:inherit (org-hide fixed-pitch))))))
 
   :config
-  (setq-default
-	org-pretty-entities t
-	org-hide-emphasis-markers t
-	org-hide-leading-stars t
-	org-agenda-block-separator ""
-	org-fontify-whole-heading-line t
-	org-fontify-done-headline t
-	org-fontify-quote-and-verse-blocks t)
+  (setq-default org-bullets-bullet-list '(" ")
+		org-pretty-entities t
+		org-hide-emphasis-markers t
+		org-hide-leading-stars t
+		org-agenda-block-separator ""
+		org-fontify-whole-heading-line t
+		org-fontify-done-headline t
+		org-fontify-quote-and-verse-blocks t)
 
   (add-hook 'org-mode-hook (lambda ()
                              "Beautify Org Checkbox Symbol :)"
