@@ -1,5 +1,6 @@
 ;;; emacs.el --- Emacs configuration
 
+
 ;;; Commentary:
 
 
@@ -24,13 +25,15 @@
       user-mail-address "clint.ryan3@gmail.com")
 
 (setq gc-cons-threshold 402653184
-      gc-cons-percentage 0.6)
-(setq byte-compile-warnings '(not free-vars unresolved noruntime lexical make-local))
+      gc-cons-percentage 0.6
+      byte-compile-warnings '(not free-vars unresolved noruntime lexical make-local))
+
 (setq custom-file my/CUSTOM-FILE-PATH)
-(load-file my/CUSTOM-FILE-PATH)
 (setq backup-directory-alist `(("." . "~/.emacs.d/backups")))
-(setq auto-save-file-name-transforms '((".*" "~/.emacs.d/auto-save-list/\\1" t)))
-(setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
+
+(load-file my/CUSTOM-FILE-PATH)
+
+(setq-default gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3") ;; Updates TLS to force 1.3+
 
 (eval-when-compile
   (require 'package)
@@ -45,40 +48,39 @@
     (package-refresh-contents)
     (package-install 'use-package))
   (require 'use-package)
-  (setq use-package-always-defer t)
-  (setq use-package-verbose t)
-  (setq use-package-always-ensure t))
+  (setq use-package-always-defer t
+        use-package-verbose t
+        use-package-always-ensure t))
+
+(scroll-bar-mode -1)
+(xterm-mouse-mode 1)
+(tool-bar-mode -1)
+(fset 'yes-or-no-p 'y-or-n-p)
+(global-hl-line-mode t)
+(add-hook 'prog-mode-hook 'display-line-numbers-mode)
+
+(unless window-system
+  (global-set-key (kbd "<mouse-4>") 'scroll-down-line)
+  (global-set-key (kbd "<mouse-5>") 'scroll-up-line))
+
+
+(setq inhibit-startup-message t
+      indent-tabs-mode nil
+      line-spacing nil
+      truncate-lines nil
+      ring-bell-function 'ignore)
 
 (use-package diminish)
 (use-package all-the-icons)
 (use-package doom-modeline
   :hook (after-init . doom-modeline-mode))
 
-(add-to-list 'custom-theme-load-path "~/.emacs.d/solarized-theme")
-(load-theme 'solarized t)
-(add-hook 'after-make-frame-functions
-          (lambda (frame)
-            (let ((mode (if (display-graphic-p frame) 'light 'dark)))
-              (set-frame-parameter frame 'background-mode mode)
-              (set-terminal-parameter frame 'background-mode mode))
-            (enable-theme 'solarized)))
-(scroll-bar-mode -1)
+(use-package spacemacs-theme)
+(use-package zenburn-theme)
+(use-package minimal-theme
+  :init
+  (load-theme 'minimal-light t))
 
-(unless window-system
-  (menu-bar-mode -1)
-  (global-set-key (kbd "<mouse-4>") 'scroll-down-line)
-  (global-set-key (kbd "<mouse-5>") 'scroll-up-line))
-
-(global-hl-line-mode t)
-(global-display-line-numbers-mode t)
-(when window-system (menu-bar-mode -1))
-(setq inhibit-startup-message t)
-(setq-default indent-tabs-mode nil)
-(setq-default line-spacing nil)
-(setq ring-bell-function 'ignore)
-(xterm-mouse-mode 1)
-(tool-bar-mode -1)
-(fset 'yes-or-no-p 'y-or-n-p)
 
 (use-package multi-term
   :config
@@ -191,8 +193,8 @@
   (evil-define-key 'normal flycheck-mode-map
     (kbd "gh") 'flycheck-display-error-at-point)
   :config
-  (setq-default flycheck-disabled-checker 'javascript-jshint)
-  (setq-default flycheck-disabled-checker 'json-jsonlist)
+  (setq-default flycheck-disabled-checker 'javascript-jshint
+                flycheck-disabled-checker 'json-jsonlist)
   (add-hook 'js2-mode-hook #'my/use-eslint-from-node-modules)
   (add-hook 'typescript-mode-hook #'my/use-tslint-from-node-modules)
   (flycheck-add-mode 'javascript-eslint 'web-mode))
@@ -257,24 +259,24 @@
     "sg" 'counsel-rg)
   (counsel-mode)
   (counsel-projectile-mode)
-  (ivy-mode))
+  (ivy-mode)
+  :config
+  (setq ivy-use-virtual-buffers t)
+  (setq ivy-re-builders-alist '((t . ivy--regex-ignore-order))))
 
 (use-package counsel-projectile
   :commands counsel-projectile-mode
   :config
   (counsel-projectile-mode t))
 
-(setq ivy-use-virtual-buffers t)
-(setq ivy-re-builders-alist '((t . ivy--regex-ignore-order)))
-
 (defun setup-tide-mode ()
   "Set up tide mode."
   (interactive)
   (tide-setup)
   (flycheck-mode +1)
-  (setq flycheck-check-syntax-automatically '(save mode-enabled))
   (eldoc-mode +1)
   (tide-hl-identifier-mode +1)
+  (setq flycheck-check-syntax-automatically '(save mode-enabled))
   (setq-default tide-tsserver-executable (projectile-expand-root "node_modules/typescript/bin/tsserver"))
   ;; enable typescript-tslint checker
   (flycheck-add-mode 'typescript-tslint 'web-mode)
@@ -362,11 +364,11 @@
   :config
   (defun my-web-mode-hook ()
     "Hooks for Web mode. Adjust indents"
-    (setq web-mode-markup-indent-offset 2)
-    (setq web-mode-attr-indent-offset 2)
-    (setq web-mode-css-indent-offset 2)
-    (setq web-mode-code-indent-offset 2)
-    (setq-default css-indent-offset 2))
+    (setq web-mode-markup-indent-offset 2
+	  web-mode-attr-indent-offset 2
+	  web-mode-css-indent-offset 2
+	  web-mode-code-indent-offset 2
+	  css-indent-offset 2))
   (add-to-list 'auto-mode-alist '("\\.cshtml\\'" . web-mode))
   (add-hook 'web-mode-hook  'my-web-mode-hook))
 
@@ -425,14 +427,47 @@
     "oc" 'org-capture
     "oa" 'org-agenda)
   :config
-  (setq display-line-numbers nil)
+
+  (let* ((variable-tuple
+	  (cond ((x-list-fonts "Source Sans Pro") '(:font "Source Sans Pro"))
+		((x-list-fonts "Lucida Grande")   '(:font "Lucida Grande"))
+		((x-list-fonts "Verdana")         '(:font "Verdana"))
+		((x-family-fonts "Sans Serif")    '(:family "Sans Serif"))
+		(nil (warn "Cannot find a Sans Serif Font.  Install Source Sans Pro."))))
+
+	 (headline `(:inherit default :weight bold)))
+
+    (custom-theme-set-faces
+     'user
+     `(org-level-8 ((t (,@headline ,@variable-tuple))))
+     `(org-level-7 ((t (,@headline ,@variable-tuple))))
+     `(org-level-6 ((t (,@headline ,@variable-tuple))))
+     `(org-level-5 ((t (,@headline ,@variable-tuple))))
+     `(org-level-4 ((t (,@headline ,@variable-tuple :height 1.1))))
+     `(org-level-3 ((t (,@headline ,@variable-tuple :height 1.25))))
+     `(org-level-2 ((t (,@headline ,@variable-tuple :height 1.5))))
+     `(org-level-1 ((t (,@headline ,@variable-tuple :height 1.75))))
+     '(variable-pitch ((t (:family "Source Sans Pro" :height 180 :weight light))))
+     '(fixed-pitch ((t ( :family "Fira Code" :slant normal :weight normal :height 1.0 :width normal))))
+     `(org-document-title ((t (,@headline ,@variable-tuple :height 2.0 :underline nil))))))
+
+  (setq-default
+	org-ellipsis "  "
+	org-pretty-entities t
+	org-hide-emphasis-markers t
+	org-hide-leading-stars t
+	org-agenda-block-separator ""
+	org-fontify-whole-heading-line t
+	org-fontify-done-headline t
+	org-fontify-quote-and-verse-blocks t)
+
+
   (add-hook 'org-mode-hook (lambda ()
                              "Beautify Org Checkbox Symbol :)"
-                             (push '("[ ]" . "☐") prettify-symbols-alist)
-                             (push '("[X]" . "☑" ) prettify-symbols-alist)
-                             (push '("[-]" . "❍" ) prettify-symbols-alist)
                              (push '("#+BEGIN_SRC" . "λ" ) prettify-symbols-alist)
                              (push '("#+END_SRC" . "λ" ) prettify-symbols-alist)
+                             (global-display-line-numbers-mode -1)
+			     (org-indent-mode)
                              (prettify-symbols-mode)))
 
    
@@ -442,7 +477,6 @@
     (org-archive-subtree)
     (save-some-buffers 'always (lambda ()
                                  (string-match-p "gtd.org_archive" buffer-file-name))))
-
   (evil-leader/set-key-for-mode 'org-mode
     "ma" 'my/org-archive
     "mci" 'org-clock-in
@@ -477,6 +511,7 @@
 
   (setq-default org-plantuml-jar-path (expand-file-name my/PLANTUML_JAR))
   (defvar +org-babel-languages '(emacs-lisp
+				 js
                                  plantuml
                                  restclient
                                  shell))
@@ -506,10 +541,10 @@
           (sequence "REPORT(r)" "BUG(b)" "KNOWNCAUSE(k)" "|" "FIXED(f)")))
 
   (setq-default org-agenda-custom-commands
-                '(("g" . "GTD contexts")
-                  ("gw" "Work" tags-todo "WORK")
-                  ("gc" "Computer" tags-todo "COMPUTER")
-                  ("gg" "Goals" tags-todo "GOALS")
+		'(("g" . "GTD contexts")
+		  ("gw" "Work" tags-todo "WORK")
+		  ("gc" "Computer" tags-todo "COMPUTER")
+		  ("gg" "Goals" tags-todo "GOALS")
                   ("gh" "Home" tags-todo "HOME")
                   ("gt" "Tasks" tags-todo "TASKS")
                   ("G" "GTD Block Agenda"
@@ -520,8 +555,8 @@
                    nil)))
 
   (setq-default org-capture-templates
-                `(("t" "Inbox" entry (file ,(get-org-file "inbox.org")) "* TODO %?\n:CREATED: %T\n" :prepend T)
-                  ("h" "Home" entry (file ,(get-org-file "home.org")) "* %?\n%T" :prepend T)
+		`(("t" "Inbox" entry (file ,(get-org-file "inbox.org")) "* TODO %?\n:CREATED: %T\n" :prepend T)
+		  ("h" "Home" entry (file ,(get-org-file "home.org")) "* %?\n%T" :prepend T)
                   ("w" "Work" entry (file ,(get-org-file "work.org")) "* %?\n%T" :prepend T)
                   ("j" "Journal" entry (file+datetree ,(get-org-file "journal.org")) "* %?\nEntered on %U\n  %i\n  %a"))))
 
@@ -535,8 +570,8 @@
   :init
   (define-key global-map [?\s-P] 'projectile-switch-project)
   :config
-  (setq projectile-enable-caching t)
-  (setq projectile-completion-system 'ivy)
+  (setq projectile-enable-caching t
+	projectile-completion-system 'ivy)
   (add-to-list 'projectile-globally-ignored-directories "node_modules")
   (projectile-mode 1))
 

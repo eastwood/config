@@ -2,7 +2,7 @@
 call plug#begin()
 Plug 'tpope/vim-surround' " The Pope's gift to man
 Plug 'jnurmine/zenburn' " Nice theme for reading
-Plug 'rakr/vim-one' " Atom themes
+Plug 'dracula/vim', { 'as': 'dracula' }
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' } " We want that tree action
 Plug 'tpope/vim-fugitive', { 'on': 'Gstatus' } " Git badassery
 Plug 'pangloss/vim-javascript', { 'for': 'javascript' } " Javascript support
@@ -17,7 +17,6 @@ Plug 'junegunn/fzf.vim' " Fzf plugin to interact with cmd tool
 Plug 'shime/vim-livedown'
 Plug 'aklt/plantuml-syntax'
 Plug 'aquach/vim-http-client'
-Plug 'altercation/vim-colors-solarized'
 call plug#end()
 
 " Settings
@@ -60,17 +59,14 @@ if has("gui_running")
 endif
 
 if (has("termguicolors"))
+  set termguicolors
 endif
 
-colorscheme solarized
+syntax on
+colorscheme dracula
 set bg=dark
 
 "General UI
-highlight LineNr guibg=NONE |
-highlight LineNr ctermbg=NONE |
-highlight SignColumn ctermbg=NONE guibg=NONE |
-highlight VertSplit guibg=NONE ctermbg=NONE |
-highlight StatusLine ctermbg=white ctermbg=black
 
 " Files and Backups
 set noswapfile
@@ -210,3 +206,4 @@ let g:http_client_verify_ssl=0
 
 " use python to format xml
 command! FormatXML :%!python3 -c "import xml.dom.minidom, sys; print(xml.dom.minidom.parse(sys.stdin).toprettyxml())"
+command! FormatJSON :%!jq
