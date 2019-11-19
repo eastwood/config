@@ -1,17 +1,14 @@
-;;; emacs.el --- Emacs configuration
-
+ ;;; emacs.el --- Emacs configuration
 
 ;;; Commentary:
-
 
 ;; A simple, fast and no-nonsense Emacs configuration reduced down over the years.
 ;; Mantra of the config:
 
-;; 1. We autoload and byte compile all packages.
-
+;; 1. We look good and act good.
 ;; 2. We subscribe to the way of vim, our flow should be evil.
-;; 3. We let LSP handle all our coding needs
-;; 4. We value performance over laziness
+;; 3. We let LSP handle coding environments
+;; 4. We value performance over readability
 
 ;;; Code:
 (defconst my/WINDOWS (memq window-system '(w32)))
@@ -56,13 +53,13 @@
 (xterm-mouse-mode 1)
 (tool-bar-mode -1)
 (fset 'yes-or-no-p 'y-or-n-p)
-(global-hl-line-mode t)
-(add-hook 'prog-mode-hook 'display-line-numbers-mode)
+(add-hook 'prog-mode-hook (lambda ()
+			    (display-line-numbers-mode t)
+			    (hl-line-mode t)))
 
 (unless window-system
   (global-set-key (kbd "<mouse-4>") 'scroll-down-line)
   (global-set-key (kbd "<mouse-5>") 'scroll-up-line))
-
 
 (setq inhibit-startup-message t
       indent-tabs-mode nil
@@ -71,15 +68,23 @@
       ring-bell-function 'ignore)
 
 (use-package diminish)
-(use-package all-the-icons)
+(use-package solaire-mode
+  :init
+  (solaire-global-mode t)
+  (solaire-mode-swap-bg))
+
 (use-package doom-modeline
   :hook (after-init . doom-modeline-mode))
 
-(use-package spacemacs-theme
+(use-package all-the-icons)
+(use-package doom-themes
   :init
-  (load-theme 'spacemacs-dark t))
-(use-package zenburn-theme)
-(use-package minimal-theme)
+  (load-theme 'doom-solarized-light t)
+  :config
+  (doom-themes-neotree-config)
+  (setq-default doom-themes-neotree-file-icons t))
+
+(use-package spacemacs-theme)
 
 (use-package multi-term
   :config
@@ -435,6 +440,7 @@
    '(org-property-value        ((t (:inherit fixed-pitch))) t)
    '(org-special-keyword       ((t (:inherit (font-lock-comment-face fixed-pitch)))))
    '(org-tag                   ((t (:inherit (shadow fixed-pitch) :weight bold))))
+   '(org-table                 ((t (:inherit fixed-pitch))) t)
    '(org-verbatim              ((t (:inherit (shadow fixed-pitch)))))
    '(org-indent                ((t (:inherit (org-hide fixed-pitch))))))
 
@@ -449,12 +455,13 @@
 		org-fontify-quote-and-verse-blocks t)
 
   (add-hook 'org-mode-hook (lambda ()
-                             "Beautify Org Checkbox Symbol :)"
-                             (push '("#+BEGIN_SRC" . "λ" ) prettify-symbols-alist)
-                             (push '("#+END_SRC" . "λ" ) prettify-symbols-alist)
-                             (global-display-line-numbers-mode -1)
+			     "Beautify Org Checkbox Symbol :)"
+			     (push '("#+BEGIN_SRC" . "λ" ) prettify-symbols-alist)
+			     (push '("#+END_SRC" . "λ" ) prettify-symbols-alist)
+                             (display-line-numbers-mode -1)
 			     (variable-pitch-mode t)
 			     (org-indent-mode)
+			     (hl-line-mode -1)
                              (prettify-symbols-mode)))
 
   (defun my/org-archive ()
@@ -462,7 +469,8 @@
     (interactive)
     (org-archive-subtree)
     (save-some-buffers 'always (lambda ()
-                                 (string-match-p "gtd.org_archive" buffer-file-name))))
+				 (string-match-p "gtd.org_archive" buffer-file-name))))
+
   (evil-leader/set-key-for-mode 'org-mode
     "ma" 'my/org-archive
     "mci" 'org-clock-in
@@ -492,6 +500,7 @@
     "k" 'org-capture-kill)
 
   (setq org-startup-with-inline-images "inlineimages")
+  (org-display-inline-images)
   (setq org-confirm-babel-evaluate nil)
   (add-hook 'org-babel-after-execute-hook 'org-redisplay-inline-images)
 
