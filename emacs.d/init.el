@@ -6,6 +6,7 @@
 ;; Mantra of the config:
 
 ;; 1. We look good and act good.
+
 ;; 2. We subscribe to the way of vim, our flow should be evil.
 ;; 3. We let LSP handle coding environments
 ;; 4. We value performance over readability
@@ -48,7 +49,7 @@
   (setq use-package-always-defer t
         use-package-verbose t
         use-package-always-ensure t))
-
+ 
 (scroll-bar-mode -1)
 (xterm-mouse-mode 1)
 (tool-bar-mode -1)
@@ -77,14 +78,14 @@
   :hook (after-init . doom-modeline-mode))
 
 (use-package all-the-icons)
+
 (use-package doom-themes
+  :after evil
   :init
-  (load-theme 'doom-solarized-light t)
+  (load-theme 'doom-dracula t)
   :config
   (doom-themes-neotree-config)
   (setq-default doom-themes-neotree-file-icons t))
-
-(use-package spacemacs-theme)
 
 (use-package multi-term
   :config
@@ -99,24 +100,21 @@
 
 (use-package restclient
   :config
-  (add-to-list 'auto-mode-alist '("\\.rest\\'" . restclient-mode)))
+  (add-to-list 'auto-mode-alist '("\\.rest\\'" . restclient-mode))
+  (add-to-list 'auto-mode-alist '("\\.http\\'" . restclient-mode)))
   
 (use-package ob-restclient)
 
 (use-package evil
+  :hook (after-init . evil-mode)
   :init
   (setq evil-want-keybinding nil)
-  (evil-mode 1)
   :config
   (evil-define-key 'normal 'global "j" 'evil-next-visual-line)
   (evil-define-key 'normal 'global "k" 'evil-previous-visual-line)
   (setq evil-want-C-u-scroll t))
 
 (use-package evil-collection
-  :custom
-  (evil-collection-company-use-tng nil)
-  (evil-collection-setup-minibuffer t)
-  (evil-collection-outline-bind-tab-p nil)
   :after evil
   :init
   (evil-collection-init))
@@ -124,7 +122,6 @@
 (use-package evil-leader
   :after evil
   :config
-
   (defmacro open-org-file (filename)
     "Macro for opening files in org directory with FILENAME filepath."
     `(lambda ()
@@ -191,12 +188,11 @@
     (setq-default flycheck-javascript-eslint-executable eslint)))
 
 (use-package flycheck
-  :commands (projectile-switch-project)
-  :init
-  (add-hook 'after-init-hook #'global-flycheck-mode)
+  :after evil
+  :config
+  (global-flycheck-mode)
   (evil-define-key 'normal flycheck-mode-map
     (kbd "gh") 'flycheck-display-error-at-point)
-  :config
   (setq-default flycheck-disabled-checker 'javascript-jshint
                 flycheck-disabled-checker 'json-jsonlist)
   (add-hook 'js2-mode-hook #'my/use-eslint-from-node-modules)
@@ -261,10 +257,9 @@
     "sw" 'my/search-current-word
     "sb" 'swiper
     "sg" 'counsel-rg)
-  (counsel-mode)
-  (counsel-projectile-mode)
-  (ivy-mode)
   :config
+  (counsel-mode)
+  (ivy-mode)
   (setq ivy-use-virtual-buffers t)
   (setq ivy-re-builders-alist '((t . ivy--regex-ignore-order))))
 
@@ -561,10 +556,9 @@
 
 (use-package projectile
   :diminish projectile-mode
-  :commands (projectile-switch-project)
-  :init
-  (define-key global-map [?\s-P] 'projectile-switch-project)
+  :commands (projectile-switch-project projectile-project-root)
   :config
+  (define-key global-map [?\s-P] 'projectile-switch-project)
   (setq projectile-enable-caching t
 	projectile-completion-system 'ivy)
   (add-to-list 'projectile-globally-ignored-directories "node_modules")
@@ -582,7 +576,7 @@
 (use-package yasnippet-snippets)
 
 (use-package emojify
-  :init
+  :config
   (global-emojify-mode t))
 
 (use-package which-key
