@@ -5,11 +5,9 @@
 ;; A simple, fast and no-nonsense Emacs configuration reduced down over the years.
 ;; Mantra of the config:
 
-;; 1. We look good and act good.
-
-;; 2. We subscribe to the way of vim, our flow should be evil.
-;; 3. We let LSP handle coding environments
-;; 4. We value performance over readability
+;; 1. Look good, be evil.
+;; 2. LSP is king.
+;; 3. Performance > readability.
 
 ;;; Code:
 (defconst my/WINDOWS (memq window-system '(w32)))
@@ -69,9 +67,11 @@
       ring-bell-function 'ignore)
 
 (use-package diminish)
+
 (use-package solaire-mode
   :init
   (solaire-global-mode t)
+  :config
   (solaire-mode-swap-bg))
 
 (use-package doom-modeline
@@ -82,9 +82,10 @@
 (use-package doom-themes
   :after evil
   :init
-  (load-theme 'doom-dracula t)
+  (load-theme 'doom-solarized-dark t)
   :config
   (doom-themes-neotree-config)
+  (doom-themes-org-config)
   (setq-default doom-themes-neotree-file-icons t))
 
 (use-package multi-term
@@ -150,7 +151,7 @@
     "ee" 'eval-last-sexp
     "er" 'eval-region
     "fs" 'save-buffer
-    "fo" (open-org-file "gtd.org")
+    "fo" (open-org-file)
     "ff" 'counsel-find-file
     "fr" 'counsel-recentf
     "fed" 'open-config-file
@@ -161,7 +162,7 @@
     "gs" 'magit-status
     "pf" 'projectile-find-file
     "pp" 'projectile-switch-project
-    "pt" 'neotree-find-project-root
+    "pt" 'neotree-show
     "tl" 'toggle-truncate-lines
     "ts" 'eshell
     "qc" 'delete-frame
@@ -437,6 +438,9 @@
    '(org-tag                   ((t (:inherit (shadow fixed-pitch) :weight bold))))
    '(org-table                 ((t (:inherit fixed-pitch))) t)
    '(org-verbatim              ((t (:inherit (shadow fixed-pitch)))))
+   '(org-level-1               ((t (:inherit (outline-1 variable-pitch) :height 1.6))))
+   '(org-level-2               ((t (:inherit (outline-2 variable-pitch) :weight normal :height 1.4))))
+   '(org-level-3               ((t (:inherit (outline-3 variable-pitch) :weight normal :height 1.2))))
    '(org-indent                ((t (:inherit (org-hide fixed-pitch))))))
 
   :config
