@@ -1,10 +1,10 @@
- ;;; emacs.el --- Emacs configuration
+;;; emacs.el --- Emacs configuration
 
 ;;; Commentary:
 
 ;; A simple, fast and no-nonsense Emacs configuration reduced down over the years.
 ;; Mantra of the config:
-
+ 
 ;; 1. Look good, be evil.
 ;; 2. LSP is king.
 ;; 3. Performance > readability.
@@ -68,12 +68,6 @@
 
 (use-package diminish)
 
-(use-package solaire-mode
-  :init
-  (solaire-global-mode t)
-  :config
-  (solaire-mode-swap-bg))
-
 (use-package doom-modeline
   :hook (after-init . doom-modeline-mode))
 
@@ -133,6 +127,10 @@
     "Macro for opening files in org directory with FILENAME filepath."
     (concat my/ORG-PATH "/" filename))
 
+  (defun open-org-directory ()
+    (interactive)
+    (counsel-find-file my/ORG-PATH))
+
   (evil-leader/set-leader "SPC")
   (evil-leader/set-key
     "SPC" 'counsel-M-x
@@ -151,7 +149,8 @@
     "ee" 'eval-last-sexp
     "er" 'eval-region
     "fs" 'save-buffer
-    "fo" (open-org-file)
+    "fo" (open-org-file "gtd.org")
+    "fd" 'open-org-directory
     "ff" 'counsel-find-file
     "fr" 'counsel-recentf
     "fed" 'open-config-file
@@ -190,14 +189,15 @@
 
 (use-package flycheck
   :after evil
-  :config
+  :init
+  (add-hook 'js2-mode-hook #'my/use-eslint-from-node-modules)
+  (add-hook 'typescript-mode-hook #'my/use-tslint-from-node-modules)
   (global-flycheck-mode)
+  :config
   (evil-define-key 'normal flycheck-mode-map
     (kbd "gh") 'flycheck-display-error-at-point)
   (setq-default flycheck-disabled-checker 'javascript-jshint
                 flycheck-disabled-checker 'json-jsonlist)
-  (add-hook 'js2-mode-hook #'my/use-eslint-from-node-modules)
-  (add-hook 'typescript-mode-hook #'my/use-tslint-from-node-modules)
   (flycheck-add-mode 'javascript-eslint 'web-mode))
 
 (when my/OSX
@@ -258,6 +258,7 @@
     "sw" 'my/search-current-word
     "sb" 'swiper
     "sg" 'counsel-rg)
+  (evil-define-key 'normal 'global "*" 'swiper-thing-at-point)
   :config
   (counsel-mode)
   (ivy-mode)
@@ -288,7 +289,7 @@
     (setup-tide-mode)))
 
 (use-package eglot
-  :config
+  :init
   (add-hook 'js2-mode-hook 'eglot-ensure)
   (add-hook 'typescript-mode-hook 'eglot-ensure))
 
