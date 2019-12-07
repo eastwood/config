@@ -68,6 +68,15 @@
 
 (use-package diminish)
 
+(use-package solaire-mode
+  :after doom-themes
+  :hook
+  ((change-major-mode after-revert ediff-prepare-buffer) . turn-on-solaire-mode)
+  (minibuffer-setup . solaire-mode-in-minibuffer)
+  :config
+  (solaire-mode-swap-bg)
+  (solaire-global-mode +1))
+
 (use-package doom-modeline
   :hook (after-init . doom-modeline-mode))
 
@@ -76,7 +85,7 @@
 (use-package doom-themes
   :after evil
   :init
-  (load-theme 'doom-solarized-dark t)
+  (load-theme 'doom-dracula t)
   :config
   (doom-themes-neotree-config)
   (doom-themes-org-config)
@@ -290,8 +299,7 @@
 
 (use-package eglot
   :init
-  (add-hook 'js2-mode-hook 'eglot-ensure)
-  (add-hook 'typescript-mode-hook 'eglot-ensure))
+  (add-hook 'js2-mode-hook 'eglot-ensure))
 
 ;; Specifically for typescript as lsp mode isn't working well
 (use-package tide
@@ -337,6 +345,8 @@
 
 (setq js2-basic-offset 2)
 (setq js-indent-level 2)
+
+(use-package ejc-sql)
 
 (use-package typescript-mode
   :diminish typescript-mode
@@ -422,6 +432,7 @@
     (async-shell-command blogCommand)))
 
 (use-package org
+  :ensure org-plus-contrib
   :mode ("\\.org\\'" . org-mode)
   :init
   (evil-leader/set-key
@@ -456,8 +467,8 @@
 
   (add-hook 'org-mode-hook (lambda ()
 			     "Beautify Org Checkbox Symbol :)"
-			     (push '("#+BEGIN_SRC" . "λ" ) prettify-symbols-alist)
-			     (push '("#+END_SRC" . "λ" ) prettify-symbols-alist)
+			     (push '("#+begin_src" . "λ" ) prettify-symbols-alist)
+			     (push '("#+end_src" . "λ" ) prettify-symbols-alist)
                              (display-line-numbers-mode -1)
 			     (variable-pitch-mode t)
 			     (org-indent-mode)
@@ -473,6 +484,7 @@
 
   (evil-leader/set-key-for-mode 'org-mode
     "ma" 'my/org-archive
+    "mi" 'org-insert-structure-template
     "mci" 'org-clock-in
     "mco" 'org-clock-out
     "mt" 'org-set-tags-command

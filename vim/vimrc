@@ -48,6 +48,9 @@ set showcmd
 set hidden
 set showmode
 set updatetime=300
+set nobackup
+set nowritebackup
+set shortmess+=c
 
 if has("gui_running")
   set guifont=Source\ Code\ Pro:h12
