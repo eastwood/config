@@ -100,7 +100,7 @@ nnoremap ' `
 imap <C-s> <C-o>:w!<CR>
 imap <C-v> <ESC>"+gP
 vmap <C-c> "+y
-nnoremap / /\v
+nnoremap /
 inoremap <expr> <TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
 inoremap <expr> <S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"

@@ -512,7 +512,7 @@
     "k" 'org-capture-kill)
 
   (setq org-startup-with-inline-images "inlineimages")
-  (org-display-inline-images)
+  (setq org-display-inline-images t)
   (setq org-confirm-babel-evaluate nil)
   (add-hook 'org-babel-after-execute-hook 'org-redisplay-inline-images)
 
