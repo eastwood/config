@@ -4,7 +4,7 @@
 
 ;; A simple, fast and no-nonsense Emacs configuration reduced down over the years.
 ;; Mantra of the config:
- 
+
 ;; 1. Look good, be evil.
 ;; 2. LSP is king.
 ;; 3. Performance > readability.
@@ -45,9 +45,9 @@
     (package-install 'use-package))
   (require 'use-package)
   (setq use-package-always-defer t
-        use-package-verbose t
-        use-package-always-ensure t))
- 
+	use-package-verbose t
+	use-package-always-ensure t))
+
 (scroll-bar-mode -1)
 (xterm-mouse-mode 1)
 (tool-bar-mode -1)
@@ -87,9 +87,44 @@
   :init
   (load-theme 'doom-dracula t)
   :config
-  (doom-themes-neotree-config)
-  (doom-themes-org-config)
-  (setq-default doom-themes-neotree-file-icons t))
+  (setq doom-themes-treemacs-theme "doom-colors")
+  (doom-themes-treemacs-config)
+  (doom-themes-org-config))
+
+(use-package treemacs
+  :after evil
+  :defer t
+  :config
+  (progn
+    (evil-leader/set-key
+      "pt" 'treemacs
+      "pa" 'treemacs-add-project-to-workspace
+      "pr" 'treemacs-remove-project-from-workspace
+      "pc" 'treemacs-create-workspace
+      "ps" 'treemacs-switch-workspace
+      "ft" 'treemacs-find-file)
+    (treemacs-follow-mode t)
+    (treemacs-filewatch-mode t)
+    (treemacs-fringe-indicator-mode t)
+    (pcase (cons (not (null (executable-find "git")))
+		 (not (null treemacs-python-executable)))
+      (`(t . t)
+       (treemacs-git-mode 'deferred))
+      (`(t . _)
+       (treemacs-git-mode 'simple)))))
+
+(use-package treemacs-evil
+  :after treemacs evil)
+
+(use-package treemacs-projectile
+  :after treemacs projectile)
+
+(use-package treemacs-icons-dired
+  :after treemacs dired
+  :config (treemacs-icons-dired-mode))
+
+(use-package treemacs-magit
+  :after treemacs magit)
 
 (use-package multi-term
   :config
@@ -106,8 +141,6 @@
   :config
   (add-to-list 'auto-mode-alist '("\\.rest\\'" . restclient-mode))
   (add-to-list 'auto-mode-alist '("\\.http\\'" . restclient-mode)))
-  
-(use-package ob-restclient)
 
 (use-package evil
   :hook (after-init . evil-mode)
@@ -164,13 +197,11 @@
     "fr" 'counsel-recentf
     "fed" 'open-config-file
     "feR" 'reload-config-file
-    "ft" 'neotree-toggle
     "is" 'yas-insert-snippet
     "in" 'yas-new-snippet
     "gs" 'magit-status
     "pf" 'projectile-find-file
     "pp" 'projectile-switch-project
-    "pt" 'neotree-show
     "tl" 'toggle-truncate-lines
     "ts" 'eshell
     "qc" 'delete-frame
@@ -206,7 +237,7 @@
   (evil-define-key 'normal flycheck-mode-map
     (kbd "gh") 'flycheck-display-error-at-point)
   (setq-default flycheck-disabled-checker 'javascript-jshint
-                flycheck-disabled-checker 'json-jsonlist)
+		flycheck-disabled-checker 'json-jsonlist)
   (flycheck-add-mode 'javascript-eslint 'web-mode))
 
 (when my/OSX
@@ -214,19 +245,14 @@
     :init
     (xclip-mode))
   (add-to-list 'default-frame-alist
-               '(ns-transparent-titlebar . t))
+	       '(ns-transparent-titlebar . t))
   (add-to-list 'default-frame-alist
-               '(ns-appearance . dark))) ;; or dark - depending on your theme
+	       '(ns-appearance . dark))) ;; or dark - depending on your theme
 
 (when my/OSX
   (use-package exec-path-from-shell
     :init
     (exec-path-from-shell-initialize)))
-
-(defun neotree-find-project-root()
-  "Find the root of neotree."
-  (interactive)
-  (neotree-find (projectile-project-root)))
 
 (defun reload-config-file()
   "Reload our configuration file."
@@ -249,7 +275,7 @@
   "Kill all other buffers.  If the universal prefix ARG is used then will the windows too."
   (interactive "P")
   (when (yes-or-no-p (format "Killing all buffers except \"%s\"? "
-                             (buffer-name)))
+			     (buffer-name)))
     (mapc 'kill-buffer (delq (current-buffer) (buffer-list)))
     (when (equal '(4) arg) (delete-other-windows))
     (message "Buffers deleted!")))
@@ -285,6 +311,8 @@
   (tide-setup)
   (flycheck-mode +1)
   (eldoc-mode +1)
+  (setq indent-tabs-mode nil)
+  (setq typescript-indent-level 2)
   (tide-hl-identifier-mode +1)
   (setq flycheck-check-syntax-automatically '(save mode-enabled))
   (setq-default tide-tsserver-executable (projectile-expand-root "node_modules/typescript/bin/tsserver"))
@@ -297,9 +325,15 @@
   (when (string-equal "tsx" (file-name-extension buffer-file-name))
     (setup-tide-mode)))
 
-(use-package eglot
-  :init
-  (add-hook 'js2-mode-hook 'eglot-ensure))
+(use-package lsp-mode
+  :hook (js2-mode . lsp-deferred)
+  :commands lsp)
+
+(use-package lsp-ui :commands lsp-ui-mode)
+(use-package company-lsp :commands company-lsp)
+(use-package dap-mode
+  :config
+  (require 'dap-node))
 
 ;; Specifically for typescript as lsp mode isn't working well
 (use-package tide
@@ -394,41 +428,15 @@
   :config
   (setq-default markdown-split-window-direction 'right))
 
-(use-package neotree
-  :commands (projectile-switch-project)
-  :config
-  (setq neo-toggle-window-keep-p t)
-  (define-key evil-motion-state-map "\\" 'neotree-toggle)
-  (evil-define-key 'normal neotree-mode-map
-    (kbd "TAB") 'neotree-enter
-    "H" 'neotree-hidden-file-toggle
-    "i" 'neotree-enter-horizontal-split
-    "s" 'neotree-enter-vertical-split
-    "q" 'neotree-hide
-    (kbd "RET") 'neotree-enter)
-
-  (evil-leader/set-key-for-mode 'neotree-mode
-    "mo" 'neotree-open-file-in-system-application
-    "md" 'neotree-delete-node
-    "mr" 'neotree-rename-node
-    "mc" 'neotree-create-node)
-
-  (setq neo-theme (if (display-graphic-p) 'icons 'nerd))
-  (setq neo-window-fixed-size nil)
-  (setq neo-smart-open t))
-
-(setq neo-window-width 40)
-(setq neo-default-system-application "open")
-
 (use-package htmlize)
 
 (defun deploy-blog ()
   "Deploy my hugo blog."
   (interactive)
   (let ((blogCommand
-         (cond
-          (my/WINDOWS (format "powershell C:/code/blog/deploy.ps1"))
-          (t (format "cd %s && ./deploy.sh" (blog-base-url))))))
+	 (cond
+	  (my/WINDOWS (format "powershell C:/code/blog/deploy.ps1"))
+	  (t (format "cd %s && ./deploy.sh" (blog-base-url))))))
     (async-shell-command blogCommand)))
 
 (use-package org
@@ -443,6 +451,7 @@
    'user
    '(variable-pitch ((t (:family "Source Sans Pro" :height 180 :weight light))))
    '(fixed-pitch ((t ( :family "Fira Code" :slant normal :weight normal :height 1 :width normal))))
+
    '(org-block                 ((t (:inherit fixed-pitch))))
    '(org-document-info-keyword ((t (:inherit (shadow fixed-pitch)))))
    '(org-property-value        ((t (:inherit fixed-pitch))) t)
@@ -469,11 +478,11 @@
 			     "Beautify Org Checkbox Symbol :)"
 			     (push '("#+begin_src" . "λ" ) prettify-symbols-alist)
 			     (push '("#+end_src" . "λ" ) prettify-symbols-alist)
-                             (display-line-numbers-mode -1)
+			     (display-line-numbers-mode -1)
 			     (variable-pitch-mode t)
 			     (org-indent-mode)
 			     (hl-line-mode -1)
-                             (prettify-symbols-mode)))
+			     (prettify-symbols-mode)))
 
   (defun my/org-archive ()
     "Archives and saves file."
@@ -519,13 +528,13 @@
   (setq-default org-plantuml-jar-path (expand-file-name my/PLANTUML_JAR))
   (defvar +org-babel-languages '(emacs-lisp
 				 js
-                                 plantuml
-                                 restclient
-                                 shell))
+				 plantuml
+				 restclient
+				 shell))
 
   (org-babel-do-load-languages 'org-babel-load-languages
-                               (cl-loop for sym in +org-babel-languages
-                                        collect (cons sym t)))
+			       (cl-loop for sym in +org-babel-languages
+					collect (cons sym t)))
 
   (setq org-use-speed-commands t)
   (setq org-directory my/ORG-PATH)
@@ -540,32 +549,32 @@
   (setq org-agenda-files (directory-files-recursively my/ORG-PATH "\.org$"))
   (setq org-refile-targets '((org-agenda-files :maxlevel . 3)))
   (setq org-tag-alist
-        '((:startgroup . nil)
-          (:endgroup . nil)
-          ("WORK" . ?w) ("HOME" . ?h) ("WORK" . ?w) ("COMPUTER" . ?l) ("GOALS" . ?g) ("READING" . ?r) ("PROJECT" . ?p)))
+	'((:startgroup . nil)
+	  (:endgroup . nil)
+	  ("WORK" . ?w) ("HOME" . ?h) ("WORK" . ?w) ("COMPUTER" . ?l) ("GOALS" . ?g) ("READING" . ?r) ("PROJECT" . ?p)))
   (setq org-todo-keywords
-        '((sequence "TODO(t)" "IN-PROGRESS(i)" "|" "DONE(d)")
-          (sequence "REPORT(r)" "BUG(b)" "KNOWNCAUSE(k)" "|" "FIXED(f)")))
+	'((sequence "TODO(t)" "IN-PROGRESS(i)" "|" "DONE(d)")
+	  (sequence "REPORT(r)" "BUG(b)" "KNOWNCAUSE(k)" "|" "FIXED(f)")))
 
   (setq-default org-agenda-custom-commands
 		'(("g" . "GTD contexts")
 		  ("gw" "Work" tags-todo "WORK")
 		  ("gc" "Computer" tags-todo "COMPUTER")
 		  ("gg" "Goals" tags-todo "GOALS")
-                  ("gh" "Home" tags-todo "HOME")
-                  ("gt" "Tasks" tags-todo "TASKS")
-                  ("G" "GTD Block Agenda"
-                   ((tags-todo "WORK")
-                    (tags-todo "COMPUTER")
-                    (tags-todo "GOALS")
-                    (tags-todo "TASKS"))
-                   nil)))
+		  ("gh" "Home" tags-todo "HOME")
+		  ("gt" "Tasks" tags-todo "TASKS")
+		  ("G" "GTD Block Agenda"
+		   ((tags-todo "WORK")
+		    (tags-todo "COMPUTER")
+		    (tags-todo "GOALS")
+		    (tags-todo "TASKS"))
+		   nil)))
 
   (setq-default org-capture-templates
 		`(("t" "Inbox" entry (file ,(get-org-file "inbox.org")) "* TODO %?\n:CREATED: %T\n" :prepend T)
 		  ("h" "Home" entry (file ,(get-org-file "home.org")) "* %?\n%T" :prepend T)
-                  ("w" "Work" entry (file ,(get-org-file "work.org")) "* %?\n%T" :prepend T)
-                  ("j" "Journal" entry (file+datetree ,(get-org-file "journal.org")) "* %?\nEntered on %U\n  %i\n  %a"))))
+		  ("w" "Work" entry (file ,(get-org-file "work.org")) "* %?\n%T" :prepend T)
+		  ("j" "Journal" entry (file+datetree ,(get-org-file "journal.org")) "* %?\nEntered on %U\n  %i\n  %a"))))
 
 (use-package org-bullets
   :hook
@@ -611,7 +620,7 @@
 (toggle-frame-maximized)
 
 (if (and (fboundp 'server-running-p)
-         (not (server-running-p)))
+	 (not (server-running-p)))
    (server-start))
 
 ;;; init ends here
