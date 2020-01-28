@@ -68,6 +68,17 @@
 
 (use-package diminish)
 
+(use-package ivy-posframe
+  :hook
+  (after-init . ivy-posframe-mode)
+  :config
+  (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-top-center)))
+  (setq ivy-posframe-width 128)
+  (setq ivy-posframe-border-width 1)
+  (setq ivy-posframe-height-alist '((counsel-rg . 40)
+				    (t      . 20)))
+  (ivy-posframe-mode 1))
+
 (use-package solaire-mode
   :after doom-themes
   :hook
@@ -91,27 +102,35 @@
   (doom-themes-treemacs-config)
   (doom-themes-org-config))
 
+(use-package centaur-tabs
+  :demand
+  :config
+  (centaur-tabs-mode t)
+  (setq centaur-tabs-set-icons t)
+  (centaur-tabs-group-by-projectile-project)
+  :bind
+  ("M-{" . centaur-tabs-backward)
+  ("M-}" . centaur-tabs-forward))
+
 (use-package treemacs
   :after evil
-  :defer t
+  :init
+  (evil-leader/set-key-for-mode 'treemacs-mode
+    "mc" 'treemacs-create-file
+    "mC" 'treemacs-create-dir
+    "md" 'treemacs-delete)
+  (evil-leader/set-key
+    "pt" 'treemacs
+    "pa" 'treemacs-add-project-to-workspace
+    "pr" 'treemacs-remove-project-from-workspace
+    "pc" 'treemacs-create-workspace
+    "ps" 'treemacs-switch-workspace
+    "ft" 'treemacs-find-file)
   :config
-  (progn
-    (evil-leader/set-key
-      "pt" 'treemacs
-      "pa" 'treemacs-add-project-to-workspace
-      "pr" 'treemacs-remove-project-from-workspace
-      "pc" 'treemacs-create-workspace
-      "ps" 'treemacs-switch-workspace
-      "ft" 'treemacs-find-file)
-    (treemacs-follow-mode t)
-    (treemacs-filewatch-mode t)
-    (treemacs-fringe-indicator-mode t)
-    (pcase (cons (not (null (executable-find "git")))
-		 (not (null treemacs-python-executable)))
-      (`(t . t)
-       (treemacs-git-mode 'deferred))
-      (`(t . _)
-       (treemacs-git-mode 'simple)))))
+  (treemacs-follow-mode t)
+  (treemacs-filewatch-mode t)
+  (treemacs-fringe-indicator-mode t)
+  (treemacs-git-mode 'deferred))
 
 (use-package treemacs-evil
   :after treemacs evil)
@@ -206,6 +225,7 @@
     "ts" 'eshell
     "qc" 'delete-frame
     "qq" 'save-buffers-kill-terminal
+    "ww" 'ace-window
     "wc" 'evil-window-delete
     "wo" 'delete-other-windows
     "wj" 'evil-window-down
@@ -231,7 +251,8 @@
   :after evil
   :init
   (add-hook 'js2-mode-hook #'my/use-eslint-from-node-modules)
-  (add-hook 'typescript-mode-hook #'my/use-tslint-from-node-modules)
+  (add-hook 'typescript-mode-hook #'my/use-eslint-from-node-modules)
+  (flymake-mode-off)
   (global-flycheck-mode)
   :config
   (evil-define-key 'normal flycheck-mode-map
@@ -305,50 +326,19 @@
   :config
   (counsel-projectile-mode t))
 
-(defun setup-tide-mode ()
-  "Set up tide mode."
-  (interactive)
-  (tide-setup)
-  (flycheck-mode +1)
-  (eldoc-mode +1)
-  (setq indent-tabs-mode nil)
-  (setq typescript-indent-level 2)
-  (tide-hl-identifier-mode +1)
-  (setq flycheck-check-syntax-automatically '(save mode-enabled))
-  (setq-default tide-tsserver-executable (projectile-expand-root "node_modules/typescript/bin/tsserver"))
-  ;; enable typescript-tslint checker
-  (flycheck-add-mode 'typescript-tslint 'web-mode)
-  (company-mode +1))
-
-(defun setup-tsx-mode ()
-  "Set up tsx mode."
-  (when (string-equal "tsx" (file-name-extension buffer-file-name))
-    (setup-tide-mode)))
-
 (use-package lsp-mode
   :hook (js2-mode . lsp-deferred)
-  :commands lsp)
+  :hook (web-mode . lsp-deferred)
+  :hook (typescript-mode . lsp-deferred)
+  :commands (lsp lsp-deferred)
+  :config
+  (setq lsp-prefer-flymake nil))
 
 (use-package lsp-ui :commands lsp-ui-mode)
 (use-package company-lsp :commands company-lsp)
 (use-package dap-mode
   :config
   (require 'dap-node))
-
-;; Specifically for typescript as lsp mode isn't working well
-(use-package tide
-  :hook (typescript-mode . setup-tide-mode)
-  :hook (web-mode . setup-tsx-mode)
-  :init
-  (add-to-list 'auto-mode-alist '("\\.tsx\\'" . web-mode))
-  (setq company-tooltip-align-annotations t))
-
-(defun my/use-tslint-from-node-modules ()
-  "Gets eslint exe from local path."
-  (let (tslint)
-    (setq tslint (projectile-expand-root "node_modules/tslint/bin/tslint"))
-    ;; (setq-default flycheck-tslint-args `("--project" ,(projectile-expand-root "tsconfig.json") "--type-check"))
-    (setq-default flycheck-typescript-tslint-executable tslint)))
 
 (electric-pair-mode)
 
@@ -387,6 +377,8 @@
   :init
   (setq-default typescript-indent-level 2)
   (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
+  (add-to-list 'auto-mode-alist '("\\.tsx\\'" . web-mode))
+  (add-to-list 'auto-mode-alist '("\\.jsx\\'" . web-mode))
   (add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-mode)))
 
 (use-package rust-mode
@@ -465,6 +457,7 @@
    '(org-indent                ((t (:inherit (org-hide fixed-pitch))))))
 
   :config
+  (require 'ox-confluence)
   (setq-default org-bullets-bullet-list '(" ")
 		org-pretty-entities t
 		org-hide-emphasis-markers t
@@ -600,6 +593,11 @@
   (yas-global-mode 1))
 
 (use-package yasnippet-snippets)
+
+(use-package counsel-spotify
+  :config
+  (setq counsel-spotify-client-id "611607283a734086a27669546b48084f")
+  (setq counsel-spotify-client-secret "d9e1ac4e01e14ad4a7c6ff1286a28632"))
 
 (use-package emojify
   :config

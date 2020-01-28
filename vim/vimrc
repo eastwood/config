@@ -4,11 +4,12 @@ Plug 'tpope/vim-surround' " The Pope's gift to man
 Plug 'jnurmine/zenburn' " Nice theme for reading
 Plug 'dracula/vim', { 'as': 'dracula' }
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' } " We want that tree action
+Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'tpope/vim-fugitive', { 'on': 'Gstatus' } " Git badassery
 Plug 'pangloss/vim-javascript', { 'for': 'javascript' } " Javascript support
 Plug 'leafgarland/typescript-vim' " Typescript lang
 Plug 'ianks/vim-tsx'
-Plug 'mxw/vim-jsx', { 'for': 'javascript.jsx' } " JSX support
+Plug 'maxmellon/vim-jsx-pretty'
 Plug 'vim-ruby/vim-ruby' " Ruby support
 Plug 'neoclide/coc.nvim', {'do': 'yarn install --frozen-lockfile'} " Language Servers 
 Plug 'scrooloose/nerdcommenter' " Comment lines
@@ -17,6 +18,8 @@ Plug 'junegunn/fzf.vim' " Fzf plugin to interact with cmd tool
 Plug 'shime/vim-livedown'
 Plug 'aklt/plantuml-syntax'
 Plug 'aquach/vim-http-client'
+Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }
+
 call plug#end()
 
 " Settings
@@ -100,7 +103,6 @@ nnoremap ' `
 imap <C-s> <C-o>:w!<CR>
 imap <C-v> <ESC>"+gP
 vmap <C-c> "+y
-nnoremap /
 inoremap <expr> <TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
 inoremap <expr> <S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
@@ -199,6 +201,7 @@ endfunction
 " Tab now opens dirs in nerdtree
 autocmd FileType nerdtree map <buffer> <tab> <CR>
 let NERDTreeShowHidden = 1
+let NERDTreeWinSize = 50
 
 " Snippets - Really don't use these enough
 let g:UltiSnipsExpandTrigger="<C-j>"

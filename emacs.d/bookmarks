@@ -8,8 +8,8 @@
  (rear-context-string . "cular service\n \n")
  (position . 1754))
 ("org-capture-last-stored"
- (filename . "~/Google Drive/Documents/notes/work.org")
- (front-context-string . "** PHISL-2235 \n-")
- (rear-context-string)
- (position . 1))
+ (filename . "~/Google Drive/Documents/notes/journal.org")
+ (front-context-string . "**** Create\nEnte")
+ (rear-context-string . "0-01-07 Tuesday\n")
+ (position . 101))
 )

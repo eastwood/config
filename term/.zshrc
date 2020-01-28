@@ -57,7 +57,7 @@ DISABLE_AUTO_TITLE="true"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git osx nvm git-open)
+plugins=(git nvm git-open)
 source $ZSH/oh-my-zsh.sh
 
 alias emacsd="emacs --daemon"
@@ -69,7 +69,6 @@ alias em="emacs -nw"
 alias ls="ls -lsaG"
 alias grep="grep --color=auto"
 alias debug-chrome="/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --remote-debugging-port=9222"
-alias mux=tmuxinator
 alias create-loopback="sudo ifconfig lo0 alias 10.100.10.1"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
