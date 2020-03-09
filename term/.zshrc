@@ -13,7 +13,7 @@ export PATH=/usr/local/bin:$PATH:$NIB_PATH:$PYTHON_PATH:$TEX_PATH
 # Set name of the theme to load. Optionally, if you set this to "random"
 # it'll load a random theme each time that oh-my-zsh is loaded.
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
-ZSH_THEME="lambda"
+ZSH_THEME="typewritten/typewritten"
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
@@ -67,6 +67,7 @@ alias vim="nvim"
 alias ec="emacsclient -t"
 alias em="emacs -nw"
 alias ls="ls -lsaG"
+alias jcurl="curl -H 'Content-Type: application/json'"
 alias grep="grep --color=auto"
 alias debug-chrome="/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --remote-debugging-port=9222"
 alias create-loopback="sudo ifconfig lo0 alias 10.100.10.1"

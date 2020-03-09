@@ -24,7 +24,8 @@
       gc-cons-percentage 0.6
       byte-compile-warnings '(not free-vars unresolved noruntime lexical make-local))
 
-(setq custom-file my/CUSTOM-FILE-PATH)
+(setq custom-file 'my/CUSTOM-FILE-PATH)
+(add-to-list 'custom-theme-load-path "~/.emacs.d/solarized-theme")
 (setq backup-directory-alist `(("." . "~/.emacs.d/backups")))
 
 (load-file my/CUSTOM-FILE-PATH)
@@ -48,6 +49,9 @@
 	use-package-verbose t
 	use-package-always-ensure t))
 
+(unless (display-graphic-p)
+  (menu-bar-mode -1))
+
 (scroll-bar-mode -1)
 (xterm-mouse-mode 1)
 (tool-bar-mode -1)
@@ -56,7 +60,7 @@
 			    (display-line-numbers-mode t)
 			    (hl-line-mode t)))
 
-(unless window-system
+(unless (display-graphic-p)
   (global-set-key (kbd "<mouse-4>") 'scroll-down-line)
   (global-set-key (kbd "<mouse-5>") 'scroll-up-line))
 
@@ -76,7 +80,7 @@
   (setq ivy-posframe-width 128)
   (setq ivy-posframe-border-width 1)
   (setq ivy-posframe-height-alist '((counsel-rg . 40)
-				    (t      . 20)))
+				    (t . 20)))
   (ivy-posframe-mode 1))
 
 (use-package solaire-mode
@@ -85,8 +89,8 @@
   ((change-major-mode after-revert ediff-prepare-buffer) . turn-on-solaire-mode)
   (minibuffer-setup . solaire-mode-in-minibuffer)
   :config
-  (solaire-mode-swap-bg)
-  (solaire-global-mode +1))
+  (solaire-global-mode +1)
+  (solaire-mode-swap-bg))
 
 (use-package doom-modeline
   :hook (after-init . doom-modeline-mode))
@@ -96,59 +100,48 @@
 (use-package doom-themes
   :after evil
   :init
-  (load-theme 'doom-dracula t)
+  (load-theme 'doom-solarized-dark t)
   :config
-  (setq doom-themes-treemacs-theme "doom-colors")
-  (doom-themes-treemacs-config)
+  (setq-default doom-themes-neotree-theme "doom-colors")
+  (doom-themes-neotree-config)
+  (setq doom-themes-neotree-file-icons t)
   (doom-themes-org-config))
 
-(use-package centaur-tabs
-  :demand
-  :config
-  (centaur-tabs-mode t)
-  (setq centaur-tabs-set-icons t)
-  (centaur-tabs-group-by-projectile-project)
-  :bind
-  ("M-{" . centaur-tabs-backward)
-  ("M-}" . centaur-tabs-forward))
+(defun neotree-find-project-root()
+  "Find the root of neotree."
+  (interactive)
+  (neotree-find (projectile-project-root)))
 
-(use-package treemacs
+(use-package neotree
+  :commands (projectile-switch-project)
   :after evil
   :init
-  (evil-leader/set-key-for-mode 'treemacs-mode
-    "mc" 'treemacs-create-file
-    "mC" 'treemacs-create-dir
-    "md" 'treemacs-delete)
   (evil-leader/set-key
-    "pt" 'treemacs
-    "pa" 'treemacs-add-project-to-workspace
-    "pr" 'treemacs-remove-project-from-workspace
-    "pc" 'treemacs-create-workspace
-    "ps" 'treemacs-switch-workspace
-    "ft" 'treemacs-find-file)
+    "pt" 'neotree-find-project-root
+    "ft" 'neotree-toggle)
   :config
-  (treemacs-follow-mode t)
-  (treemacs-filewatch-mode t)
-  (treemacs-fringe-indicator-mode t)
-  (treemacs-git-mode 'deferred))
+  (setq neo-toggle-window-keep-p t)
+  (define-key evil-motion-state-map "\\" 'neotree-toggle)
+  (evil-define-key 'normal neotree-mode-map
+    (kbd "TAB") 'neotree-enter
+    "H" 'neotree-hidden-file-toggle
+    "i" 'neotree-enter-horizontal-split
+    "s" 'neotree-enter-vertical-split
+    "q" 'neotree-hide
+    (kbd "RET") 'neotree-enter)
 
-(use-package treemacs-evil
-  :after treemacs evil)
+  (evil-leader/set-key-for-mode 'neotree-mode
+    "mo" 'neotree-open-file-in-system-application
+    "md" 'neotree-delete-node
+    "mr" 'neotree-rename-node
+    "mc" 'neotree-create-node)
 
-(use-package treemacs-projectile
-  :after treemacs projectile)
+  (setq neo-theme (if (display-graphic-p) 'icons 'nerd))
+  (setq neo-window-fixed-size nil)
+  (setq neo-smart-open t))
 
-(use-package treemacs-icons-dired
-  :after treemacs dired
-  :config (treemacs-icons-dired-mode))
-
-(use-package treemacs-magit
-  :after treemacs magit)
-
-(use-package multi-term
-  :config
-  (define-key global-map (kbd "<f12>") 'multi-term-dedicated-toggle)
-  (setq multi-term-program "/usr/local/bin/zsh"))
+(setq neo-window-width 40)
+(setq neo-default-system-application "open")
 
 (use-package company
   :diminish company-mode
@@ -262,6 +255,7 @@
   (flycheck-add-mode 'javascript-eslint 'web-mode))
 
 (when my/OSX
+  (setq explicit-shell-file-name "/usr/local/bin/tmux")
   (use-package xclip
     :init
     (xclip-mode))
@@ -437,13 +431,13 @@
   :init
   (evil-leader/set-key
     "oc" 'org-capture
-    "oa" 'org-agenda)
+    "oa" 'org-agenda
+)
 
   (custom-theme-set-faces
    'user
    '(variable-pitch ((t (:family "Source Sans Pro" :height 180 :weight light))))
    '(fixed-pitch ((t ( :family "Fira Code" :slant normal :weight normal :height 1 :width normal))))
-
    '(org-block                 ((t (:inherit fixed-pitch))))
    '(org-document-info-keyword ((t (:inherit (shadow fixed-pitch)))))
    '(org-property-value        ((t (:inherit fixed-pitch))) t)
@@ -458,10 +452,8 @@
 
   :config
   (require 'ox-confluence)
-  (setq-default org-bullets-bullet-list '(" ")
-		org-pretty-entities t
+  (setq-default org-pretty-entities t
 		org-hide-emphasis-markers t
-		org-hide-leading-stars t
 		org-agenda-block-separator ""
 		org-fontify-whole-heading-line t
 		org-fontify-done-headline t
@@ -472,8 +464,9 @@
 			     (push '("#+begin_src" . "λ" ) prettify-symbols-alist)
 			     (push '("#+end_src" . "λ" ) prettify-symbols-alist)
 			     (display-line-numbers-mode -1)
-			     (variable-pitch-mode t)
-			     (org-indent-mode)
+			     (when (display-graphic-p)
+			       (variable-pitch-mode t)
+			       (org-indent-mode))
 			     (hl-line-mode -1)
 			     (prettify-symbols-mode)))
 
