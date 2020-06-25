@@ -2,9 +2,6 @@
 call plug#begin()
 Plug 'tpope/vim-surround' " The Pope's gift to man
 Plug 'morhetz/gruvbox'
-Plug 'joshdick/onedark.vim'
-Plug 'arcticicestudio/nord-vim'
-Plug 'lifepillar/vim-solarized8'
 Plug 'preservim/nerdtree' " We want that tree action
 Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'tpope/vim-fugitive', { 'on': 'Gstatus' } " Git badassery
@@ -18,12 +15,12 @@ Plug 'scrooloose/nerdcommenter' " Comment lines
 Plug '/usr/local/opt/fzf' " Searching, need to install fzf first
 Plug 'junegunn/fzf.vim' " Fzf plugin to interact with cmd tool
 Plug 'aklt/plantuml-syntax'
-Plug 'aquach/vim-http-client'
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }
 Plug 'junegunn/vim-easy-align'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'edkolev/tmuxline.vim'
+Plug 'vim-scripts/nginx.vim'
 
 call plug#end()
 
@@ -52,12 +49,9 @@ set title
 set number
 set lazyredraw
 set signcolumn=yes
-set showcmd
 set hidden
 set showmode
 set updatetime=300
-set nobackup
-set writebackup
 set shortmess+=c
 
 if has("gui_running")
@@ -75,12 +69,14 @@ endif
 
 syntax on
 set bg=dark
-colorscheme solarized8_flat
+let g:gruvbox_sign_column = 'bg0'
+colorscheme gruvbox
 let g:airline_powerline_fonts = 1
 
 "General UI
 
 " Files and Backups
+set writebackup
 set noswapfile
 set backupdir=.,/tmp
 set undodir=~/.vim/.tmp,~/tmp,~/.tmp,/tmp
@@ -107,8 +103,6 @@ nnoremap <backspace> <C-^>
 nnoremap ` '
 nnoremap ' `
 imap <C-s> <C-o>:w!<CR>
-imap <C-v> <ESC>"+gP
-vmap <C-c> "+y
 inoremap <expr> <TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
 inoremap <expr> <S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
@@ -125,7 +119,7 @@ map \ :NERDTreeToggle<CR>
 nnoremap <leader>gc :Gcommit<CR>
 nnoremap <leader>gC :Git checkout
 nnoremap <leader>gf :Gfetch<CR>
-nnoremap <leader>gF :!git pull --rebase<CR>
+nnoremap <leader>gF :GPull --rebase<CR>
 nnoremap <leader>gP :Gpush
 nnoremap <leader>gs :Gstatus<CR>
 
@@ -136,20 +130,18 @@ nnoremap <leader>wk <C-w>k
 nnoremap <leader>wl <C-w>l
 nnoremap <leader>wo <C-w>o
 nnoremap <leader>wc <C-w>c
-" nnoremap <leader>ws <C-w>s
+nnoremap <leader>ws <C-w>s
 nnoremap <leader>wv <C-w>v
 
 " Buffer bindings
-nmap <leader>d :bp<bar>sp<bar>bn<bar>bd<CR>
+nmap <leader>d :bd!<CR>
 nmap <leader>bd :bd!<CR>
 nmap <leader>bb :Buffers<CR>
 nmap <leader>bn :bn!<CR>
 nmap <leader>bp :bp!<CR>
 
-" To avoid generating too much entropy
 nmap <leader>qq :wqa!<CR>
 nmap <leader><Esc> :q!<CR>
-nmap <leader>/ :noh<CR>
 
 " File based 
 nmap <leader>ff :edit
@@ -163,8 +155,12 @@ nmap <leader>fo :edit ~/Dropbox/notes/gth.md<CR>
 nnoremap <Leader>sw :Rg <C-r><C-w>
 nnoremap <Leader>sg :Rg<CR>
 nnoremap <Leader>sb :BLines<CR>
+nnoremap <leader>/ :noh<CR>
 tnoremap <Esc> <C-\><C-n>
 
+
+" Plugin configuration
+"
 " Nice scratch buffer on read command
 :command! -nargs=* -complete=shellcmd R new | setlocal buftype=nofile bufhidden=hide noswapfile | r !<args>
 
@@ -181,6 +177,7 @@ command! -bang -nargs=* Rg
 
 " LSP configuration
 let g:coc_force_debug = 1
+let g:coc_global_extensions = ['coc-json', 'coc-solargraph', 'coc-jest', 'coc-eslint', 'coc-tsserver']
 inoremap <silent><expr> <c-space> coc#refresh()
 nmap <silent> [c <Plug>(coc-diagnostic-prev)
 nmap <silent> ]c <Plug>(coc-diagnostic-next)
@@ -188,8 +185,9 @@ nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> gh <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
-nmap <silent> <F2> <Plug>(coc-rename)
+nmap <leader>ac  <Plug>(coc-codeaction)
 nmap <leader>qf <Plug>(coc-fix-current)
+nmap <silent> <F2> <Plug>(coc-rename)
 nnoremap <silent> K :call <SID>show_documentation()<CR>
 autocmd CursorHold * silent call CocActionAsync('highlight')
 command! -nargs=0 JestCurrent :call CocAction('runCommand', 'jest.fileTest', ['%'])
@@ -218,7 +216,10 @@ let g:http_client_verify_ssl=0
 command! FormatXML :%!python3 -c "import xml.dom.minidom, sys; print(xml.dom.minidom.parse(sys.stdin).toprettyxml())"
 command! FormatJSON :%!jq
 
+
+
 " Start interactive EasyAlign in visual mode (e.g. vipga)
 xmap ga <Plug>(EasyAlign)
 " Start interactive EasyAlign for a motion/text object (e.g. gaip)
 nmap ga <Plug>(EasyAlign)
+

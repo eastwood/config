@@ -1,5 +1,6 @@
 ;;; emacs.el --- Emacs configuration
 
+
 ;;; Commentary:
 
 ;; A simple, fast and no-nonsense Emacs configuration reduced down over the years.
@@ -24,7 +25,8 @@
       gc-cons-percentage 0.6
       byte-compile-warnings '(not free-vars unresolved noruntime lexical make-local))
 
-(setq custom-file 'my/CUSTOM-FILE-PATH)
+(setq custom-file my/CUSTOM-FILE-PATH)
+(setq exec-path-from-shell-check-startup-files nil)
 (add-to-list 'custom-theme-load-path "~/.emacs.d/solarized-theme")
 (setq backup-directory-alist `(("." . "~/.emacs.d/backups")))
 
@@ -49,26 +51,24 @@
 	use-package-verbose t
 	use-package-always-ensure t))
 
-(unless (display-graphic-p)
-  (menu-bar-mode -1))
-
+(menu-bar-mode -1)
 (scroll-bar-mode -1)
 (xterm-mouse-mode 1)
 (tool-bar-mode -1)
 (fset 'yes-or-no-p 'y-or-n-p)
 (add-hook 'prog-mode-hook (lambda ()
-			    (display-line-numbers-mode t)
-			    (hl-line-mode t)))
+                            (display-line-numbers-mode t)
+                            (hl-line-mode t)))
 
 (unless (display-graphic-p)
   (global-set-key (kbd "<mouse-4>") 'scroll-down-line)
   (global-set-key (kbd "<mouse-5>") 'scroll-up-line))
 
-(setq inhibit-startup-message t
-      indent-tabs-mode nil
-      line-spacing nil
-      truncate-lines nil
-      ring-bell-function 'ignore)
+(setq-default inhibit-startup-message t
+              indent-tabs-mode nil
+              line-spacing nil
+              truncate-lines nil
+              ring-bell-function 'ignore)
 
 (use-package diminish)
 
@@ -100,11 +100,11 @@
 (use-package doom-themes
   :after evil
   :init
-  (load-theme 'doom-solarized-dark t)
+  (load-theme 'doom-gruvbox t)
   :config
   (setq-default doom-themes-neotree-theme "doom-colors")
   (doom-themes-neotree-config)
-  (setq doom-themes-neotree-file-icons t)
+  (setq-default doom-themes-neotree-file-icons t)
   (doom-themes-org-config))
 
 (defun neotree-find-project-root()
@@ -118,7 +118,7 @@
   :init
   (evil-leader/set-key
     "pt" 'neotree-find-project-root
-    "ft" 'neotree-toggle)
+    "ft" 'neotree-find)
   :config
   (setq neo-toggle-window-keep-p t)
   (define-key evil-motion-state-map "\\" 'neotree-toggle)
@@ -164,6 +164,7 @@
   (setq evil-want-C-u-scroll t))
 
 (use-package evil-collection
+  :custom (evil-collection-calendar-want-org-bindings t)
   :after evil
   :init
   (evil-collection-init))
@@ -434,24 +435,9 @@
     "oa" 'org-agenda
 )
 
-  (custom-theme-set-faces
-   'user
-   '(variable-pitch ((t (:family "Source Sans Pro" :height 180 :weight light))))
-   '(fixed-pitch ((t ( :family "Fira Code" :slant normal :weight normal :height 1 :width normal))))
-   '(org-block                 ((t (:inherit fixed-pitch))))
-   '(org-document-info-keyword ((t (:inherit (shadow fixed-pitch)))))
-   '(org-property-value        ((t (:inherit fixed-pitch))) t)
-   '(org-special-keyword       ((t (:inherit (font-lock-comment-face fixed-pitch)))))
-   '(org-tag                   ((t (:inherit (shadow fixed-pitch) :weight bold))))
-   '(org-table                 ((t (:inherit fixed-pitch))) t)
-   '(org-verbatim              ((t (:inherit (shadow fixed-pitch)))))
-   '(org-level-1               ((t (:inherit (outline-1 variable-pitch) :height 1.6))))
-   '(org-level-2               ((t (:inherit (outline-2 variable-pitch) :weight normal :height 1.4))))
-   '(org-level-3               ((t (:inherit (outline-3 variable-pitch) :weight normal :height 1.2))))
-   '(org-indent                ((t (:inherit (org-hide fixed-pitch))))))
 
   :config
-  (require 'ox-confluence)
+  (add-hook 'org-babel-after-execute-hook 'org-redisplay-inline-images)
   (setq-default org-pretty-entities t
 		org-hide-emphasis-markers t
 		org-agenda-block-separator ""
@@ -459,23 +445,6 @@
 		org-fontify-done-headline t
 		org-fontify-quote-and-verse-blocks t)
 
-  (add-hook 'org-mode-hook (lambda ()
-			     "Beautify Org Checkbox Symbol :)"
-			     (push '("#+begin_src" . "λ" ) prettify-symbols-alist)
-			     (push '("#+end_src" . "λ" ) prettify-symbols-alist)
-			     (display-line-numbers-mode -1)
-			     (when (display-graphic-p)
-			       (variable-pitch-mode t)
-			       (org-indent-mode))
-			     (hl-line-mode -1)
-			     (prettify-symbols-mode)))
-
-  (defun my/org-archive ()
-    "Archives and saves file."
-    (interactive)
-    (org-archive-subtree)
-    (save-some-buffers 'always (lambda ()
-				 (string-match-p "gtd.org_archive" buffer-file-name))))
 
   (evil-leader/set-key-for-mode 'org-mode
     "ma" 'my/org-archive
@@ -492,6 +461,10 @@
     "ms" 'org-schedule
     "mw" 'widen)
 
+  (evil-leader/set-key-for-mode 'org-capture-mode
+    "c" 'org-capture-finalize
+    "k" 'org-capture-kill)
+
   (evil-define-key 'normal org-mode-map
     ">" 'org-shiftmetaright
     "<" 'org-shiftmetaleft
@@ -502,38 +475,45 @@
     (kbd "TAB") 'org-cycle
     "gs" 'org-goto)
 
-  (evil-leader/set-key-for-mode 'org-capture-mode
-    "c" 'org-capture-finalize
-    "k" 'org-capture-kill)
+  (define-key global-map "\C-cc" 'org-capture)
+  (define-key global-map [?\s-F] 'replace-regexp)
+  (define-key global-map [?\s-l] 'goto-line)
 
-  (setq org-startup-with-inline-images "inlineimages")
-  (setq org-display-inline-images t)
   (setq org-confirm-babel-evaluate nil)
-  (add-hook 'org-babel-after-execute-hook 'org-redisplay-inline-images)
+  (custom-theme-set-faces
+   'user
+   '(variable-pitch ((t (:family "Source Sans Pro" :height 120 :weight light))))
+   '(fixed-pitch ((t ( :family "Fira Code" :slant normal :weight normal :height 1 :width normal))))
+   '(org-block                 ((t (:inherit fixed-pitch))))
+   '(org-document-info-keyword ((t (:inherit (shadow fixed-pitch)))))
+   '(org-property-value        ((t (:inherit fixed-pitch))) t)
+   '(org-special-keyword       ((t (:inherit (font-lock-comment-face fixed-pitch)))))
+   '(org-tag                   ((t (:inherit (shadow fixed-pitch) :weight bold))))
+   '(org-table                 ((t (:inherit fixed-pitch))) t)
+   '(org-verbatim              ((t (:inherit (shadow fixed-pitch)))))
+   '(org-level-1               ((t (:inherit (outline-1 variable-pitch) :height 1.6))))
+   '(org-level-2               ((t (:inherit (outline-2 variable-pitch) :weight normal :height 1.4))))
+   '(org-level-3               ((t (:inherit (outline-3 variable-pitch) :weight normal :height 1.2))))
+   '(org-indent                ((t (:inherit (org-hide fixed-pitch))))))
 
-  (setq-default org-plantuml-jar-path (expand-file-name my/PLANTUML_JAR))
   (defvar +org-babel-languages '(emacs-lisp
 				 js
 				 plantuml
-				 restclient
 				 shell))
 
   (org-babel-do-load-languages 'org-babel-load-languages
 			       (cl-loop for sym in +org-babel-languages
 					collect (cons sym t)))
 
+  (setq-default org-plantuml-jar-path (expand-file-name my/PLANTUML_JAR))
   (setq org-use-speed-commands t)
   (setq org-directory my/ORG-PATH)
   (setq org-default-notes-file (concat org-directory "/inbox.org"))
-  (define-key global-map "\C-cc" 'org-capture)
-
-  (define-key global-map [?\s-F] 'replace-regexp)
-  (define-key global-map [?\s-l] 'goto-line)
-
   (setq org-global-properties '(("Effort_ALL". "0 0:10 0:20 0:30 1:00 2:00 3:00 4:00 6:00 8:00")))
   (setq org-columns-default-format '"%25ITEM %10Effort(Est){+} %TODO %TAGS")
   (setq org-agenda-files (directory-files-recursively my/ORG-PATH "\.org$"))
   (setq org-refile-targets '((org-agenda-files :maxlevel . 3)))
+
   (setq org-tag-alist
 	'((:startgroup . nil)
 	  (:endgroup . nil)
