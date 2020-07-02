@@ -15,7 +15,7 @@
 (defconst my/OSX (memq window-system '(ns mac nil)))
 (defconst my/CUSTOM-FILE-PATH "~/.emacs.d/custom.el")
 (defconst my/CONFIG-FILE "~/.emacs.d/init.el")
-(defconst my/ORG-PATH "~/Google Drive/Documents/notes")
+(defconst my/ORG-PATH "~/Google Drive/Documents/Notes")
 (defconst my/PLANTUML_JAR "~/plantuml.jar")
 
 (setq user-full-name "Clint Ryan"
@@ -162,12 +162,6 @@
   (evil-define-key 'normal 'global "j" 'evil-next-visual-line)
   (evil-define-key 'normal 'global "k" 'evil-previous-visual-line)
   (setq evil-want-C-u-scroll t))
-
-(use-package evil-collection
-  :custom (evil-collection-calendar-want-org-bindings t)
-  :after evil
-  :init
-  (evil-collection-init))
 
 (use-package evil-leader
   :after evil
@@ -427,7 +421,6 @@
     (async-shell-command blogCommand)))
 
 (use-package org
-  :ensure org-plus-contrib
   :mode ("\\.org\\'" . org-mode)
   :init
   (evil-leader/set-key
