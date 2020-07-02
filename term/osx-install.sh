@@ -12,6 +12,7 @@ brew install neovim
 brew install nvm
 brew install fzf
 brew install zsh
+brew install starship
 brew install reattach-to-user-namespace
 
 
@@ -26,7 +27,7 @@ ln -s ~/Workspace/github.com/eastwood/config/term/tmux.conf ~/.tmux.conf
 ln -s ~/Workspace/github.com/eastwood/config/term ~/.config/term/
 
 # Install node and others
-nvm install 8
+nvm install 10
 npm install -g typescript
 npm install -g javascript-typescript-langserver
 
@@ -38,5 +39,3 @@ ln -s ~/Workspace/github.com/eastwood/config/vim/vimrc ~/.vimrc
 
 # Install git bash
 ln -s ~/Workspace/github.com/eastwood/config/term/.zshrc ~/.zshrc
-
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
