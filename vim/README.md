@@ -4,6 +4,8 @@ While the default vim is amazing out of the box, I have created some custom keyb
 used vim plugins to help improve support for particular languages, plugins include:
 
 - Language server support via coc-nvim (autocomplete, linting etc)
+- Vim Plug for package management
+- Vim Wiki for quick note taking
 - Useful plugins for making life easier (vim-surround, easy-align, fzf)
 - NerdTree for project tree support
 - Ultisnips for snippet support
@@ -25,9 +27,10 @@ I am primarily using neovim, but it's backwards compatible with vim8.
 > git clone git@github.com:eastwood/config.git
 > mkdir -p .vim
 > mkdir -p .config/nvim
-> cp config/autoload .vim/
 > cp config/vimrc ~/.vimrc
 > cp config/init.vim ~/.config/nvim 
+> curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 > nvim
 # Run :Plug-Install
 ```

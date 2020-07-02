@@ -10,7 +10,7 @@ Plug 'leafgarland/typescript-vim' " Typescript lang
 Plug 'ianks/vim-tsx'
 Plug 'maxmellon/vim-jsx-pretty'
 Plug 'vim-ruby/vim-ruby' " Ruby support
-Plug 'neoclide/coc.nvim', {'do': 'yarn install --frozen-lockfile'} " Language Servers 
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'scrooloose/nerdcommenter' " Comment lines
 Plug '/usr/local/opt/fzf' " Searching, need to install fzf first
 Plug 'junegunn/fzf.vim' " Fzf plugin to interact with cmd tool
