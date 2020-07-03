@@ -7,7 +7,8 @@ export TEX_PATH="/usr/local/texlive/2018/bin/x86_64-darwin"
 export TERM='xterm-256color'
 export NIB_PATH='/Users/cryan/Workspace/nib.com.au/cryan/bin'
 export PYTHON_PATH='/Users/cryan/Library/Python/3.7/bin/'
-export PATH=/usr/local/bin:$PATH:$NIB_PATH:$PYTHON_PATH:$TEX_PATH
+export CUSTOM_SCRIPTS=~/.scripts
+export PATH=/usr/local/bin:$PATH:$NIB_PATH:$PYTHON_PATH:$TEX_PATH:$CUSTOM_SCRIPTS
 
 eval "$(starship init zsh)"
 source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh

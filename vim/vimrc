@@ -97,7 +97,7 @@ set nowrap
 " Keybindings
 
 " General Keybindings
-map <leader><leader> :
+map <leader><leader> :Commands<CR>
 imap jk <ESC>
 nnoremap <backspace> <C-^>
 nnoremap ` '
@@ -223,8 +223,7 @@ nmap ga <Plug>(EasyAlign)
 
 let g:vimwiki_list = [{'path': '~/.wiki/',
                       \ 'syntax': 'markdown', 'ext': '.md',
-                      \ 'auto_diary_index': 1,
-                      \ 'auto_generate_links': 1}]
+                      \ 'auto_diary_index': 1 }]
 "
 " Some conflicting binds
 let g:vimwiki_key_mappings =
