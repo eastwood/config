@@ -188,9 +188,12 @@ nmap <silent> gr <Plug>(coc-references)
 nmap <leader>ac  <Plug>(coc-codeaction)
 nmap <leader>qf <Plug>(coc-fix-current)
 nmap <silent> <F2> <Plug>(coc-rename)
+
 nnoremap <silent> K :call <SID>show_documentation()<CR>
 autocmd CursorHold * silent call CocActionAsync('highlight')
+
 command! -nargs=0 JestCurrent :call CocAction('runCommand', 'jest.fileTest', ['%'])
+command! -nargs=0 FilePath :!echo $(pwd)/% | pbcopy
 
 function! s:show_documentation()
   if &filetype == 'vim'
@@ -230,3 +233,4 @@ let g:vimwiki_key_mappings =
       \ {
       \ 'html': 0
       \ }
+let g:vimwiki_markdown_link_ext = 1

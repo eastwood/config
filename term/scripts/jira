@@ -1,0 +1,11 @@
+#!/bin/bash
+this_branch=$(git branch --show-current)
+jira_issue=$1 
+
+if [[ -n "$jira_issue" ]]; then
+  open https://jira.nib.com.au/browse/${jira_issue}
+elif [[ -n "$this_branch" ]]; then
+  open https://jira.nib.com.au/browse/${this_branch}
+else
+  echo "First argument, or current branch did not contain anything"
+fi

@@ -1,6 +1,5 @@
 ;;; emacs.el --- Emacs configuration
 
-
 ;;; Commentary:
 
 ;; A simple, fast and no-nonsense Emacs configuration reduced down over the years.
@@ -15,24 +14,23 @@
 (defconst my/OSX (memq window-system '(ns mac nil)))
 (defconst my/CUSTOM-FILE-PATH "~/.emacs.d/custom.el")
 (defconst my/CONFIG-FILE "~/.emacs.d/init.el")
-(defconst my/ORG-PATH "~/Google Drive/Documents/Notes")
-(defconst my/PLANTUML_JAR "~/plantuml.jar")
+(defconst my/ORG-PATH "~/Dropbox/notes")
 
 (setq user-full-name "Clint Ryan"
       user-mail-address "clint.ryan3@gmail.com")
 
-(setq gc-cons-threshold 402653184
-      gc-cons-percentage 0.6
-      byte-compile-warnings '(not free-vars unresolved noruntime lexical make-local))
-
+(setq gc-cons-threshold most-positive-fixnum)
+(setq byte-compile-warnings '(not free-vars unresolved noruntime lexical make-local))
 (setq custom-file my/CUSTOM-FILE-PATH)
-(setq exec-path-from-shell-check-startup-files nil)
-(add-to-list 'custom-theme-load-path "~/.emacs.d/solarized-theme")
+(setq-default exec-path-from-shell-check-startup-files nil)
 (setq backup-directory-alist `(("." . "~/.emacs.d/backups")))
 
 (load-file my/CUSTOM-FILE-PATH)
 
 (setq-default gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3") ;; Updates TLS to force 1.3+
+
+(set-face-background 'vertical-border "black")
+(set-face-foreground 'vertical-border (face-background 'vertical-border))
 
 (eval-when-compile
   (require 'package)
@@ -47,14 +45,15 @@
     (package-refresh-contents)
     (package-install 'use-package))
   (require 'use-package)
-  (setq use-package-always-defer t
-	use-package-verbose t
+  (setq use-package-verbose t
+        use-package-always-defer t
 	use-package-always-ensure t))
 
 (menu-bar-mode -1)
 (scroll-bar-mode -1)
 (xterm-mouse-mode 1)
 (tool-bar-mode -1)
+(electric-pair-mode)
 (fset 'yes-or-no-p 'y-or-n-p)
 (add-hook 'prog-mode-hook (lambda ()
                             (display-line-numbers-mode t)
@@ -72,23 +71,10 @@
 
 (use-package diminish)
 
-(use-package ivy-posframe
-  :hook
-  (after-init . ivy-posframe-mode)
-  :config
-  (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-top-center)))
-  (setq ivy-posframe-width 128)
-  (setq ivy-posframe-border-width 1)
-  (setq ivy-posframe-height-alist '((counsel-rg . 40)
-				    (t . 20)))
-  (ivy-posframe-mode 1))
-
 (use-package solaire-mode
   :after doom-themes
-  :hook
-  ((change-major-mode after-revert ediff-prepare-buffer) . turn-on-solaire-mode)
-  (minibuffer-setup . solaire-mode-in-minibuffer)
-  :config
+  :hook (minibuffer-setup . solaire-mode-in-minibuffer)
+  :init
   (solaire-global-mode +1)
   (solaire-mode-swap-bg))
 
@@ -98,9 +84,8 @@
 (use-package all-the-icons)
 
 (use-package doom-themes
-  :after evil
   :init
-  (load-theme 'doom-gruvbox t)
+  (load-theme 'doom-gruvbox)
   :config
   (setq-default doom-themes-neotree-theme "doom-colors")
   (doom-themes-neotree-config)
@@ -113,8 +98,7 @@
   (neotree-find (projectile-project-root)))
 
 (use-package neotree
-  :commands (projectile-switch-project)
-  :after evil
+  :commands (neotree-find)
   :init
   (evil-leader/set-key
     "pt" 'neotree-find-project-root
@@ -144,15 +128,14 @@
 (setq neo-default-system-application "open")
 
 (use-package company
-  :diminish company-mode
-  :init
+  :commands (counsel-M-x)
+  :config
   (global-company-mode t)
   (setq company-tooltip-align-annotations t))
 
 (use-package restclient
-  :config
-  (add-to-list 'auto-mode-alist '("\\.rest\\'" . restclient-mode))
-  (add-to-list 'auto-mode-alist '("\\.http\\'" . restclient-mode)))
+  :mode ("\\.rest" . restclient-mode)
+  :mode ("\\.http" . restclient-mode))
 
 (use-package evil
   :hook (after-init . evil-mode)
@@ -208,7 +191,6 @@
     "in" 'yas-new-snippet
     "gs" 'magit-status
     "pf" 'projectile-find-file
-    "pp" 'projectile-switch-project
     "tl" 'toggle-truncate-lines
     "ts" 'eshell
     "qc" 'delete-frame
@@ -226,7 +208,7 @@
 
 (use-package evil-surround
   :after evil
-  :init
+  :config
   (global-evil-surround-mode))
 
 (defun my/use-eslint-from-node-modules ()
@@ -240,9 +222,9 @@
   :init
   (add-hook 'js2-mode-hook #'my/use-eslint-from-node-modules)
   (add-hook 'typescript-mode-hook #'my/use-eslint-from-node-modules)
+  :config
   (flymake-mode-off)
   (global-flycheck-mode)
-  :config
   (evil-define-key 'normal flycheck-mode-map
     (kbd "gh") 'flycheck-display-error-at-point)
   (setq-default flycheck-disabled-checker 'javascript-jshint
@@ -251,13 +233,10 @@
 
 (when my/OSX
   (setq explicit-shell-file-name "/usr/local/bin/tmux")
+
   (use-package xclip
     :init
-    (xclip-mode))
-  (add-to-list 'default-frame-alist
-	       '(ns-transparent-titlebar . t))
-  (add-to-list 'default-frame-alist
-	       '(ns-appearance . dark))) ;; or dark - depending on your theme
+    (xclip-mode)))
 
 (when my/OSX
   (use-package exec-path-from-shell
@@ -297,39 +276,52 @@
 
 (use-package counsel
   :diminish ivy-mode counsel-mode
-  :init
+  :commands (counsel-M-x)
+  :config
+  (counsel-mode)
+  (ivy-mode)
   (global-set-key (kbd "C-s") 'swiper)
   (evil-leader/set-key
     "sw" 'my/search-current-word
     "sb" 'swiper
     "sg" 'counsel-rg)
-  (evil-define-key 'normal 'global "*" 'swiper-thing-at-point)
-  :config
-  (counsel-mode)
-  (ivy-mode)
   (setq ivy-use-virtual-buffers t)
   (setq ivy-re-builders-alist '((t . ivy--regex-ignore-order))))
 
-(use-package counsel-projectile
-  :commands counsel-projectile-mode
+(use-package ivy-posframe
+  :hook (counsel-mode . ivy-posframe-mode)
   :config
-  (counsel-projectile-mode t))
+  (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-top-center)))
+  (setq ivy-posframe-width 128)
+  (setq ivy-posframe-border-width 1)
+  (setq ivy-posframe-height-alist '((counsel-rg . 40)
+				    (t . 20)))
+  (ivy-posframe-mode 1))
+
+(use-package projectile
+  :diminish projectile-mode
+  :commands (projectile-switch-project projectile-project-root)
+  :init
+  (evil-leader/set-key
+    "pp" 'projectile-switch-project)
+  :config
+  (projectile-mode)
+  (setq projectile-enable-caching t
+	projectile-completion-system 'ivy)
+  (add-to-list 'projectile-globally-ignored-directories "node_modules"))
+
+(use-package counsel-projectile)
 
 (use-package lsp-mode
-  :hook (js2-mode . lsp-deferred)
-  :hook (web-mode . lsp-deferred)
-  :hook (typescript-mode . lsp-deferred)
   :commands (lsp lsp-deferred)
+  :hook (typescript-mode . lsp-deferred)
+  :hook (js2-mode . lsp-deferred)
   :config
-  (setq lsp-prefer-flymake nil))
+  (lsp-deferred)
+  (setq-default lsp-prefer-flymake nil))
 
 (use-package lsp-ui :commands lsp-ui-mode)
-(use-package company-lsp :commands company-lsp)
-(use-package dap-mode
-  :config
-  (require 'dap-node))
-
-(electric-pair-mode)
+(use-package company-lsp :commands lsp-ui-mode)
 
 (use-package slime
   :config
@@ -339,39 +331,36 @@
   (when my/WINDOWS (setq inferior-lisp-program "sbcl.exe"))
   (add-to-list 'slime-contribs 'slime-fancy 'slime-repl))
 
-(use-package csharp-mode)
-
-(use-package omnisharp
-  :config
-  (add-hook 'csharp-mode-hook 'omnisharp-mode)
-  (add-to-list 'company-backends 'company-omnisharp))
+(use-package csharp-mode
+  :mode "\\.cs\\'")
 
 (use-package json-mode
-  :init
+  :mode "\\.json\\'"
+  :config
   (evil-leader/set-key-for-mode 'json-mode
     "m=" 'json-pretty-print-buffer))
 
 (use-package js2-mode
-  :diminish js2-mode)
-(use-package rjsx-mode
-  :diminish rjsx-mode)
+  :mode "\\.js\\'"
+  :diminish js2-mode
+  :config
+  (setq js2-basic-offset 2)
+  (setq js-indent-level 2))
 
-(setq js2-basic-offset 2)
-(setq js-indent-level 2)
+(use-package rjsx-mode
+  :mode "\\.jsx\\'"
+  :diminish rjsx-mode)
 
 (use-package ejc-sql)
 
 (use-package typescript-mode
+  :mode "\\.ts"
   :diminish typescript-mode
-  :init
-  (setq-default typescript-indent-level 2)
-  (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
-  (add-to-list 'auto-mode-alist '("\\.tsx\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.jsx\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-mode)))
+  :config
+  (setq-default typescript-indent-level 2))
 
 (use-package rust-mode
-  :mode ("\\.rs\\'" . rust-mode))
+  :mode "\\.rs\\'")
 
 (use-package racer
   :hook
@@ -382,21 +371,18 @@
   (evil-define-key 'insert rust-mode-map
     (kbd "TAB") 'company-indent-or-complete-common))
 
-(setq-default css-indent-offset 2)
-
-(use-package yaml-mode)
+(use-package yaml-mode
+  :mode "\\.yaml\\'")
 
 (use-package web-mode
+  :mode ("\\.cshtml\\'" "\\.jsx\\'" "\\.tsx\\'")
   :config
-  (defun my-web-mode-hook ()
-    "Hooks for Web mode. Adjust indents"
-    (setq web-mode-markup-indent-offset 2
-	  web-mode-attr-indent-offset 2
-	  web-mode-css-indent-offset 2
-	  web-mode-code-indent-offset 2
-	  css-indent-offset 2))
-  (add-to-list 'auto-mode-alist '("\\.cshtml\\'" . web-mode))
-  (add-hook 'web-mode-hook  'my-web-mode-hook))
+  (setq web-mode-markup-indent-offset 2
+        web-mode-attr-indent-offset 2
+        web-mode-css-indent-offset 2
+        web-mode-code-indent-offset 2
+        css-indent-offset 2)
+  (add-to-list 'auto-mode-alist '("\\.cshtml\\'" . web-mode)))
 
 (use-package magit
   :commands magit-status
@@ -406,10 +392,9 @@
     (evil-magit-init)))
 
 (use-package markdown-mode
+  :mode "\\.md\\'"
   :config
   (setq-default markdown-split-window-direction 'right))
-
-(use-package htmlize)
 
 (defun deploy-blog ()
   "Deploy my hugo blog."
@@ -422,13 +407,6 @@
 
 (use-package org
   :mode ("\\.org\\'" . org-mode)
-  :init
-  (evil-leader/set-key
-    "oc" 'org-capture
-    "oa" 'org-agenda
-)
-
-
   :config
   (add-hook 'org-babel-after-execute-hook 'org-redisplay-inline-images)
   (setq-default org-pretty-entities t
@@ -438,6 +416,9 @@
 		org-fontify-done-headline t
 		org-fontify-quote-and-verse-blocks t)
 
+  (evil-leader/set-key
+    "oc" 'org-capture
+    "oa" 'org-agenda)
 
   (evil-leader/set-key-for-mode 'org-mode
     "ma" 'my/org-archive
@@ -491,14 +472,12 @@
 
   (defvar +org-babel-languages '(emacs-lisp
 				 js
-				 plantuml
 				 shell))
 
   (org-babel-do-load-languages 'org-babel-load-languages
 			       (cl-loop for sym in +org-babel-languages
 					collect (cons sym t)))
 
-  (setq-default org-plantuml-jar-path (expand-file-name my/PLANTUML_JAR))
   (setq org-use-speed-commands t)
   (setq org-directory my/ORG-PATH)
   (setq org-default-notes-file (concat org-directory "/inbox.org"))
@@ -536,18 +515,9 @@
 		  ("j" "Journal" entry (file+datetree ,(get-org-file "journal.org")) "* %?\nEntered on %U\n  %i\n  %a"))))
 
 (use-package org-bullets
-  :hook
-  (org-mode . org-bullets-mode))
-
-(use-package projectile
-  :diminish projectile-mode
-  :commands (projectile-switch-project projectile-project-root)
+  :hook (org-mode . org-bullets-mode)
   :config
-  (define-key global-map [?\s-P] 'projectile-switch-project)
-  (setq projectile-enable-caching t
-	projectile-completion-system 'ivy)
-  (add-to-list 'projectile-globally-ignored-directories "node_modules")
-  (projectile-mode 1))
+  (org-indent-mode 1))
 
 (use-package expand-region
   :init
@@ -555,15 +525,11 @@
 
 (use-package yasnippet
   :commands (yas-insert-snippet)
-  :init
+  :config
   (yas-global-mode 1))
 
-(use-package yasnippet-snippets)
-
-(use-package counsel-spotify
-  :config
-  (setq counsel-spotify-client-id "611607283a734086a27669546b48084f")
-  (setq counsel-spotify-client-secret "d9e1ac4e01e14ad4a7c6ff1286a28632"))
+(use-package yasnippet-snippets
+  :after yasnippet)
 
 (use-package emojify
   :config
@@ -574,13 +540,10 @@
   :init
   (which-key-mode))
 
-(defun renew-dhcp ()
-  "Renews my DHCP lease on windows."
-  (interactive)
-  (when my/WINDOWS (eshell-command "ipconfig /renew")))
+;; Reduce the gc to idle times
+(use-package gcmh
+  :hook (after-init . gcmh-mode))
 
-(setq gc-cons-threshold 16777216
-      gc-cons-percentage 0.1)
 (toggle-frame-maximized)
 
 (if (and (fboundp 'server-running-p)
