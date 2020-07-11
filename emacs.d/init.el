@@ -207,9 +207,7 @@
   (global-evil-leader-mode))
 
 (use-package evil-surround
-  :after evil
-  :config
-  (global-evil-surround-mode))
+  :hook (evil-mode . global-evil-surround-mode))
 
 (defun my/use-eslint-from-node-modules ()
   "Gets eslint exe from local path."
@@ -218,7 +216,6 @@
     (setq-default flycheck-javascript-eslint-executable eslint)))
 
 (use-package flycheck
-  :after evil
   :init
   (add-hook 'js2-mode-hook #'my/use-eslint-from-node-modules)
   (add-hook 'typescript-mode-hook #'my/use-eslint-from-node-modules)
@@ -233,15 +230,12 @@
 
 (when my/OSX
   (setq explicit-shell-file-name "/usr/local/bin/tmux")
-
+  (use-package exec-path-from-shell
+    :init
+    (exec-path-from-shell-initialize))
   (use-package xclip
     :init
     (xclip-mode)))
-
-(when my/OSX
-  (use-package exec-path-from-shell
-    :init
-    (exec-path-from-shell-initialize)))
 
 (defun reload-config-file()
   "Reload our configuration file."
@@ -317,11 +311,11 @@
   :hook (typescript-mode . lsp-deferred)
   :hook (js2-mode . lsp-deferred)
   :config
-  (lsp-deferred)
+  (global-flycheck-mode)
+  (flycheck-add-next-checker 'lsp 'javascript-eslint)
   (setq-default lsp-prefer-flymake nil))
 
 (use-package lsp-ui :commands lsp-ui-mode)
-(use-package company-lsp :commands lsp-ui-mode)
 
 (use-package slime
   :config
