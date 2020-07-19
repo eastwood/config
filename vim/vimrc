@@ -27,9 +27,6 @@ call plug#end()
 
 " Settings
 let mapleader = " "
-if has('mac')
-  let g:clipboard = {'copy': {'+': 'pbcopy', '*': 'pbcopy'}, 'paste': {'+': 'pbpaste', '*': 'pbpaste'}, 'name': 'pbcopy', 'cache_enabled': 0}
-endif
 set clipboard+=unnamedplus
 set completeopt=menu,preview,longest,noinsert
 set modelines=0
@@ -144,7 +141,7 @@ nmap <leader>qq :wqa!<CR>
 nmap <leader><Esc> :q!<CR>
 
 " File based 
-nmap <leader>ff :edit
+nmap <leader>ff :edit 
 nmap <leader>fs :w!<CR>
 nmap <leader>ft :NERDTreeFind<CR>
 nmap <leader>feR :source ~/.vimrc<CR>

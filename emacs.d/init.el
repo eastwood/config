@@ -14,7 +14,7 @@
 (defconst my/OSX (memq window-system '(ns mac nil)))
 (defconst my/CUSTOM-FILE-PATH "~/.emacs.d/custom.el")
 (defconst my/CONFIG-FILE "~/.emacs.d/init.el")
-(defconst my/ORG-PATH "~/Dropbox/notes")
+(defconst my/ORG-PATH "~/Documents/notes")
 
 (setq user-full-name "Clint Ryan"
       user-mail-address "clint.ryan3@gmail.com")
