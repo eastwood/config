@@ -14,7 +14,7 @@
 (defconst my/OSX (memq window-system '(ns mac nil)))
 (defconst my/CUSTOM-FILE-PATH "~/.emacs.d/custom.el")
 (defconst my/CONFIG-FILE "~/.emacs.d/init.el")
-(defconst my/ORG-PATH "~/Dropbox/notes")
+(defconst my/ORG-PATH "~/Documents/notes")
 
 (setq user-full-name "Clint Ryan"
       user-mail-address "clint.ryan3@gmail.com")
@@ -26,8 +26,6 @@
 (setq backup-directory-alist `(("." . "~/.emacs.d/backups")))
 
 (load-file my/CUSTOM-FILE-PATH)
-
-(setq-default gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3") ;; Updates TLS to force 1.3+
 
 (set-face-background 'vertical-border "black")
 (set-face-foreground 'vertical-border (face-background 'vertical-border))
@@ -104,6 +102,7 @@
     "pt" 'neotree-find-project-root
     "ft" 'neotree-find)
   :config
+  (evil-mode)
   (setq neo-toggle-window-keep-p t)
   (define-key evil-motion-state-map "\\" 'neotree-toggle)
   (evil-define-key 'normal neotree-mode-map
@@ -113,7 +112,6 @@
     "s" 'neotree-enter-vertical-split
     "q" 'neotree-hide
     (kbd "RET") 'neotree-enter)
-
   (evil-leader/set-key-for-mode 'neotree-mode
     "mo" 'neotree-open-file-in-system-application
     "md" 'neotree-delete-node
@@ -181,7 +179,7 @@
     "ee" 'eval-last-sexp
     "er" 'eval-region
     "fs" 'save-buffer
-    "fo" (open-org-file "gtd.org")
+    "fo" (open-org-file "inbox.org")
     "fd" 'open-org-directory
     "ff" 'counsel-find-file
     "fr" 'counsel-recentf
@@ -474,7 +472,7 @@
 
   (setq org-use-speed-commands t)
   (setq org-directory my/ORG-PATH)
-  (setq org-default-notes-file (concat org-directory "/inbox.org"))
+  (setq org-default-notes-file (concat org-directory "/work.org"))
   (setq org-global-properties '(("Effort_ALL". "0 0:10 0:20 0:30 1:00 2:00 3:00 4:00 6:00 8:00")))
   (setq org-columns-default-format '"%25ITEM %10Effort(Est){+} %TODO %TAGS")
   (setq org-agenda-files (directory-files-recursively my/ORG-PATH "\.org$"))
@@ -503,10 +501,17 @@
 		   nil)))
 
   (setq-default org-capture-templates
-		`(("t" "Inbox" entry (file ,(get-org-file "inbox.org")) "* TODO %?\n:CREATED: %T\n" :prepend T)
-		  ("h" "Home" entry (file ,(get-org-file "home.org")) "* %?\n%T" :prepend T)
-		  ("w" "Work" entry (file ,(get-org-file "work.org")) "* %?\n%T" :prepend T)
-		  ("j" "Journal" entry (file+datetree ,(get-org-file "journal.org")) "* %?\nEntered on %U\n  %i\n  %a"))))
+		`(("h" "Home" entry (file ,(get-org-file "home.org")) "* %?\n%T" :prepend T)
+		  ("w" "Work" entry (file ,(get-org-file "work.org")) "* %?\n%T" :prepend T))))
+
+(use-package org-journal
+  :commands (org-journal-new-entry)
+  :init
+  (evil-leader/set-key
+    "fj" 'org-journal-new-entry)
+  :config
+  (setq org-journal-dir (concat my/ORG-PATH "/journal"))
+  (setq org-journal-date-format "%A, %d %B %Y"))
 
 (use-package org-bullets
   :hook (org-mode . org-bullets-mode)

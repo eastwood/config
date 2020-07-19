@@ -1,4 +1,4 @@
-;;;; Emacs Bookmark Format Version 1 ;;;; -*- coding: utf-8-emacs -*- 
+;;;; Emacs Bookmark Format Version 1;;;; -*- coding: utf-8-emacs; mode: lisp-data -*-
 ;;; This format is meant to be slightly human-readable;
 ;;; nevertheless, you probably don't want to edit it.
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
@@ -8,8 +8,8 @@
  (rear-context-string . "cular service\n \n")
  (position . 1754))
 ("org-capture-last-stored"
- (filename . "~/Google Drive/Documents/notes/journal.org")
- (front-context-string . "**** Create\nEnte")
- (rear-context-string . "0-01-07 Tuesday\n")
- (position . 101))
+ (filename . "~/Documents/notes/home.org")
+ (front-context-string . "* Buy coca cola\n")
+ (rear-context-string)
+ (position . 1))
 )

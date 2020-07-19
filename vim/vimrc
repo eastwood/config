@@ -21,15 +21,11 @@ Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'edkolev/tmuxline.vim'
 Plug 'vim-scripts/nginx.vim'
-Plug 'vimwiki/vimwiki'
 
 call plug#end()
 
 " Settings
 let mapleader = " "
-if has('mac')
-  let g:clipboard = {'copy': {'+': 'pbcopy', '*': 'pbcopy'}, 'paste': {'+': 'pbpaste', '*': 'pbpaste'}, 'name': 'pbcopy', 'cache_enabled': 0}
-endif
 set clipboard+=unnamedplus
 set completeopt=menu,preview,longest,noinsert
 set modelines=0
@@ -144,7 +140,7 @@ nmap <leader>qq :wqa!<CR>
 nmap <leader><Esc> :q!<CR>
 
 " File based 
-nmap <leader>ff :edit
+nmap <leader>ff :edit 
 nmap <leader>fs :w!<CR>
 nmap <leader>ft :NERDTreeFind<CR>
 nmap <leader>feR :source ~/.vimrc<CR>
@@ -223,14 +219,3 @@ command! FormatJSON :%!jq
 xmap ga <Plug>(EasyAlign)
 " Start interactive EasyAlign for a motion/text object (e.g. gaip)
 nmap ga <Plug>(EasyAlign)
-
-let g:vimwiki_list = [{'path': '~/.wiki/',
-                      \ 'syntax': 'markdown', 'ext': '.md',
-                      \ 'auto_diary_index': 1 }]
-"
-" Some conflicting binds
-let g:vimwiki_key_mappings =
-      \ {
-      \ 'html': 0
-      \ }
-let g:vimwiki_markdown_link_ext = 1
