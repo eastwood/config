@@ -21,7 +21,6 @@ Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'edkolev/tmuxline.vim'
 Plug 'vim-scripts/nginx.vim'
-Plug 'vimwiki/vimwiki'
 
 call plug#end()
 
@@ -220,14 +219,3 @@ command! FormatJSON :%!jq
 xmap ga <Plug>(EasyAlign)
 " Start interactive EasyAlign for a motion/text object (e.g. gaip)
 nmap ga <Plug>(EasyAlign)
-
-let g:vimwiki_list = [{'path': '~/.wiki/',
-                      \ 'syntax': 'markdown', 'ext': '.md',
-                      \ 'auto_diary_index': 1 }]
-"
-" Some conflicting binds
-let g:vimwiki_key_mappings =
-      \ {
-      \ 'html': 0
-      \ }
-let g:vimwiki_markdown_link_ext = 1
