@@ -44,3 +44,10 @@ test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell
 export NVM_DIR="${HOME}/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" #--no-use
 
+
+# tabtab source for serverless package
+# uninstall by removing these lines or running `tabtab uninstall serverless`
+[[ -f /Users/cryan/Workspace/nib.com.au/cryan/quote-session-dynamo-consumer/node_modules/tabtab/.completions/serverless.zsh ]] && . /Users/cryan/Workspace/nib.com.au/cryan/quote-session-dynamo-consumer/node_modules/tabtab/.completions/serverless.zsh
+# tabtab source for sls package
+# uninstall by removing these lines or running `tabtab uninstall sls`
+[[ -f /Users/cryan/Workspace/nib.com.au/cryan/quote-session-dynamo-consumer/node_modules/tabtab/.completions/sls.zsh ]] && . /Users/cryan/Workspace/nib.com.au/cryan/quote-session-dynamo-consumer/node_modules/tabtab/.completions/sls.zsh

@@ -20,6 +20,7 @@
       user-mail-address "clint.ryan3@gmail.com")
 
 (setq gc-cons-threshold most-positive-fixnum)
+(setq read-process-output-max (* 1024 1024))
 (setq byte-compile-warnings '(not free-vars unresolved noruntime lexical make-local))
 (setq custom-file my/CUSTOM-FILE-PATH)
 (setq-default exec-path-from-shell-check-startup-files nil)
@@ -47,6 +48,7 @@
         use-package-always-defer t
 	use-package-always-ensure t))
 
+(setq truncate-lines t)
 (menu-bar-mode -1)
 (scroll-bar-mode -1)
 (xterm-mouse-mode 1)
@@ -157,6 +159,21 @@
     "Macro for opening files in org directory with FILENAME filepath."
     (concat my/ORG-PATH "/" filename))
 
+(defun my/open-git()
+  (interactive)
+  (let ((name (projectile-project-name)))
+    (shell-command (concat "open https://github.com/nib-group/" name))))
+
+(defun my/open-jira()
+  (interactive)
+  (let ((name (magit-get-current-branch)))
+    (shell-command (concat "open https://jira.nib.com.au/browse/" name))))
+
+(defun my/open-buildkite()
+  (interactive)
+  (let ((name (projectile-project-name)))
+    (shell-command (concat "open https://buildkite.com/nib-health-funds-ltd/" name))))
+
   (defun open-org-directory ()
     (interactive)
     (counsel-find-file my/ORG-PATH))
@@ -209,6 +226,7 @@
 
 (defun my/use-eslint-from-node-modules ()
   "Gets eslint exe from local path."
+  (interactive)
   (let (eslint)
     (setq eslint (projectile-expand-root "node_modules/eslint/bin/eslint.js"))
     (setq-default flycheck-javascript-eslint-executable eslint)))
@@ -397,6 +415,12 @@
 	  (t (format "cd %s && ./deploy.sh" (blog-base-url))))))
     (async-shell-command blogCommand)))
 
+(defun my/org-archive ()
+  "Archive and save file."
+  (interactive)
+  (org-archive-subtree)
+  (save-some-buffers 'always (lambda ()
+                               (string-match-p "inbox.org_archive" buffer-file-name))))
 (use-package org
   :mode ("\\.org\\'" . org-mode)
   :config
@@ -464,6 +488,7 @@
 
   (defvar +org-babel-languages '(emacs-lisp
 				 js
+                                 restclient
 				 shell))
 
   (org-babel-do-load-languages 'org-babel-load-languages
@@ -501,9 +526,10 @@
 		   nil)))
 
   (setq-default org-capture-templates
-		`(("h" "Home" entry (file ,(get-org-file "home.org")) "* %?\n%T" :prepend T)
-		  ("w" "Work" entry (file ,(get-org-file "work.org")) "* %?\n%T" :prepend T))))
+		`(("t" "Task" entry (file ,(get-org-file "inbox.org")) "* TODO %?%^g\n%T" :prepend T))))
 
+(use-package ob-restclient)
+(use-package htmlize)
 (use-package org-journal
   :commands (org-journal-new-entry)
   :init
