@@ -1,15 +1,15 @@
-;;;; Emacs Bookmark Format Version 1;;;; -*- coding: utf-8-emacs; mode: lisp-data -*-
+;;;; Emacs Bookmark Format Version 1 ;;;; -*- coding: utf-8-emacs -*- 
 ;;; This format is meant to be slightly human-readable;
 ;;; nevertheless, you probably don't want to edit it.
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
 (("org-refile-last-stored"
- (filename . "~/Google Drive/Documents/notes/gtd.org")
- (front-context-string . "** PHISL-2107\n1.")
- (rear-context-string . "cular service\n \n")
- (position . 1754))
+ (filename . "~/Documents/notes/work.org")
+ (front-context-string . "** DONE [[https:")
+ (rear-context-string . "7-21 Tue 15:22>\n")
+ (position . 1455))
 ("org-capture-last-stored"
- (filename . "~/Documents/notes/home.org")
- (front-context-string . "* Buy coca cola\n")
+ (filename . "~/Documents/notes/inbox.org")
+ (front-context-string . "* TODO IAP absor")
  (rear-context-string)
  (position . 1))
 )
