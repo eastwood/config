@@ -321,12 +321,23 @@
 
 (use-package counsel-projectile)
 
-(use-package lsp-mode
-  :commands (lsp lsp-deferred)
-  :hook (typescript-mode . lsp)
-  :hook (js2-mode . lsp)
+(use-package eglot)
+
+(defun setup-tide-mode ()
+  (interactive)
+  (tide-setup)
+  (flycheck-mode +1)
+  (setq flycheck-check-syntax-automatically '(save mode-enabled))
+  (eldoc-mode +1)
+  (tide-hl-identifier-mode +1)
+  (flycheck-add-mode 'javascript-eslint 'typescript-mode)
+  (flycheck-add-next-checker 'typescript-tide 'javascript-eslint 'append)
+  (company-mode +1))
+
+(use-package tide
   :init
-  (setq-default lsp-prefer-flymake nil))
+  (add-hook 'before-save-hook 'tide-format-before-save)
+  (add-hook 'typescript-mode-hook #'setup-tide-mode))
 
 (use-package slime
   :config
