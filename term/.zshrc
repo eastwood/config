@@ -6,7 +6,7 @@ export EDITOR="nvim"
 export TEX_PATH="/usr/local/texlive/2018/bin/x86_64-darwin"
 export TERM='xterm-256color'
 export NIB_PATH='/Users/cryan/Workspace/nib.com.au/cryan/bin'
-export PYTHON_PATH='/Users/cryan/Library/Python/3.7/bin/'
+export PYTHON_PATH='/Users/cryan/Library/Python/3.7/bin'
 export CUSTOM_SCRIPTS=~/.scripts
 export PATH=/usr/local/bin:$PATH:$NIB_PATH:$PYTHON_PATH:$TEX_PATH:$CUSTOM_SCRIPTS
 
@@ -51,3 +51,4 @@ export NVM_DIR="${HOME}/.nvm"
 # tabtab source for sls package
 # uninstall by removing these lines or running `tabtab uninstall sls`
 [[ -f /Users/cryan/Workspace/nib.com.au/cryan/quote-session-dynamo-consumer/node_modules/tabtab/.completions/sls.zsh ]] && . /Users/cryan/Workspace/nib.com.au/cryan/quote-session-dynamo-consumer/node_modules/tabtab/.completions/sls.zsh
+eval "$(direnv hook zsh)"

@@ -236,12 +236,11 @@
   (add-hook 'js2-mode-hook #'my/use-eslint-from-node-modules)
   (add-hook 'typescript-mode-hook #'my/use-eslint-from-node-modules)
   :config
-  (flymake-mode-off)
   (global-flycheck-mode)
+  (flymake-mode-off)
   (evil-define-key 'normal flycheck-mode-map
     (kbd "gh") 'flycheck-display-error-at-point)
-  (setq-default flycheck-disabled-checker 'javascript-jshint
-		flycheck-disabled-checker 'json-jsonlist)
+  (setq-default flycheck-disabled-checkers '(javascript-jshint json-jsonlist))
   (flycheck-add-mode 'javascript-eslint 'web-mode))
 
 (when my/OSX
@@ -324,14 +323,10 @@
 
 (use-package lsp-mode
   :commands (lsp lsp-deferred)
-  :hook (typescript-mode . lsp-deferred)
-  :hook (js2-mode . lsp-deferred)
-  :config
-  (global-flycheck-mode)
-  (flycheck-add-next-checker 'lsp 'javascript-eslint)
+  :hook (typescript-mode . lsp)
+  :hook (js2-mode . lsp)
+  :init
   (setq-default lsp-prefer-flymake nil))
-
-(use-package lsp-ui :commands lsp-ui-mode)
 
 (use-package slime
   :config
