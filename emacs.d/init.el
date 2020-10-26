@@ -85,7 +85,7 @@
 
 (use-package doom-themes
   :init
-  (load-theme 'doom-gruvbox)
+  (load-theme 'doom-gruvbox t)
   :config
   (setq-default doom-themes-neotree-theme "doom-colors")
   (doom-themes-neotree-config)
