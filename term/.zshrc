@@ -5,10 +5,10 @@
 export EDITOR="nvim"
 export TEX_PATH="/usr/local/texlive/2018/bin/x86_64-darwin"
 export TERM='xterm-256color'
-export NIB_PATH='/Users/cryan/Workspace/nib.com.au/cryan/bin'
-export PYTHON_PATH='/Users/cryan/Library/Python/3.7/bin'
+export NIB_PATH=/Users/cryan/Workspace/nib.com.au/cryan/bin
+export HOMEBREW_PATH=/usr/local/sbin:/usr/local/bin
 export CUSTOM_SCRIPTS=~/.scripts
-export PATH=/usr/local/bin:$PATH:$NIB_PATH:$PYTHON_PATH:$TEX_PATH:$CUSTOM_SCRIPTS
+export PATH=$HOMEBREW_PATH:$NIB_PATH:$TEX_PATH:$CUSTOM_SCRIPTS:$PATH
 
 eval "$(starship init zsh)"
 source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
@@ -31,24 +31,11 @@ alias create-loopback="sudo ifconfig lo0 alias 10.100.10.1"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-# export NVM_DIR="$HOME/.nvm"
-# [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-# [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-
-export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
-export PATH="$HOME/.rbenv/bin:$PATH"
+export PATH=$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH
+export PATH=$HOME/.rbenv/bin:$PATH
 eval "$(rbenv init -)"
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
 export NVM_DIR="${HOME}/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" #--no-use
-
-
-# tabtab source for serverless package
-# uninstall by removing these lines or running `tabtab uninstall serverless`
-[[ -f /Users/cryan/Workspace/nib.com.au/cryan/quote-session-dynamo-consumer/node_modules/tabtab/.completions/serverless.zsh ]] && . /Users/cryan/Workspace/nib.com.au/cryan/quote-session-dynamo-consumer/node_modules/tabtab/.completions/serverless.zsh
-# tabtab source for sls package
-# uninstall by removing these lines or running `tabtab uninstall sls`
-[[ -f /Users/cryan/Workspace/nib.com.au/cryan/quote-session-dynamo-consumer/node_modules/tabtab/.completions/sls.zsh ]] && . /Users/cryan/Workspace/nib.com.au/cryan/quote-session-dynamo-consumer/node_modules/tabtab/.completions/sls.zsh
-eval "$(direnv hook zsh)"

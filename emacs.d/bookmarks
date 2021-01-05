@@ -1,12 +1,12 @@
-;;;; Emacs Bookmark Format Version 1 ;;;; -*- coding: utf-8-emacs -*- 
+;;;; Emacs Bookmark Format Version 1;;;; -*- coding: utf-8-emacs; mode: lisp-data -*-
 ;;; This format is meant to be slightly human-readable;
 ;;; nevertheless, you probably don't want to edit it.
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
 (("org-refile-last-stored"
- (filename . "~/Documents/notes/work.org")
- (front-context-string . "** DONE [[https:")
- (rear-context-string . "7-21 Tue 15:22>\n")
- (position . 1455))
+ (filename . "~/Documents/notes/journal/20210104")
+ (front-context-string . "** PHISL-3450: R")
+ (rear-context-string . " 2021\n** 09:44 \n")
+ (position . 37))
 ("org-capture-last-stored"
  (filename . "~/Documents/notes/inbox.org")
  (front-context-string . "* TODO IAP absor")

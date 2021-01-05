@@ -28,6 +28,7 @@
 
 (load-file my/CUSTOM-FILE-PATH)
 
+(set-frame-font "Hack-14" nil t)
 (set-face-background 'vertical-border "black")
 (set-face-foreground 'vertical-border (face-background 'vertical-border))
 
@@ -43,17 +44,12 @@
   (unless (package-installed-p 'use-package)
     (package-refresh-contents)
     (package-install 'use-package))
+
   (require 'use-package)
   (setq use-package-verbose t
         use-package-always-defer t
-	use-package-always-ensure t))
+        use-package-always-ensure t))
 
-(setq truncate-lines t)
-(menu-bar-mode -1)
-(scroll-bar-mode -1)
-(xterm-mouse-mode 1)
-(tool-bar-mode -1)
-(electric-pair-mode)
 (fset 'yes-or-no-p 'y-or-n-p)
 (add-hook 'prog-mode-hook (lambda ()
                             (display-line-numbers-mode t)
@@ -68,6 +64,8 @@
               line-spacing nil
               truncate-lines nil
               ring-bell-function 'ignore)
+
+(electric-pair-mode)
 
 (use-package diminish)
 
@@ -85,7 +83,7 @@
 
 (use-package doom-themes
   :init
-  (load-theme 'doom-gruvbox t)
+  (load-theme 'doom-one t)
   :config
   (setq-default doom-themes-neotree-theme "doom-colors")
   (doom-themes-neotree-config)
@@ -124,7 +122,7 @@
   (setq neo-window-fixed-size nil)
   (setq neo-smart-open t))
 
-(setq neo-window-width 40)
+(setq neo-window-width 60)
 (setq neo-default-system-application "open")
 
 (use-package company
@@ -140,6 +138,7 @@
 (use-package evil
   :hook (after-init . evil-mode)
   :init
+  (evil-set-undo-system 'undo-redo)
   (setq evil-want-keybinding nil)
   :config
   (evil-define-key 'normal 'global "j" 'evil-next-visual-line)
@@ -331,13 +330,38 @@
   (eldoc-mode +1)
   (tide-hl-identifier-mode +1)
   (flycheck-add-mode 'javascript-eslint 'typescript-mode)
+  (flycheck-disable-checker 'typescript-tslint)
   (flycheck-add-next-checker 'typescript-tide 'javascript-eslint 'append)
-  (company-mode +1))
+  (company-mode +1)
+
+  (evil-define-key 'normal tide-mode-map
+    "gd" 'tide-jump-to-definition
+    (kbd "C-t") 'tide-jump-back
+    (kbd "C-o") 'tide-jump-back
+    "K" 'tide-documentation-at-point)
+
+  (evil-define-key 'normal tide-references-mode-map
+    "gj" 'tide-find-next-reference
+    "gk" 'tide-find-previous-reference
+    (kbd "C-j") 'tide-find-next-reference
+    (kbd "C-k") 'tide-find-previous-reference
+    (kbd "RET") 'tide-goto-reference
+    (kbd "q") 'quit-window)
+
+  (evil-define-key 'normal tide-project-errors-mode-map
+    "gj" 'tide-find-next-error
+    "gk" 'tide-find-previous-error
+    (kbd "C-j") 'tide-find-next-error
+    (kbd "C-k") 'tide-find-previous-error
+    (kbd "RET") 'tide-goto-error
+    (kbd "q") 'quit-window))
 
 (use-package tide
   :init
   (add-hook 'before-save-hook 'tide-format-before-save)
   (add-hook 'typescript-mode-hook #'setup-tide-mode))
+
+(use-package jest)
 
 (use-package slime
   :config
@@ -377,15 +401,6 @@
 
 (use-package rust-mode
   :mode "\\.rs\\'")
-
-(use-package racer
-  :hook
-  (rust-mode . racer-mode)
-  (racer-mode . eldoc-mode)
-  :commands (rust-mode)
-  :config
-  (evil-define-key 'insert rust-mode-map
-    (kbd "TAB") 'company-indent-or-complete-common))
 
 (use-package yaml-mode
   :mode "\\.yaml\\'")
@@ -478,7 +493,7 @@
   (setq org-confirm-babel-evaluate nil)
   (custom-theme-set-faces
    'user
-   '(variable-pitch ((t (:family "Source Sans Pro" :height 120 :weight light))))
+   '(variable-pitch ((t (:family "Hack-14" :weight light))))
    '(fixed-pitch ((t ( :family "Fira Code" :slant normal :weight normal :height 1 :width normal))))
    '(org-block                 ((t (:inherit fixed-pitch))))
    '(org-document-info-keyword ((t (:inherit (shadow fixed-pitch)))))
@@ -540,7 +555,9 @@
   :commands (org-journal-new-entry)
   :init
   (evil-leader/set-key
-    "fj" 'org-journal-new-entry)
+    "fj" (lambda ()
+           (interactive)
+           (org-journal-new-entry t)))
   :config
   (setq org-journal-dir (concat my/ORG-PATH "/journal"))
   (setq org-journal-date-format "%A, %d %B %Y"))

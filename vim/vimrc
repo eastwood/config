@@ -2,6 +2,7 @@
 call plug#begin()
 Plug 'tpope/vim-surround' " The Pope's gift to man
 Plug 'morhetz/gruvbox'
+Plug 'rakr/vim-one'
 Plug 'preservim/nerdtree' " We want that tree action
 Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'tpope/vim-fugitive'
@@ -68,8 +69,9 @@ endif
 
 syntax on
 set bg=dark
-let g:gruvbox_sign_column = 'bg0'
-colorscheme gruvbox
+" let g:gruvbox_sign_column = 'bg0'
+colorscheme one
+let g:one_allow_italics = 1
 let g:airline_powerline_fonts = 1
 
 "General UI
@@ -148,7 +150,7 @@ nmap <leader>fs :w!<CR>
 nmap <leader>ft :NERDTreeFind<CR>
 nmap <leader>feR :source ~/.vimrc<CR>
 nmap <leader>fed :edit ~/.vimrc<CR>
-nmap <leader>fo :edit ~/Dropbox/notes/gth.md<CR>
+nmap <leader>fo :edit ~/Documents/notes/backlog.md<CR>
 
 " Searching
 nnoremap <Leader>sw :Rg <C-r><C-w>
