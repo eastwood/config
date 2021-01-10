@@ -180,8 +180,8 @@
   (evil-leader/set-leader "SPC")
   (evil-leader/set-key
     "SPC" 'counsel-M-x
-    "[" 'previous-error
-    "]" 'next-error
+    "[" 'flycheck-previous-error
+    "]" 'flycheck-next-error
     "!" 'flycheck-list-errors
     "." 'flycheck-display-error-at-point
     "bb" 'ivy-switch-buffer
@@ -195,7 +195,8 @@
     "ee" 'eval-last-sexp
     "er" 'eval-region
     "fs" 'save-buffer
-    "fo" (open-org-file "inbox.org")
+    "fow" (open-org-file "inbox.org")
+    "foh" (open-org-file "home.org")
     "fd" 'open-org-directory
     "ff" 'counsel-find-file
     "fr" 'counsel-recentf
@@ -332,6 +333,7 @@
   (flycheck-add-mode 'javascript-eslint 'typescript-mode)
   (flycheck-disable-checker 'typescript-tslint)
   (flycheck-add-next-checker 'typescript-tide 'javascript-eslint 'append)
+  (setq-default tide-user-preferences '(:importModuleSpecifierPreference "relative" :includeCompletionsForModuleExports t :includeCompletionsWithInsertText t :allowTextChangesInNewFiles t))
   (company-mode +1)
 
   (evil-define-key 'normal tide-mode-map
@@ -356,6 +358,7 @@
     (kbd "RET") 'tide-goto-error
     (kbd "q") 'quit-window))
 
+;; We use Tide here because it uses tsserver directly
 (use-package tide
   :init
   (add-hook 'before-save-hook 'tide-format-before-save)
@@ -379,6 +382,10 @@
   :config
   (evil-leader/set-key-for-mode 'json-mode
     "m=" 'json-pretty-print-buffer))
+
+(use-package prettier
+  :mode "\\.ts"
+  :mode "\\.js")
 
 (use-package js2-mode
   :mode "\\.js\\'"
@@ -529,8 +536,7 @@
 	  (:endgroup . nil)
 	  ("WORK" . ?w) ("HOME" . ?h) ("WORK" . ?w) ("COMPUTER" . ?l) ("GOALS" . ?g) ("READING" . ?r) ("PROJECT" . ?p)))
   (setq org-todo-keywords
-	'((sequence "TODO(t)" "IN-PROGRESS(i)" "|" "DONE(d)")
-	  (sequence "REPORT(r)" "BUG(b)" "KNOWNCAUSE(k)" "|" "FIXED(f)")))
+	'((sequence "TODO(t)" "IN-PROGRESS(i)" "REPORT(r)" "BUG(b)" "KNOWN-CAUSE(k)" "|" "DONE(d)" "NOT-DOING(n)")))
 
   (setq-default org-agenda-custom-commands
 		'(("g" . "GTD contexts")
@@ -545,9 +551,10 @@
 		    (tags-todo "GOALS")
 		    (tags-todo "TASKS"))
 		   nil)))
-
+  
   (setq-default org-capture-templates
-		`(("t" "Task" entry (file ,(get-org-file "inbox.org")) "* TODO %?%^g\n%T" :prepend T))))
+                `(("w" "Work" entry (file+headline ,(get-org-file "inbox.org") "Inbox") "* TODO %?%^g\n%T" :prepend T)
+                  ("h" "Home" entry (file+headline ,(get-org-file "home.org") "Inbox") "* TODO %?%^g\n%T" :prepend T))))
 
 (use-package ob-restclient)
 (use-package htmlize)
