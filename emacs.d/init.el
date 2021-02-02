@@ -145,6 +145,8 @@
   (evil-define-key 'normal 'global "k" 'evil-previous-visual-line)
   (setq evil-want-C-u-scroll t))
 
+(use-package plantuml-mode)
+
 (use-package evil-leader
   :after evil
   :config
@@ -238,6 +240,7 @@
   :config
   (global-flycheck-mode)
   (flymake-mode-off)
+  (setq flycheck-ruby-rubocop-executable "~/.rbenv/shims/rubocop")
   (evil-define-key 'normal flycheck-mode-map
     (kbd "gh") 'flycheck-display-error-at-point)
   (setq-default flycheck-disabled-checkers '(javascript-jshint json-jsonlist))
@@ -362,7 +365,8 @@
 (use-package tide
   :init
   (add-hook 'before-save-hook 'tide-format-before-save)
-  (add-hook 'typescript-mode-hook #'setup-tide-mode))
+  (add-hook 'typescript-mode-hook #'setup-tide-mode)
+  (add-hook 'js2-mode-hook #'setup-tide-mode))
 
 (use-package jest)
 
@@ -378,14 +382,15 @@
   :mode "\\.cs\\'")
 
 (use-package json-mode
-  :mode "\\.json\\'"
+  :mode "\\.json"
   :config
   (evil-leader/set-key-for-mode 'json-mode
     "m=" 'json-pretty-print-buffer))
 
 (use-package prettier
-  :mode "\\.ts"
-  :mode "\\.js")
+  :init
+  (add-hook 'js2-mode-hook #'prettier-mode)
+  (add-hook 'typescript-mode-hook #'prettier-mode))
 
 (use-package js2-mode
   :mode "\\.js\\'"
@@ -516,6 +521,7 @@
 
   (defvar +org-babel-languages '(emacs-lisp
 				 js
+                                 plantuml
                                  restclient
 				 shell))
 
@@ -539,24 +545,25 @@
 	'((sequence "TODO(t)" "IN-PROGRESS(i)" "REPORT(r)" "BUG(b)" "KNOWN-CAUSE(k)" "|" "DONE(d)" "NOT-DOING(n)")))
 
   (setq-default org-agenda-custom-commands
-		'(("g" . "GTD contexts")
-		  ("gw" "Work" tags-todo "WORK")
+                '(("g" . "GTD contexts")
+                  ("gw" "Work" tags-todo "WORK")
 		  ("gc" "Computer" tags-todo "COMPUTER")
-		  ("gg" "Goals" tags-todo "GOALS")
-		  ("gh" "Home" tags-todo "HOME")
-		  ("gt" "Tasks" tags-todo "TASKS")
-		  ("G" "GTD Block Agenda"
-		   ((tags-todo "WORK")
-		    (tags-todo "COMPUTER")
-		    (tags-todo "GOALS")
-		    (tags-todo "TASKS"))
-		   nil)))
+                  ("gg" "Goals" tags-todo "GOALS")
+                  ("gh" "Home" tags-todo "HOME")
+                  ("gt" "Tasks" tags-todo "TASKS")
+                  ("G" "GTD Block Agenda"
+                   ((tags-todo "WORK")
+                    (tags-todo "COMPUTER")
+                    (tags-todo "GOALS")
+                    (tags-todo "TASKS"))
+                   nil)))
   
   (setq-default org-capture-templates
                 `(("w" "Work" entry (file+headline ,(get-org-file "inbox.org") "Inbox") "* TODO %?%^g\n%T" :prepend T)
                   ("h" "Home" entry (file+headline ,(get-org-file "home.org") "Inbox") "* TODO %?%^g\n%T" :prepend T))))
 
 (use-package ob-restclient)
+(use-package ox-gfm)
 (use-package htmlize)
 (use-package org-journal
   :commands (org-journal-new-entry)
