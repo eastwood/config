@@ -105,6 +105,7 @@
   (evil-mode)
   (setq neo-toggle-window-keep-p t)
   (define-key evil-motion-state-map "\\" 'neotree-toggle)
+  (setq neo-autorefresh t)
   (evil-define-key 'normal neotree-mode-map
     (kbd "TAB") 'neotree-enter
     "H" 'neotree-hidden-file-toggle
@@ -310,6 +311,11 @@
 				    (t . 20)))
   (ivy-posframe-mode 1))
 
+(defun my/switch-project ()
+  (projectile-find-file)
+  (neotree-projectile-action)
+  (other-window 1))
+
 (use-package projectile
   :diminish projectile-mode
   :commands (projectile-switch-project projectile-project-root)
@@ -318,6 +324,7 @@
     "pp" 'projectile-switch-project)
   :config
   (projectile-mode)
+  (setq projectile-switch-project-action 'my/switch-project)
   (setq projectile-enable-caching t
 	projectile-completion-system 'ivy)
   (add-to-list 'projectile-globally-ignored-directories "node_modules"))
@@ -389,8 +396,11 @@
 
 (use-package prettier
   :init
+  (add-hook 'js2-mode-hook #'add-node-modules-path)
   (add-hook 'js2-mode-hook #'prettier-mode)
   (add-hook 'typescript-mode-hook #'prettier-mode))
+
+(use-package add-node-modules-path)
 
 (use-package js2-mode
   :mode "\\.js\\'"
