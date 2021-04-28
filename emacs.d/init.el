@@ -11,7 +11,8 @@
 
 ;;; Code:
 (defconst my/WINDOWS (memq window-system '(w32)))
-(defconst my/OSX (memq window-system '(ns mac nil)))
+(defconst my/TERM (memq window-system '(nil)))
+(defconst my/OSX (memq window-system '(ns mac)))
 (defconst my/CUSTOM-FILE-PATH "~/.emacs.d/custom.el")
 (defconst my/CONFIG-FILE "~/.emacs.d/init.el")
 (defconst my/ORG-PATH "~/Documents/notes")
@@ -65,6 +66,7 @@
               truncate-lines nil
               ring-bell-function 'ignore)
 
+(setq evil-want-keybinding nil)
 (electric-pair-mode)
 
 (use-package diminish)
@@ -102,7 +104,7 @@
     "pt" 'neotree-find-project-root
     "ft" 'neotree-find)
   :config
-  (evil-mode)
+  ;; (evil-mode)
   (setq neo-toggle-window-keep-p t)
   (define-key evil-motion-state-map "\\" 'neotree-toggle)
   (setq neo-autorefresh t)
@@ -140,26 +142,17 @@
   :hook (after-init . evil-mode)
   :init
   (evil-set-undo-system 'undo-redo)
-  (setq evil-want-keybinding nil)
   :config
   (evil-define-key 'normal 'global "j" 'evil-next-visual-line)
   (evil-define-key 'normal 'global "k" 'evil-previous-visual-line)
   (setq evil-want-C-u-scroll t))
 
+(use-package evil-collection
+  :init
+  (evil-collection-init))
+
 (use-package plantuml-mode)
 
-(use-package evil-leader
-  :after evil
-  :config
-  (defmacro open-org-file (filename)
-    "Macro for opening files in org directory with FILENAME filepath."
-    `(lambda ()
-       (interactive)
-       (find-file (concat my/ORG-PATH "/" ,filename) nil)))
-
-  (defun get-org-file (filename)
-    "Macro for opening files in org directory with FILENAME filepath."
-    (concat my/ORG-PATH "/" filename))
 
 (defun my/open-git()
   (interactive)
@@ -176,10 +169,23 @@
   (let ((name (projectile-project-name)))
     (shell-command (concat "open https://buildkite.com/nib-health-funds-ltd/" name))))
 
-  (defun open-org-directory ()
-    (interactive)
-    (counsel-find-file my/ORG-PATH))
+(defmacro open-org-file (filename)
+  "Macro for opening files in org directory with FILENAME filepath."
+  `(lambda ()
+     (interactive)
+     (find-file (concat my/ORG-PATH "/" ,filename) nil)))
 
+(defun get-org-file (filename)
+  "Macro for opening files in org directory with FILENAME filepath."
+  (concat my/ORG-PATH "/" filename))
+
+(defun open-org-directory ()
+  (interactive)
+  (counsel-find-file my/ORG-PATH))
+
+(use-package evil-leader
+  :after evil
+  :config
   (evil-leader/set-leader "SPC")
   (evil-leader/set-key
     "SPC" 'counsel-M-x
@@ -223,6 +229,28 @@
     "wv" 'evil-window-vsplit
     "ws" 'evil-window-split)
   (global-evil-leader-mode))
+
+(use-package plantuml-mode)
+
+(defun my/open-git()
+  (interactive)
+  (let ((name (projectile-project-name)))
+    (shell-command (concat "open https://github.com/nib-group/" name))))
+
+(defun my/open-jira()
+  (interactive)
+  (let ((name (magit-get-current-branch)))
+    (shell-command (concat "open https://jira.nib.com.au/browse/" name))))
+
+(defun my/open-buildkite()
+  (interactive)
+  (let ((name (projectile-project-name)))
+    (shell-command (concat "open https://buildkite.com/nib-health-funds-ltd/" name))))
+
+(defun open-org-directory ()
+  (interactive)
+  (counsel-find-file my/ORG-PATH))
+
 
 (use-package evil-surround
   :hook (evil-mode . global-evil-surround-mode))
@@ -277,7 +305,7 @@
   "Kill all other buffers.  If the universal prefix ARG is used then will the windows too."
   (interactive "P")
   (when (yes-or-no-p (format "Killing all buffers except \"%s\"? "
-			     (buffer-name)))
+                             (buffer-name)))
     (mapc 'kill-buffer (delq (current-buffer) (buffer-list)))
     (when (equal '(4) arg) (delete-other-windows))
     (message "Buffers deleted!")))
@@ -308,13 +336,18 @@
   (setq ivy-posframe-width 128)
   (setq ivy-posframe-border-width 1)
   (setq ivy-posframe-height-alist '((counsel-rg . 40)
-				    (t . 20)))
+                                    (t . 20)))
   (ivy-posframe-mode 1))
 
 (defun my/switch-project ()
   (projectile-find-file)
   (neotree-projectile-action)
   (other-window 1))
+
+(defun open-shell ()
+  (interactive)
+  (let ((default-directory (projectile-project-root)))
+    (eshell '(4))))
 
 (use-package projectile
   :diminish projectile-mode
@@ -323,57 +356,29 @@
   (evil-leader/set-key
     "pp" 'projectile-switch-project)
   :config
+  (define-key global-map (kbd "<f12>") 'open-shell)
   (projectile-mode)
   (setq projectile-switch-project-action 'my/switch-project)
   (setq projectile-enable-caching t
-	projectile-completion-system 'ivy)
+        projectile-completion-system 'ivy)
   (add-to-list 'projectile-globally-ignored-directories "node_modules"))
 
 (use-package counsel-projectile)
-
-(use-package eglot)
-
-(defun setup-tide-mode ()
-  (interactive)
-  (tide-setup)
-  (flycheck-mode +1)
-  (setq flycheck-check-syntax-automatically '(save mode-enabled))
-  (eldoc-mode +1)
-  (tide-hl-identifier-mode +1)
-  (flycheck-add-mode 'javascript-eslint 'typescript-mode)
-  (flycheck-disable-checker 'typescript-tslint)
-  (flycheck-add-next-checker 'typescript-tide 'javascript-eslint 'append)
-  (setq-default tide-user-preferences '(:importModuleSpecifierPreference "relative" :includeCompletionsForModuleExports t :includeCompletionsWithInsertText t :allowTextChangesInNewFiles t))
-  (company-mode +1)
-
-  (evil-define-key 'normal tide-mode-map
-    "gd" 'tide-jump-to-definition
-    (kbd "C-t") 'tide-jump-back
-    (kbd "C-o") 'tide-jump-back
-    "K" 'tide-documentation-at-point)
-
-  (evil-define-key 'normal tide-references-mode-map
-    "gj" 'tide-find-next-reference
-    "gk" 'tide-find-previous-reference
-    (kbd "C-j") 'tide-find-next-reference
-    (kbd "C-k") 'tide-find-previous-reference
-    (kbd "RET") 'tide-goto-reference
-    (kbd "q") 'quit-window)
-
-  (evil-define-key 'normal tide-project-errors-mode-map
-    "gj" 'tide-find-next-error
-    "gk" 'tide-find-previous-error
-    (kbd "C-j") 'tide-find-next-error
-    (kbd "C-k") 'tide-find-previous-error
-    (kbd "RET") 'tide-goto-error
-    (kbd "q") 'quit-window))
-
-;; We use Tide here because it uses tsserver directly
-(use-package tide
+(use-package lsp-mode
   :init
-  (add-hook 'before-save-hook 'tide-format-before-save)
-  (add-hook 'typescript-mode-hook #'setup-tide-mode)
-  (add-hook 'js2-mode-hook #'setup-tide-mode))
+  :config
+  (define-key global-map (kbd "s-.") 'lsp-execute-code-action)
+  (setq lsp-headerline-breadcrumb-enable nil)
+  :hook (
+         (typescript-mode . lsp)
+         (web-mode . lsp)
+         (js2-mode . lsp)
+         (lsp-mode . lsp-enable-which-key-integration))
+  :commands lsp)
+
+(use-package lsp-ui :commands lsp-ui-mode)
+(use-package lsp-ivy :commands lsp-ivy-workspace-symbol)
+(use-package dap-mode)
 
 (use-package jest)
 
@@ -393,12 +398,6 @@
   :config
   (evil-leader/set-key-for-mode 'json-mode
     "m=" 'json-pretty-print-buffer))
-
-(use-package prettier
-  :init
-  (add-hook 'js2-mode-hook #'add-node-modules-path)
-  (add-hook 'js2-mode-hook #'prettier-mode)
-  (add-hook 'typescript-mode-hook #'prettier-mode))
 
 (use-package add-node-modules-path)
 
@@ -438,24 +437,22 @@
   (add-to-list 'auto-mode-alist '("\\.cshtml\\'" . web-mode)))
 
 (use-package magit
-  :commands magit-status
-  :config
-  (use-package evil-magit
-    :init
-    (evil-magit-init)))
+  :commands magit-status)
 
 (use-package markdown-mode
   :mode "\\.md\\'"
   :config
+  (evil-define-key 'normal markdown-mode-map
+    "c" 'markdown-toggle-gfm-checkbox)
   (setq-default markdown-split-window-direction 'right))
 
 (defun deploy-blog ()
   "Deploy my hugo blog."
   (interactive)
   (let ((blogCommand
-	 (cond
-	  (my/WINDOWS (format "powershell C:/code/blog/deploy.ps1"))
-	  (t (format "cd %s && ./deploy.sh" (blog-base-url))))))
+         (cond
+          (my/WINDOWS (format "powershell C:/code/blog/deploy.ps1"))
+          (t (format "cd %s && ./deploy.sh" (blog-base-url))))))
     (async-shell-command blogCommand)))
 
 (defun my/org-archive ()
@@ -469,11 +466,11 @@
   :config
   (add-hook 'org-babel-after-execute-hook 'org-redisplay-inline-images)
   (setq-default org-pretty-entities t
-		org-hide-emphasis-markers t
-		org-agenda-block-separator ""
-		org-fontify-whole-heading-line t
-		org-fontify-done-headline t
-		org-fontify-quote-and-verse-blocks t)
+                org-hide-emphasis-markers t
+                org-agenda-block-separator ""
+                org-fontify-whole-heading-line t
+                org-fontify-done-headline t
+                org-fontify-quote-and-verse-blocks t)
 
   (evil-leader/set-key
     "oc" 'org-capture
@@ -530,14 +527,14 @@
    '(org-indent                ((t (:inherit (org-hide fixed-pitch))))))
 
   (defvar +org-babel-languages '(emacs-lisp
-				 js
+                                 js
                                  plantuml
                                  restclient
-				 shell))
+                                 shell))
 
   (org-babel-do-load-languages 'org-babel-load-languages
-			       (cl-loop for sym in +org-babel-languages
-					collect (cons sym t)))
+                               (cl-loop for sym in +org-babel-languages
+                                        collect (cons sym t)))
 
   (setq org-use-speed-commands t)
   (setq org-directory my/ORG-PATH)
@@ -548,16 +545,16 @@
   (setq org-refile-targets '((org-agenda-files :maxlevel . 3)))
 
   (setq org-tag-alist
-	'((:startgroup . nil)
-	  (:endgroup . nil)
-	  ("WORK" . ?w) ("HOME" . ?h) ("WORK" . ?w) ("COMPUTER" . ?l) ("GOALS" . ?g) ("READING" . ?r) ("PROJECT" . ?p)))
+        '((:startgroup . nil)
+          (:endgroup . nil)
+          ("WORK" . ?w) ("HOME" . ?h) ("WORK" . ?w) ("COMPUTER" . ?l) ("GOALS" . ?g) ("READING" . ?r) ("PROJECT" . ?p)))
   (setq org-todo-keywords
-	'((sequence "TODO(t)" "IN-PROGRESS(i)" "REPORT(r)" "BUG(b)" "KNOWN-CAUSE(k)" "|" "DONE(d)" "NOT-DOING(n)")))
+        '((sequence "TODO(t)" "IN-PROGRESS(i)" "REPORT(r)" "BUG(b)" "KNOWN-CAUSE(k)" "|" "DONE(d)" "NOT-DOING(n)")))
 
   (setq-default org-agenda-custom-commands
                 '(("g" . "GTD contexts")
                   ("gw" "Work" tags-todo "WORK")
-		  ("gc" "Computer" tags-todo "COMPUTER")
+                  ("gc" "Computer" tags-todo "COMPUTER")
                   ("gg" "Goals" tags-todo "GOALS")
                   ("gh" "Home" tags-todo "HOME")
                   ("gt" "Tasks" tags-todo "TASKS")
@@ -619,7 +616,7 @@
 (toggle-frame-maximized)
 
 (if (and (fboundp 'server-running-p)
-	 (not (server-running-p)))
-   (server-start))
+         (not (server-running-p)))
+    (server-start))
 
 ;;; init ends here

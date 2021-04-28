@@ -71,6 +71,8 @@ syntax on
 set bg=dark
 " let g:gruvbox_sign_column = 'bg0'
 colorscheme one
+" Set transparency
+hi Normal guibg=NONE ctermbg=NONE 
 let g:one_allow_italics = 1
 let g:airline_powerline_fonts = 1
 

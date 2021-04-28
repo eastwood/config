@@ -4,9 +4,9 @@
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
 (("org-refile-last-stored"
  (filename . "~/Documents/notes/inbox.org")
- (front-context-string . "** DONE Remove c")
- (rear-context-string . "88\n   #+end_src\n")
- (position . 3754))
+ (front-context-string . "** KNOWN-CAUSE P")
+ (rear-context-string . "module to nginx\n")
+ (position . 5570))
 ("org-capture-last-stored"
  (filename . "~/Documents/notes/inbox.org")
  (front-context-string . "** TODO Remove c")
