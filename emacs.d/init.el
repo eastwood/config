@@ -71,13 +71,6 @@
 
 (use-package diminish)
 
-(use-package solaire-mode
-  :after doom-themes
-  :hook (minibuffer-setup . solaire-mode-in-minibuffer)
-  :init
-  (solaire-global-mode +1)
-  (solaire-mode-swap-bg))
-
 (use-package doom-modeline
   :hook (after-init . doom-modeline-mode))
 
@@ -91,6 +84,10 @@
   (doom-themes-neotree-config)
   (setq-default doom-themes-neotree-file-icons t)
   (doom-themes-org-config))
+
+(use-package solaire-mode
+  :init
+  (solaire-global-mode))
 
 (defun neotree-find-project-root()
   "Find the root of neotree."
@@ -148,11 +145,11 @@
   (setq evil-want-C-u-scroll t))
 
 (use-package evil-collection
+  :after evil
   :init
-  (evil-collection-init))
+  (evil-collection-init '(magit dired)))
 
 (use-package plantuml-mode)
-
 
 (defun my/open-git()
   (interactive)
@@ -260,7 +257,8 @@
   (interactive)
   (let (eslint)
     (setq eslint (projectile-expand-root "node_modules/eslint/bin/eslint.js"))
-    (setq-default flycheck-javascript-eslint-executable eslint)))
+    (flycheck-add-next-checker 'javascript-eslint)
+    (set-default flycheck-javascript-eslint-executable eslint)))
 
 (use-package flycheck
   :init
@@ -364,15 +362,18 @@
   (add-to-list 'projectile-globally-ignored-directories "node_modules"))
 
 (use-package counsel-projectile)
+
 (use-package lsp-mode
   :init
+  (setq exec-path (append exec-path '("~/.nvm/versions/node/v12.19.0/bin")))
   :config
   (define-key global-map (kbd "s-.") 'lsp-execute-code-action)
+  (setq lsp-diagnostic-package :none)
   (setq lsp-headerline-breadcrumb-enable nil)
   :hook (
-         (typescript-mode . lsp)
-         (web-mode . lsp)
-         (js2-mode . lsp)
+         (typescript-mode . lsp-deferred)
+         (web-mode . lsp-deferred)
+         (js2-mode . lsp-deferred)
          (lsp-mode . lsp-enable-which-key-integration))
   :commands lsp)
 
@@ -435,6 +436,10 @@
         web-mode-code-indent-offset 2
         css-indent-offset 2)
   (add-to-list 'auto-mode-alist '("\\.cshtml\\'" . web-mode)))
+
+(use-package git-link
+  :config
+  (setq git-link-open-in-browser t))
 
 (use-package magit
   :commands magit-status)
@@ -572,6 +577,7 @@
 (use-package ob-restclient)
 (use-package ox-gfm)
 (use-package htmlize)
+
 (use-package org-journal
   :commands (org-journal-new-entry)
   :init

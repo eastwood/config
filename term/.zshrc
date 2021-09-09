@@ -8,17 +8,18 @@ export TERM='xterm-256color'
 export NIB_PATH=/Users/cryan/Workspace/nib.com.au/cryan/bin
 export HOMEBREW_PATH=/usr/local/sbin:/usr/local/bin
 export CUSTOM_SCRIPTS=~/.scripts
-export PATH=$HOMEBREW_PATH:$NIB_PATH:$TEX_PATH:$CUSTOM_SCRIPTS:$PATH
+export NODE_PATH=~/.nvm/versions/node/v12.19.0/bin
+export PATH=$HOMEBREW_PATH:$NIB_PATH:$TEX_PATH:$CUSTOM_SCRIPTS:$NODE_PATH:$PATH
 
 eval "$(starship init zsh)"
-source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
+# source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 bindkey '^Y' autosuggest-accept
 autoload -z edit-command-line
 zle -N edit-command-line
 bindkey "^X^E" edit-command-line
 
 alias emacsd="/Applications/Emacs.app/Contents/MacOS/Emacs --daemon"
-alias cdw="cd ~/Workspace/nib.com.au/cryan"
+alias cdw="cd ~/Workspace/github.com/eastwood/"
 alias flushdns="mDNSResponder -HUP"
 alias vim="nvim"
 alias ec="emacsclient -t"
@@ -38,4 +39,4 @@ eval "$(rbenv init -)"
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
 export NVM_DIR="${HOME}/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" #--no-use
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" --no-use
