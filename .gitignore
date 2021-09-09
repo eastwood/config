@@ -21,3 +21,7 @@ npm-debug.log
 /emacs.d/emojis/emojione-v2.2.6-22/0023-20e3.png
 /emacs.d/emojis/
 /emacs.d/transient/
+/emacs.d/.dap-breakpoints
+/emacs.d/.lsp-session-v1
+/emacs.d/eln-cache/
+/term/scripts/rqp
