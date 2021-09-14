@@ -1,5 +1,6 @@
 ;;; emacs.el --- Emacs configuration
 
+
 ;;; Commentary:
 
 ;; A simple, fast and no-nonsense Emacs configuration reduced down over the years.
@@ -8,6 +9,7 @@
 ;; 1. Look good, be evil.
 ;; 2. LSP is king.
 ;; 3. Performance > readability.
+
 
 ;;; Code:
 (defconst my/WINDOWS (memq window-system '(w32)))
@@ -33,23 +35,6 @@
 (set-face-background 'vertical-border "black")
 (set-face-foreground 'vertical-border (face-background 'vertical-border))
 
-(eval-when-compile
-  (require 'package)
-  (unless (assoc-default "elpa" package-archives)
-    (add-to-list 'package-archives '("elpa" . "https://elpa.gnu.org/packages/") t))
-  (unless (assoc-default "melpa" package-archives)
-    (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t))
-  (unless (assoc-default "org" package-archives)
-    (add-to-list 'package-archives '("org" . "https://orgmode.org/elpa/") t))
-  (package-initialize)
-  (unless (package-installed-p 'use-package)
-    (package-refresh-contents)
-    (package-install 'use-package))
-
-  (require 'use-package)
-  (setq use-package-verbose t
-        use-package-always-defer t
-        use-package-always-ensure t))
 
 (fset 'yes-or-no-p 'y-or-n-p)
 (add-hook 'prog-mode-hook (lambda ()
@@ -135,6 +120,11 @@
   :mode ("\\.rest" . restclient-mode)
   :mode ("\\.http" . restclient-mode))
 
+(use-package evil-terminal-cursor-changer
+  :init
+  (when my/TERM
+    (evil-terminal-cursor-changer-activate)))
+
 (use-package evil
   :hook (after-init . evil-mode)
   :init
@@ -153,8 +143,7 @@
 
 (defun my/open-git()
   (interactive)
-  (let ((name (projectile-project-name)))
-    (shell-command (concat "open https://github.com/nib-group/" name))))
+  (call-interactively 'git-link))
 
 (defun my/open-jira()
   (interactive)
@@ -252,18 +241,7 @@
 (use-package evil-surround
   :hook (evil-mode . global-evil-surround-mode))
 
-(defun my/use-eslint-from-node-modules ()
-  "Gets eslint exe from local path."
-  (interactive)
-  (let (eslint)
-    (setq eslint (projectile-expand-root "node_modules/eslint/bin/eslint.js"))
-    (flycheck-add-next-checker 'javascript-eslint)
-    (set-default flycheck-javascript-eslint-executable eslint)))
-
 (use-package flycheck
-  :init
-  (add-hook 'js2-mode-hook #'my/use-eslint-from-node-modules)
-  (add-hook 'typescript-mode-hook #'my/use-eslint-from-node-modules)
   :config
   (global-flycheck-mode)
   (flymake-mode-off)
@@ -277,7 +255,9 @@
   (setq explicit-shell-file-name "/usr/local/bin/tmux")
   (use-package exec-path-from-shell
     :init
-    (exec-path-from-shell-initialize))
+    (exec-path-from-shell-initialize)))
+
+(when my/TERM
   (use-package xclip
     :init
     (xclip-mode)))
@@ -368,7 +348,6 @@
   (setq exec-path (append exec-path '("~/.nvm/versions/node/v12.19.0/bin")))
   :config
   (define-key global-map (kbd "s-.") 'lsp-execute-code-action)
-  (setq lsp-diagnostic-package :none)
   (setq lsp-headerline-breadcrumb-enable nil)
   :hook (
          (typescript-mode . lsp-deferred)
@@ -466,6 +445,7 @@
   (org-archive-subtree)
   (save-some-buffers 'always (lambda ()
                                (string-match-p "inbox.org_archive" buffer-file-name))))
+
 (use-package org
   :mode ("\\.org\\'" . org-mode)
   :config
@@ -480,6 +460,10 @@
   (evil-leader/set-key
     "oc" 'org-capture
     "oa" 'org-agenda)
+
+  (evil-leader/set-key-for-mode 'journal-mode
+    "mls" 'org-store-link
+    "mlp" 'org-insert-last-stored-link)
 
   (evil-leader/set-key-for-mode 'org-mode
     "ma" 'my/org-archive

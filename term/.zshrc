@@ -12,7 +12,7 @@ export NODE_PATH=~/.nvm/versions/node/v12.19.0/bin
 export PATH=$HOMEBREW_PATH:$NIB_PATH:$TEX_PATH:$CUSTOM_SCRIPTS:$NODE_PATH:$PATH
 
 eval "$(starship init zsh)"
-# source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
+source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 bindkey '^Y' autosuggest-accept
 autoload -z edit-command-line
 zle -N edit-command-line
@@ -23,7 +23,7 @@ alias cdw="cd ~/Workspace/github.com/eastwood/"
 alias flushdns="mDNSResponder -HUP"
 alias vim="nvim"
 alias ec="emacsclient -t"
-alias em="emacs -nw"
+alias em="emacsclient -c"
 alias ls="ls -lsaG"
 alias jcurl="curl -H 'Content-Type: application/json'"
 alias grep="grep --color=auto"
