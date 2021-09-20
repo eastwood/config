@@ -40,3 +40,28 @@ test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell
 
 export NVM_DIR="${HOME}/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" --no-use
+
+
+ws-fzf-cd-widget() {
+  local cmd="${FZF_ALT_C_COMMAND:-"command find -L /Users/cryan/Workspace/github.com/eastwood -maxdepth 1 \\( -path '*/\\.*' -o -fstype 'sysfs' -o -fstype 'devfs' -o -fstype 'devtmpfs' -o -fstype 'proc' \\) -prune \
+    -o -type d -print 2> /dev/null | cut -b1-"}"
+  setopt localoptions pipefail no_aliases 2> /dev/null
+  local dir="$(eval "$cmd" | FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} --reverse $FZF_DEFAULT_OPTS $FZF_ALT_C_OPTS" $(__fzfcmd) +m)"
+  if [[ -z "$dir" ]]; then
+    zle redisplay
+    return 0
+  fi
+  if [ -z "$BUFFER" ]; then
+    BUFFER="cd ${(q)dir}"
+    zle accept-line
+  else
+    print -sr "cd ${(q)dir}"
+    cd "$dir"
+  fi
+  local ret=$?
+  unset dir # ensure this doesn't end up appearing in prompt expansion
+  zle fzf-redraw-prompt
+  return $ret
+}
+zle     -N    ws-fzf-cd-widget
+bindkey '\ew' ws-fzf-cd-widget

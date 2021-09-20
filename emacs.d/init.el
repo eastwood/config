@@ -139,7 +139,10 @@
   :init
   (evil-collection-init '(magit dired)))
 
-(use-package plantuml-mode)
+(use-package plantuml-mode
+  :config
+  (setq org-plantuml-jar-path "~/plantuml.jar")
+  (setq plantuml-default-exec-mode "server"))
 
 (defun my/open-git()
   (interactive)
@@ -610,3 +613,4 @@
     (server-start))
 
 ;;; init ends here
+(put 'dired-find-alternate-file 'disabled nil)
