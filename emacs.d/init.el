@@ -15,6 +15,7 @@
 (defconst my/WINDOWS (memq window-system '(w32)))
 (defconst my/TERM (memq window-system '(nil)))
 (defconst my/OSX (memq window-system '(ns mac)))
+
 (defconst my/CUSTOM-FILE-PATH "~/.emacs.d/custom.el")
 (defconst my/CONFIG-FILE "~/.emacs.d/init.el")
 (defconst my/ORG-PATH "~/Documents/notes")
@@ -31,7 +32,6 @@
 
 (load-file my/CUSTOM-FILE-PATH)
 
-(set-frame-font "Hack-14" nil t)
 (set-face-background 'vertical-border "black")
 (set-face-foreground 'vertical-border (face-background 'vertical-border))
 
@@ -63,7 +63,7 @@
 
 (use-package doom-themes
   :init
-  (load-theme 'doom-one t)
+  (load-theme 'doom-dark+ t)
   :config
   (setq-default doom-themes-neotree-theme "doom-colors")
   (doom-themes-neotree-config)
@@ -86,10 +86,7 @@
     "pt" 'neotree-find-project-root
     "ft" 'neotree-find)
   :config
-  ;; (evil-mode)
-  (setq neo-toggle-window-keep-p t)
   (define-key evil-motion-state-map "\\" 'neotree-toggle)
-  (setq neo-autorefresh t)
   (evil-define-key 'normal neotree-mode-map
     (kbd "TAB") 'neotree-enter
     "H" 'neotree-hidden-file-toggle
@@ -104,11 +101,12 @@
     "mc" 'neotree-create-node)
 
   (setq neo-theme (if (display-graphic-p) 'icons 'nerd))
-  (setq neo-window-fixed-size nil)
-  (setq neo-smart-open t))
-
-(setq neo-window-width 60)
-(setq neo-default-system-application "open")
+  (setq neo-window-width 60
+        neo-toggle-window-keep-p t
+        neo-autorefresh t
+        neo-window-fixed-size nil
+        neo-default-system-application "open"
+        neo-smart-open t))
 
 (use-package company
   :commands (counsel-M-x)
@@ -145,15 +143,18 @@
   (setq plantuml-default-exec-mode "server"))
 
 (defun my/open-git()
+  "Opens git in browser."
   (interactive)
   (call-interactively 'git-link))
 
 (defun my/open-jira()
+  "Open JIRA in browser."
   (interactive)
   (let ((name (magit-get-current-branch)))
     (shell-command (concat "open https://jira.nib.com.au/browse/" name))))
 
 (defun my/open-buildkite()
+  "Open Buildkite in browser."
   (interactive)
   (let ((name (projectile-project-name)))
     (shell-command (concat "open https://buildkite.com/nib-health-funds-ltd/" name))))
@@ -204,6 +205,8 @@
     "in" 'yas-new-snippet
     "gs" 'magit-status
     "pf" 'projectile-find-file
+    "rr" 'counsel-register
+    "rw" 'window-configuration-to-register
     "tl" 'toggle-truncate-lines
     "ts" 'eshell
     "qc" 'delete-frame
@@ -275,13 +278,6 @@
   (interactive)
   (find-file my/CONFIG-FILE))
 
-(defun blog-base-url ()
-  "Get blog base url."
-  (interactive)
-  (cond
-   ((null my/WINDOWS) "~/Workspace/github.com/eastwood/blog")
-   (t "C:/code/blog")))
-
 (defun kill-other-buffers (&optional arg)
   "Kill all other buffers.  If the universal prefix ARG is used then will the windows too."
   (interactive "P")
@@ -350,6 +346,7 @@
   :init
   (setq exec-path (append exec-path '("~/.nvm/versions/node/v12.19.0/bin")))
   :config
+  (setq lsp-keep-workspace-alive nil)
   (define-key global-map (kbd "s-.") 'lsp-execute-code-action)
   (setq lsp-headerline-breadcrumb-enable nil)
   :hook (
@@ -398,9 +395,12 @@
 (use-package ejc-sql)
 
 (use-package typescript-mode
-  :mode "\\.ts"
+  :mode "\\.ts\\'"
+  :hook (typescript-mode . lsp-deferred)
   :diminish typescript-mode
   :config
+  (require 'dap-node)
+  (dap-node-setup)
   (setq-default typescript-indent-level 2))
 
 (use-package rust-mode
@@ -433,15 +433,6 @@
     "c" 'markdown-toggle-gfm-checkbox)
   (setq-default markdown-split-window-direction 'right))
 
-(defun deploy-blog ()
-  "Deploy my hugo blog."
-  (interactive)
-  (let ((blogCommand
-         (cond
-          (my/WINDOWS (format "powershell C:/code/blog/deploy.ps1"))
-          (t (format "cd %s && ./deploy.sh" (blog-base-url))))))
-    (async-shell-command blogCommand)))
-
 (defun my/org-archive ()
   "Archive and save file."
   (interactive)
@@ -449,9 +440,37 @@
   (save-some-buffers 'always (lambda ()
                                (string-match-p "inbox.org_archive" buffer-file-name))))
 
+(setq-default prettify-symbols-alist '(("#+BEGIN_SRC" . "λ")
+                                       ("#+END_SRC" . "λ")
+                                       ("#+begin_src" . "λ")
+                                       ("#+end_src" . "λ")))
+
+(setq prettify-symbols-unprettify-at-point 'right-edge)
+(add-hook 'org-mode-hook 'prettify-symbols-mode)
+(add-to-list 'default-frame-alist '(font . "Fira Code"))
+(custom-theme-set-faces
+ 'user
+ '(variable-pitch ((t (:family "Source Sans Pro" :height 1.2 :weight light))))
+ '(fixed-pitch ((t ( :family "Fira Code" :slant normal :weight normal :height 1 :width normal))))
+ '(org-block                 ((t (:inherit fixed-pitch))))
+ '(org-code                  ((t (:inherit (shadow fixed-pitch)))))
+ '(org-document-info-keyword ((t (:inherit (shadow fixed-pitch)))))
+ '(org-property-value        ((t (:inherit fixed-pitch))) t)
+ '(org-special-keyword       ((t (:inherit (font-lock-comment-face fixed-pitch)))))
+ '(org-tag                   ((t (:inherit (shadow fixed-pitch) :weight bold))))
+ '(org-table                 ((t (:inherit fixed-pitch))) t)
+ '(org-verbatim              ((t (:inherit (shadow fixed-pitch)))))
+ '(org-level-1               ((t (:inherit (outline-1 variable-pitch) :height 1.6))))
+ '(org-level-2               ((t (:inherit (outline-2 variable-pitch) :weight normal :height 1.4))))
+ '(org-level-3               ((t (:inherit (outline-3 variable-pitch) :weight normal :height 1.2))))
+ '(org-indent                ((t (:inherit (org-hide fixed-pitch))))))
+
 (use-package org
   :mode ("\\.org\\'" . org-mode)
   :config
+  (add-hook 'org-mode-hook 'visual-line-mode)
+  (add-hook 'org-mode-hook 'variable-pitch-mode)
+  (setq org-confirm-babel-evaluate nil)
   (add-hook 'org-babel-after-execute-hook 'org-redisplay-inline-images)
   (setq-default org-pretty-entities t
                 org-hide-emphasis-markers t
@@ -502,21 +521,7 @@
   (define-key global-map [?\s-l] 'goto-line)
 
   (setq org-confirm-babel-evaluate nil)
-  (custom-theme-set-faces
-   'user
-   '(variable-pitch ((t (:family "Hack-14" :weight light))))
-   '(fixed-pitch ((t ( :family "Fira Code" :slant normal :weight normal :height 1 :width normal))))
-   '(org-block                 ((t (:inherit fixed-pitch))))
-   '(org-document-info-keyword ((t (:inherit (shadow fixed-pitch)))))
-   '(org-property-value        ((t (:inherit fixed-pitch))) t)
-   '(org-special-keyword       ((t (:inherit (font-lock-comment-face fixed-pitch)))))
-   '(org-tag                   ((t (:inherit (shadow fixed-pitch) :weight bold))))
-   '(org-table                 ((t (:inherit fixed-pitch))) t)
-   '(org-verbatim              ((t (:inherit (shadow fixed-pitch)))))
-   '(org-level-1               ((t (:inherit (outline-1 variable-pitch) :height 1.6))))
-   '(org-level-2               ((t (:inherit (outline-2 variable-pitch) :weight normal :height 1.4))))
-   '(org-level-3               ((t (:inherit (outline-3 variable-pitch) :weight normal :height 1.2))))
-   '(org-indent                ((t (:inherit (org-hide fixed-pitch))))))
+
 
   (defvar +org-babel-languages '(emacs-lisp
                                  js
