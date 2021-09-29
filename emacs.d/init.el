@@ -208,7 +208,7 @@
     "rr" 'counsel-register
     "rw" 'window-configuration-to-register
     "tl" 'toggle-truncate-lines
-    "ts" 'eshell
+    "ts" 'open-shell
     "qc" 'delete-frame
     "qq" 'save-buffers-kill-terminal
     "ww" 'ace-window
@@ -483,7 +483,7 @@
     "oc" 'org-capture
     "oa" 'org-agenda)
 
-  (evil-leader/set-key-for-mode 'journal-mode
+  (evil-leader/set-key-for-mode 'org-journal-mode
     "mls" 'org-store-link
     "mlp" 'org-insert-last-stored-link)
 
@@ -538,7 +538,7 @@
   (setq org-default-notes-file (concat org-directory "/work.org"))
   (setq org-global-properties '(("Effort_ALL". "0 0:10 0:20 0:30 1:00 2:00 3:00 4:00 6:00 8:00")))
   (setq org-columns-default-format '"%25ITEM %10Effort(Est){+} %TODO %TAGS")
-  (setq org-agenda-files (directory-files-recursively my/ORG-PATH "\.org$"))
+  (setq org-agenda-files (directory-files-recursively my/ORG-PATH "\.org$" t))
   (setq org-refile-targets '((org-agenda-files :maxlevel . 3)))
 
   (setq org-tag-alist
@@ -579,6 +579,7 @@
            (org-journal-new-entry t)))
   :config
   (setq org-journal-dir (concat my/ORG-PATH "/journal"))
+  (setq org-journal-file-format "%Y-%m-%d.org")
   (setq org-journal-date-format "%A, %d %B %Y"))
 
 (use-package org-bullets

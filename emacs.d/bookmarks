@@ -4,9 +4,9 @@
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
 (("org-refile-last-stored"
  (filename . "~/Documents/notes/inbox.org")
- (front-context-string . "** TODO Prep sto")
- (rear-context-string . "pc-meeting.md)\n\n")
- (position . 586))
+ (front-context-string . "** Update the ca")
+ (rear-context-string . "9-22 Wed 10:44>\n")
+ (position . 1002))
 ("org-capture-last-stored"
  (filename . "~/Documents/notes/inbox.org")
  (front-context-string . "** TODO Investig")
