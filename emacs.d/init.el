@@ -1,6 +1,5 @@
 ;;; emacs.el --- Emacs configuration
 
-
 ;;; Commentary:
 
 ;; A simple, fast and no-nonsense Emacs configuration reduced down over the years.
@@ -40,6 +39,7 @@
 
 (fset 'yes-or-no-p 'y-or-n-p)
 (add-hook 'prog-mode-hook (lambda ()
+                            (electric-pair-local-mode)
                             (display-line-numbers-mode t)
                             (hl-line-mode t)))
 
@@ -59,7 +59,6 @@
               ring-bell-function 'ignore)
 
 (setq evil-want-keybinding nil)
-(electric-pair-mode)
 
 (use-package diminish)
 
@@ -201,8 +200,8 @@
     "ee" 'eval-last-sexp
     "er" 'eval-region
     "fs" 'save-buffer
-    "fow" (open-org-file "inbox.org")
-    "foh" (open-org-file "home.org")
+    "fow" (open-org-file "work.org")
+    "foh" (open-org-file "personal.org")
     "fd" 'open-org-directory
     "ff" 'counsel-find-file
     "fr" 'counsel-recentf
@@ -445,7 +444,9 @@
   (interactive)
   (org-archive-subtree)
   (save-some-buffers 'always (lambda ()
-                               (string-match-p "inbox.org_archive" buffer-file-name))))
+                               (or (string-match-p "inbox.org_archive" buffer-file-name)
+                                   (string-match-p "work.org_archive" buffer-file-name)
+                                   (string-match-p "personal.org_archive" buffer-file-name)))))
 
 (setq-default prettify-symbols-alist '(("#+BEGIN_SRC" . "λ")
                                        ("#+END_SRC" . "λ")
@@ -454,12 +455,11 @@
 
 (setq prettify-symbols-unprettify-at-point 'right-edge)
 (add-hook 'org-mode-hook 'prettify-symbols-mode)
-(add-to-list 'default-frame-alist '(font . "Fira Code"))
 
 (custom-theme-set-faces
  'user
- '(variable-pitch ((t (:family "Source Sans Pro" :height 1.2 :weight light))))
- '(fixed-pitch ((t ( :family "Fira Code" :slant normal :height 1.0))))
+ '(variable-pitch ((t (:family "OpenSans" :height 130))))
+ '(fixed-pitch ((t ( :family "Hack" :height 120))))
  '(org-block                 ((t (:inherit fixed-pitch))))
  '(org-code                  ((t (:inherit (shadow fixed-pitch)))))
  '(org-document-info-keyword ((t (:inherit (shadow fixed-pitch)))))
@@ -468,9 +468,9 @@
  '(org-tag                   ((t (:inherit (shadow fixed-pitch) :weight bold))))
  '(org-table                 ((t (:inherit fixed-pitch))) t)
  '(org-verbatim              ((t (:inherit (shadow fixed-pitch)))))
- '(org-level-1               ((t (:inherit (outline-1 variable-pitch) :height 1.6))))
- '(org-level-2               ((t (:inherit (outline-2 variable-pitch) :weight normal :height 1.4))))
- '(org-level-3               ((t (:inherit (outline-3 variable-pitch) :weight normal :height 1.2))))
+ '(org-level-1               ((t (:inherit (outline-1 variable-pitch) :family "Roboto" :height 200))))
+ '(org-level-2               ((t (:inherit (outline-2 variable-pitch) :family "Roboto" :weight normal :height 180))))
+ '(org-level-3               ((t (:inherit (outline-3 variable-pitch) :family "Roboto" :weight normal :height 160))))
  '(org-indent                ((t (:inherit (org-hide fixed-pitch))))))
 
 (use-package org
@@ -571,8 +571,8 @@
                    nil)))
   
   (setq-default org-capture-templates
-                `(("w" "Work" entry (file+headline ,(get-org-file "inbox.org") "Inbox") "* TODO %?%^g\n%T" :prepend T)
-                  ("h" "Home" entry (file+headline ,(get-org-file "home.org") "Inbox") "* TODO %?%^g\n%T" :prepend T))))
+                `(("w" "Work" entry (file+headline ,(get-org-file "work.org") "Inbox") "* TODO %?%^g\n%T" :prepend T)
+                  ("h" "Home" entry (file+headline ,(get-org-file "personal.org") "Inbox") "* TODO %?%^g\n%T" :prepend T))))
 
 (use-package ob-restclient)
 (use-package ox-gfm)
