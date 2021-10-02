@@ -12,10 +12,12 @@
 ;;; Code:
 (defconst my/WINDOWS (memq window-system '(w32)))
 (defconst my/TERM (memq window-system '(nil)))
-(defconst my/OSX (memq window-system '(ns mac)))
+(defconst my/OSX (memq window-system '(ns mac x)))
+(defconst my/WSL (memq window-system '(x)))
 (defconst my/CUSTOM-FILE-PATH "~/.emacs.d/custom.el")
 (defconst my/CONFIG-FILE "~/.emacs.d/init.el")
-(defconst my/ORG-PATH "~/Documents/notes")
+(defconst my/ORG-PATH (cond (my/WSL "/mnt/c/users/clint/iCloudDrive/Documents/notes")
+                            (t "~/Documents/notes")))
 
 (setq user-full-name "Clint Ryan"
       user-mail-address "clint.ryan3@gmail.com")
@@ -60,6 +62,11 @@
   (global-set-key (kbd "<mouse-4>") 'scroll-down-line)
   (global-set-key (kbd "<mouse-5>") 'scroll-up-line))
 
+(when my/OSX
+  (scroll-bar-mode -1)
+  (menu-bar-mode -1)
+  (tool-bar-mode -1))
+
 (setq-default inhibit-startup-message t
               indent-tabs-mode nil
               line-spacing nil
@@ -71,12 +78,11 @@
 
 (use-package diminish)
 
-(use-package solaire-mode
-  :after doom-themes
-  :hook (minibuffer-setup . solaire-mode-in-minibuffer)
-  :init
-  (solaire-global-mode +1)
-  (solaire-mode-swap-bg))
+;;(use-package solaire-mode
+;;  :after doom-themes
+;;  :hook (minibuffer-setup . solaire-mode-in-minibuffer)
+;;  :init
+;;  (solaire-global-mode +1))
 
 (use-package doom-modeline
   :hook (after-init . doom-modeline-mode))
@@ -463,6 +469,7 @@
                                (string-match-p "inbox.org_archive" buffer-file-name))))
 (use-package org
   :mode ("\\.org\\'" . org-mode)
+  :hook (org-mode . variable-pitch-mode)
   :config
   (add-hook 'org-babel-after-execute-hook 'org-redisplay-inline-images)
   (setq-default org-pretty-entities t
@@ -512,8 +519,8 @@
   (setq org-confirm-babel-evaluate nil)
   (custom-theme-set-faces
    'user
-   '(variable-pitch ((t (:family "Hack-14" :weight light))))
-   '(fixed-pitch ((t ( :family "Fira Code" :slant normal :weight normal :height 1 :width normal))))
+   '(variable-pitch ((t (:family "Roboto" :height 1.0))))
+   '(fixed-pitch ((t ( :family "Hack-14" :height 1.0))))
    '(org-block                 ((t (:inherit fixed-pitch))))
    '(org-document-info-keyword ((t (:inherit (shadow fixed-pitch)))))
    '(org-property-value        ((t (:inherit fixed-pitch))) t)
