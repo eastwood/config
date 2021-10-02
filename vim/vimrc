@@ -25,6 +25,7 @@ Plug 'vim-airline/vim-airline-themes'
 Plug 'edkolev/tmuxline.vim'
 Plug 'vim-scripts/nginx.vim'
 Plug 'vimwiki/vimwiki'
+Plug 'qpkorr/vim-bufkill'
 
 call plug#end()
 
@@ -98,11 +99,14 @@ set hlsearch
 set nowrap
 
 " Keybindings
+"  som
 
 " General Keybindings
 map <leader><leader> :Commands<CR>
 imap jk <ESC>
 nnoremap <backspace> <C-^>
+cnoremap <A-BS> <c-w>
+inoremap <A-BS> <c-w>
 nnoremap ` '
 nnoremap ' `
 imap <C-s> <C-o>:w!<CR>
@@ -121,10 +125,10 @@ map \ :NERDTreeToggle<CR>
 " Git/Fugitive keybindings
 nnoremap <leader>gc :Gcommit<CR>
 nnoremap <leader>gC :Git checkout
-nnoremap <leader>gf :Gfetch<CR>
-nnoremap <leader>gF :GPull --rebase<CR>
-nnoremap <leader>gP :Gpush
-nnoremap <leader>gs :Gstatus<CR>
+nnoremap <leader>gf :Git fetch<CR>
+nnoremap <leader>gF :Git pull --rebase<CR>
+nnoremap <leader>gP :Git push
+nnoremap <leader>gs :Git<CR>
 
 " Window bindings
 nnoremap <leader>wh <C-w>h
@@ -137,8 +141,8 @@ nnoremap <leader>ws <C-w>s
 nnoremap <leader>wv <C-w>v
 
 " Buffer bindings
-nmap <leader>d :bd!<CR>
-nmap <leader>bd :bd!<CR>
+nmap <leader>d :BD<CR>
+nmap <leader>bd :BD!<CR>
 nmap <leader>bb :Buffers<CR>
 nmap <leader>bn :bn!<CR>
 nmap <leader>bp :bp!<CR>
@@ -237,3 +241,10 @@ let g:vimwiki_key_mappings =
       \ 'html': 0	
       \ }	
 let g:vimwiki_markdown_link_ext = 1
+
+augroup neovim_terminal
+  autocmd!
+  autocmd TermOpen * setlocal nonumber
+  autocmd TermOpen * startinsert
+  autocmd TermOpen * nnoremap <buffer> <C-c> i<C-c>
+augroup END

@@ -1,5 +1,6 @@
 ;;; emacs.el --- Emacs configuration
 
+
 ;;; Commentary:
 
 ;; A simple, fast and no-nonsense Emacs configuration reduced down over the years.
@@ -9,11 +10,13 @@
 ;; 2. LSP is king.
 ;; 3. Performance > readability.
 
+
 ;;; Code:
 (defconst my/WINDOWS (memq window-system '(w32)))
 (defconst my/TERM (memq window-system '(nil)))
-(defconst my/OSX (memq window-system '(ns mac x)))
+(defconst my/OSX (memq window-system '(ns mac)))
 (defconst my/WSL (memq window-system '(x)))
+
 (defconst my/CUSTOM-FILE-PATH "~/.emacs.d/custom.el")
 (defconst my/CONFIG-FILE "~/.emacs.d/init.el")
 (defconst my/ORG-PATH (cond (my/WSL "/mnt/c/users/clint/iCloudDrive/Documents/notes")
@@ -31,27 +34,9 @@
 
 (load-file my/CUSTOM-FILE-PATH)
 
-(set-frame-font "Hack-14" nil t)
 (set-face-background 'vertical-border "black")
 (set-face-foreground 'vertical-border (face-background 'vertical-border))
 
-(eval-when-compile
-  (require 'package)
-  (unless (assoc-default "elpa" package-archives)
-    (add-to-list 'package-archives '("elpa" . "https://elpa.gnu.org/packages/") t))
-  (unless (assoc-default "melpa" package-archives)
-    (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t))
-  (unless (assoc-default "org" package-archives)
-    (add-to-list 'package-archives '("org" . "https://orgmode.org/elpa/") t))
-  (package-initialize)
-  (unless (package-installed-p 'use-package)
-    (package-refresh-contents)
-    (package-install 'use-package))
-
-  (require 'use-package)
-  (setq use-package-verbose t
-        use-package-always-defer t
-        use-package-always-ensure t))
 
 (fset 'yes-or-no-p 'y-or-n-p)
 (add-hook 'prog-mode-hook (lambda ()
@@ -62,7 +47,7 @@
   (global-set-key (kbd "<mouse-4>") 'scroll-down-line)
   (global-set-key (kbd "<mouse-5>") 'scroll-up-line))
 
-(when my/OSX
+(when (or my/OSX my/WSL)
   (scroll-bar-mode -1)
   (menu-bar-mode -1)
   (tool-bar-mode -1))
@@ -78,12 +63,6 @@
 
 (use-package diminish)
 
-;;(use-package solaire-mode
-;;  :after doom-themes
-;;  :hook (minibuffer-setup . solaire-mode-in-minibuffer)
-;;  :init
-;;  (solaire-global-mode +1))
-
 (use-package doom-modeline
   :hook (after-init . doom-modeline-mode))
 
@@ -91,12 +70,16 @@
 
 (use-package doom-themes
   :init
-  (load-theme 'doom-one t)
+  (load-theme 'doom-dark+ t)
   :config
   (setq-default doom-themes-neotree-theme "doom-colors")
   (doom-themes-neotree-config)
   (setq-default doom-themes-neotree-file-icons t)
   (doom-themes-org-config))
+
+(use-package solaire-mode
+  :init
+  (solaire-global-mode))
 
 (defun neotree-find-project-root()
   "Find the root of neotree."
@@ -110,10 +93,7 @@
     "pt" 'neotree-find-project-root
     "ft" 'neotree-find)
   :config
-  ;; (evil-mode)
-  (setq neo-toggle-window-keep-p t)
   (define-key evil-motion-state-map "\\" 'neotree-toggle)
-  (setq neo-autorefresh t)
   (evil-define-key 'normal neotree-mode-map
     (kbd "TAB") 'neotree-enter
     "H" 'neotree-hidden-file-toggle
@@ -128,11 +108,12 @@
     "mc" 'neotree-create-node)
 
   (setq neo-theme (if (display-graphic-p) 'icons 'nerd))
-  (setq neo-window-fixed-size nil)
-  (setq neo-smart-open t))
-
-(setq neo-window-width 60)
-(setq neo-default-system-application "open")
+  (setq neo-window-width 60
+        neo-toggle-window-keep-p t
+        neo-autorefresh t
+        neo-window-fixed-size nil
+        neo-default-system-application "open"
+        neo-smart-open t))
 
 (use-package company
   :commands (counsel-M-x)
@@ -144,6 +125,11 @@
   :mode ("\\.rest" . restclient-mode)
   :mode ("\\.http" . restclient-mode))
 
+(use-package evil-terminal-cursor-changer
+  :init
+  (when my/TERM
+    (evil-terminal-cursor-changer-activate)))
+
 (use-package evil
   :hook (after-init . evil-mode)
   :init
@@ -154,23 +140,28 @@
   (setq evil-want-C-u-scroll t))
 
 (use-package evil-collection
+  :after evil
   :init
-  (evil-collection-init))
+  (evil-collection-init '(magit dired)))
 
-(use-package plantuml-mode)
-
+(use-package plantuml-mode
+  :config
+  (setq org-plantuml-jar-path "~/plantuml.jar")
+  (setq plantuml-default-exec-mode "server"))
 
 (defun my/open-git()
+  "Opens git in browser."
   (interactive)
-  (let ((name (projectile-project-name)))
-    (shell-command (concat "open https://github.com/nib-group/" name))))
+  (call-interactively 'git-link))
 
 (defun my/open-jira()
+  "Open JIRA in browser."
   (interactive)
   (let ((name (magit-get-current-branch)))
     (shell-command (concat "open https://jira.nib.com.au/browse/" name))))
 
 (defun my/open-buildkite()
+  "Open Buildkite in browser."
   (interactive)
   (let ((name (projectile-project-name)))
     (shell-command (concat "open https://buildkite.com/nib-health-funds-ltd/" name))))
@@ -221,8 +212,10 @@
     "in" 'yas-new-snippet
     "gs" 'magit-status
     "pf" 'projectile-find-file
+    "rr" 'counsel-register
+    "rw" 'window-configuration-to-register
     "tl" 'toggle-truncate-lines
-    "ts" 'eshell
+    "ts" 'open-shell
     "qc" 'delete-frame
     "qq" 'save-buffers-kill-terminal
     "ww" 'ace-window
@@ -261,17 +254,7 @@
 (use-package evil-surround
   :hook (evil-mode . global-evil-surround-mode))
 
-(defun my/use-eslint-from-node-modules ()
-  "Gets eslint exe from local path."
-  (interactive)
-  (let (eslint)
-    (setq eslint (projectile-expand-root "node_modules/eslint/bin/eslint.js"))
-    (setq-default flycheck-javascript-eslint-executable eslint)))
-
 (use-package flycheck
-  :init
-  (add-hook 'js2-mode-hook #'my/use-eslint-from-node-modules)
-  (add-hook 'typescript-mode-hook #'my/use-eslint-from-node-modules)
   :config
   (global-flycheck-mode)
   (flymake-mode-off)
@@ -285,7 +268,9 @@
   (setq explicit-shell-file-name "/usr/local/bin/tmux")
   (use-package exec-path-from-shell
     :init
-    (exec-path-from-shell-initialize))
+    (exec-path-from-shell-initialize)))
+
+(when my/TERM
   (use-package xclip
     :init
     (xclip-mode)))
@@ -299,13 +284,6 @@
   "Open our configuration file."
   (interactive)
   (find-file my/CONFIG-FILE))
-
-(defun blog-base-url ()
-  "Get blog base url."
-  (interactive)
-  (cond
-   ((null my/WINDOWS) "~/Workspace/github.com/eastwood/blog")
-   (t "C:/code/blog")))
 
 (defun kill-other-buffers (&optional arg)
   "Kill all other buffers.  If the universal prefix ARG is used then will the windows too."
@@ -370,15 +348,18 @@
   (add-to-list 'projectile-globally-ignored-directories "node_modules"))
 
 (use-package counsel-projectile)
+
 (use-package lsp-mode
   :init
+  (setq exec-path (append exec-path '("~/.nvm/versions/node/v12.19.0/bin")))
   :config
+  (setq lsp-keep-workspace-alive nil)
   (define-key global-map (kbd "s-.") 'lsp-execute-code-action)
   (setq lsp-headerline-breadcrumb-enable nil)
   :hook (
-         (typescript-mode . lsp)
-         (web-mode . lsp)
-         (js2-mode . lsp)
+         (typescript-mode . lsp-deferred)
+         (web-mode . lsp-deferred)
+         (js2-mode . lsp-deferred)
          (lsp-mode . lsp-enable-which-key-integration))
   :commands lsp)
 
@@ -421,9 +402,12 @@
 (use-package ejc-sql)
 
 (use-package typescript-mode
-  :mode "\\.ts"
+  :mode "\\.ts\\'"
+  :hook (typescript-mode . lsp-deferred)
   :diminish typescript-mode
   :config
+  (require 'dap-node)
+  (dap-node-setup)
   (setq-default typescript-indent-level 2))
 
 (use-package rust-mode
@@ -442,6 +426,10 @@
         css-indent-offset 2)
   (add-to-list 'auto-mode-alist '("\\.cshtml\\'" . web-mode)))
 
+(use-package git-link
+  :config
+  (setq git-link-open-in-browser t))
+
 (use-package magit
   :commands magit-status)
 
@@ -452,25 +440,46 @@
     "c" 'markdown-toggle-gfm-checkbox)
   (setq-default markdown-split-window-direction 'right))
 
-(defun deploy-blog ()
-  "Deploy my hugo blog."
-  (interactive)
-  (let ((blogCommand
-         (cond
-          (my/WINDOWS (format "powershell C:/code/blog/deploy.ps1"))
-          (t (format "cd %s && ./deploy.sh" (blog-base-url))))))
-    (async-shell-command blogCommand)))
-
 (defun my/org-archive ()
   "Archive and save file."
   (interactive)
   (org-archive-subtree)
   (save-some-buffers 'always (lambda ()
                                (string-match-p "inbox.org_archive" buffer-file-name))))
+
+(setq-default prettify-symbols-alist '(("#+BEGIN_SRC" . "λ")
+                                       ("#+END_SRC" . "λ")
+                                       ("#+begin_src" . "λ")
+                                       ("#+end_src" . "λ")))
+
+(setq prettify-symbols-unprettify-at-point 'right-edge)
+(add-hook 'org-mode-hook 'prettify-symbols-mode)
+(add-to-list 'default-frame-alist '(font . "Fira Code"))
+
+(custom-theme-set-faces
+ 'user
+ '(variable-pitch ((t (:family "Source Sans Pro" :height 1.2 :weight light))))
+ '(fixed-pitch ((t ( :family "Fira Code" :slant normal :height 1.0))))
+ '(org-block                 ((t (:inherit fixed-pitch))))
+ '(org-code                  ((t (:inherit (shadow fixed-pitch)))))
+ '(org-document-info-keyword ((t (:inherit (shadow fixed-pitch)))))
+ '(org-property-value        ((t (:inherit fixed-pitch))) t)
+ '(org-special-keyword       ((t (:inherit (font-lock-comment-face fixed-pitch)))))
+ '(org-tag                   ((t (:inherit (shadow fixed-pitch) :weight bold))))
+ '(org-table                 ((t (:inherit fixed-pitch))) t)
+ '(org-verbatim              ((t (:inherit (shadow fixed-pitch)))))
+ '(org-level-1               ((t (:inherit (outline-1 variable-pitch) :height 1.6))))
+ '(org-level-2               ((t (:inherit (outline-2 variable-pitch) :weight normal :height 1.4))))
+ '(org-level-3               ((t (:inherit (outline-3 variable-pitch) :weight normal :height 1.2))))
+ '(org-indent                ((t (:inherit (org-hide fixed-pitch))))))
+
 (use-package org
   :mode ("\\.org\\'" . org-mode)
   :hook (org-mode . variable-pitch-mode)
   :config
+  (add-hook 'org-mode-hook 'visual-line-mode)
+  (add-hook 'org-mode-hook 'variable-pitch-mode)
+  (setq org-confirm-babel-evaluate nil)
   (add-hook 'org-babel-after-execute-hook 'org-redisplay-inline-images)
   (setq-default org-pretty-entities t
                 org-hide-emphasis-markers t
@@ -482,6 +491,10 @@
   (evil-leader/set-key
     "oc" 'org-capture
     "oa" 'org-agenda)
+
+  (evil-leader/set-key-for-mode 'org-journal-mode
+    "mls" 'org-store-link
+    "mlp" 'org-insert-last-stored-link)
 
   (evil-leader/set-key-for-mode 'org-mode
     "ma" 'my/org-archive
@@ -517,21 +530,6 @@
   (define-key global-map [?\s-l] 'goto-line)
 
   (setq org-confirm-babel-evaluate nil)
-  (custom-theme-set-faces
-   'user
-   '(variable-pitch ((t (:family "Roboto" :height 1.0))))
-   '(fixed-pitch ((t ( :family "Hack-14" :height 1.0))))
-   '(org-block                 ((t (:inherit fixed-pitch))))
-   '(org-document-info-keyword ((t (:inherit (shadow fixed-pitch)))))
-   '(org-property-value        ((t (:inherit fixed-pitch))) t)
-   '(org-special-keyword       ((t (:inherit (font-lock-comment-face fixed-pitch)))))
-   '(org-tag                   ((t (:inherit (shadow fixed-pitch) :weight bold))))
-   '(org-table                 ((t (:inherit fixed-pitch))) t)
-   '(org-verbatim              ((t (:inherit (shadow fixed-pitch)))))
-   '(org-level-1               ((t (:inherit (outline-1 variable-pitch) :height 1.6))))
-   '(org-level-2               ((t (:inherit (outline-2 variable-pitch) :weight normal :height 1.4))))
-   '(org-level-3               ((t (:inherit (outline-3 variable-pitch) :weight normal :height 1.2))))
-   '(org-indent                ((t (:inherit (org-hide fixed-pitch))))))
 
   (defvar +org-babel-languages '(emacs-lisp
                                  js
@@ -548,7 +546,7 @@
   (setq org-default-notes-file (concat org-directory "/work.org"))
   (setq org-global-properties '(("Effort_ALL". "0 0:10 0:20 0:30 1:00 2:00 3:00 4:00 6:00 8:00")))
   (setq org-columns-default-format '"%25ITEM %10Effort(Est){+} %TODO %TAGS")
-  (setq org-agenda-files (directory-files-recursively my/ORG-PATH "\.org$"))
+  (setq org-agenda-files (directory-files-recursively my/ORG-PATH "\.org$" t))
   (setq org-refile-targets '((org-agenda-files :maxlevel . 3)))
 
   (setq org-tag-alist
@@ -579,6 +577,7 @@
 (use-package ob-restclient)
 (use-package ox-gfm)
 (use-package htmlize)
+
 (use-package org-journal
   :commands (org-journal-new-entry)
   :init
@@ -588,6 +587,7 @@
            (org-journal-new-entry t)))
   :config
   (setq org-journal-dir (concat my/ORG-PATH "/journal"))
+  (setq org-journal-file-format "%Y-%m-%d.org")
   (setq org-journal-date-format "%A, %d %B %Y"))
 
 (use-package org-bullets
@@ -627,3 +627,4 @@
     (server-start))
 
 ;;; init ends here
+(put 'dired-find-alternate-file 'disabled nil)

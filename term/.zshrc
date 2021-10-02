@@ -8,7 +8,8 @@ export TERM='xterm-256color'
 export NIB_PATH=/Users/cryan/Workspace/nib.com.au/cryan/bin
 export HOMEBREW_PATH=/usr/local/sbin:/usr/local/bin
 export CUSTOM_SCRIPTS=~/.scripts
-export PATH=$HOMEBREW_PATH:$NIB_PATH:$TEX_PATH:$CUSTOM_SCRIPTS:$PATH
+export NODE_PATH=~/.nvm/versions/node/v12.19.0/bin
+export PATH=$HOMEBREW_PATH:$NIB_PATH:$TEX_PATH:$CUSTOM_SCRIPTS:$NODE_PATH:$PATH
 
 eval "$(starship init zsh)"
 source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
@@ -18,11 +19,11 @@ zle -N edit-command-line
 bindkey "^X^E" edit-command-line
 
 alias emacsd="/Applications/Emacs.app/Contents/MacOS/Emacs --daemon"
-alias cdw="cd ~/Workspace/nib.com.au/cryan"
+alias cdw="cd ~/Workspace/github.com/eastwood/"
 alias flushdns="mDNSResponder -HUP"
 alias vim="nvim"
 alias ec="emacsclient -t"
-alias em="emacs -nw"
+alias em="emacsclient -n -c"
 alias ls="ls -lsaG"
 alias jcurl="curl -H 'Content-Type: application/json'"
 alias grep="grep --color=auto"
@@ -38,4 +39,29 @@ eval "$(rbenv init -)"
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
 export NVM_DIR="${HOME}/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" #--no-use
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" --no-use
+
+
+ws-fzf-cd-widget() {
+  local cmd="${FZF_ALT_C_COMMAND:-"command find -L /Users/cryan/Workspace/github.com/eastwood -maxdepth 1 \\( -path '*/\\.*' -o -fstype 'sysfs' -o -fstype 'devfs' -o -fstype 'devtmpfs' -o -fstype 'proc' \\) -prune \
+    -o -type d -print 2> /dev/null | cut -b1-"}"
+  setopt localoptions pipefail no_aliases 2> /dev/null
+  local dir="$(eval "$cmd" | FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} --reverse $FZF_DEFAULT_OPTS $FZF_ALT_C_OPTS" $(__fzfcmd) +m)"
+  if [[ -z "$dir" ]]; then
+    zle redisplay
+    return 0
+  fi
+  if [ -z "$BUFFER" ]; then
+    BUFFER="cd ${(q)dir}"
+    zle accept-line
+  else
+    print -sr "cd ${(q)dir}"
+    cd "$dir"
+  fi
+  local ret=$?
+  unset dir # ensure this doesn't end up appearing in prompt expansion
+  zle fzf-redraw-prompt
+  return $ret
+}
+zle     -N    ws-fzf-cd-widget
+bindkey '\ew' ws-fzf-cd-widget
