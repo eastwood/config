@@ -8,7 +8,7 @@ export TERM='xterm-256color'
 export NIB_PATH=/Users/cryan/Workspace/nib.com.au/cryan/bin
 export HOMEBREW_PATH=/usr/local/sbin:/usr/local/bin
 export CUSTOM_SCRIPTS=~/.scripts
-export NODE_PATH=~/.nvm/versions/node/v12.19.0/bin
+export NODE_PATH=~/.nvm/versions/node/v14.17.0/bin
 export PATH=$HOMEBREW_PATH:$NIB_PATH:$TEX_PATH:$CUSTOM_SCRIPTS:$NODE_PATH:$PATH
 
 eval "$(starship init zsh)"
@@ -65,3 +65,10 @@ ws-fzf-cd-widget() {
 }
 zle     -N    ws-fzf-cd-widget
 bindkey '\ew' ws-fzf-cd-widget
+
+# tabtab source for serverless package
+# uninstall by removing these lines or running `tabtab uninstall serverless`
+[[ -f /Users/cryan/Workspace/github.com/eastwood/join-api-to-on-prem-lambda/node_modules/tabtab/.completions/serverless.zsh ]] && . /Users/cryan/Workspace/github.com/eastwood/join-api-to-on-prem-lambda/node_modules/tabtab/.completions/serverless.zsh
+# tabtab source for sls package
+# uninstall by removing these lines or running `tabtab uninstall sls`
+[[ -f /Users/cryan/Workspace/github.com/eastwood/join-api-to-on-prem-lambda/node_modules/tabtab/.completions/sls.zsh ]] && . /Users/cryan/Workspace/github.com/eastwood/join-api-to-on-prem-lambda/node_modules/tabtab/.completions/sls.zsh

@@ -24,7 +24,6 @@ Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'edkolev/tmuxline.vim'
 Plug 'vim-scripts/nginx.vim'
-Plug 'vimwiki/vimwiki'
 Plug 'qpkorr/vim-bufkill'
 
 call plug#end()
@@ -99,7 +98,6 @@ set hlsearch
 set nowrap
 
 " Keybindings
-"  som
 
 " General Keybindings
 map <leader><leader> :Commands<CR>
@@ -165,11 +163,10 @@ nnoremap <Leader>sb :BLines<CR>
 nnoremap <leader>/ :noh<CR>
 tnoremap <Esc> <C-\><C-n>
 
+" Scratch buffer on R command
+:command! -nargs=* -complete=shellcmd R new | setlocal buftype=nofile bufhidden=hide noswapfile | r !<args>
 
 " Plugin configuration
-"
-" Nice scratch buffer on read command
-:command! -nargs=* -complete=shellcmd R new | setlocal buftype=nofile bufhidden=hide noswapfile | r !<args>
 
 " FZF configuration
 let $FZF_DEFAULT_COMMAND = 'rg --hidden --files'
@@ -195,11 +192,12 @@ nmap <silent> gr <Plug>(coc-references)
 nmap <leader>ac  <Plug>(coc-codeaction)
 nmap <leader>qf <Plug>(coc-fix-current)
 nmap <silent> <F2> <Plug>(coc-rename)
-
 nnoremap <silent> K :call <SID>show_documentation()<CR>
+
 autocmd CursorHold * silent call CocActionAsync('highlight')
 
 command! -nargs=0 JestCurrent :call CocAction('runCommand', 'jest.fileTest', ['%'])
+command! -nargs=0 JestSingle :call CocAction('runCommand', 'jest.singleTest')
 command! -nargs=0 FilePath :!echo $(pwd)/% | pbcopy
 
 function! s:show_documentation()
@@ -230,17 +228,6 @@ command! FormatJSON :%!jq
 xmap ga <Plug>(EasyAlign)
 " Start interactive EasyAlign for a motion/text object (e.g. gaip)
 nmap ga <Plug>(EasyAlign)
-
-let g:vimwiki_list = [{'path': '~/.wiki/',	
-                      \ 'syntax': 'markdown', 'ext': '.md',	
-                      \ 'auto_diary_index': 1 }]	
-"	
-" Some conflicting binds	
-let g:vimwiki_key_mappings =	
-      \ {	
-      \ 'html': 0	
-      \ }	
-let g:vimwiki_markdown_link_ext = 1
 
 augroup neovim_terminal
   autocmd!

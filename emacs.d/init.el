@@ -1,7 +1,7 @@
 ;;; emacs.el --- Emacs configuration
 
 ;;; Commentary:
-
+ 
 ;; A simple, fast and no-nonsense Emacs configuration reduced down over the years.
 ;; Mantra of the config:
 
@@ -69,11 +69,12 @@
 
 (use-package doom-themes
   :init
-  (load-theme 'doom-dark+ t)
+  (load-theme 'doom-nord t)
   :config
   (setq-default doom-themes-neotree-theme "doom-colors")
-  (doom-themes-neotree-config)
   (setq-default doom-themes-neotree-file-icons t)
+
+  (doom-themes-neotree-config)
   (doom-themes-org-config))
 
 (use-package solaire-mode
@@ -456,10 +457,16 @@
 (setq prettify-symbols-unprettify-at-point 'right-edge)
 (add-hook 'org-mode-hook 'prettify-symbols-mode)
 
+(set-face-attribute 'default nil
+                    :family "Hack"
+                    :height 130
+                    :weight 'normal
+                    :width 'normal)
+
 (custom-theme-set-faces
  'user
- '(variable-pitch ((t (:family "OpenSans" :height 130))))
- '(fixed-pitch ((t ( :family "Hack" :height 120))))
+ '(variable-pitch ((t (:family "Roboto" :weight normal :height 180))))
+ '(fixed-pitch ((t ( :family "Hack" :height 150))))
  '(org-block                 ((t (:inherit fixed-pitch))))
  '(org-code                  ((t (:inherit (shadow fixed-pitch)))))
  '(org-document-info-keyword ((t (:inherit (shadow fixed-pitch)))))
@@ -468,9 +475,9 @@
  '(org-tag                   ((t (:inherit (shadow fixed-pitch) :weight bold))))
  '(org-table                 ((t (:inherit fixed-pitch))) t)
  '(org-verbatim              ((t (:inherit (shadow fixed-pitch)))))
- '(org-level-1               ((t (:inherit (outline-1 variable-pitch) :family "Roboto" :height 200))))
- '(org-level-2               ((t (:inherit (outline-2 variable-pitch) :family "Roboto" :weight normal :height 180))))
- '(org-level-3               ((t (:inherit (outline-3 variable-pitch) :family "Roboto" :weight normal :height 160))))
+ '(org-level-1               ((t (:inherit (outline-1 variable-pitch) :family "Roboto" :weight light :height 300))))
+ '(org-level-2               ((t (:inherit (outline-2 variable-pitch) :family "Roboto" :weight light :height 280))))
+ '(org-level-3               ((t (:inherit (outline-3 variable-pitch) :family "Roboto" :weight light :height 260))))
  '(org-indent                ((t (:inherit (org-hide fixed-pitch))))))
 
 (use-package org
