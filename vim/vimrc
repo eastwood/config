@@ -21,7 +21,6 @@ Plug 'junegunn/fzf.vim' " Fzf plugin to interact with cmd tool
 Plug 'aklt/plantuml-syntax'
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }
 Plug 'junegunn/vim-easy-align'
-Plug 'edkolev/tmuxline.vim'
 Plug 'vim-scripts/nginx.vim'
 Plug 'qpkorr/vim-bufkill'
 
@@ -68,12 +67,6 @@ endif
 
 syntax on
 set bg=dark
-" let g:gruvbox_sign_column = 'bg0'
-colorscheme dracula
-" Set transparency
-hi Normal guibg=NONE ctermbg=NONE 
-hi statusline guibg=#282A36
-let g:airline_powerline_fonts = 1
 
 "General UI
 
@@ -83,6 +76,7 @@ set noswapfile
 set backupdir=.,/tmp
 set undodir=~/.vim/.tmp,~/tmp,~/.tmp,/tmp
 set wildignore=.svn,CVS,.git,*.swp,*.jpg,*.png,*.gif,*.pdf,*.bak
+
 set suffixes+=.bak
 set undofile
 
@@ -234,3 +228,16 @@ augroup neovim_terminal
   autocmd TermOpen * startinsert
   autocmd TermOpen * nnoremap <buffer> <C-c> i<C-c>
 augroup END
+
+" Status line stuff
+set statusline=%f         " Path to the file
+set statusline+=%=        " Switch to the right side
+set statusline+=%l        " Current line
+set statusline+=/         " Separator
+set statusline+=%L        " Total lines
+
+colorscheme dracula
+" Set transparency
+hi Normal guibg=NONE ctermbg=NONE 
+hi statusline guibg=NONE
+hi cursorline guibg=#21222C "Dracula mods
