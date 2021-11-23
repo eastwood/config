@@ -14,7 +14,7 @@
 (defconst my/WINDOWS (memq window-system '(w32)))
 (defconst my/TERM (memq window-system '(nil)))
 (defconst my/OSX (memq window-system '(ns mac)))
-(defconst my/WSL (memq window-system '(x)))
+(defconst my/WSL (memq window-system '(x nil)))
 
 (defconst my/CUSTOM-FILE-PATH "~/.emacs.d/custom.el")
 (defconst my/CONFIG-FILE "~/.emacs.d/init.el")
@@ -69,7 +69,7 @@
 
 (use-package doom-themes
   :init
-  (load-theme 'doom-nord t)
+  (load-theme 'doom-dracula t)
   :config
   (setq-default doom-themes-neotree-theme "doom-colors")
   (setq-default doom-themes-neotree-file-icons t)
@@ -77,9 +77,9 @@
   (doom-themes-neotree-config)
   (doom-themes-org-config))
 
-(use-package solaire-mode
-  :init
-  (solaire-global-mode))
+;;(use-package solaire-mode
+;;  :init
+;;  (solaire-global-mode))
 
 (defun neotree-find-project-root()
   "Find the root of neotree."
@@ -351,7 +351,7 @@
 
 (use-package lsp-mode
   :init
-  (setq exec-path (append exec-path '("~/.nvm/versions/node/v12.19.0/bin")))
+  (setq exec-path (append exec-path '("/home/eastwd/.nvm/versions/node/v14.17.6/bin")))
   :config
   (setq lsp-keep-workspace-alive nil)
   (define-key global-map (kbd "s-.") 'lsp-execute-code-action)
@@ -478,7 +478,7 @@
  '(org-level-1               ((t (:inherit (outline-1 variable-pitch) :family "Roboto" :weight light :height 300))))
  '(org-level-2               ((t (:inherit (outline-2 variable-pitch) :family "Roboto" :weight light :height 280))))
  '(org-level-3               ((t (:inherit (outline-3 variable-pitch) :family "Roboto" :weight light :height 260))))
- '(org-indent                ((t (:inherit (org-hide fixed-pitch))))))
+ '(org-indent                ((t (:inherit (fixed-pitch))))))
 
 (use-package org
   :mode ("\\.org\\'" . org-mode)

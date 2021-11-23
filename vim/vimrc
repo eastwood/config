@@ -3,6 +3,7 @@ call plug#begin()
 Plug 'tpope/vim-surround' " The Pope's gift to man
 Plug 'morhetz/gruvbox'
 Plug 'rakr/vim-one'
+Plug 'dracula/vim', { 'as': 'dracula' }
 Plug 'preservim/nerdtree' " We want that tree action
 Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'tpope/vim-fugitive'
@@ -15,13 +16,11 @@ Plug 'vim-ruby/vim-ruby' " Ruby support
 Plug 'fatih/vim-go'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'scrooloose/nerdcommenter' " Comment lines
-Plug '/usr/local/opt/fzf' " Searching, need to install fzf first
+Plug 'junegunn/fzf' " Searching, need to install fzf first
 Plug 'junegunn/fzf.vim' " Fzf plugin to interact with cmd tool
 Plug 'aklt/plantuml-syntax'
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }
 Plug 'junegunn/vim-easy-align'
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
 Plug 'edkolev/tmuxline.vim'
 Plug 'vim-scripts/nginx.vim'
 Plug 'qpkorr/vim-bufkill'
@@ -70,10 +69,10 @@ endif
 syntax on
 set bg=dark
 " let g:gruvbox_sign_column = 'bg0'
-colorscheme one
+colorscheme dracula
 " Set transparency
 hi Normal guibg=NONE ctermbg=NONE 
-let g:one_allow_italics = 1
+hi statusline guibg=#282A36
 let g:airline_powerline_fonts = 1
 
 "General UI
