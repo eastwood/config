@@ -1,3 +1,27 @@
 #!/bin/bash
+case $( uname -s ) in
+  Darwin)   open='open';;
+  MINGW*)   open='start';;
+  MSYS*)    open='start';;
+  CYGWIN*)  open='cygstart';;
+  *)        # Try to detect WSL (Windows Subsystem for Linux)
+            if uname -r | grep -q -i Microsoft; then
+              open='powershell.exe Start'
+            else
+              open='xdg-open'
+            fi;;
+esac
+
+if (( print_only )); then
+  BROWSER="echo"
+fi
+
+# Allow printing the url if BROWSER=echo
+if [[ $BROWSER != "echo" ]]; then
+  exec &>/dev/null
+fi
+
+# open it in a browser
 this_folder=${PWD##*/}
-start http://buildkite.com/nib-health-funds-ltd/${this_folder}
+openurl=http://buildkite.com/nib-health-funds-ltd/${this_folder}
+${BROWSER:-$open} "$openurl"
