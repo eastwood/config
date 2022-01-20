@@ -65,7 +65,7 @@
 
 (use-package doom-themes
   :init
-  (load-theme 'doom-flatwhite t)
+  (load-theme 'doom-gruvbox t)
   (set-face-attribute 'region nil :background "#ddd")
   :config
   (setq-default doom-themes-neotree-theme "doom-colors")
@@ -487,7 +487,7 @@
  '(org-level-1               ((t (:inherit (outline-1 variable-pitch) :family "Roboto" :weight light :height 200))))
  '(org-level-2               ((t (:inherit (outline-2 variable-pitch) :family "Roboto" :weight light :height 180))))
  '(org-level-3               ((t (:inherit (outline-3 variable-pitch) :family "Roboto" :weight light :height 160))))
- '(vertical-border           ((t (:background "#ddd" :foreground "#ddd"))))
+ '(vertical-border           ((t (:background "#444" :foreground "#444"))))
  '(lsp-face-highlight-read   ((t (:underline t))))
  '(lsp-face-highlight-write  ((t (:underline t))))
  '(org-indent                ((t (:inherit (fixed-pitch))))))
