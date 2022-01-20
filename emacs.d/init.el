@@ -33,10 +33,6 @@
 
 (load-file my/CUSTOM-FILE-PATH)
 
-(set-face-background 'vertical-border "black")
-(set-face-foreground 'vertical-border (face-background 'vertical-border))
-
-
 (fset 'yes-or-no-p 'y-or-n-p)
 (add-hook 'prog-mode-hook (lambda ()
                             (electric-pair-local-mode)
@@ -69,11 +65,11 @@
 
 (use-package doom-themes
   :init
-  (load-theme 'doom-dracula t)
+  (load-theme 'doom-flatwhite t)
+  (set-face-attribute 'region nil :background "#ddd")
   :config
   (setq-default doom-themes-neotree-theme "doom-colors")
   (setq-default doom-themes-neotree-file-icons t)
-
   (doom-themes-neotree-config)
   (doom-themes-org-config))
 
@@ -149,6 +145,12 @@
   (setq org-plantuml-jar-path "~/plantuml.jar")
   (setq plantuml-default-exec-mode "server"))
 
+(when my/WSL
+  (setq
+   browse-url-generic-program  "/mnt/c/Windows/System32/cmd.exe"
+   browse-url-generic-args     '("/c" "start")
+   browse-url-browser-function #'browse-url-generic))
+
 (defun my/open-git()
   "Opens git in browser."
   (interactive)
@@ -157,14 +159,14 @@
 (defun my/open-jira()
   "Open JIRA in browser."
   (interactive)
-  (let ((name (magit-get-current-branch)))
-    (shell-command (concat "open https://jira.nib.com.au/browse/" name))))
+  (let (name (magit-get-current-branch))
+    (browse-url (concat "https://jira.nib.com.au/browse/" name))))
 
 (defun my/open-buildkite()
   "Open Buildkite in browser."
   (interactive)
   (let ((name (projectile-project-name)))
-    (shell-command (concat "open https://buildkite.com/nib-health-funds-ltd/" name))))
+    (browse-url (concat "https://buildkite.com/nib-health-funds-ltd/" name))))
 
 (defmacro open-org-file (filename)
   "Macro for opening files in org directory with FILENAME filepath."
@@ -186,6 +188,7 @@
   (evil-leader/set-leader "SPC")
   (evil-leader/set-key
     "SPC" 'counsel-M-x
+    "=" 'what-cursor-position ; cool for finding faces
     "[" 'flycheck-previous-error
     "]" 'flycheck-next-error
     "!" 'flycheck-list-errors
@@ -352,6 +355,11 @@
 (use-package lsp-mode
   :init
   (setq exec-path (append exec-path '("/home/eastwd/.nvm/versions/node/v14.17.6/bin")))
+  ;; https://github.com/emacs-lsp/lsp-mode/wiki/LSP-ESlint-integration 
+  (setq lsp-eslint-server-command 
+   '("node" 
+     "/home/eastwd/.emacs.d/eslint-server/server/out/eslintServer.js" 
+     "--stdio"))
   :config
   (setq lsp-keep-workspace-alive nil)
   (define-key global-map (kbd "s-.") 'lsp-execute-code-action)
@@ -424,6 +432,7 @@
         web-mode-css-indent-offset 2
         web-mode-code-indent-offset 2
         css-indent-offset 2)
+  (set-face-attribute 'web-mode-html-tag-bracket-face nil :foreground "#50FA7B")
   (add-to-list 'auto-mode-alist '("\\.cshtml\\'" . web-mode)))
 
 (use-package git-link
@@ -475,9 +484,12 @@
  '(org-tag                   ((t (:inherit (shadow fixed-pitch) :weight bold))))
  '(org-table                 ((t (:inherit fixed-pitch))) t)
  '(org-verbatim              ((t (:inherit (shadow fixed-pitch)))))
- '(org-level-1               ((t (:inherit (outline-1 variable-pitch) :family "Roboto" :weight light :height 300))))
- '(org-level-2               ((t (:inherit (outline-2 variable-pitch) :family "Roboto" :weight light :height 280))))
- '(org-level-3               ((t (:inherit (outline-3 variable-pitch) :family "Roboto" :weight light :height 260))))
+ '(org-level-1               ((t (:inherit (outline-1 variable-pitch) :family "Roboto" :weight light :height 200))))
+ '(org-level-2               ((t (:inherit (outline-2 variable-pitch) :family "Roboto" :weight light :height 180))))
+ '(org-level-3               ((t (:inherit (outline-3 variable-pitch) :family "Roboto" :weight light :height 160))))
+ '(vertical-border           ((t (:background "#ddd" :foreground "#ddd"))))
+ '(lsp-face-highlight-read   ((t (:underline t))))
+ '(lsp-face-highlight-write  ((t (:underline t))))
  '(org-indent                ((t (:inherit (fixed-pitch))))))
 
 (use-package org
@@ -597,10 +609,11 @@
   (setq org-journal-file-format "%Y-%m-%d.org")
   (setq org-journal-date-format "%A, %d %B %Y"))
 
-(use-package org-bullets
-  :hook (org-mode . org-bullets-mode)
-  :config
-  (org-indent-mode 1))
+(when (not my/WSL)
+  (use-package org-bullets
+    :hook (org-mode . org-bullets-mode)
+    :config
+    (org-indent-mode 1)))
 
 (use-package expand-region
   :init
@@ -626,6 +639,18 @@
 ;; Reduce the gc to idle times
 (use-package gcmh
   :hook (after-init . gcmh-mode))
+
+(defun wsl-copy-region-to-clipboard (start end)
+  "Copy region to Windows clipboard."
+  (interactive "r")
+  (call-process-region start end "clip.exe" nil 0))
+
+(defun wsl-paste-from-clipboard (arg)
+  "Insert Windows clipboard at point. With prefix ARG, also add to kill-ring"
+  (interactive "P")
+  (let ((clip (wsl-clipboard-to-string)))
+    (insert clip)
+    (if arg (kill-new clip))))
 
 (toggle-frame-maximized)
 
