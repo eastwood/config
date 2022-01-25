@@ -54,7 +54,6 @@
               truncate-lines nil
               ring-bell-function 'ignore)
 
-(setq evil-want-keybinding nil)
 
 (use-package diminish)
 
@@ -65,8 +64,7 @@
 
 (use-package doom-themes
   :init
-  (load-theme 'doom-gruvbox t)
-  (set-face-attribute 'region nil :background "#ddd")
+  (load-theme 'doom-flatwhite t)
   :config
   (setq-default doom-themes-neotree-theme "doom-colors")
   (setq-default doom-themes-neotree-file-icons t)
@@ -126,6 +124,7 @@
   (when my/TERM
     (evil-terminal-cursor-changer-activate)))
 
+(setq evil-want-keybinding nil)
 (use-package evil
   :hook (after-init . evil-mode)
   :init
@@ -146,10 +145,9 @@
   (setq plantuml-default-exec-mode "server"))
 
 (when my/WSL
-  (setq
-   browse-url-generic-program  "/mnt/c/Windows/System32/cmd.exe"
-   browse-url-generic-args     '("/c" "start")
-   browse-url-browser-function #'browse-url-generic))
+  (customize-set-variable 'browse-url-generic-program  "/mnt/c/Windows/System32/cmd.exe")
+  (customize-set-variable 'browse-url-generic-args     '("/c" "start"))
+  (customize-set-variable ' browse-url-browser-function #'browse-url-generic))
 
 (defun my/open-git()
   "Opens git in browser."
@@ -233,21 +231,6 @@
   (global-evil-leader-mode))
 
 (use-package plantuml-mode)
-
-(defun my/open-git()
-  (interactive)
-  (let ((name (projectile-project-name)))
-    (shell-command (concat "open https://github.com/nib-group/" name))))
-
-(defun my/open-jira()
-  (interactive)
-  (let ((name (magit-get-current-branch)))
-    (shell-command (concat "open https://jira.nib.com.au/browse/" name))))
-
-(defun my/open-buildkite()
-  (interactive)
-  (let ((name (projectile-project-name)))
-    (shell-command (concat "open https://buildkite.com/nib-health-funds-ltd/" name))))
 
 (defun open-org-directory ()
   (interactive)
@@ -487,7 +470,7 @@
  '(org-level-1               ((t (:inherit (outline-1 variable-pitch) :family "Roboto" :weight light :height 200))))
  '(org-level-2               ((t (:inherit (outline-2 variable-pitch) :family "Roboto" :weight light :height 180))))
  '(org-level-3               ((t (:inherit (outline-3 variable-pitch) :family "Roboto" :weight light :height 160))))
- '(vertical-border           ((t (:background "#444" :foreground "#444"))))
+ '(vertical-border           ((t (:background "#333" :foreground "#333"))))
  '(lsp-face-highlight-read   ((t (:underline t))))
  '(lsp-face-highlight-write  ((t (:underline t))))
  '(org-indent                ((t (:inherit (fixed-pitch))))))

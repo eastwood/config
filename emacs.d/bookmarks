@@ -8,8 +8,8 @@
  (rear-context-string . "9-22 Wed 10:44>\n")
  (position . 1002))
 ("org-capture-last-stored"
- (filename . "~/Documents/notes/work.org")
- (front-context-string . "** TODO correlat")
- (rear-context-string . "cement\n\n* Inbox\n")
- (position . 370))
+ (filename . "/mnt/c/users/clint/iCloudDrive/Documents/notes/work.org")
+ (front-context-string . "** TODO :WORK:\n ")
+ (rear-context-string . "    \n  \n* Inbox\n")
+ (position . 569))
 )
