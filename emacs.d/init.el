@@ -1,5 +1,3 @@
-;;; emacs.el --- Emacs configuration
-
 ;;; Commentary:
  
 ;; A simple, fast and no-nonsense Emacs configuration reduced down over the years.
@@ -64,7 +62,7 @@
 
 (use-package doom-themes
   :init
-  (load-theme 'doom-flatwhite t)
+  (load-theme 'nord t)
   :config
   (setq-default doom-themes-neotree-theme "doom-colors")
   (setq-default doom-themes-neotree-file-icons t)
@@ -81,6 +79,7 @@
   (neotree-find (projectile-project-root)))
 
 (use-package neotree
+  :after evil
   :commands (neotree-find)
   :init
   (evil-leader/set-key
@@ -120,16 +119,17 @@
   :mode ("\\.http" . restclient-mode))
 
 (use-package evil-terminal-cursor-changer
+  :after evil
   :init
   (when my/TERM
     (evil-terminal-cursor-changer-activate)))
 
-(setq evil-want-keybinding nil)
 (use-package evil
   :hook (after-init . evil-mode)
   :init
-  (evil-set-undo-system 'undo-redo)
+  (setq evil-want-keybinding nil)
   :config
+  (evil-set-undo-system 'undo-redo)
   (evil-define-key 'normal 'global "j" 'evil-next-visual-line)
   (evil-define-key 'normal 'global "k" 'evil-previous-visual-line)
   (setq evil-want-C-u-scroll t))
@@ -238,9 +238,11 @@
 
 
 (use-package evil-surround
+  :after evil
   :hook (evil-mode . global-evil-surround-mode))
 
 (use-package flycheck
+  :after evil
   :config
   (global-flycheck-mode)
   (flymake-mode-off)
@@ -286,6 +288,7 @@
   (counsel-rg (current-word)))
 
 (use-package counsel
+  :after evil
   :diminish ivy-mode counsel-mode
   :commands (counsel-M-x)
   :config
@@ -320,6 +323,7 @@
     (eshell '(4))))
 
 (use-package projectile
+  :after evil
   :diminish projectile-mode
   :commands (projectile-switch-project projectile-project-root)
   :init
@@ -361,6 +365,7 @@
 (use-package jest)
 
 (use-package slime
+  :after evil
   :config
   (evil-leader/set-key-for-mode 'lisp-mode
     "eb" 'slime-eval-buffer)
@@ -372,6 +377,7 @@
   :mode "\\.cs\\'")
 
 (use-package json-mode
+  :after evil
   :mode "\\.json"
   :config
   (evil-leader/set-key-for-mode 'json-mode
@@ -426,6 +432,7 @@
   :commands magit-status)
 
 (use-package markdown-mode
+  :after evil
   :mode "\\.md\\'"
   :config
   (evil-define-key 'normal markdown-mode-map
@@ -455,27 +462,8 @@
                     :weight 'normal
                     :width 'normal)
 
-(custom-theme-set-faces
- 'user
- '(variable-pitch ((t (:family "Roboto" :weight normal :height 180))))
- '(fixed-pitch ((t ( :family "Hack" :height 150))))
- '(org-block                 ((t (:inherit fixed-pitch))))
- '(org-code                  ((t (:inherit (shadow fixed-pitch)))))
- '(org-document-info-keyword ((t (:inherit (shadow fixed-pitch)))))
- '(org-property-value        ((t (:inherit fixed-pitch))) t)
- '(org-special-keyword       ((t (:inherit (font-lock-comment-face fixed-pitch)))))
- '(org-tag                   ((t (:inherit (shadow fixed-pitch) :weight bold))))
- '(org-table                 ((t (:inherit fixed-pitch))) t)
- '(org-verbatim              ((t (:inherit (shadow fixed-pitch)))))
- '(org-level-1               ((t (:inherit (outline-1 variable-pitch) :family "Roboto" :weight light :height 200))))
- '(org-level-2               ((t (:inherit (outline-2 variable-pitch) :family "Roboto" :weight light :height 180))))
- '(org-level-3               ((t (:inherit (outline-3 variable-pitch) :family "Roboto" :weight light :height 160))))
- '(vertical-border           ((t (:background "#333" :foreground "#333"))))
- '(lsp-face-highlight-read   ((t (:underline t))))
- '(lsp-face-highlight-write  ((t (:underline t))))
- '(org-indent                ((t (:inherit (fixed-pitch))))))
-
 (use-package org
+  :after evil
   :mode ("\\.org\\'" . org-mode)
   :hook (org-mode . variable-pitch-mode)
   :config
@@ -581,6 +569,7 @@
 (use-package htmlize)
 
 (use-package org-journal
+  :after evil
   :commands (org-journal-new-entry)
   :init
   (evil-leader/set-key

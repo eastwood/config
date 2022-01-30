@@ -4,6 +4,7 @@ Plug 'tpope/vim-surround' " The Pope's gift to man
 Plug 'morhetz/gruvbox'
 Plug 'rakr/vim-one'
 Plug 'dracula/vim', { 'as': 'dracula' }
+Plug 'arcticicestudio/nord-vim', { 'branch': 'develop' }
 Plug 'preservim/nerdtree' " We want that tree action
 Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'tpope/vim-fugitive'
@@ -236,11 +237,10 @@ set statusline+=%l        " Current line
 set statusline+=/         " Separator
 set statusline+=%L        " Total lines
 
-colorscheme dracula
+colorscheme nord 
 " Set transparency
 hi Normal guibg=NONE ctermbg=NONE 
 hi statusline guibg=NONE
-hi cursorline guibg=#21222C "Dracula mods
 
 " WSL yank support
 let s:clip = '/mnt/c/Windows/System32/clip.exe'  " change this path according to your mount point

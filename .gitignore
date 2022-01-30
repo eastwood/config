@@ -19,6 +19,7 @@ npm-debug.log
 
 !/emacs.d/init.el
 !/emacs.d/early-init.el
+!/emacs.d/custom.el
 /emacs.d/emojis/emojione-v2.2.6-22/0023-20e3.png
 /emacs.d/emojis/
 /emacs.d/transient/
