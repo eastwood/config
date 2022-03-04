@@ -223,6 +223,7 @@ xmap ga <Plug>(EasyAlign)
 " Start interactive EasyAlign for a motion/text object (e.g. gaip)
 nmap ga <Plug>(EasyAlign)
 
+nnoremap <f12> :10split term://zsh<cr>
 augroup neovim_terminal
   autocmd!
   autocmd TermOpen * setlocal nonumber
@@ -237,7 +238,7 @@ set statusline+=%l        " Current line
 set statusline+=/         " Separator
 set statusline+=%L        " Total lines
 
-colorscheme nord 
+colorscheme dracula
 " Set transparency
 hi Normal guibg=NONE ctermbg=NONE 
 hi statusline guibg=NONE
@@ -250,3 +251,5 @@ if executable(s:clip)
         autocmd TextYankPost * if v:event.operator ==# 'y' | call system(s:clip, @0) | endif
     augroup END
 endif
+
+let g:netrwbrowsex_viewer="cmd.exe /C start"

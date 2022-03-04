@@ -9,7 +9,7 @@
  (position . 1002))
 ("org-capture-last-stored"
  (filename . "/mnt/c/users/clint/iCloudDrive/Documents/notes/work.org")
- (front-context-string . "** TODO :WORK:\n ")
- (rear-context-string . "    \n  \n* Inbox\n")
- (position . 569))
+ (front-context-string . "** TODO PHISL-36")
+ (rear-context-string)
+ (position . 9))
 )

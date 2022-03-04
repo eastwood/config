@@ -62,16 +62,17 @@
 
 (use-package doom-themes
   :init
-  (load-theme 'nord t)
+  (cond (my/TERM (load-theme 'dracula t))
+        (t (load-theme 'doom-flatwhite t)))
   :config
   (setq-default doom-themes-neotree-theme "doom-colors")
   (setq-default doom-themes-neotree-file-icons t)
   (doom-themes-neotree-config)
   (doom-themes-org-config))
 
-;;(use-package solaire-mode
-;;  :init
-;;  (solaire-global-mode))
+(use-package solaire-mode
+  :init
+  (solaire-global-mode))
 
 (defun neotree-find-project-root()
   "Find the root of neotree."
@@ -344,14 +345,17 @@
   :init
   (setq exec-path (append exec-path '("/home/eastwd/.nvm/versions/node/v14.17.6/bin")))
   ;; https://github.com/emacs-lsp/lsp-mode/wiki/LSP-ESlint-integration 
-  (setq lsp-eslint-server-command 
+  :config
+  (setq lsp-keep-workspace-alive nil)
+  (define-key global-map (kbd "C-c .") 'lsp-execute-code-action)
+  (setq lsp-headerline-breadcrumb-enable nil)
+  :custom
+  (lsp-eslint-server-command 
    '("node" 
      "/home/eastwd/.emacs.d/eslint-server/server/out/eslintServer.js" 
      "--stdio"))
-  :config
-  (setq lsp-keep-workspace-alive nil)
-  (define-key global-map (kbd "s-.") 'lsp-execute-code-action)
-  (setq lsp-headerline-breadcrumb-enable nil)
+  ;; put the log files to stderr
+  (lsp-clients-typescript-server-args '("--stdio" "--tsserver-log-file" "/dev/stderr"))
   :hook (
          (typescript-mode . lsp-deferred)
          (web-mode . lsp-deferred)
@@ -391,7 +395,8 @@
   :diminish js2-mode
   :config
   (setq js2-basic-offset 2)
-  (setq js-indent-level 2))
+  (customize-set-variable 'js2-basic-offset 2)
+  (customize-set-variable 'js2-indent-level 2))
 
 (use-package rjsx-mode
   :mode "\\.jsx\\'"
@@ -416,12 +421,13 @@
 
 (use-package web-mode
   :mode ("\\.cshtml\\'" "\\.jsx\\'" "\\.tsx\\'")
+  :custom
+  (web-mode-markup-indent-offset 2
+   web-mode-attr-indent-offset 2
+   web-mode-css-indent-offset 2
+   web-mode-code-indent-offset 2
+   css-indent-offset 2)
   :config
-  (setq web-mode-markup-indent-offset 2
-        web-mode-attr-indent-offset 2
-        web-mode-css-indent-offset 2
-        web-mode-code-indent-offset 2
-        css-indent-offset 2)
   (set-face-attribute 'web-mode-html-tag-bracket-face nil :foreground "#50FA7B")
   (add-to-list 'auto-mode-alist '("\\.cshtml\\'" . web-mode)))
 
