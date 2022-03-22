@@ -27,3 +27,5 @@ npm-debug.log
 /emacs.d/.lsp-session-v1
 /emacs.d/eln-cache/
 /term/scripts/rqp
+/emacs.d/.lsp-eslint-choices
+/emacs.d/eslint-server/

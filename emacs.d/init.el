@@ -13,10 +13,12 @@
 (defconst my/TERM (memq window-system '(nil)))
 (defconst my/OSX (memq window-system '(ns mac)))
 (defconst my/WSL (memq window-system '(x nil)))
+(defconst my/GTK (memq window-system '(pgtk)))
 
 (defconst my/CUSTOM-FILE-PATH "~/.emacs.d/custom.el")
 (defconst my/CONFIG-FILE "~/.emacs.d/init.el")
 (defconst my/ORG-PATH (cond (my/WSL "/mnt/c/users/clint/iCloudDrive/Documents/notes")
+                            (my/GTK "/mnt/c/users/clint/iCloudDrive/Documents/notes")
                             (t "~/Documents/notes")))
 
 (setq user-full-name "Clint Ryan"
@@ -62,8 +64,8 @@
 
 (use-package doom-themes
   :init
-  (cond (my/TERM (load-theme 'dracula t))
-        (t (load-theme 'doom-flatwhite t)))
+  (cond (my/TERM (load-theme 'dark+ t))
+        (t (load-theme 'doom-solarized-dark t)))
   :config
   (setq-default doom-themes-neotree-theme "doom-colors")
   (setq-default doom-themes-neotree-file-icons t)
@@ -102,7 +104,7 @@
     "mc" 'neotree-create-node)
 
   (setq neo-theme (if (display-graphic-p) 'icons 'nerd))
-  (setq neo-window-width 60
+  (setq neo-window-width 50
         neo-toggle-window-keep-p t
         neo-autorefresh t
         neo-window-fixed-size nil
@@ -253,8 +255,8 @@
   (setq-default flycheck-disabled-checkers '(javascript-jshint json-jsonlist))
   (flycheck-add-mode 'javascript-eslint 'web-mode))
 
-(when my/OSX
-  (setq explicit-shell-file-name "/usr/local/bin/tmux")
+(when (or my/OSX my/GTK)
+  (setq explicit-shell-file-name "/usr/bin/tmux")
   (use-package exec-path-from-shell
     :init
     (exec-path-from-shell-initialize)))
@@ -469,11 +471,17 @@
                     :weight 'normal
                     :width 'normal)
 
+(use-package nov
+  :mode ("\\.epub\\'" . nov-mode)
+  :config
+  (add-to-list 'evil-emacs-state-modes 'nov-mode))
+
 (use-package org
   :after evil
   :mode ("\\.org\\'" . org-mode)
   :hook (org-mode . variable-pitch-mode)
   :config
+  (org-indent-mode 1)
   (add-hook 'org-mode-hook 'visual-line-mode)
   (add-hook 'org-mode-hook 'variable-pitch-mode)
   (setq org-confirm-babel-evaluate nil)
@@ -590,9 +598,7 @@
 
 (when (not my/WSL)
   (use-package org-bullets
-    :hook (org-mode . org-bullets-mode)
-    :config
-    (org-indent-mode 1)))
+    :hook (org-mode . org-bullets-mode)))
 
 (use-package expand-region
   :init

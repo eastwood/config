@@ -1,9 +1,10 @@
-" Install packages and configuration
+
 call plug#begin()
 Plug 'tpope/vim-surround' " The Pope's gift to man
 Plug 'morhetz/gruvbox'
 Plug 'rakr/vim-one'
 Plug 'dracula/vim', { 'as': 'dracula' }
+Plug 'romainl/flattened'
 Plug 'arcticicestudio/nord-vim', { 'branch': 'develop' }
 Plug 'preservim/nerdtree' " We want that tree action
 Plug 'Xuyuanp/nerdtree-git-plugin'
@@ -29,7 +30,7 @@ call plug#end()
 
 " Settings
 let mapleader = " "
-set clipboard+=unnamedplus
+set clipboard=unnamedplus
 set completeopt=menu,preview,longest,noinsert
 set modelines=0
 set history=500
@@ -53,6 +54,7 @@ set hidden
 set showmode
 set updatetime=300
 set shortmess+=c
+set showcmd
 
 if has("gui_running")
   set guioptions-=m " no menu
@@ -62,12 +64,10 @@ if has("gui_running")
   set guioptions-=b " no scrollbar on the bottom
 endif
 
-if (has("termguicolors"))
-  set termguicolors
-endif
 
 syntax on
 set bg=dark
+colorscheme flattened_dark
 
 "General UI
 
@@ -115,11 +115,8 @@ nmap <leader>pt :NERDTreeToggle<CR>
 map \ :NERDTreeToggle<CR>
 
 " Git/Fugitive keybindings
-nnoremap <leader>gc :Gcommit<CR>
-nnoremap <leader>gC :Git checkout
-nnoremap <leader>gf :Git fetch<CR>
-nnoremap <leader>gF :Git pull --rebase<CR>
-nnoremap <leader>gP :Git push
+nnoremap <leader>gf :Git pull
+nnoremap <leader>gp :Git push
 nnoremap <leader>gs :Git<CR>
 
 " Window bindings
@@ -213,11 +210,9 @@ let g:UltiSnipsJumpForwardTrigger="<C-j>"
 let g:UltiSnipsJumpBackwardTrigger="<C-k>"
 let g:plantuml_executable_script='java -jar ~/plantuml.jar -tsvg'
 let g:http_client_verify_ssl=0
-
 " use python to format xml
 command! FormatXML :%!python3 -c "import xml.dom.minidom, sys; print(xml.dom.minidom.parse(sys.stdin).toprettyxml())"
 command! FormatJSON :%!jq
-
 " Start interactive EasyAlign in visual mode (e.g. vipga)
 xmap ga <Plug>(EasyAlign)
 " Start interactive EasyAlign for a motion/text object (e.g. gaip)
@@ -237,19 +232,10 @@ set statusline+=%=        " Switch to the right side
 set statusline+=%l        " Current line
 set statusline+=/         " Separator
 set statusline+=%L        " Total lines
+set statusline+=:\%c  " Current column
 
-colorscheme dracula
-" Set transparency
-hi Normal guibg=NONE ctermbg=NONE 
-hi statusline guibg=NONE
-
-" WSL yank support
-let s:clip = '/mnt/c/Windows/System32/clip.exe'  " change this path according to your mount point
-if executable(s:clip)
-    augroup WSLYank
-        autocmd!
-        autocmd TextYankPost * if v:event.operator ==# 'y' | call system(s:clip, @0) | endif
-    augroup END
-endif
-
-let g:netrwbrowsex_viewer="cmd.exe /C start"
+hi Cursor ctermbg=black
+hi VertSplit ctermbg=NONE
+hi StatusLineNC ctermbg=4 ctermfg=black
+hi StatusLine ctermbg=2 ctermfg=black
+hi LineNr ctermbg=NONE

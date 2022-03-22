@@ -6,6 +6,7 @@
 (scroll-bar-mode -1)
 (xterm-mouse-mode 1)
 (tool-bar-mode -1)
+(pixel-scroll-precision-mode)
 (modify-all-frames-parameters '((vertical-scroll-bars . nil)))
 
 (eval-when-compile
