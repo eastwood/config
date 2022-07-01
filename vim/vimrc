@@ -25,7 +25,7 @@ Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }
 Plug 'junegunn/vim-easy-align'
 Plug 'vim-scripts/nginx.vim'
 Plug 'qpkorr/vim-bufkill'
-
+Plug 'vimwiki/vimwiki'
 call plug#end()
 
 " Settings
@@ -199,6 +199,8 @@ function! s:show_documentation()
   endif
 endfunction
 
+nmap <silent> gr <Plug>(coc-references)
+
 " Tab now opens dirs in nerdtree
 autocmd FileType nerdtree map <buffer> <tab> <CR>
 let NERDTreeShowHidden = 1
@@ -239,3 +241,9 @@ hi VertSplit ctermbg=NONE
 hi StatusLineNC ctermbg=4 ctermfg=black
 hi StatusLine ctermbg=2 ctermfg=black
 hi LineNr ctermbg=NONE
+
+let g:vimwiki_list = [{'path': '~/Documents/notes',
+                      \ 'syntax': 'markdown', 'ext': '.md'}]
+
+nmap <leader>wx <Plug>Vimwiki2HTML
+nmap <leader>wxx <Plug>Vimwiki2HTMLBrowse

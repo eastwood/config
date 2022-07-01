@@ -21,15 +21,13 @@
                             (my/GTK "/mnt/c/users/clint/iCloudDrive/Documents/notes")
                             (t "~/Documents/notes")))
 
-(setq user-full-name "Clint Ryan"
-      user-mail-address "clint.ryan3@gmail.com")
-
 (setq gc-cons-threshold most-positive-fixnum)
 (setq read-process-output-max (* 1024 1024))
 (setq byte-compile-warnings '(not free-vars unresolved noruntime lexical make-local))
 (setq custom-file my/CUSTOM-FILE-PATH)
 (setq-default exec-path-from-shell-check-startup-files nil)
-(setq backup-directory-alist `(("." . "~/.emacs.d/backups")))
+(setq backup-directory-alist `(("." . "/home/eastwd/.emacs.d/backups")))
+(auto-save-visited-mode)
 
 (load-file my/CUSTOM-FILE-PATH)
 
@@ -39,21 +37,16 @@
                             (display-line-numbers-mode t)
                             (hl-line-mode t)))
 
+
 (unless (display-graphic-p)
   (global-set-key (kbd "<mouse-4>") 'scroll-down-line)
   (global-set-key (kbd "<mouse-5>") 'scroll-up-line))
-
-(when (or my/OSX my/WSL)
-  (scroll-bar-mode -1)
-  (menu-bar-mode -1)
-  (tool-bar-mode -1))
 
 (setq-default inhibit-startup-message t
               indent-tabs-mode nil
               line-spacing nil
               truncate-lines nil
               ring-bell-function 'ignore)
-
 
 (use-package diminish)
 
@@ -215,9 +208,12 @@
     "is" 'yas-insert-snippet
     "in" 'yas-new-snippet
     "gs" 'magit-status
-    "pf" 'projectile-find-file
-    "rr" 'counsel-register
-    "rw" 'window-configuration-to-register
+    "pf" 'counsel-projectile-find-file
+    "sg" 'counsel-projectile-rg
+    "sw" 'my/search-current-word
+    "sb" 'swiper
+    "pr" 'counsel-register
+    "pw" 'window-configuration-to-register
     "tl" 'toggle-truncate-lines
     "ts" 'open-shell
     "qc" 'delete-frame
@@ -266,7 +262,6 @@
     :init
     (xclip-mode)))
 
-
 (defun reload-config-file()
   "Reload our configuration file."
   (interactive)
@@ -299,10 +294,6 @@
   (counsel-mode)
   (ivy-mode)
   (global-set-key (kbd "C-s") 'swiper)
-  (evil-leader/set-key
-    "sw" 'my/search-current-word
-    "sb" 'swiper
-    "sg" 'counsel-rg)
   (setq ivy-use-virtual-buffers t)
   (setq ivy-re-builders-alist '((t . ivy--regex-ignore-order))))
 
@@ -343,6 +334,8 @@
 
 (use-package counsel-projectile)
 
+(use-package persp-mode)
+
 (use-package lsp-mode
   :init
   (setq exec-path (append exec-path '("/home/eastwd/.nvm/versions/node/v14.17.6/bin")))
@@ -351,6 +344,7 @@
   (setq lsp-keep-workspace-alive nil)
   (define-key global-map (kbd "C-c .") 'lsp-execute-code-action)
   (setq lsp-headerline-breadcrumb-enable nil)
+  (setq lsp-auto-configure t)
   :custom
   (lsp-eslint-server-command 
    '("node" 
@@ -368,7 +362,6 @@
 (use-package lsp-ui :commands lsp-ui-mode)
 (use-package lsp-ivy :commands lsp-ivy-workspace-symbol)
 (use-package dap-mode)
-
 (use-package jest)
 
 (use-package slime
@@ -407,12 +400,12 @@
 (use-package ejc-sql)
 
 (use-package typescript-mode
-  :mode "\\.ts\\'"
+  :mode ("\\.ts\\'" "\\.tsx\\'")
   :hook (typescript-mode . lsp-deferred)
   :diminish typescript-mode
   :config
-  (require 'dap-node)
-  (dap-node-setup)
+  ;(require 'dap-node)
+  ;(dap-node-setup)
   (setq-default typescript-indent-level 2))
 
 (use-package rust-mode
@@ -422,7 +415,7 @@
   :mode "\\.yaml\\'")
 
 (use-package web-mode
-  :mode ("\\.cshtml\\'" "\\.jsx\\'" "\\.tsx\\'")
+  :mode ("\\.cshtml\\'" "\\.jsx\\'")
   :custom
   (web-mode-markup-indent-offset 2
    web-mode-attr-indent-offset 2
@@ -467,7 +460,7 @@
 
 (set-face-attribute 'default nil
                     :family "Hack"
-                    :height 130
+                    :height 120
                     :weight 'normal
                     :width 'normal)
 
@@ -625,11 +618,11 @@
 (use-package gcmh
   :hook (after-init . gcmh-mode))
 
-(toggle-frame-maximized)
-
-(if (and (fboundp 'server-running-p)
-         (not (server-running-p)))
-    (server-start))
-
+(require 'server nil t)
+(use-package server
+  :if window-system
+  :init
+  (when (not (server-running-p server-name))
+    (server-start)))
 ;;; init ends here
 (put 'dired-find-alternate-file 'disabled nil)
