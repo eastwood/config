@@ -1,4 +1,3 @@
-
 call plug#begin()
 Plug 'tpope/vim-surround' " The Pope's gift to man
 Plug 'morhetz/gruvbox'
@@ -64,12 +63,11 @@ if has("gui_running")
   set guioptions-=b " no scrollbar on the bottom
 endif
 
-
 syntax on
 set bg=dark
 colorscheme flattened_dark
 
-"General UI
+highlight EndOfBuffer ctermfg=bg guifg=bg
 
 " Files and Backups
 set writebackup
@@ -118,6 +116,7 @@ map \ :NERDTreeToggle<CR>
 nnoremap <leader>gf :Git pull
 nnoremap <leader>gp :Git push
 nnoremap <leader>gs :Git<CR>
+command! -nargs=0 GitPushNoVerify :Git push --no-verify
 
 " Window bindings
 nnoremap <leader>wh <C-w>h
@@ -155,7 +154,7 @@ nnoremap <leader>/ :noh<CR>
 tnoremap <Esc> <C-\><C-n>
 
 " Scratch buffer on R command
-:command! -nargs=* -complete=shellcmd R new | setlocal buftype=nofile bufhidden=hide noswapfile | r !<args>
+command! -nargs=* -complete=shellcmd R new | setlocal buftype=nofile bufhidden=hide noswapfile | r !<args>
 
 " Plugin configuration
 
@@ -181,6 +180,7 @@ nmap <silent> gh <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
 nmap <leader>ac  <Plug>(coc-codeaction)
+nmap <leader>qa  <Plug>(coc-codelens-action)
 nmap <leader>qf <Plug>(coc-fix-current)
 nmap <silent> <F2> <Plug>(coc-rename)
 nnoremap <silent> K :call <SID>show_documentation()<CR>
@@ -198,8 +198,6 @@ function! s:show_documentation()
     call CocActionAsync('doHover')
   endif
 endfunction
-
-nmap <silent> gr <Plug>(coc-references)
 
 " Tab now opens dirs in nerdtree
 autocmd FileType nerdtree map <buffer> <tab> <CR>
