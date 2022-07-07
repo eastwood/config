@@ -29,3 +29,6 @@ npm-debug.log
 /term/scripts/rqp
 /emacs.d/.lsp-eslint-choices
 /emacs.d/eslint-server/
+
+/vim/plugged
+/vim/autoload
