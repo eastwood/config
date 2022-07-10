@@ -7,13 +7,12 @@
 ;; 2. LSP is king.
 ;; 3. Performance > readability.
 
-
 ;;; Code:
 (defconst my/WINDOWS (memq window-system '(w32)))
-(defconst my/TERM (memq window-system '(nil)))
-(defconst my/OSX (memq window-system '(ns mac)))
-(defconst my/WSL (memq window-system '(x nil)))
-(defconst my/GTK (memq window-system '(pgtk)))
+(defconst my/TERM    (memq window-system '(nil)))
+(defconst my/OSX     (memq window-system '(ns mac)))
+(defconst my/WSL     (memq window-system '(x  nil)))
+(defconst my/GTK     (memq window-system '(pgtk)))
 
 (defconst my/CUSTOM-FILE-PATH "~/.emacs.d/custom.el")
 (defconst my/CONFIG-FILE "~/.emacs.d/init.el")
@@ -37,7 +36,6 @@
                             (display-line-numbers-mode t)
                             (hl-line-mode t)))
 
-
 (unless (display-graphic-p)
   (global-set-key (kbd "<mouse-4>") 'scroll-down-line)
   (global-set-key (kbd "<mouse-5>") 'scroll-up-line))
@@ -48,7 +46,84 @@
               truncate-lines nil
               ring-bell-function 'ignore)
 
+(add-hook 'emacs-startup-hook
+          (lambda ()
+            (message "Emacs loaded in %s."
+                     (emacs-init-time))))
+
 (use-package diminish)
+
+(use-package evil
+  :hook (after-init . evil-mode)
+  :init
+  (setq evil-want-keybinding nil)
+  :config
+  (evil-set-undo-system 'undo-redo)
+  (evil-define-key 'normal 'global "j" 'evil-next-visual-line)
+  (evil-define-key 'normal 'global "k" 'evil-previous-visual-line)
+  (setq evil-want-C-u-scroll t))
+
+(use-package evil-leader
+  :after evil
+  :config
+  (evil-leader/set-leader "SPC")
+  (evil-leader/set-key
+    "SPC" 'counsel-M-x
+    "=" 'what-cursor-position ; cool for finding faces
+    "[" 'flycheck-previous-error
+    "]" 'flycheck-next-error
+    "!" 'flycheck-list-errors
+    "." 'flycheck-display-error-at-point
+    "bb" 'ivy-switch-buffer
+    "bl" 'dired
+    "bd" 'kill-buffer
+    "bk" 'kill-this-buffer
+    "bD" 'kill-other-buffers
+    "bn" 'next-buffer
+    "bp" 'previous-buffer
+    "ca" 'lsp-execute-code-action
+    "eb" 'eval-buffer
+    "ee" 'eval-last-sexp
+    "er" 'eval-region
+    "fs" 'save-buffer
+    "fow" (open-org-file "work.org")
+    "foh" (open-org-file "personal.org")
+    "fd" 'open-org-directory
+    "fed" 'open-config-file
+    "feR" 'reload-config-file
+    "ff" 'counsel-find-file
+    "fr" 'counsel-recentf
+    "ft" 'neotree-find
+    "is" 'yas-insert-snippet
+    "in" 'yas-new-snippet
+    "gs" 'magit-status
+    "pf" 'counsel-projectile-find-file
+    "pp" 'projectile-switch-project
+    "sg" 'counsel-projectile-rg
+    "sw" 'my/search-current-word
+    "sb" 'swiper
+    "pr" 'counsel-register
+    "pt" 'neotree-find-project-root
+    "pw" 'window-configuration-to-register
+    "tl" 'toggle-truncate-lines
+    "ts" 'open-shell
+    "qc" 'delete-frame
+    "qq" 'save-buffers-kill-terminal
+    "ww" 'ace-window
+    "wc" 'evil-window-delete
+    "wo" 'delete-other-windows
+    "wj" 'evil-window-down
+    "wk" 'evil-window-up
+    "wh" 'evil-window-left
+    "wl" 'evil-window-right
+    "wv" 'evil-window-vsplit
+    "ws" 'evil-window-split)
+  (global-evil-leader-mode))
+
+(use-package evil-collection
+  :after evil
+  :init
+  (evil-collection-init '(magit dired)))
 
 (use-package doom-modeline
   :hook (after-init . doom-modeline-mode))
@@ -66,8 +141,7 @@
   (doom-themes-org-config))
 
 (use-package solaire-mode
-  :init
-  (solaire-global-mode))
+  :hook (after-init . solaire-global-mode))
 
 (defun neotree-find-project-root()
   "Find the root of neotree."
@@ -77,10 +151,6 @@
 (use-package neotree
   :after evil
   :commands (neotree-find)
-  :init
-  (evil-leader/set-key
-    "pt" 'neotree-find-project-root
-    "ft" 'neotree-find)
   :config
   (define-key evil-motion-state-map "\\" 'neotree-toggle)
   (evil-define-key 'normal neotree-mode-map
@@ -115,25 +185,10 @@
   :mode ("\\.http" . restclient-mode))
 
 (use-package evil-terminal-cursor-changer
+  :requires my/TERM
   :after evil
   :init
-  (when my/TERM
-    (evil-terminal-cursor-changer-activate)))
-
-(use-package evil
-  :hook (after-init . evil-mode)
-  :init
-  (setq evil-want-keybinding nil)
-  :config
-  (evil-set-undo-system 'undo-redo)
-  (evil-define-key 'normal 'global "j" 'evil-next-visual-line)
-  (evil-define-key 'normal 'global "k" 'evil-previous-visual-line)
-  (setq evil-want-C-u-scroll t))
-
-(use-package evil-collection
-  :after evil
-  :init
-  (evil-collection-init '(magit dired)))
+  (evil-terminal-cursor-changer-activate))
 
 (use-package plantuml-mode
   :config
@@ -176,59 +231,6 @@
   (interactive)
   (counsel-find-file my/ORG-PATH))
 
-(use-package evil-leader
-  :after evil
-  :config
-  (evil-leader/set-leader "SPC")
-  (evil-leader/set-key
-    "SPC" 'counsel-M-x
-    "=" 'what-cursor-position ; cool for finding faces
-    "[" 'flycheck-previous-error
-    "]" 'flycheck-next-error
-    "!" 'flycheck-list-errors
-    "." 'flycheck-display-error-at-point
-    "bb" 'ivy-switch-buffer
-    "bl" 'dired
-    "bd" 'kill-buffer
-    "bk" 'kill-this-buffer
-    "bD" 'kill-other-buffers
-    "bn" 'next-buffer
-    "bp" 'previous-buffer
-    "eb" 'eval-buffer
-    "ee" 'eval-last-sexp
-    "er" 'eval-region
-    "fs" 'save-buffer
-    "fow" (open-org-file "work.org")
-    "foh" (open-org-file "personal.org")
-    "fd" 'open-org-directory
-    "ff" 'counsel-find-file
-    "fr" 'counsel-recentf
-    "fed" 'open-config-file
-    "feR" 'reload-config-file
-    "is" 'yas-insert-snippet
-    "in" 'yas-new-snippet
-    "gs" 'magit-status
-    "pf" 'counsel-projectile-find-file
-    "sg" 'counsel-projectile-rg
-    "sw" 'my/search-current-word
-    "sb" 'swiper
-    "pr" 'counsel-register
-    "pw" 'window-configuration-to-register
-    "tl" 'toggle-truncate-lines
-    "ts" 'open-shell
-    "qc" 'delete-frame
-    "qq" 'save-buffers-kill-terminal
-    "ww" 'ace-window
-    "wc" 'evil-window-delete
-    "wo" 'delete-other-windows
-    "wj" 'evil-window-down
-    "wk" 'evil-window-up
-    "wh" 'evil-window-left
-    "wl" 'evil-window-right
-    "wv" 'evil-window-vsplit
-    "ws" 'evil-window-split)
-  (global-evil-leader-mode))
-
 (use-package plantuml-mode)
 
 (defun open-org-directory ()
@@ -251,16 +253,16 @@
   (setq-default flycheck-disabled-checkers '(javascript-jshint json-jsonlist))
   (flycheck-add-mode 'javascript-eslint 'web-mode))
 
-(when (or my/OSX my/GTK)
-  (setq explicit-shell-file-name "/usr/bin/tmux")
-  (use-package exec-path-from-shell
-    :init
-    (exec-path-from-shell-initialize)))
+;; (when (or my/OSX my/GTK)
+;;  (setq explicit-shell-file-name "/usr/bin/zsh")
+;;  (use-package exec-path-from-shell
+;;    :config
+;;    (exec-path-from-shell-initialize)))
 
-(when my/TERM
-  (use-package xclip
-    :init
-    (xclip-mode)))
+(use-package xclip
+             :if my/WSL
+             :init
+             (xclip-mode))
 
 (defun reload-config-file()
   "Reload our configuration file."
@@ -287,7 +289,6 @@
   (counsel-rg (current-word)))
 
 (use-package counsel
-  :after evil
   :diminish ivy-mode counsel-mode
   :commands (counsel-M-x)
   :config
@@ -318,12 +319,8 @@
     (eshell '(4))))
 
 (use-package projectile
-  :after evil
   :diminish projectile-mode
   :commands (projectile-switch-project projectile-project-root)
-  :init
-  (evil-leader/set-key
-    "pp" 'projectile-switch-project)
   :config
   (define-key global-map (kbd "<f12>") 'open-shell)
   (projectile-mode)
@@ -337,35 +334,31 @@
 (use-package persp-mode)
 
 (use-package lsp-mode
+  :hook ((typescript-mode . lsp-deferred)
+         (web-mode . lsp-deferred)
+         (js2-mode . lsp-deferred)
+         (lsp-mode . lsp-enable-which-key-integration))
   :init
   (setq exec-path (append exec-path '("/home/eastwd/.nvm/versions/node/v14.17.6/bin")))
-  ;; https://github.com/emacs-lsp/lsp-mode/wiki/LSP-ESlint-integration 
   :config
   (setq lsp-keep-workspace-alive nil)
-  (define-key global-map (kbd "C-c .") 'lsp-execute-code-action)
   (setq lsp-headerline-breadcrumb-enable nil)
   (setq lsp-auto-configure t)
   :custom
+  ;; https://github.com/emacs-lsp/lsp-mode/wiki/LSP-ESlint-integration 
   (lsp-eslint-server-command 
    '("node" 
      "/home/eastwd/.emacs.d/eslint-server/server/out/eslintServer.js" 
      "--stdio"))
   ;; put the log files to stderr
   (lsp-clients-typescript-server-args '("--stdio" "--tsserver-log-file" "/dev/stderr"))
-  :hook (
-         (typescript-mode . lsp-deferred)
-         (web-mode . lsp-deferred)
-         (js2-mode . lsp-deferred)
-         (lsp-mode . lsp-enable-which-key-integration))
   :commands lsp)
 
 (use-package lsp-ui :commands lsp-ui-mode)
 (use-package lsp-ivy :commands lsp-ivy-workspace-symbol)
-(use-package dap-mode)
 (use-package jest)
 
 (use-package slime
-  :after evil
   :config
   (evil-leader/set-key-for-mode 'lisp-mode
     "eb" 'slime-eval-buffer)
@@ -377,7 +370,6 @@
   :mode "\\.cs\\'")
 
 (use-package json-mode
-  :after evil
   :mode "\\.json"
   :config
   (evil-leader/set-key-for-mode 'json-mode
@@ -401,11 +393,8 @@
 
 (use-package typescript-mode
   :mode ("\\.ts\\'" "\\.tsx\\'")
-  :hook (typescript-mode . lsp-deferred)
   :diminish typescript-mode
   :config
-  ;(require 'dap-node)
-  ;(dap-node-setup)
   (setq-default typescript-indent-level 2))
 
 (use-package rust-mode
@@ -434,7 +423,6 @@
   :commands magit-status)
 
 (use-package markdown-mode
-  :after evil
   :mode "\\.md\\'"
   :config
   (evil-define-key 'normal markdown-mode-map
@@ -472,9 +460,8 @@
 (use-package org
   :after evil
   :mode ("\\.org\\'" . org-mode)
-  :hook (org-mode . variable-pitch-mode)
+  :hook (org-mode . org-indent-mode)
   :config
-  (org-indent-mode 1)
   (add-hook 'org-mode-hook 'visual-line-mode)
   (add-hook 'org-mode-hook 'variable-pitch-mode)
   (setq org-confirm-babel-evaluate nil)
@@ -577,7 +564,6 @@
 (use-package htmlize)
 
 (use-package org-journal
-  :after evil
   :commands (org-journal-new-entry)
   :init
   (evil-leader/set-key
@@ -589,9 +575,9 @@
   (setq org-journal-file-format "%Y-%m-%d.org")
   (setq org-journal-date-format "%A, %d %B %Y"))
 
-(when (not my/WSL)
-  (use-package org-bullets
-    :hook (org-mode . org-bullets-mode)))
+(use-package org-bullets
+             :unless my/WSL
+             :hook (org-mode . org-bullets-mode))
 
 (use-package expand-region
   :init
@@ -610,9 +596,7 @@
   (global-emojify-mode t))
 
 (use-package which-key
-  :diminish which-key-mode
-  :init
-  (which-key-mode))
+  :hook (evil-mode . which-key-mode))
 
 ;; Reduce the gc to idle times
 (use-package gcmh
@@ -625,4 +609,3 @@
   (when (not (server-running-p server-name))
     (server-start)))
 ;;; init ends here
-(put 'dired-find-alternate-file 'disabled nil)
