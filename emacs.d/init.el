@@ -141,6 +141,7 @@
   :config
   (cond (my/TERM (load-theme 'doom-dark+ t))
         (t (load-theme 'doom-one t)))
+        (t (load-theme 'doom-solarized-dark t)))
   (setq-default doom-themes-neotree-theme "doom-colors")
   (setq-default doom-themes-neotree-file-icons t)
   (doom-themes-neotree-config)
