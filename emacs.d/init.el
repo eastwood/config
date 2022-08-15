@@ -8,6 +8,7 @@
 ;; 3. Performance > readability.
 
 ;;; Code:
+(require 'use-package)
 (defconst my/WINDOWS (memq window-system '(w32)))
 (defconst my/TERM    (memq window-system '(nil)))
 (defconst my/OSX     (memq window-system '(ns mac)))
@@ -16,43 +17,36 @@
 
 (defconst my/CUSTOM-FILE-PATH "~/.emacs.d/custom.el")
 (defconst my/CONFIG-FILE "~/.emacs.d/init.el")
-(defconst my/ORG-PATH (cond (my/WSL "/mnt/c/users/clint/iCloudDrive/Documents/notes")
-                            (my/GTK "/mnt/c/users/clint/iCloudDrive/Documents/notes")
+(defconst my/ORG-PATH (cond (my/WSL "/home/eastwd/Workspace/github.com/eastwood/notes")
+                            (my/GTK "/home/eastwd/Workspace/github.com/eastwood/notes")
                             (t "~/Documents/notes")))
 
-(setq gc-cons-threshold most-positive-fixnum)
-(setq read-process-output-max (* 1024 1024))
-(setq byte-compile-warnings '(not free-vars unresolved noruntime lexical make-local))
 (setq custom-file my/CUSTOM-FILE-PATH)
-(setq-default exec-path-from-shell-check-startup-files nil)
 (setq backup-directory-alist `(("." . "/home/eastwd/.emacs.d/backups")))
-(auto-save-visited-mode)
 
 (load-file my/CUSTOM-FILE-PATH)
-
+(auto-save-visited-mode)
+(pixel-scroll-precision-mode)
 (fset 'yes-or-no-p 'y-or-n-p)
+
+(setq inhibit-startup-message t
+      indent-tabs-mode nil
+      line-spacing nil
+      truncate-lines nil
+      ring-bell-function 'ignore
+
+      ;; use-package config
+      use-package-verbose t
+      use-package-always-defer t
+      use-package-always-ensure t)
+
 (add-hook 'prog-mode-hook (lambda ()
                             (electric-pair-local-mode)
                             (display-line-numbers-mode t)
                             (hl-line-mode t)))
-
-(unless (display-graphic-p)
-  (global-set-key (kbd "<mouse-4>") 'scroll-down-line)
-  (global-set-key (kbd "<mouse-5>") 'scroll-up-line))
-
-(setq-default inhibit-startup-message t
-              indent-tabs-mode nil
-              line-spacing nil
-              truncate-lines nil
-              ring-bell-function 'ignore)
-
-(add-hook 'emacs-startup-hook
-          (lambda ()
-            (message "Emacs loaded in %s."
-                     (emacs-init-time))))
-
-(use-package diminish)
-
+(add-hook 'emacs-startup-hook (lambda ()
+                                (message "Emacs loaded in %s."
+                                         (emacs-init-time))))
 (use-package evil
   :hook (after-init . evil-mode)
   :init
@@ -63,18 +57,24 @@
   (evil-define-key 'normal 'global "k" 'evil-previous-visual-line)
   (setq evil-want-C-u-scroll t))
 
+(use-package evil-surround
+  :hook (evil-mode . global-evil-surround-mode))
+
 (use-package evil-leader
-  :after evil
+  :hook (after-init . evil-leader-mode)
   :config
   (evil-leader/set-leader "SPC")
   (evil-leader/set-key
     "SPC" 'counsel-M-x
+    "<tab><tab>" 'persp-switch
+    "<tab>n" 'persp-next
+    "<tab>p" 'persp-prev
     "=" 'what-cursor-position ; cool for finding faces
     "[" 'flycheck-previous-error
     "]" 'flycheck-next-error
     "!" 'flycheck-list-errors
     "." 'flycheck-display-error-at-point
-    "bb" 'ivy-switch-buffer
+    "bb" 'persp-counsel-switch-buffer
     "bl" 'dired
     "bd" 'kill-buffer
     "bk" 'kill-this-buffer
@@ -97,16 +97,18 @@
     "is" 'yas-insert-snippet
     "in" 'yas-new-snippet
     "gs" 'magit-status
+    "oc" 'org-capture
+    "oa" 'org-agenda
     "pf" 'counsel-projectile-find-file
-    "pp" 'projectile-switch-project
+    "pp" 'projectile-persp-switch-project
+    "pr" 'counsel-register
+    "pt" 'neotree-find-project-root
     "sg" 'counsel-projectile-rg
     "sw" 'my/search-current-word
     "sb" 'swiper
-    "pr" 'counsel-register
-    "pt" 'neotree-find-project-root
-    "pw" 'window-configuration-to-register
     "tl" 'toggle-truncate-lines
     "ts" 'open-shell
+    "tv" 'vterm
     "qc" 'delete-frame
     "qq" 'save-buffers-kill-terminal
     "ww" 'ace-window
@@ -120,27 +122,32 @@
     "ws" 'evil-window-split)
   (global-evil-leader-mode))
 
+(use-package evil-terminal-cursor-changer)
+
 (use-package evil-collection
-  :after evil
-  :init
+  :defer 1
+  :config
   (evil-collection-init '(magit dired)))
 
+(use-package all-the-icons
+  :defer 1)
+
 (use-package doom-modeline
+  :defer 1
   :hook (after-init . doom-modeline-mode))
 
-(use-package all-the-icons)
-
 (use-package doom-themes
-  :init
-  (cond (my/TERM (load-theme 'dark+ t))
-        (t (load-theme 'doom-solarized-dark t)))
+  :defer 1
   :config
+  (cond (my/TERM (load-theme 'doom-dark+ t))
+        (t (load-theme 'doom-one t)))
   (setq-default doom-themes-neotree-theme "doom-colors")
   (setq-default doom-themes-neotree-file-icons t)
   (doom-themes-neotree-config)
   (doom-themes-org-config))
 
 (use-package solaire-mode
+  :defer 1
   :hook (after-init . solaire-global-mode))
 
 (defun neotree-find-project-root()
@@ -149,7 +156,6 @@
   (neotree-find (projectile-project-root)))
 
 (use-package neotree
-  :after evil
   :commands (neotree-find)
   :config
   (define-key evil-motion-state-map "\\" 'neotree-toggle)
@@ -175,9 +181,8 @@
         neo-smart-open t))
 
 (use-package company
-  :commands (counsel-M-x)
+  :hook (prog-mode . global-company-mode)
   :config
-  (global-company-mode t)
   (setq company-tooltip-align-annotations t))
 
 (use-package restclient
@@ -186,14 +191,12 @@
 
 (use-package evil-terminal-cursor-changer
   :requires my/TERM
-  :after evil
-  :init
+  :config
   (evil-terminal-cursor-changer-activate))
 
 (use-package plantuml-mode
   :config
-  (setq org-plantuml-jar-path "~/plantuml.jar")
-  (setq plantuml-default-exec-mode "server"))
+  (setq-default org-plantuml-jar-path (expand-file-name "~/plantuml.jar")))
 
 (when my/WSL
   (customize-set-variable 'browse-url-generic-program  "/mnt/c/Windows/System32/cmd.exe")
@@ -231,21 +234,10 @@
   (interactive)
   (counsel-find-file my/ORG-PATH))
 
-(use-package plantuml-mode)
-
-(defun open-org-directory ()
-  (interactive)
-  (counsel-find-file my/ORG-PATH))
-
-
-(use-package evil-surround
-  :after evil
-  :hook (evil-mode . global-evil-surround-mode))
-
 (use-package flycheck
+  :hook (prog-mode . global-flycheck-mode)
   :after evil
   :config
-  (global-flycheck-mode)
   (flymake-mode-off)
   (setq flycheck-ruby-rubocop-executable "~/.rbenv/shims/rubocop")
   (evil-define-key 'normal flycheck-mode-map
@@ -253,15 +245,15 @@
   (setq-default flycheck-disabled-checkers '(javascript-jshint json-jsonlist))
   (flycheck-add-mode 'javascript-eslint 'web-mode))
 
-;; (when (or my/OSX my/GTK)
-;;  (setq explicit-shell-file-name "/usr/bin/zsh")
-;;  (use-package exec-path-from-shell
-;;    :config
-;;    (exec-path-from-shell-initialize)))
+(setq explicit-shell-file-name "/usr/bin/zsh")
+(setq-default exec-path-from-shell-check-startup-files nil)
+(use-package exec-path-from-shell
+  :hook (after-init . exec-path-from-shell-initialize)
+  :if (or my/OSX my/GTK))
 
 (use-package xclip
              :if my/WSL
-             :init
+             :config
              (xclip-mode))
 
 (defun reload-config-file()
@@ -289,10 +281,9 @@
   (counsel-rg (current-word)))
 
 (use-package counsel
-  :diminish ivy-mode counsel-mode
-  :commands (counsel-M-x)
+  :hook (after-init . counsel-mode)
+  :commands (counsel-M-x counsel-list-buffers)
   :config
-  (counsel-mode)
   (ivy-mode)
   (global-set-key (kbd "C-s") 'swiper)
   (setq ivy-use-virtual-buffers t)
@@ -305,8 +296,7 @@
   (setq ivy-posframe-width 128)
   (setq ivy-posframe-border-width 1)
   (setq ivy-posframe-height-alist '((counsel-rg . 40)
-                                    (t . 20)))
-  (ivy-posframe-mode 1))
+                                    (t . 20))))
 
 (defun my/switch-project ()
   (projectile-find-file)
@@ -319,7 +309,6 @@
     (eshell '(4))))
 
 (use-package projectile
-  :diminish projectile-mode
   :commands (projectile-switch-project projectile-project-root)
   :config
   (define-key global-map (kbd "<f12>") 'open-shell)
@@ -329,17 +318,25 @@
         projectile-completion-system 'ivy)
   (add-to-list 'projectile-globally-ignored-directories "node_modules"))
 
-(use-package counsel-projectile)
+(use-package counsel-projectile
+  :after (counsel projectile))
 
-(use-package persp-mode)
+(use-package perspective
+  :hook (emacs-startup . persp-mode)
+  :commands (persp-counsel-switch-buffer)
+  :config
+  (setq persp-suppress-no-prefix-key-warning t))
+
+(use-package persp-projectile
+  :commands (projectile-persp-switch-project)
+  :after perspective)
 
 (use-package lsp-mode
+  :commands (lsp)
   :hook ((typescript-mode . lsp-deferred)
          (web-mode . lsp-deferred)
          (js2-mode . lsp-deferred)
          (lsp-mode . lsp-enable-which-key-integration))
-  :init
-  (setq exec-path (append exec-path '("/home/eastwd/.nvm/versions/node/v14.17.6/bin")))
   :config
   (setq lsp-keep-workspace-alive nil)
   (setq lsp-headerline-breadcrumb-enable nil)
@@ -351,12 +348,12 @@
      "/home/eastwd/.emacs.d/eslint-server/server/out/eslintServer.js" 
      "--stdio"))
   ;; put the log files to stderr
-  (lsp-clients-typescript-server-args '("--stdio" "--tsserver-log-file" "/dev/stderr"))
-  :commands lsp)
+  (lsp-clients-typescript-server-args '("--stdio" "--tsserver-log-file" "/dev/stderr")))
 
 (use-package lsp-ui :commands lsp-ui-mode)
 (use-package lsp-ivy :commands lsp-ivy-workspace-symbol)
-(use-package jest)
+(use-package jest
+  :commands (jest jest-file))
 
 (use-package slime
   :config
@@ -379,21 +376,16 @@
 
 (use-package js2-mode
   :mode "\\.js\\'"
-  :diminish js2-mode
   :config
   (setq js2-basic-offset 2)
   (customize-set-variable 'js2-basic-offset 2)
   (customize-set-variable 'js2-indent-level 2))
 
 (use-package rjsx-mode
-  :mode "\\.jsx\\'"
-  :diminish rjsx-mode)
-
-(use-package ejc-sql)
+  :mode "\\.jsx\\'")
 
 (use-package typescript-mode
   :mode ("\\.ts\\'" "\\.tsx\\'")
-  :diminish typescript-mode
   :config
   (setq-default typescript-indent-level 2))
 
@@ -423,7 +415,7 @@
   :commands magit-status)
 
 (use-package markdown-mode
-  :mode "\\.md\\'"
+  :mode ("\\.md\\'" . gfm-mode)
   :config
   (evil-define-key 'normal markdown-mode-map
     "c" 'markdown-toggle-gfm-checkbox)
@@ -447,7 +439,7 @@
 (add-hook 'org-mode-hook 'prettify-symbols-mode)
 
 (set-face-attribute 'default nil
-                    :family "Hack"
+                    :family "Fira Code"
                     :height 120
                     :weight 'normal
                     :width 'normal)
@@ -458,7 +450,6 @@
   (add-to-list 'evil-emacs-state-modes 'nov-mode))
 
 (use-package org
-  :after evil
   :mode ("\\.org\\'" . org-mode)
   :hook (org-mode . org-indent-mode)
   :config
@@ -472,10 +463,6 @@
                 org-fontify-whole-heading-line t
                 org-fontify-done-headline t
                 org-fontify-quote-and-verse-blocks t)
-
-  (evil-leader/set-key
-    "oc" 'org-capture
-    "oa" 'org-agenda)
 
   (evil-leader/set-key-for-mode 'org-journal-mode
     "mls" 'org-store-link
@@ -497,8 +484,8 @@
     "mw" 'widen)
 
   (evil-leader/set-key-for-mode 'org-capture-mode
-    "c" 'org-capture-finalize
-    "k" 'org-capture-kill)
+    "mc" 'org-capture-finalize
+    "mk" 'org-capture-kill)
 
   (evil-define-key 'normal org-mode-map
     ">" 'org-shiftmetaright
@@ -509,10 +496,6 @@
     (kbd "C-k") 'org-previous-item
     (kbd "TAB") 'org-cycle
     "gs" 'org-goto)
-
-  (define-key global-map "\C-cc" 'org-capture)
-  (define-key global-map [?\s-F] 'replace-regexp)
-  (define-key global-map [?\s-l] 'goto-line)
 
   (setq org-confirm-babel-evaluate nil)
 
@@ -565,38 +548,38 @@
 
 (use-package org-journal
   :commands (org-journal-new-entry)
-  :init
-  (evil-leader/set-key
-    "fj" (lambda ()
-           (interactive)
-           (org-journal-new-entry t)))
   :config
   (setq org-journal-dir (concat my/ORG-PATH "/journal"))
   (setq org-journal-file-format "%Y-%m-%d.org")
   (setq org-journal-date-format "%A, %d %B %Y"))
 
 (use-package org-bullets
-             :unless my/WSL
-             :hook (org-mode . org-bullets-mode))
+  :unless my/WSL
+  :hook (org-mode . org-bullets-mode))
 
 (use-package expand-region
-  :init
-  (global-set-key (kbd "C-=") 'er/expand-region))
+  :bind ("C-=" . er/expand-region))
 
 (use-package yasnippet
   :commands (yas-insert-snippet)
   :config
   (yas-global-mode 1))
 
-(use-package yasnippet-snippets
-  :after yasnippet)
+(use-package yasnippet-snippets)
 
 (use-package emojify
-  :config
-  (global-emojify-mode t))
+  :hook (after-init . global-emojify-mode))
 
 (use-package which-key
-  :hook (evil-mode . which-key-mode))
+  :hook (after-init . which-key-mode))
+
+;; compile vterm manually was the trick here
+;; needed cmake, libtools
+;; cd elpa/vterm
+;; cmake -G 'Unix Makefiles' ..
+;; make
+(use-package vterm
+  :commands (vterm-other-window vterm))
 
 ;; Reduce the gc to idle times
 (use-package gcmh

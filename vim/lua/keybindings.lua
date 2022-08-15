@@ -23,7 +23,7 @@ bind(normal_mode,  '<leader><Esc>',    ':q!<CR>')
 bind(normal_mode, '<leader>pf', ':Files<CR>')
 bind(normal_mode, '<leader>pp', ':source ~/.vim/sessions/')
 bind(normal_mode, '<leader>ps', ':mksession! ~/.vim/sessions/')
-bind(normal_mode, '<leader>pt', ':NERDTreeToggle<CR>')
+bind(normal_mode, '<leader>pt', ':NvimTreeToggle<CR>')
 
 -- Git/Fugitive keybindings
 bind(normal_mode, '<leader>gf', ':Git pull')
@@ -51,7 +51,7 @@ bind(normal_mode, '<leader>bp', ':bp!<CR>')
 -- File based 
 bind(normal_mode, '<leader>ff',  ':edit ')
 bind(normal_mode, '<leader>fs',  ':w!<CR>')
-bind(normal_mode, '<leader>ft',  ':NERDTreeFind<CR>')
+bind(normal_mode, '<leader>ft',  ':NvimTreeFindFile<CR>')
 bind(normal_mode, '<leader>feR', ':source ~/.config/nvim/init.lua<CR>')
 bind(normal_mode, '<leader>fed', ':FZF ~/.config/nvim/lua/<CR>')
 bind(normal_mode, '<leader>fo',  ':edit ~/Documents/notes/backlog.md<CR>')
@@ -67,7 +67,8 @@ bind(terminal_mode, '<Esc>',      '<C-\\><C-n>')
 bind(visual_mode, 'ga',    '<Plug>(EasyAlign)')
 bind(normal_mode, 'ga',    '<Plug>(EasyAlign)')
 bind(normal_mode, '<f12>', ':10split term://zsh<cr>')
-bind(normal_mode, '\\',    ':NERDTreeToggle<CR>')
+bind(normal_mode, '<leader>tt', ':10split term://zsh<cr>')
+bind(normal_mode, '\\',    ':NvimTreeToggle<CR>')
 
 -- Coding
 bind(normal_mode, '[c',         '<Plug>(coc-diagnostic-prev)',         { silent = true })
@@ -79,8 +80,10 @@ bind(normal_mode, 'gr',         '<Plug>(coc-references)',              { silent 
 bind(normal_mode, '<leader>cr', '<Plug>(coc-rename)',                  { silent = true })
 bind(normal_mode, 'K',          ":call CocActionAsync('doHover')<CR>", { silent = true })
 bind(normal_mode, '<leader>ca', '<Plug>(coc-codeaction)',              { silent = true, noremap = true })
-bind(normal_mode, '<leader>cl', '<Plug>(coc-codelens-action)',         { silent = true, noremap = true })
 bind(normal_mode, '<leader>cc', '<Plug>NERDCommenterToggle',           { silent = true, noremap = true })
+bind(normal_mode, '<leader>cl', '<Plug>(coc-codelens-action)',         { silent = true, noremap = true })
+
+bind(insert_mode, '<c-x><c-f>', '<Plug>(fzf-complete-path)',           { silent = true, noremap = true })
 
 bind(insert_mode, '<Tab>', function()
   return vim.fn.pumvisible() == 1 and '<C-N>' or '<Tab>'

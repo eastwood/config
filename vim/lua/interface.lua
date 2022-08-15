@@ -1,7 +1,6 @@
 local set = vim.opt
 
 -- User Interface
-set.bg = 'dark'
 set.colorcolumn = '120'
 set.cursorline = true
 set.title = true
@@ -13,7 +12,7 @@ set.showmode = true
 set.updatetime = 300
 set.shortmess = set.shortmess + 'c'
 set.showcmd = true
-set.statusline = '%f%=%l%L:%c'
+set.statusline = '%f%=%l:%c'
 set.modelines = 0
 set.history = 500
 set.showmatch = true
@@ -30,7 +29,12 @@ end
 
 vim.cmd [[
   syntax enable
-  colorscheme flattened_dark
+  set bg=dark
+  colorscheme one
+  set termguicolors
+  let g:lightline = {
+        \ 'colorscheme': 'one',
+        \ }
   hi EndOfBuffer ctermfg=bg guifg=bg
   hi Cursor ctermbg=black
   hi VertSplit ctermbg=NONE
