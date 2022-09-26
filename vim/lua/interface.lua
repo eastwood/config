@@ -18,6 +18,7 @@ set.history = 500
 set.showmatch = true
 set.splitbelow = true
 set.splitright = true 
+set.termguicolors = true
 
 if (vim.fn.has('gui_running') == 1) then
   set.guioptions= set.guioptions - 'm' --no menu
@@ -29,16 +30,7 @@ end
 
 vim.cmd [[
   syntax enable
-  set bg=dark
-  colorscheme one
-  set termguicolors
-  let g:lightline = {
-        \ 'colorscheme': 'one',
-        \ }
-  hi EndOfBuffer ctermfg=bg guifg=bg
-  hi Cursor ctermbg=black
-  hi VertSplit ctermbg=NONE
-  hi StatusLineNC ctermbg=4 ctermfg=black
-  hi StatusLine ctermbg=2 ctermfg=black
-  hi LineNr ctermbg=NONE
 ]]
+
+require('onedark').load()
+require('lualine').setup()

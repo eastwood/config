@@ -5,6 +5,9 @@ local visual_mode = 'v'
 local terminal_mode = 't'
 local command_mode = 'c'
 
+local opts = { noremap=true, silent=true }
+local bufopts = { noremap=true, silent=true, buffer=bufnr }
+
 -- Keybindings
 
 -- General
@@ -71,28 +74,25 @@ bind(normal_mode, '<leader>tt', ':10split term://zsh<cr>')
 bind(normal_mode, '\\',    ':NvimTreeToggle<CR>')
 
 -- Coding
-bind(normal_mode, '[c',         '<Plug>(coc-diagnostic-prev)',         { silent = true })
-bind(normal_mode, ']c',         '<Plug>(coc-diagnostic-next)',         { silent = true })
-bind(normal_mode, 'gd',         '<Plug>(coc-definition)',              { silent = true })
-bind(normal_mode, 'gh',         '<Plug>(coc-type-definition)',         { silent = true })
-bind(normal_mode, 'gi',         '<Plug>(coc-implementation)',          { silent = true })
-bind(normal_mode, 'gr',         '<Plug>(coc-references)',              { silent = true })
-bind(normal_mode, '<leader>cr', '<Plug>(coc-rename)',                  { silent = true })
-bind(normal_mode, 'K',          ":call CocActionAsync('doHover')<CR>", { silent = true })
-bind(normal_mode, '<leader>ca', '<Plug>(coc-codeaction)',              { silent = true, noremap = true })
-bind(normal_mode, '<leader>cc', '<Plug>NERDCommenterToggle',           { silent = true, noremap = true })
-bind(normal_mode, '<leader>cl', '<Plug>(coc-codelens-action)',         { silent = true, noremap = true })
+bind(normal_mode, '<leader>cc', '<Plug>NERDCommenterToggle', opts)
+bind(insert_mode, '<c-x><c-f>', '<Plug>(fzf-complete-path)', opts)
 
-bind(insert_mode, '<c-x><c-f>', '<Plug>(fzf-complete-path)',           { silent = true, noremap = true })
 
-bind(insert_mode, '<Tab>', function()
-  return vim.fn.pumvisible() == 1 and '<C-N>' or '<Tab>'
-end, {expr = true})
+-- LSP 
+bind(normal_mode, '<space>e', vim.diagnostic.open_float, opts)
+bind(normal_mode, '[d', vim.diagnostic.goto_prev, opts)
+bind(normal_mode, ']d', vim.diagnostic.goto_next, opts)
+bind(normal_mode, 'gD', vim.lsp.buf.declaration, bufopts)
+bind(normal_mode, 'gd', vim.lsp.buf.definition, bufopts)
+bind(normal_mode, 'K', vim.lsp.buf.hover, bufopts)
+bind(normal_mode, 'gi', vim.lsp.buf.implementation, bufopts)
+bind(normal_mode, '<C-k>', vim.lsp.buf.signature_help, bufopts)
+bind(normal_mode, '<space>D', vim.lsp.buf.type_definition, bufopts)
+bind(normal_mode, '<space>rn', vim.lsp.buf.rename, bufopts)
+bind(normal_mode, '<space>ca', vim.lsp.buf.code_action, bufopts)
+bind(normal_mode, 'gr', vim.lsp.buf.references, bufopts)
+bind(normal_mode, '<space>f', vim.lsp.buf.formatting, bufopts)
 
-bind(insert_mode, '<S-Tab>', function()
-  return vim.fn.pumvisible() == 1 and '<C-p>' or '<C-h>'
-end, {expr = true})
+-- Jest
+bind(normal_mode, '<space>jt', function() require('jester').run() end, opts)
 
-bind(insert_mode, '<cr>', function()
-  return vim.fn.pumvisible() == 1 and '<C-y>' or '<C-g>u<CR>'
-end, {expr = true})

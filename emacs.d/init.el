@@ -141,7 +141,7 @@
   :config
   (cond (my/TERM (load-theme 'doom-dark+ t))
         (t (load-theme 'doom-one t)))
-        (t (load-theme 'doom-solarized-dark t)))
+        
   (setq-default doom-themes-neotree-theme "doom-colors")
   (setq-default doom-themes-neotree-file-icons t)
   (doom-themes-neotree-config)
@@ -337,6 +337,7 @@
   :hook ((typescript-mode . lsp-deferred)
          (web-mode . lsp-deferred)
          (js2-mode . lsp-deferred)
+	 (rust-mode . lsp-deferred)
          (lsp-mode . lsp-enable-which-key-integration))
   :config
   (setq lsp-keep-workspace-alive nil)
