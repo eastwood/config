@@ -69,6 +69,7 @@
     "<tab><tab>" 'persp-switch
     "<tab>n" 'persp-next
     "<tab>p" 'persp-prev
+    "<tab>k" 'persp-kill
     "=" 'what-cursor-position ; cool for finding faces
     "[" 'flycheck-previous-error
     "]" 'flycheck-next-error
@@ -139,8 +140,8 @@
 (use-package doom-themes
   :defer 1
   :config
-  (cond (my/TERM (load-theme 'doom-dark+ t))
-        (t (load-theme 'doom-one t)))
+  (cond (my/TERM (load-theme 'doom-tokyo-night t))
+        (t (load-theme 'doom-tokyo-night t)))
         
   (setq-default doom-themes-neotree-theme "doom-colors")
   (setq-default doom-themes-neotree-file-icons t)
@@ -184,6 +185,7 @@
 (use-package company
   :hook (prog-mode . global-company-mode)
   :config
+  (evil-define-key 'insert prog-mode-map (kbd "C-<SPC>") 'company-complete)
   (setq company-tooltip-align-annotations t))
 
 (use-package restclient
@@ -332,6 +334,12 @@
   :commands (projectile-persp-switch-project)
   :after perspective)
 
+(use-package dap-mode
+  :config
+  (require 'dap-node)
+  (setq-default dap-node-debug-path "/home/eastwd/.emacs.d/.extension/vscode/vscode-node-debug2")
+  (setq-default dap-node-debug-program '("node" "/home/eastwd/.emacs.d/.extension/vscode/vscode-node-debug2/out/src/nodeDebug.js")))
+
 (use-package lsp-mode
   :commands (lsp)
   :hook ((typescript-mode . lsp-deferred)
@@ -371,6 +379,7 @@
 (use-package json-mode
   :mode "\\.json"
   :config
+  (setq-default js-indent-level 2)
   (evil-leader/set-key-for-mode 'json-mode
     "m=" 'json-pretty-print-buffer))
 

@@ -11,7 +11,7 @@ require('packer').startup(function()
     'nvim-lualine/lualine.nvim',
     requires = { 'kyazdani42/nvim-web-devicons', opt = true }
   }
-  use 'navarasu/onedark.nvim'
+  use 'folke/tokyonight.nvim'
   use {
     'kyazdani42/nvim-tree.lua',
     requires = {
@@ -40,6 +40,7 @@ require('packer').startup(function()
         \   'html': 0,
         \   'mouse': 1,
         \ }
+      let g:vimwiki_list = [{'path': '~/Workspace/github.com/eastwood/notes', 'syntax': 'markdown', 'ext': '.md'}]
     ]]
   end}
   -- LSP configuration
@@ -50,7 +51,13 @@ require('packer').startup(function()
   use 'L3MON4D3/LuaSnip' -- Snippets plugin
 
   -- DAP configuration
-
+  use {'mfussenegger/nvim-dap'}
+  use {'mxsdev/nvim-dap-vscode-js', requires = {"mfussenegger/nvim-dap"} }
+  use {
+    'microsoft/vscode-js-debug',
+    opt = true,
+    run = 'npm install --legacy-peer-deps && npm run compile' 
+  }
   use {'nvim-treesitter/nvim-treesitter', run = ':TSUpdate'}
   use {
 	  'kylechui/nvim-surround', 
@@ -59,7 +66,7 @@ require('packer').startup(function()
 	  end
   }
   use 'kdheepak/lazygit.nvim'
-  use {'tpope/vim-fugitive', cmd = 'Git'}
+  use {'tpope/vim-fugitive' }
   use 'tpope/vim-rhubarb'
   use 'junegunn/vim-easy-align'
   use 'qpkorr/vim-bufkill'

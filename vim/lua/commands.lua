@@ -50,7 +50,7 @@ vim.cmd [[
 
 -- Add additional capabilities supported by nvim-cmp
 local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
+capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 
 local lspconfig = require('lspconfig')
 
@@ -106,3 +106,33 @@ cmp.setup {
     { name = 'luasnip' },
   },
 }
+
+local dap = require('dap')
+dap.defaults.fallback.terminal_win_cmd = '10split new'
+vim.api.nvim_create_user_command('LoadLaunchJson', function()
+  require('dap.ext.vscode').load_launchjs(nil, {['pwa-node'] = {'typescript', 'javascript'}})
+end, { bang = false })
+
+require("dap-vscode-js").setup({
+  node_path = "/home/eastwd/.nvm/versions/node/v14.17.6/bin/node", -- Path of node executable. Defaults to $NODE_PATH, and then "node"
+  -- debugger_path = "(runtimedir)/site/pack/packer/opt/vscode-js-debug", -- Path to vscode-js-debug installation.
+  -- debugger_cmd = { "js-debug-adapter" }, -- Command to use to launch the debug server. Takes precedence over `node_path` and `debugger_path`.
+  adapters = { 'node', 'pwa-node', 'pwa-chrome', 'pwa-msedge', 'node-terminal', 'pwa-extensionHost' }, -- which adapters to register in nvim-dap
+})
+
+for _, language in ipairs({ "typescript", "javascript" }) do
+  require("dap").configurations[language] = {
+    {
+      type = "pwa-node",
+      request = "launch",
+      name = "Join API",
+      program = "${workspaceFolder}/dist/server.js",
+      cwd = "${workspaceFolder}",
+      console = "integratedTerminal"
+    }
+  }
+end
+
+local widgets = require('dap.ui.widgets')
+local my_sidebar = widgets.sidebar(widgets.scopes)
+-- my_sidebar.open()

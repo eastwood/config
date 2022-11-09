@@ -30,7 +30,7 @@ end
 
 vim.cmd [[
   syntax enable
+  colorscheme tokyonight
 ]]
 
-require('onedark').load()
 require('lualine').setup()

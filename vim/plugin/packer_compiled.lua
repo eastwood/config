@@ -131,6 +131,16 @@ _G.packer_plugins = {
     path = "/home/eastwd/.local/share/nvim/site/pack/packer/start/nvim-cmp",
     url = "https://github.com/hrsh7th/nvim-cmp"
   },
+  ["nvim-dap"] = {
+    loaded = true,
+    path = "/home/eastwd/.local/share/nvim/site/pack/packer/start/nvim-dap",
+    url = "https://github.com/mfussenegger/nvim-dap"
+  },
+  ["nvim-dap-vscode-js"] = {
+    loaded = true,
+    path = "/home/eastwd/.local/share/nvim/site/pack/packer/start/nvim-dap-vscode-js",
+    url = "https://github.com/mxsdev/nvim-dap-vscode-js"
+  },
   ["nvim-lspconfig"] = {
     loaded = true,
     path = "/home/eastwd/.local/share/nvim/site/pack/packer/start/nvim-lspconfig",
@@ -159,15 +169,15 @@ _G.packer_plugins = {
     path = "/home/eastwd/.local/share/nvim/site/pack/packer/opt/nvim-web-devicons",
     url = "https://github.com/kyazdani42/nvim-web-devicons"
   },
-  ["onedark.nvim"] = {
-    loaded = true,
-    path = "/home/eastwd/.local/share/nvim/site/pack/packer/start/onedark.nvim",
-    url = "https://github.com/navarasu/onedark.nvim"
-  },
   ["packer.nvim"] = {
     loaded = true,
     path = "/home/eastwd/.local/share/nvim/site/pack/packer/start/packer.nvim",
     url = "https://github.com/wbthomason/packer.nvim"
+  },
+  ["tokyonight.nvim"] = {
+    loaded = true,
+    path = "/home/eastwd/.local/share/nvim/site/pack/packer/start/tokyonight.nvim",
+    url = "https://github.com/folke/tokyonight.nvim"
   },
   ["vim-bufkill"] = {
     loaded = true,
@@ -180,11 +190,8 @@ _G.packer_plugins = {
     url = "https://github.com/junegunn/vim-easy-align"
   },
   ["vim-fugitive"] = {
-    commands = { "Git" },
-    loaded = false,
-    needs_bufread = true,
-    only_cond = false,
-    path = "/home/eastwd/.local/share/nvim/site/pack/packer/opt/vim-fugitive",
+    loaded = true,
+    path = "/home/eastwd/.local/share/nvim/site/pack/packer/start/vim-fugitive",
     url = "https://github.com/tpope/vim-fugitive"
   },
   ["vim-rhubarb"] = {
@@ -193,10 +200,16 @@ _G.packer_plugins = {
     url = "https://github.com/tpope/vim-rhubarb"
   },
   vimwiki = {
-    config = { "\27LJ\2\ní\2\0\0\3\0\3\0\0056\0\0\0009\0\1\0'\2\2\0B\0\2\1K\0\1\0Í\2      let g:vimwiki_key_mappings =\n        \\ {\n        \\   'all_maps': 1,\n        \\   'global': 1,\n        \\   'headers': 1,\n        \\   'text_objs': 1,\n        \\   'table_format': 1,\n        \\   'table_mappings': 1,\n        \\   'lists': 1,\n        \\   'links': 1,\n        \\   'html': 0,\n        \\   'mouse': 1,\n        \\ }\n    \bcmd\bvim\0" },
+    config = { "\27LJ\2\nà\3\0\0\3\0\3\0\0056\0\0\0009\0\1\0'\2\2\0B\0\2\1K\0\1\0À\3      let g:vimwiki_key_mappings =\n        \\ {\n        \\   'all_maps': 1,\n        \\   'global': 1,\n        \\   'headers': 1,\n        \\   'text_objs': 1,\n        \\   'table_format': 1,\n        \\   'table_mappings': 1,\n        \\   'lists': 1,\n        \\   'links': 1,\n        \\   'html': 0,\n        \\   'mouse': 1,\n        \\ }\n      let g:vimwiki_list = [{'path': '~/Workspace/github.com/eastwood/notes', 'syntax': 'markdown', 'ext': '.md'}]\n    \bcmd\bvim\0" },
     loaded = true,
     path = "/home/eastwd/.local/share/nvim/site/pack/packer/start/vimwiki",
     url = "https://github.com/vimwiki/vimwiki"
+  },
+  ["vscode-js-debug"] = {
+    loaded = false,
+    needs_bufread = false,
+    path = "/home/eastwd/.local/share/nvim/site/pack/packer/opt/vscode-js-debug",
+    url = "https://github.com/microsoft/vscode-js-debug"
   }
 }
 
@@ -205,20 +218,14 @@ time([[Defining packer_plugins]], false)
 time([[Config for nvim-surround]], true)
 try_loadstring("\27LJ\2\n;\0\0\3\0\3\0\0066\0\0\0'\2\1\0B\0\2\0029\0\2\0B\0\1\1K\0\1\0\nsetup\18nvim-surround\frequire\0", "config", "nvim-surround")
 time([[Config for nvim-surround]], false)
--- Config for: vimwiki
-time([[Config for vimwiki]], true)
-try_loadstring("\27LJ\2\ní\2\0\0\3\0\3\0\0056\0\0\0009\0\1\0'\2\2\0B\0\2\1K\0\1\0Í\2      let g:vimwiki_key_mappings =\n        \\ {\n        \\   'all_maps': 1,\n        \\   'global': 1,\n        \\   'headers': 1,\n        \\   'text_objs': 1,\n        \\   'table_format': 1,\n        \\   'table_mappings': 1,\n        \\   'lists': 1,\n        \\   'links': 1,\n        \\   'html': 0,\n        \\   'mouse': 1,\n        \\ }\n    \bcmd\bvim\0", "config", "vimwiki")
-time([[Config for vimwiki]], false)
 -- Config for: nvim-tree.lua
 time([[Config for nvim-tree.lua]], true)
 try_loadstring("\27LJ\2\n7\0\0\3\0\3\0\0066\0\0\0'\2\1\0B\0\2\0029\0\2\0B\0\1\1K\0\1\0\nsetup\14nvim-tree\frequire\0", "config", "nvim-tree.lua")
 time([[Config for nvim-tree.lua]], false)
-
--- Command lazy-loads
-time([[Defining lazy-load commands]], true)
-pcall(vim.cmd, [[command -nargs=* -range -bang -complete=file Git lua require("packer.load")({'vim-fugitive'}, { cmd = "Git", l1 = <line1>, l2 = <line2>, bang = <q-bang>, args = <q-args>, mods = "<mods>" }, _G.packer_plugins)]])
-time([[Defining lazy-load commands]], false)
-
+-- Config for: vimwiki
+time([[Config for vimwiki]], true)
+try_loadstring("\27LJ\2\nà\3\0\0\3\0\3\0\0056\0\0\0009\0\1\0'\2\2\0B\0\2\1K\0\1\0À\3      let g:vimwiki_key_mappings =\n        \\ {\n        \\   'all_maps': 1,\n        \\   'global': 1,\n        \\   'headers': 1,\n        \\   'text_objs': 1,\n        \\   'table_format': 1,\n        \\   'table_mappings': 1,\n        \\   'lists': 1,\n        \\   'links': 1,\n        \\   'html': 0,\n        \\   'mouse': 1,\n        \\ }\n      let g:vimwiki_list = [{'path': '~/Workspace/github.com/eastwood/notes', 'syntax': 'markdown', 'ext': '.md'}]\n    \bcmd\bvim\0", "config", "vimwiki")
+time([[Config for vimwiki]], false)
 vim.cmd [[augroup packer_load_aucmds]]
 vim.cmd [[au!]]
   -- Filetype lazy-loads
