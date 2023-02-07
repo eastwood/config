@@ -1,13 +1,12 @@
 # Path to your oh-my-zsh installation.
-export ZSH="/home/eastwd/.oh-my-zsh"
 export CUSTOM_SCRIPTS=~/.scripts
 export LOCAL_SCRIPTS=~/.local/bin
-export NODE_BIN="/home/eastwd/.nvm/versions/node/v14.17.6/bin"
-export RUST_ANALYSER="home/eastwd/.local/bin"
+export NODE_BIN="$HOME/.nvm/versions/node/v14.17.6/bin"
+export RUST_ANALYSER="$HOME/.local/bin"
 export PATH=$LOCAL_SCRIPTS:/usr/local/bin:$PATH:$CUSTOM_SCRIPTS:$NODE_BIN:$RUST_ANALYSER
 
 ZSH_THEME="lambda"
-source $ZSH/oh-my-zsh.sh
+source $HOME/.oh-my-zsh/oh-my-zsh.sh
 
 # User configuration
 # export MANPATH="/usr/local/man:$MANPATH"
@@ -33,7 +32,7 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 # Setup fzf (relies on neovim install)
-fzfDir="/home/eastwd/.local/share/nvim/site/pack/packer/start/fzf/"
+fzfDir="$HOME/.local/share/nvim/site/pack/packer/start/fzf/"
 # ---------
 if [[ ! "$PATH" == *${fzfDir}/bin* ]]; then
   PATH="${PATH:+${PATH}:}${fzfDir}/bin"
