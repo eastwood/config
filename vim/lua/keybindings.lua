@@ -96,9 +96,7 @@ bind(normal_mode, '<space>f', vim.lsp.buf.formatting, bufopts)
 -- Jest
 bind(normal_mode, '<space>jt', function() require('jester').run() end, opts)
 
-
 -- DAP
---
 
 bind(normal_mode, '<leader><Up>', "<Cmd>lua require'dap'.continue()<CR>")
 bind(normal_mode, '<leader><Down>', "<Cmd>lua require'dap'.step_over()<CR>")
@@ -109,3 +107,6 @@ bind(normal_mode, '<Leader>B', "<Cmd>lua require'dap'.set_breakpoint(vim.fn.inpu
 bind(normal_mode, '<Leader>lp', "<Cmd>lua require'dap'.set_breakpoint(nil, nil, vim.fn.input('Log point message: '))<CR>")
 bind(normal_mode, '<Leader>dr', "<Cmd>lua require'dap'.repl.open()<CR>")
 bind(normal_mode, '<Leader>dl', ":LoadLaunchJson")
+bind(normal_mode, '<Leader>dui', function() 
+  require("dapui").toggle()
+end)

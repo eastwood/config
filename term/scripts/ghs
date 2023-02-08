@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+case $( uname -s ) in
+  Darwin)   open='open';;
+  MINGW*)   open='start';;
+  MSYS*)    open='start';;
+  CYGWIN*)  open='cygstart';;
+  *)        # Try to detect WSL (Windows Subsystem for Linux)
+            if uname -r | grep -q -i Microsoft; then
+              open='powershell.exe Start'
+            else
+              open='xdg-open'
+            fi;;
+esac
+
+# open it in a browser
+this_folder=${PWD##*/}
+openurl=https://github.com/search?q=org:nib-group+${1}
+${BROWSER:-$open} "$openurl"

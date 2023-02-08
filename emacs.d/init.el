@@ -356,9 +356,7 @@
   (lsp-eslint-server-command 
    '("node" 
      "/home/eastwd/.emacs.d/eslint-server/server/out/eslintServer.js" 
-     "--stdio"))
-  ;; put the log files to stderr
-  (lsp-clients-typescript-server-args '("--stdio" "--tsserver-log-file" "/dev/stderr")))
+     "--stdio")))
 
 (use-package lsp-ui :commands lsp-ui-mode)
 (use-package lsp-ivy :commands lsp-ivy-workspace-symbol)
