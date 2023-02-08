@@ -32,7 +32,7 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 # Setup fzf (relies on neovim install)
-fzfDir="$HOME/.local/share/nvim/site/pack/packer/start/fzf/"
+fzfDir="$HOME/.local/share/nvim/site/pack/packer/start/fzf"
 # ---------
 if [[ ! "$PATH" == *${fzfDir}/bin* ]]; then
   PATH="${PATH:+${PATH}:}${fzfDir}/bin"
