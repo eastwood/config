@@ -23,6 +23,7 @@ bind(normal_mode,  '<leader>qq',       ':wqa!<CR>')
 bind(normal_mode,  '<leader><Esc>',    ':q!<CR>')
 
 -- Project management
+bind(normal_mode,  '<C-p>',            ':Files<CR>')
 bind(normal_mode, '<leader>pf', ':Files<CR>')
 bind(normal_mode, '<leader>pp', ':source ~/.vim/sessions/')
 bind(normal_mode, '<leader>ps', ':mksession! ~/.vim/sessions/')
@@ -30,7 +31,7 @@ bind(normal_mode, '<leader>pt', ':NvimTreeToggle<CR>')
 
 -- Git/Fugitive keybindings
 bind(normal_mode, '<leader>gf', ':Git pull')
-bind(normal_mode, '<leader>gp', ':Git push')
+bind(normal_mode, '<leader>gp', ':Git push --no-verify -u')
 bind(normal_mode, '<leader>gs', ':Git<CR>')
 
 -- Window bindings
