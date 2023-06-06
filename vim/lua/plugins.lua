@@ -13,6 +13,7 @@ require('packer').startup(function()
   }
 
   use 'folke/tokyonight.nvim'
+  use 'tomasiser/vim-code-dark'
 
   use {
     'kyazdani42/nvim-tree.lua',
@@ -26,6 +27,7 @@ require('packer').startup(function()
     tag = 'nightly'
   }
 
+  use {"peitalin/vim-jsx-typescript", ft={'typescriptreact'}}
   use {"iamcco/markdown-preview.nvim", ft={'markdown'}}
   use {
     'vimwiki/vimwiki', 

@@ -1,11 +1,34 @@
 #!/bin/bash
+#
+case $( uname -s ) in
+  Darwin)   open='open';;
+  MINGW*)   open='start';;
+  MSYS*)    open='start';;
+  CYGWIN*)  open='cygstart';;
+  *)        # Try to detect WSL (Windows Subsystem for Linux)
+            if uname -r | grep -q -i Microsoft; then
+              open='powershell.exe Start'
+            else
+              open='xdg-open'
+            fi;;
+esac
+
+if (( print_only )); then
+  BROWSER="echo"
+fi
+
+# Allow printing the url if BROWSER=echo
+if [[ $BROWSER != "echo" ]]; then
+  exec &>/dev/null
+fi
+
 this_branch=$(git branch --show-current)
 jira_issue=$1 
 
 if [[ -n "$jira_issue" ]]; then
-  open https://jira.nib.com.au/browse/${jira_issue}
+  ${BROWSER:-$open} https://jira.nib.com.au/browse/${jira_issue}
 elif [[ -n "$this_branch" ]]; then
-  open https://jira.nib.com.au/browse/${this_branch}
+  ${BROWSER:-$open} https://jira.nib.com.au/browse/${this_branch}
 else
   echo "First argument, or current branch did not contain anything"
 fi

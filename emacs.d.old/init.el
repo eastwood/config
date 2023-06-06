@@ -52,7 +52,6 @@
   :init
   (setq evil-want-keybinding nil)
   :config
-  (evil-set-undo-system 'undo-redo)
   (evil-define-key 'normal 'global "j" 'evil-next-visual-line)
   (evil-define-key 'normal 'global "k" 'evil-previous-visual-line)
   (setq evil-want-C-u-scroll t))
@@ -83,6 +82,8 @@
     "bn" 'next-buffer
     "bp" 'previous-buffer
     "ca" 'lsp-execute-code-action
+    "cd" 'evil-goto-definition
+    "ch" 'lsp-ui-doc-glance
     "eb" 'eval-buffer
     "ee" 'eval-last-sexp
     "er" 'eval-region
@@ -140,8 +141,8 @@
 (use-package doom-themes
   :defer 1
   :config
-  (cond (my/TERM (load-theme 'doom-tokyo-night t))
-        (t (load-theme 'doom-tokyo-night t)))
+  (cond (my/TERM (load-theme 'doom-molokai t))
+        (t (load-theme 'doom-molokai t)))
         
   (setq-default doom-themes-neotree-theme "doom-colors")
   (setq-default doom-themes-neotree-file-icons t)
@@ -183,7 +184,7 @@
         neo-smart-open t))
 
 (use-package company
-  :hook (prog-mode . global-company-mode)
+  :hook (prog-mode . company-mode)
   :config
   (evil-define-key 'insert prog-mode-map (kbd "C-<SPC>") 'company-complete)
   (setq company-tooltip-align-annotations t))
@@ -254,10 +255,17 @@
   :hook (after-init . exec-path-from-shell-initialize)
   :if (or my/OSX my/GTK))
 
-(use-package xclip
-             :if my/WSL
-             :config
-             (xclip-mode))
+(defun wsl-copy-clip(&rest _args)
+  (setq mytemp (make-temp-file "winclip"))
+  (write-region
+   (current-kill 0 t)
+   nil
+   mytemp
+   )
+  (shell-command (concat "clip.exe<" mytemp ))
+  (delete-file mytemp))
+
+(advice-add 'kill-new :after #'wsl-copy-clip)
 
 (defun reload-config-file()
   "Reload our configuration file."
@@ -351,12 +359,14 @@
   (setq lsp-keep-workspace-alive nil)
   (setq lsp-headerline-breadcrumb-enable nil)
   (setq lsp-auto-configure t)
-  :custom
+  (evil-define-key 'normal 'global "gr" 'lsp-find-references)
+  (evil-define-key 'normal 'global "gh" 'lsp-ui-doc-glance))
+  ;;:custom
   ;; https://github.com/emacs-lsp/lsp-mode/wiki/LSP-ESlint-integration 
-  (lsp-eslint-server-command 
-   '("node" 
-     "/home/eastwd/.emacs.d/eslint-server/server/out/eslintServer.js" 
-     "--stdio")))
+  ;;(lsp-eslint-server-command 
+  ;; '("node" 
+  ;;   "/home/eastwd/.emacs.d/eslint-server/server/out/eslintServer.js" 
+  ;;   "--stdio")))
 
 (use-package lsp-ui :commands lsp-ui-mode)
 (use-package lsp-ivy :commands lsp-ivy-workspace-symbol)
