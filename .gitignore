@@ -16,6 +16,12 @@ npm-debug.log
 /emacs.d/projectile-bookmarks.eld
 /emacs.d/projectile.cache
 /emacs.d/recentf
+/emacs/*.cache
+/emacs/eln-cache
+/emacs/elpa
+/emacs/etc
+/emacs/var
+/emacs/grammars
 
 !/emacs.d/init.el
 !/emacs.d/early-init.el

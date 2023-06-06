@@ -91,7 +91,6 @@ bind(normal_mode, '<space>D', vim.lsp.buf.type_definition, bufopts)
 bind(normal_mode, '<space>rn', vim.lsp.buf.rename, bufopts)
 bind(normal_mode, '<space>ca', vim.lsp.buf.code_action, bufopts)
 bind(normal_mode, 'gr', vim.lsp.buf.references, bufopts)
-bind(normal_mode, '<space>f', vim.lsp.buf.formatting, bufopts)
 
 -- Jest
 bind(normal_mode, '<space>jt', function() require('jester').run() end, opts)

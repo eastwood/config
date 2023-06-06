@@ -1,0 +1,1 @@
+("~/Workspace/github.com/eastwood/config/" "~/" "~/Workspace/github.com/eastwood/join-api/")
