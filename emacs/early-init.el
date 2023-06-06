@@ -18,15 +18,13 @@
 (setq native-comp-deferred-compilation t)
 
 (setq inhibit-startup-message t)
+
+
 (push '(tool-bar-lines . 0) default-frame-alist)
 (push '(menu-bar-lines . 0) default-frame-alist)
 (push '(vertical-scroll-bars) default-frame-alist)
 (modify-all-frames-parameters '((vertical-scroll-bars . nil)))
 
-(unless (display-graphic-p)
-  (xterm-mouse-mode)
-  (global-set-key (kbd "<mouse-4>") 'scroll-down-line)
-  (global-set-key (kbd "<mouse-5>") 'scroll-up-line))
 
 (unless (assoc-default "elpa" package-archives)
   (add-to-list 'package-archives '("elpa" . "https://elpa.gnu.org/packages/") t))
