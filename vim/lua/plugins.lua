@@ -67,29 +67,6 @@ require('packer').startup(function()
     end
   }
 
-  -- DAP configuration
-  use {
-    'mfussenegger/nvim-dap', 
-    config = function() 
-      require('plugins.dap').setup()
-    end
-  }
-
-  use { "rcarriga/nvim-dap-ui", requires = {"mfussenegger/nvim-dap"}, config = function() 
-    require('plugins.dap').setup_ui()
-  end}
-
-  use {
-    'mxsdev/nvim-dap-vscode-js', 
-    requires = {"mfussenegger/nvim-dap"} 
-  }
-
-  use {
-    'microsoft/vscode-js-debug',
-    opt = true,
-    run = 'npm install --legacy-peer-deps && npm run compile' 
-  }
-
   use {
     'nvim-treesitter/nvim-treesitter', 
     run = ':TSUpdate'
@@ -103,7 +80,7 @@ require('packer').startup(function()
   }
 
   use 'kdheepak/lazygit.nvim'
-  use {'tpope/vim-fugitive' }
+  use 'tpope/vim-fugitive'
   use 'tpope/vim-rhubarb'
   use 'junegunn/vim-easy-align'
   use 'qpkorr/vim-bufkill'

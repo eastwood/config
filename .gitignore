@@ -1,8 +1,6 @@
 .DS_Store
 npm-debug.log
 
-/term/tmuxinator/arhi-sales.yml
-/term/tmuxinator/*.yml
 /emacs.d/url
 /emacs.d/.cache
 /emacs.d/*.elc
@@ -35,6 +33,7 @@ npm-debug.log
 /term/scripts/rqp
 /emacs.d/.lsp-eslint-choices
 /emacs.d/eslint-server/
+/emacs.d/.extension
 
 /vim/plugged
 /vim/autoload

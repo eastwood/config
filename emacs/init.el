@@ -3,7 +3,6 @@
 (add-hook 'emacs-startup-hook (lambda ()
                                 (message "Emacs loaded in %s."
                                          (emacs-init-time))))
-
 (setq custom-file "~/.config/emacs/eastwood/custom.el")
 (require 'rc)
 (require 'ui)
