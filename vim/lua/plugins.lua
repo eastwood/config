@@ -1,5 +1,6 @@
 -- Automatically build
 local fn = vim.fn
+
 local install_path = fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
 if fn.empty(fn.glob(install_path)) > 0 then
   packer_bootstrap = fn.system({'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path})
@@ -27,6 +28,7 @@ require('packer').startup(function()
     tag = 'nightly'
   }
 
+  use {"ionide/Ionide-vim"}
   use {"peitalin/vim-jsx-typescript", ft={'typescriptreact'}}
   use {"iamcco/markdown-preview.nvim", ft={'markdown'}}
   use {
@@ -52,24 +54,43 @@ require('packer').startup(function()
   }
   -- LSP configuration
   use {
-    'neovim/nvim-lspconfig', 
-    config = function() 
-      require('plugins.lsp').setup()
-    end
-  }
-  use 'hrsh7th/cmp-nvim-lsp' -- LSP source for nvim-cmp
-  use 'saadparwaiz1/cmp_luasnip' -- Snippets source for nvim-cmp
-  use 'L3MON4D3/LuaSnip' -- Snippets plugin
-  use { 
-    'hrsh7th/nvim-cmp', 
-    config = function() 
-      require('plugins.cmp').setup()
-    end
+	  'VonHeikemen/lsp-zero.nvim',
+	  branch = 'v1.x',
+	  requires = {
+		  -- LSP Support
+		  {'neovim/nvim-lspconfig'},
+		  {'williamboman/mason.nvim'},
+		  {'williamboman/mason-lspconfig.nvim'},
+
+		  -- Autocompletion
+		  {'hrsh7th/nvim-cmp'},
+		  {'hrsh7th/cmp-buffer'},
+		  {'hrsh7th/cmp-path'},
+		  {'saadparwaiz1/cmp_luasnip'},
+		  {'hrsh7th/cmp-nvim-lsp'},
+		  {'hrsh7th/cmp-nvim-lua'},
+
+		  -- Snippets
+		  {'L3MON4D3/LuaSnip'},
+		  {'rafamadriz/friendly-snippets'},
+	  }
   }
 
   use {
     'nvim-treesitter/nvim-treesitter', 
-    run = ':TSUpdate'
+    run = ':TSUpdate',
+    config = function() 
+      local parser_config = require "nvim-treesitter.parsers".get_parser_configs()
+      parser_config.fsharp = {
+        install_info = {
+          url = "/home/eastwd/treesit/tree-sitter-fsharp",
+          files = {"src/scanner.cc", "src/parser.c" },
+          generate_requires_npm = false,
+          requires_generate_from_grammar = false
+        },
+        filetype = "fs",
+      }
+    end
   }
 
   use {
@@ -91,3 +112,4 @@ require('packer').startup(function()
   use 'scrooloose/nerdcommenter'
 
 end)
+

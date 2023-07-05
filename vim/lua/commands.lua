@@ -48,4 +48,3 @@ vim.cmd [[
   command! -nargs=0 FilePath :!echo $(pwd)/% | pbcopy
 ]]
 
-

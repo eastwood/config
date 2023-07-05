@@ -8,3 +8,4 @@
 (load-theme 'modus-vivendi)
 
 (fido-vertical-mode)
+(setq next-line-add-newlines t)

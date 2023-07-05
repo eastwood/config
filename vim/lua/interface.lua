@@ -30,7 +30,7 @@ end
 
 vim.cmd [[
   syntax enable
-  colorscheme codedark
+  colorscheme tokyonight-storm
 ]]
 
 require('lualine').setup()

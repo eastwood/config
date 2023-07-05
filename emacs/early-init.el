@@ -28,6 +28,7 @@
   (global-set-key (kbd "<mouse-4>") 'scroll-down-line)
   (global-set-key (kbd "<mouse-5>") 'scroll-up-line))
 
+
 (unless (assoc-default "elpa" package-archives)
   (add-to-list 'package-archives '("elpa" . "https://elpa.gnu.org/packages/") t))
 (unless (assoc-default "melpa" package-archives)
@@ -35,7 +36,15 @@
 (unless (assoc-default "org" package-archives)
   (add-to-list 'package-archives '("org" . "https://orgmode.org/elpa/") t))
 (package-initialize)
-
 (add-hook 'emacs-startup-hook
           (lambda ()
             (setq gc-cons-threshold (expt 2 23))))
+
+
+
+
+
+
+
+
+
