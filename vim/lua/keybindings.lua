@@ -21,17 +21,21 @@ bind(normal_mode,  "'",                '`')
 bind(insert_mode,  '<C-s>',            '<C-o>:w!<CR>')
 bind(normal_mode,  '<leader>qq',       ':wqa!<CR>')
 bind(normal_mode,  '<leader><Esc>',    ':q!<CR>')
+bind(normal_mode,  '<C-d>',            '<C-d>zz')
+bind(normal_mode,  '<C-u>',            '<C-u>zz')
+bind(normal_mode,  'n',                'nzzzv')
+bind(normal_mode,  'N', 'Nzzzv')
 
 -- Project management
 bind(normal_mode,  '<C-p>',            ':Files<CR>')
 bind(normal_mode, '<leader>pf', ':Files<CR>')
 bind(normal_mode, '<leader>pp', ':source ~/.vim/sessions/')
 bind(normal_mode, '<leader>ps', ':mksession! ~/.vim/sessions/')
-bind(normal_mode, '<leader>pt', ':NvimTreeToggle<CR>')
+bind(normal_mode, '<leader>pt', ':NvimTreeFocus<CR>')
 
 -- Git/Fugitive keybindings
 bind(normal_mode, '<leader>gf', ':Git pull')
-bind(normal_mode, '<leader>gp', ':Git push --no-verify -u')
+bind(normal_mode, '<leader>gp', ':Git push -u')
 bind(normal_mode, '<leader>gs', ':Git<CR>')
 
 -- Window bindings
@@ -57,7 +61,7 @@ bind(normal_mode, '<leader>ff',  ':edit ')
 bind(normal_mode, '<leader>fs',  ':w!<CR>')
 bind(normal_mode, '<leader>ft',  ':NvimTreeFindFile<CR>')
 bind(normal_mode, '<leader>feR', ':source ~/.config/nvim/init.lua<CR>')
-bind(normal_mode, '<leader>fed', ':FZF ~/.config/nvim/lua/<CR>')
+bind(normal_mode, '<leader>fed', ':FZF ~/.config/nvim/<CR>')
 bind(normal_mode, '<leader>fo',  ':edit ~/Documents/notes/backlog.md<CR>')
 
 -- Searching
@@ -95,18 +99,3 @@ bind(normal_mode, 'gr', vim.lsp.buf.references, bufopts)
 
 -- Jest
 bind(normal_mode, '<space>jt', function() require('jester').run() end, opts)
-
--- DAP
-
-bind(normal_mode, '<leader><Up>', "<Cmd>lua require'dap'.continue()<CR>")
-bind(normal_mode, '<leader><Down>', "<Cmd>lua require'dap'.step_over()<CR>")
-bind(normal_mode, '<leader><Right>', "<Cmd>lua require'dap'.step_into()<CR>")
-bind(normal_mode, '<leader><Left>', "<Cmd>lua require'dap'.step_out()<CR>")
-bind(normal_mode, '<Leader>b', "<Cmd>lua require'dap'.toggle_breakpoint()<CR>")
-bind(normal_mode, '<Leader>B', "<Cmd>lua require'dap'.set_breakpoint(vim.fn.input('Breakpoint condition: '))<CR>")
-bind(normal_mode, '<Leader>lp', "<Cmd>lua require'dap'.set_breakpoint(nil, nil, vim.fn.input('Log point message: '))<CR>")
-bind(normal_mode, '<Leader>dr', "<Cmd>lua require'dap'.repl.open()<CR>")
-bind(normal_mode, '<Leader>dl', ":LoadLaunchJson")
-bind(normal_mode, '<Leader>dui', function() 
-  require("dapui").toggle()
-end)
