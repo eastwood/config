@@ -74,11 +74,6 @@ end
 time([[try_loadstring definition]], false)
 time([[Defining packer_plugins]], true)
 _G.packer_plugins = {
-  ["Ionide-vim"] = {
-    loaded = true,
-    path = "/home/eastwd/.local/share/nvim/site/pack/packer/start/Ionide-vim",
-    url = "https://github.com/ionide/Ionide-vim"
-  },
   LuaSnip = {
     loaded = true,
     path = "/home/eastwd/.local/share/nvim/site/pack/packer/start/LuaSnip",
@@ -113,6 +108,11 @@ _G.packer_plugins = {
     loaded = true,
     path = "/home/eastwd/.local/share/nvim/site/pack/packer/start/friendly-snippets",
     url = "https://github.com/rafamadriz/friendly-snippets"
+  },
+  ["fsharp-vim"] = {
+    loaded = true,
+    path = "/home/eastwd/.local/share/nvim/site/pack/packer/start/fsharp-vim",
+    url = "https://github.com/kongo2002/fsharp-vim"
   },
   fzf = {
     loaded = true,
@@ -189,7 +189,6 @@ _G.packer_plugins = {
     url = "https://github.com/kyazdani42/nvim-tree.lua"
   },
   ["nvim-treesitter"] = {
-    config = { "\27LJ\2\n™\2\0\0\4\0\t\0\f6\0\0\0'\2\1\0B\0\2\0029\0\2\0B\0\1\0025\1\a\0005\2\4\0005\3\5\0=\3\6\2=\2\b\1=\1\3\0K\0\1\0\17install_info\1\0\1\rfiletype\afs\nfiles\1\3\0\0\19src/scanner.cc\17src/parser.c\1\0\3#requires_generate_from_grammar\1\burl,/home/eastwd/treesit/tree-sitter-fsharp\26generate_requires_npm\1\vfsharp\23get_parser_configs\28nvim-treesitter.parsers\frequire\0" },
     loaded = true,
     path = "/home/eastwd/.local/share/nvim/site/pack/packer/start/nvim-treesitter",
     url = "https://github.com/nvim-treesitter/nvim-treesitter"
@@ -242,12 +241,6 @@ _G.packer_plugins = {
     path = "/home/eastwd/.local/share/nvim/site/pack/packer/start/vim-rhubarb",
     url = "https://github.com/tpope/vim-rhubarb"
   },
-  vimwiki = {
-    config = { "\27LJ\2\nþ\3\0\0\3\0\3\0\0056\0\0\0009\0\1\0'\2\2\0B\0\2\1K\0\1\0Þ\3        let g:vimwiki_key_mappings =\n        \\ {\n          \\   'all_maps': 1,\n          \\   'global': 1,\n          \\   'headers': 1,\n          \\   'text_objs': 1,\n          \\   'table_format': 1,\n          \\   'table_mappings': 1,\n          \\   'lists': 1,\n          \\   'links': 1,\n          \\   'html': 0,\n          \\   'mouse': 1,\n          \\ }\n          let g:vimwiki_list = [{'path': '~/Workspace/github.com/eastwood/notes', 'syntax': 'markdown', 'ext': '.md'}]\n      \bcmd\bvim\0" },
-    loaded = true,
-    path = "/home/eastwd/.local/share/nvim/site/pack/packer/start/vimwiki",
-    url = "https://github.com/vimwiki/vimwiki"
-  },
   ["which-key.nvim"] = {
     loaded = true,
     path = "/home/eastwd/.local/share/nvim/site/pack/packer/start/which-key.nvim",
@@ -256,28 +249,20 @@ _G.packer_plugins = {
 }
 
 time([[Defining packer_plugins]], false)
--- Config for: nvim-surround
-time([[Config for nvim-surround]], true)
-try_loadstring("\27LJ\2\n;\0\0\3\0\3\0\0066\0\0\0'\2\1\0B\0\2\0029\0\2\0B\0\1\1K\0\1\0\nsetup\18nvim-surround\frequire\0", "config", "nvim-surround")
-time([[Config for nvim-surround]], false)
--- Config for: nvim-treesitter
-time([[Config for nvim-treesitter]], true)
-try_loadstring("\27LJ\2\n™\2\0\0\4\0\t\0\f6\0\0\0'\2\1\0B\0\2\0029\0\2\0B\0\1\0025\1\a\0005\2\4\0005\3\5\0=\3\6\2=\2\b\1=\1\3\0K\0\1\0\17install_info\1\0\1\rfiletype\afs\nfiles\1\3\0\0\19src/scanner.cc\17src/parser.c\1\0\3#requires_generate_from_grammar\1\burl,/home/eastwd/treesit/tree-sitter-fsharp\26generate_requires_npm\1\vfsharp\23get_parser_configs\28nvim-treesitter.parsers\frequire\0", "config", "nvim-treesitter")
-time([[Config for nvim-treesitter]], false)
--- Config for: vimwiki
-time([[Config for vimwiki]], true)
-try_loadstring("\27LJ\2\nþ\3\0\0\3\0\3\0\0056\0\0\0009\0\1\0'\2\2\0B\0\2\1K\0\1\0Þ\3        let g:vimwiki_key_mappings =\n        \\ {\n          \\   'all_maps': 1,\n          \\   'global': 1,\n          \\   'headers': 1,\n          \\   'text_objs': 1,\n          \\   'table_format': 1,\n          \\   'table_mappings': 1,\n          \\   'lists': 1,\n          \\   'links': 1,\n          \\   'html': 0,\n          \\   'mouse': 1,\n          \\ }\n          let g:vimwiki_list = [{'path': '~/Workspace/github.com/eastwood/notes', 'syntax': 'markdown', 'ext': '.md'}]\n      \bcmd\bvim\0", "config", "vimwiki")
-time([[Config for vimwiki]], false)
 -- Config for: nvim-tree.lua
 time([[Config for nvim-tree.lua]], true)
 try_loadstring("\27LJ\2\n7\0\0\3\0\3\0\0066\0\0\0'\2\1\0B\0\2\0029\0\2\0B\0\1\1K\0\1\0\nsetup\14nvim-tree\frequire\0", "config", "nvim-tree.lua")
 time([[Config for nvim-tree.lua]], false)
+-- Config for: nvim-surround
+time([[Config for nvim-surround]], true)
+try_loadstring("\27LJ\2\n;\0\0\3\0\3\0\0066\0\0\0'\2\1\0B\0\2\0029\0\2\0B\0\1\1K\0\1\0\nsetup\18nvim-surround\frequire\0", "config", "nvim-surround")
+time([[Config for nvim-surround]], false)
 vim.cmd [[augroup packer_load_aucmds]]
 vim.cmd [[au!]]
   -- Filetype lazy-loads
 time([[Defining lazy-load filetype autocommands]], true)
-vim.cmd [[au FileType markdown ++once lua require("packer.load")({'markdown-preview.nvim'}, { ft = "markdown" }, _G.packer_plugins)]]
 vim.cmd [[au FileType typescriptreact ++once lua require("packer.load")({'vim-jsx-typescript'}, { ft = "typescriptreact" }, _G.packer_plugins)]]
+vim.cmd [[au FileType markdown ++once lua require("packer.load")({'markdown-preview.nvim'}, { ft = "markdown" }, _G.packer_plugins)]]
 time([[Defining lazy-load filetype autocommands]], false)
 vim.cmd("augroup END")
 vim.cmd [[augroup filetypedetect]]

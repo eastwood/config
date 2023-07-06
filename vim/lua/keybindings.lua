@@ -35,7 +35,7 @@ bind(normal_mode, '<leader>pt', ':NvimTreeFocus<CR>')
 
 -- Git/Fugitive keybindings
 bind(normal_mode, '<leader>gf', ':Git pull')
-bind(normal_mode, '<leader>gp', ':Git push --no-verify -u')
+bind(normal_mode, '<leader>gp', ':Git push -u')
 bind(normal_mode, '<leader>gs', ':Git<CR>')
 
 -- Window bindings
@@ -61,7 +61,7 @@ bind(normal_mode, '<leader>ff',  ':edit ')
 bind(normal_mode, '<leader>fs',  ':w!<CR>')
 bind(normal_mode, '<leader>ft',  ':NvimTreeFindFile<CR>')
 bind(normal_mode, '<leader>feR', ':source ~/.config/nvim/init.lua<CR>')
-bind(normal_mode, '<leader>fed', ':FZF ~/.config/nvim/lua/<CR>')
+bind(normal_mode, '<leader>fed', ':FZF ~/.config/nvim/<CR>')
 bind(normal_mode, '<leader>fo',  ':edit ~/Documents/notes/backlog.md<CR>')
 
 -- Searching
