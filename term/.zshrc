@@ -1,12 +1,15 @@
 # Path to your oh-my-zsh installation.
+export ZSH="/home/eastwd/.oh-my-zsh"
+# export LD_LIBRARY_PATH=/usr/local/lib/
 export CUSTOM_SCRIPTS=~/.scripts
 export LOCAL_SCRIPTS=~/.local/bin
-export NODE_BIN="$HOME/.nvm/versions/node/v14.17.6/bin"
-export RUST_ANALYSER="$HOME/.local/bin"
-export PATH=$LOCAL_SCRIPTS:/usr/local/bin:$PATH:$CUSTOM_SCRIPTS:$NODE_BIN:$RUST_ANALYSER
+export NODE_BIN="/home/eastwd/.nvm/versions/node/v16.7.0/bin"
+export RUST_ANALYSER="home/eastwd/.local/bin"
+export EMACS="/home/eastwd/emacs"
+export PATH=$EMACS/bin:$LOCAL_SCRIPTS:/usr/local/bin:$PATH:$CUSTOM_SCRIPTS:$NODE_BIN:$RUST_ANALYSER
 
 ZSH_THEME="lambda"
-source $HOME/.oh-my-zsh/oh-my-zsh.sh
+source $ZSH/oh-my-zsh.sh
 
 # User configuration
 # export MANPATH="/usr/local/man:$MANPATH"
@@ -25,14 +28,17 @@ alias cdw='cd ~/Workspace/github.com/eastwood && $(ls | fzf) && clear'
 alias vim="nvim"
 alias emacsd="emacs --daemon"
 alias ec="emacsclient -t"
+alias npmi="npm i --legacy-peer-deps"
+bindkey -s '^P' 'cdw^M'
 export tmux="tmux"
+
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 # Setup fzf (relies on neovim install)
-fzfDir="$HOME/.local/share/nvim/site/pack/packer/start/fzf"
+fzfDir="/home/eastwd/.local/share/nvim/site/pack/packer/start/fzf/"
 # ---------
 if [[ ! "$PATH" == *${fzfDir}/bin* ]]; then
   PATH="${PATH:+${PATH}:}${fzfDir}/bin"
