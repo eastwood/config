@@ -1,5 +1,5 @@
 # Path to your oh-my-zsh installation.
-export ZSH="/home/eastwd/.oh-my-zsh"
+export ZSH=~/.oh-my-zsh
 # export LD_LIBRARY_PATH=/usr/local/lib/
 export CUSTOM_SCRIPTS=~/.scripts
 export GOPATH=~/Workspace/github.com/eastwood/go/
@@ -10,7 +10,6 @@ export EMACS="/home/eastwd/emacs"
 export PATH=$EMACS/bin:$LOCAL_SCRIPTS:/usr/local/bin:$PATH:$CUSTOM_SCRIPTS:$NODE_BIN:$RUST_ANALYSER
 
 ZSH_THEME="lambda"
-source $ZSH/oh-my-zsh.sh
 
 # User configuration
 # export MANPATH="/usr/local/man:$MANPATH"
@@ -39,7 +38,7 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 # Setup fzf (relies on neovim install)
-fzfDir="/home/eastwd/.local/share/nvim/site/pack/packer/start/fzf/"
+fzfDir=~/.local/share/nvim/site/pack/packer/start/fzf/
 # ---------
 if [[ ! "$PATH" == *${fzfDir}/bin* ]]; then
   PATH="${PATH:+${PATH}:}${fzfDir}/bin"
@@ -71,3 +70,4 @@ fi
 # export NODE_PATH=$NODE_PATH:$(npm root --quiet -g)
 
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
+source $ZSH/oh-my-zsh.sh
