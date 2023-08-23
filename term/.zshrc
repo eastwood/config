@@ -1,5 +1,6 @@
 # Path to your oh-my-zsh installation.
 export CUSTOM_SCRIPTS=~/.scripts
+export GOPATH=~/Workspace/github.com/eastwood/go/
 export LOCAL_SCRIPTS=~/.local/bin
 export NODE_BIN="$HOME/.nvm/versions/node/v14.17.6/bin"
 export RUST_ANALYSER="$HOME/.local/bin"
