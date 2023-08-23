@@ -49,8 +49,8 @@ local function save_profiles(threshold)
 end
 
 time([[Luarocks path setup]], true)
-local package_path_str = "/home/eastwd/.cache/nvim/packer_hererocks/2.1.0-beta3/share/lua/5.1/?.lua;/home/eastwd/.cache/nvim/packer_hererocks/2.1.0-beta3/share/lua/5.1/?/init.lua;/home/eastwd/.cache/nvim/packer_hererocks/2.1.0-beta3/lib/luarocks/rocks-5.1/?.lua;/home/eastwd/.cache/nvim/packer_hererocks/2.1.0-beta3/lib/luarocks/rocks-5.1/?/init.lua"
-local install_cpath_pattern = "/home/eastwd/.cache/nvim/packer_hererocks/2.1.0-beta3/lib/lua/5.1/?.so"
+local package_path_str = "/Users/eastwd/.cache/nvim/packer_hererocks/2.1.0-beta3/share/lua/5.1/?.lua;/Users/eastwd/.cache/nvim/packer_hererocks/2.1.0-beta3/share/lua/5.1/?/init.lua;/Users/eastwd/.cache/nvim/packer_hererocks/2.1.0-beta3/lib/luarocks/rocks-5.1/?.lua;/Users/eastwd/.cache/nvim/packer_hererocks/2.1.0-beta3/lib/luarocks/rocks-5.1/?/init.lua"
+local install_cpath_pattern = "/Users/eastwd/.cache/nvim/packer_hererocks/2.1.0-beta3/lib/lua/5.1/?.so"
 if not string.find(package.path, package_path_str, 1, true) then
   package.path = package.path .. ';' .. package_path_str
 end
@@ -76,187 +76,187 @@ time([[Defining packer_plugins]], true)
 _G.packer_plugins = {
   LuaSnip = {
     loaded = true,
-    path = "/home/eastwd/.local/share/nvim/site/pack/packer/start/LuaSnip",
+    path = "/Users/eastwd/.local/share/nvim/site/pack/packer/start/LuaSnip",
     url = "https://github.com/L3MON4D3/LuaSnip"
   },
   ["cmp-buffer"] = {
     loaded = true,
-    path = "/home/eastwd/.local/share/nvim/site/pack/packer/start/cmp-buffer",
+    path = "/Users/eastwd/.local/share/nvim/site/pack/packer/start/cmp-buffer",
     url = "https://github.com/hrsh7th/cmp-buffer"
   },
   ["cmp-nvim-lsp"] = {
     loaded = true,
-    path = "/home/eastwd/.local/share/nvim/site/pack/packer/start/cmp-nvim-lsp",
+    path = "/Users/eastwd/.local/share/nvim/site/pack/packer/start/cmp-nvim-lsp",
     url = "https://github.com/hrsh7th/cmp-nvim-lsp"
   },
   ["cmp-nvim-lua"] = {
     loaded = true,
-    path = "/home/eastwd/.local/share/nvim/site/pack/packer/start/cmp-nvim-lua",
+    path = "/Users/eastwd/.local/share/nvim/site/pack/packer/start/cmp-nvim-lua",
     url = "https://github.com/hrsh7th/cmp-nvim-lua"
   },
   ["cmp-path"] = {
     loaded = true,
-    path = "/home/eastwd/.local/share/nvim/site/pack/packer/start/cmp-path",
+    path = "/Users/eastwd/.local/share/nvim/site/pack/packer/start/cmp-path",
     url = "https://github.com/hrsh7th/cmp-path"
   },
   cmp_luasnip = {
     loaded = true,
-    path = "/home/eastwd/.local/share/nvim/site/pack/packer/start/cmp_luasnip",
+    path = "/Users/eastwd/.local/share/nvim/site/pack/packer/start/cmp_luasnip",
     url = "https://github.com/saadparwaiz1/cmp_luasnip"
   },
   ["friendly-snippets"] = {
     loaded = true,
-    path = "/home/eastwd/.local/share/nvim/site/pack/packer/start/friendly-snippets",
+    path = "/Users/eastwd/.local/share/nvim/site/pack/packer/start/friendly-snippets",
     url = "https://github.com/rafamadriz/friendly-snippets"
   },
   ["fsharp-vim"] = {
     loaded = true,
-    path = "/home/eastwd/.local/share/nvim/site/pack/packer/start/fsharp-vim",
+    path = "/Users/eastwd/.local/share/nvim/site/pack/packer/start/fsharp-vim",
     url = "https://github.com/kongo2002/fsharp-vim"
   },
   fzf = {
     loaded = true,
-    path = "/home/eastwd/.local/share/nvim/site/pack/packer/start/fzf",
+    path = "/Users/eastwd/.local/share/nvim/site/pack/packer/start/fzf",
     url = "https://github.com/junegunn/fzf"
   },
   ["fzf.vim"] = {
     loaded = true,
-    path = "/home/eastwd/.local/share/nvim/site/pack/packer/start/fzf.vim",
+    path = "/Users/eastwd/.local/share/nvim/site/pack/packer/start/fzf.vim",
     url = "https://github.com/junegunn/fzf.vim"
   },
   jester = {
     loaded = true,
-    path = "/home/eastwd/.local/share/nvim/site/pack/packer/start/jester",
+    path = "/Users/eastwd/.local/share/nvim/site/pack/packer/start/jester",
     url = "https://github.com/David-Kunz/jester"
   },
   ["lazygit.nvim"] = {
     loaded = true,
-    path = "/home/eastwd/.local/share/nvim/site/pack/packer/start/lazygit.nvim",
+    path = "/Users/eastwd/.local/share/nvim/site/pack/packer/start/lazygit.nvim",
     url = "https://github.com/kdheepak/lazygit.nvim"
   },
   ["lsp-zero.nvim"] = {
     loaded = true,
-    path = "/home/eastwd/.local/share/nvim/site/pack/packer/start/lsp-zero.nvim",
+    path = "/Users/eastwd/.local/share/nvim/site/pack/packer/start/lsp-zero.nvim",
     url = "https://github.com/VonHeikemen/lsp-zero.nvim"
   },
   ["lualine.nvim"] = {
     loaded = true,
-    path = "/home/eastwd/.local/share/nvim/site/pack/packer/start/lualine.nvim",
+    path = "/Users/eastwd/.local/share/nvim/site/pack/packer/start/lualine.nvim",
     url = "https://github.com/nvim-lualine/lualine.nvim"
   },
   ["markdown-preview.nvim"] = {
     loaded = false,
     needs_bufread = false,
     only_cond = false,
-    path = "/home/eastwd/.local/share/nvim/site/pack/packer/opt/markdown-preview.nvim",
+    path = "/Users/eastwd/.local/share/nvim/site/pack/packer/opt/markdown-preview.nvim",
     url = "https://github.com/iamcco/markdown-preview.nvim"
   },
   ["mason-lspconfig.nvim"] = {
     loaded = true,
-    path = "/home/eastwd/.local/share/nvim/site/pack/packer/start/mason-lspconfig.nvim",
+    path = "/Users/eastwd/.local/share/nvim/site/pack/packer/start/mason-lspconfig.nvim",
     url = "https://github.com/williamboman/mason-lspconfig.nvim"
   },
   ["mason.nvim"] = {
     loaded = true,
-    path = "/home/eastwd/.local/share/nvim/site/pack/packer/start/mason.nvim",
+    path = "/Users/eastwd/.local/share/nvim/site/pack/packer/start/mason.nvim",
     url = "https://github.com/williamboman/mason.nvim"
   },
   nerdcommenter = {
     loaded = true,
-    path = "/home/eastwd/.local/share/nvim/site/pack/packer/start/nerdcommenter",
+    path = "/Users/eastwd/.local/share/nvim/site/pack/packer/start/nerdcommenter",
     url = "https://github.com/scrooloose/nerdcommenter"
   },
   ["nvim-cmp"] = {
     loaded = true,
-    path = "/home/eastwd/.local/share/nvim/site/pack/packer/start/nvim-cmp",
+    path = "/Users/eastwd/.local/share/nvim/site/pack/packer/start/nvim-cmp",
     url = "https://github.com/hrsh7th/nvim-cmp"
   },
   ["nvim-lspconfig"] = {
     loaded = true,
-    path = "/home/eastwd/.local/share/nvim/site/pack/packer/start/nvim-lspconfig",
+    path = "/Users/eastwd/.local/share/nvim/site/pack/packer/start/nvim-lspconfig",
     url = "https://github.com/neovim/nvim-lspconfig"
   },
   ["nvim-surround"] = {
     config = { "\27LJ\2\n;\0\0\3\0\3\0\0066\0\0\0'\2\1\0B\0\2\0029\0\2\0B\0\1\1K\0\1\0\nsetup\18nvim-surround\frequire\0" },
     loaded = true,
-    path = "/home/eastwd/.local/share/nvim/site/pack/packer/start/nvim-surround",
+    path = "/Users/eastwd/.local/share/nvim/site/pack/packer/start/nvim-surround",
     url = "https://github.com/kylechui/nvim-surround"
   },
   ["nvim-tree.lua"] = {
     config = { "\27LJ\2\n7\0\0\3\0\3\0\0066\0\0\0'\2\1\0B\0\2\0029\0\2\0B\0\1\1K\0\1\0\nsetup\14nvim-tree\frequire\0" },
     loaded = true,
-    path = "/home/eastwd/.local/share/nvim/site/pack/packer/start/nvim-tree.lua",
+    path = "/Users/eastwd/.local/share/nvim/site/pack/packer/start/nvim-tree.lua",
     url = "https://github.com/kyazdani42/nvim-tree.lua"
   },
   ["nvim-treesitter"] = {
     loaded = true,
-    path = "/home/eastwd/.local/share/nvim/site/pack/packer/start/nvim-treesitter",
+    path = "/Users/eastwd/.local/share/nvim/site/pack/packer/start/nvim-treesitter",
     url = "https://github.com/nvim-treesitter/nvim-treesitter"
   },
   ["nvim-web-devicons"] = {
     loaded = false,
     needs_bufread = false,
-    path = "/home/eastwd/.local/share/nvim/site/pack/packer/opt/nvim-web-devicons",
+    path = "/Users/eastwd/.local/share/nvim/site/pack/packer/opt/nvim-web-devicons",
     url = "https://github.com/kyazdani42/nvim-web-devicons"
   },
   ["packer.nvim"] = {
     loaded = true,
-    path = "/home/eastwd/.local/share/nvim/site/pack/packer/start/packer.nvim",
+    path = "/Users/eastwd/.local/share/nvim/site/pack/packer/start/packer.nvim",
     url = "https://github.com/wbthomason/packer.nvim"
   },
   ["tokyonight.nvim"] = {
     loaded = true,
-    path = "/home/eastwd/.local/share/nvim/site/pack/packer/start/tokyonight.nvim",
+    path = "/Users/eastwd/.local/share/nvim/site/pack/packer/start/tokyonight.nvim",
     url = "https://github.com/folke/tokyonight.nvim"
   },
   ["vim-bufkill"] = {
     loaded = true,
-    path = "/home/eastwd/.local/share/nvim/site/pack/packer/start/vim-bufkill",
+    path = "/Users/eastwd/.local/share/nvim/site/pack/packer/start/vim-bufkill",
     url = "https://github.com/qpkorr/vim-bufkill"
   },
   ["vim-code-dark"] = {
     loaded = true,
-    path = "/home/eastwd/.local/share/nvim/site/pack/packer/start/vim-code-dark",
+    path = "/Users/eastwd/.local/share/nvim/site/pack/packer/start/vim-code-dark",
     url = "https://github.com/tomasiser/vim-code-dark"
   },
   ["vim-easy-align"] = {
     loaded = true,
-    path = "/home/eastwd/.local/share/nvim/site/pack/packer/start/vim-easy-align",
+    path = "/Users/eastwd/.local/share/nvim/site/pack/packer/start/vim-easy-align",
     url = "https://github.com/junegunn/vim-easy-align"
   },
   ["vim-fugitive"] = {
     loaded = true,
-    path = "/home/eastwd/.local/share/nvim/site/pack/packer/start/vim-fugitive",
+    path = "/Users/eastwd/.local/share/nvim/site/pack/packer/start/vim-fugitive",
     url = "https://github.com/tpope/vim-fugitive"
   },
   ["vim-jsx-typescript"] = {
     loaded = false,
     needs_bufread = true,
     only_cond = false,
-    path = "/home/eastwd/.local/share/nvim/site/pack/packer/opt/vim-jsx-typescript",
+    path = "/Users/eastwd/.local/share/nvim/site/pack/packer/opt/vim-jsx-typescript",
     url = "https://github.com/peitalin/vim-jsx-typescript"
   },
   ["vim-rhubarb"] = {
     loaded = true,
-    path = "/home/eastwd/.local/share/nvim/site/pack/packer/start/vim-rhubarb",
+    path = "/Users/eastwd/.local/share/nvim/site/pack/packer/start/vim-rhubarb",
     url = "https://github.com/tpope/vim-rhubarb"
   },
   ["which-key.nvim"] = {
     loaded = true,
-    path = "/home/eastwd/.local/share/nvim/site/pack/packer/start/which-key.nvim",
+    path = "/Users/eastwd/.local/share/nvim/site/pack/packer/start/which-key.nvim",
     url = "https://github.com/folke/which-key.nvim"
   }
 }
 
 time([[Defining packer_plugins]], false)
--- Config for: nvim-tree.lua
-time([[Config for nvim-tree.lua]], true)
-try_loadstring("\27LJ\2\n7\0\0\3\0\3\0\0066\0\0\0'\2\1\0B\0\2\0029\0\2\0B\0\1\1K\0\1\0\nsetup\14nvim-tree\frequire\0", "config", "nvim-tree.lua")
-time([[Config for nvim-tree.lua]], false)
 -- Config for: nvim-surround
 time([[Config for nvim-surround]], true)
 try_loadstring("\27LJ\2\n;\0\0\3\0\3\0\0066\0\0\0'\2\1\0B\0\2\0029\0\2\0B\0\1\1K\0\1\0\nsetup\18nvim-surround\frequire\0", "config", "nvim-surround")
 time([[Config for nvim-surround]], false)
+-- Config for: nvim-tree.lua
+time([[Config for nvim-tree.lua]], true)
+try_loadstring("\27LJ\2\n7\0\0\3\0\3\0\0066\0\0\0'\2\1\0B\0\2\0029\0\2\0B\0\1\1K\0\1\0\nsetup\14nvim-tree\frequire\0", "config", "nvim-tree.lua")
+time([[Config for nvim-tree.lua]], false)
 vim.cmd [[augroup packer_load_aucmds]]
 vim.cmd [[au!]]
   -- Filetype lazy-loads
@@ -266,9 +266,9 @@ vim.cmd [[au FileType markdown ++once lua require("packer.load")({'markdown-prev
 time([[Defining lazy-load filetype autocommands]], false)
 vim.cmd("augroup END")
 vim.cmd [[augroup filetypedetect]]
-time([[Sourcing ftdetect script at: /home/eastwd/.local/share/nvim/site/pack/packer/opt/vim-jsx-typescript/ftdetect/typescript.vim]], true)
-vim.cmd [[source /home/eastwd/.local/share/nvim/site/pack/packer/opt/vim-jsx-typescript/ftdetect/typescript.vim]]
-time([[Sourcing ftdetect script at: /home/eastwd/.local/share/nvim/site/pack/packer/opt/vim-jsx-typescript/ftdetect/typescript.vim]], false)
+time([[Sourcing ftdetect script at: /Users/eastwd/.local/share/nvim/site/pack/packer/opt/vim-jsx-typescript/ftdetect/typescript.vim]], true)
+vim.cmd [[source /Users/eastwd/.local/share/nvim/site/pack/packer/opt/vim-jsx-typescript/ftdetect/typescript.vim]]
+time([[Sourcing ftdetect script at: /Users/eastwd/.local/share/nvim/site/pack/packer/opt/vim-jsx-typescript/ftdetect/typescript.vim]], false)
 vim.cmd("augroup END")
 
 _G._packer.inside_compile = false
