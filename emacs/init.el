@@ -1,10 +1,11 @@
-(add-to-list 'load-path "~/.config/emacs/eastwood")
 (add-to-list 'treesit-extra-load-path "~/.config/emacs/grammars")
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 (add-hook 'emacs-startup-hook (lambda ()
                                 (message "Emacs loaded in %s."
                                          (emacs-init-time))))
 
 (setq custom-file "~/.config/emacs/custom.el")
+(load custom-file)
 (setq native-comp-async-report-warnings-errors nil)
 (setq native-comp-deferred-compilation t)
 (setq use-package-always-ensure t)
@@ -26,6 +27,10 @@
       (insert input))))
 
 (require 'use-package)
+
+(use-package nord-theme
+  :config
+  (load-theme 'nord))
 
 (use-package evil)
  
