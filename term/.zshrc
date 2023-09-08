@@ -1,7 +1,8 @@
 # Path to your oh-my-zsh installation.
-export ZSH="/home/eastwd/.oh-my-zsh"
+export ZSH=~/.oh-my-zsh
 # export LD_LIBRARY_PATH=/usr/local/lib/
 export CUSTOM_SCRIPTS=~/.scripts
+export GOPATH=~/Workspace/github.com/eastwood/go/
 export LOCAL_SCRIPTS=~/.local/bin
 export NODE_BIN="/home/eastwd/.nvm/versions/node/v16.7.0/bin"
 export RUST_ANALYSER="home/eastwd/.local/bin"
@@ -9,7 +10,6 @@ export EMACS="/home/eastwd/emacs"
 export PATH=$EMACS/bin:$LOCAL_SCRIPTS:/usr/local/bin:$PATH:$CUSTOM_SCRIPTS:$NODE_BIN:$RUST_ANALYSER
 
 ZSH_THEME="lambda"
-source $ZSH/oh-my-zsh.sh
 
 # User configuration
 # export MANPATH="/usr/local/man:$MANPATH"
@@ -34,11 +34,11 @@ export tmux="tmux"
 
 
 export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/nvm.sh --no-use" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 # Setup fzf (relies on neovim install)
-fzfDir="/home/eastwd/.local/share/nvim/site/pack/packer/start/fzf/"
+fzfDir=~/.local/share/nvim/site/pack/packer/start/fzf/
 # ---------
 if [[ ! "$PATH" == *${fzfDir}/bin* ]]; then
   PATH="${PATH:+${PATH}:}${fzfDir}/bin"
@@ -67,6 +67,6 @@ if [[ "$INSIDE_EMACS" = 'vterm' ]]; then
     alias clear='vterm_printf "51;Evterm-clear-scrollback";tput clear'
 fi
 
-# export NODE_PATH=$NODE_PATH:$(npm root --quiet -g)
+source $ZSH/oh-my-zsh.sh
 
-export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

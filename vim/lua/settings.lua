@@ -19,17 +19,14 @@ set.ignorecase = true
 set.hlsearch = true
 set.wrap = false
 
-vim.cmd[[
-let g:clipboard = {
-  \   'name': 'WslClipboard',
-  \   'copy': {
-  \      '+': 'clip.exe',
-  \      '*': 'clip.exe',
-  \    },
-  \   'paste': {
-  \      '+': 'powershell.exe -c [Console]::Out.Write($(Get-Clipboard -Raw).tostring().replace("`r", ""))',
-  \      '*': 'powershell.exe -c [Console]::Out.Write($(Get-Clipboard -Raw).tostring().replace("`r", ""))',
-  \   },
-  \   'cache_enabled': 0,
-  \ }
-]]
+local in_wsl = os.getenv('WSL_DISTRO_NAME') ~= nil
+
+if in_wsl then
+  local paste_command = 'powershell.exe -c [Console]::Out.Write($(Get-Clipboard -Raw).tostring().replace("`r", ""))'
+    vim.g.clipboard = {
+        name = 'wsl clipboard',
+        copy =  { ["+"] = { "clip.exe" },   ["*"] = { "clip.exe" } },
+        paste = { ["+"] = { paste_command }, ["*"] = { paste_command } },
+        cache_enabled = true
+    }
+end
