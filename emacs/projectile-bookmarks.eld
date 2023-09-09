@@ -1,1 +1,1 @@
-("~/Workspace/github.com/eastwood/fsharp/" "~/Workspace/github.com/eastwood/config/" "~/Workspace/github.com/eastwood/join-api/" "~/")
+("~/Workspace/github.com/eastwood/config/" "~/Workspace/github.com/eastwood/fsharp/" "~/Workspace/github.com/eastwood/join-api/" "~/")

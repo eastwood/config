@@ -17,15 +17,6 @@
 
 (global-set-key (kbd "C-c fed") 'open-config)
 
-(defun fido-exit-with-input ()
-  "Exit minibuffer using the current input (without completing)."
-  (interactive)
-  (let ((input (minibuffer-contents)))
-    (minibuffer-force-complete-and-exit)
-    (if (string-empty-p input)
-        (keyboard-quit)
-      (insert input))))
-
 (require 'use-package)
 
 (use-package nord-theme
