@@ -32,8 +32,9 @@
   :config
   (load-theme 'nord))
 
+; Use this when we're really frustrated default bindings
 (use-package evil)
- 
+
 (use-package which-key
   :config
   (which-key-mode))
@@ -45,7 +46,13 @@
   :config
   (global-company-mode))
 
-(use-package exec-path-from-shell)
+(use-package exec-path-from-shell
+  :config
+  (exec-path-from-shell-initialize))
+
+(use-package fsharp-mode)
+(use-package eglot-fsharp)
+
 (use-package projectile
   :config
   ;; Recommended keymap prefix on macOS

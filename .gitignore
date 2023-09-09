@@ -37,3 +37,7 @@ npm-debug.log
 
 /vim/plugged
 /vim/autoload
+/emacs/FsAutoComplete/
+/emacs/auto-save-list/
+/emacs/transient/
+/emacs/tree-sitter/libtree-sitter-yaml.so
