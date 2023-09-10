@@ -1,11 +1,12 @@
 (add-to-list 'treesit-extra-load-path "~/.config/emacs/grammars")
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 (add-hook 'emacs-startup-hook (lambda ()
-                                (message "Emacs loaded in %s."
+				(message "Emacs loaded in %s."
                                          (emacs-init-time))))
 
 (setq custom-file "~/.config/emacs/custom.el")
 (load custom-file)
+
 (setq native-comp-async-report-warnings-errors nil)
 (setq native-comp-deferred-compilation t)
 (setq use-package-always-ensure t)
@@ -21,10 +22,13 @@
 
 (use-package nord-theme
   :config
-  (load-theme 'nord))
+  (load-theme 'nord t))
 
-; Use this when we're really frustrated default bindings
-(use-package evil)
+(use-package god-mode
+  :config
+  (define-key god-local-mode-map (kbd ".") #'repeat)
+  (define-key god-local-mode-map (kbd "i") #'god-local-mode)
+  (global-set-key (kbd "<escape>") #'god-local-mode))
 
 (use-package which-key
   :config
@@ -41,8 +45,10 @@
   :config
   (exec-path-from-shell-initialize))
 
-(use-package fsharp-mode)
-(use-package eglot-fsharp)
+(use-package fsharp-mode
+  :defer t)
+(use-package eglot-fsharp
+  :defer t)
 
 (use-package projectile
   :config
@@ -53,6 +59,7 @@
   (projectile-mode))
 
 (use-package typescript-ts-mode
+  :defer t
   :mode "\\.ts\\'"
   :hook ((typescript-ts-mode . eglot-ensure)))
 
