@@ -27,8 +27,8 @@
 (use-package god-mode
   :config
   (define-key god-local-mode-map (kbd ".") #'repeat)
-  (define-key god-local-mode-map (kbd "i") #'god-local-mode)
-  (global-set-key (kbd "<escape>") #'god-local-mode))
+  (define-key god-local-mode-map (kbd "i") #'god-local-mode))
+  ;; (global-set-key (kbd "<escape>") #'god-local-mode))
 
 (use-package which-key
   :config
@@ -45,11 +45,6 @@
   :config
   (exec-path-from-shell-initialize))
 
-(use-package fsharp-mode
-  :defer t)
-(use-package eglot-fsharp
-  :defer t)
-
 (use-package projectile
   :config
   ;; Recommended keymap prefix on macOS
@@ -58,10 +53,32 @@
   (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
   (projectile-mode))
 
+(use-package fsharp-mode
+  :defer t)
+
+(use-package eglot-fsharp
+  :defer t)
+
+(use-package move-text
+  :config
+  (global-set-key (kbd "M-p") 'move-text-up)
+  (global-set-key (kbd "M-n") 'move-text-down))
+
+(use-package multiple-cursors
+  :config
+  (global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
+  (global-set-key (kbd "C->")         'mc/mark-next-like-this)
+  (global-set-key (kbd "C-<")         'mc/mark-previous-like-this)
+  (global-set-key (kbd "C-c C-<")     'mc/mark-all-like-this)
+  (global-set-key (kbd "C-\"")        'mc/skip-to-next-like-this)
+  (global-set-key (kbd "C-:")         'mc/skip-to-previous-like-this))
+
 (use-package typescript-ts-mode
   :defer t
   :mode "\\.ts\\'"
   :hook ((typescript-ts-mode . eglot-ensure)))
+
+(use-package vterm)
 
 (fido-mode)
 (fido-vertical-mode)
