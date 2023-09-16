@@ -27,8 +27,8 @@
 (use-package god-mode
   :config
   (define-key god-local-mode-map (kbd ".") #'repeat)
-  (define-key god-local-mode-map (kbd "i") #'god-local-mode))
-  ;; (global-set-key (kbd "<escape>") #'god-local-mode))
+  (define-key god-local-mode-map (kbd "i") #'god-local-mode)
+  (global-set-key (kbd "<escape>") #'god-local-mode))
 
 (use-package which-key
   :config
@@ -52,7 +52,7 @@
   ;; Recommended keymap prefix on Windows/Linux
   (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
   (projectile-mode))
-
+	
 (use-package fsharp-mode
   :defer t)
 
@@ -60,7 +60,8 @@
   :defer t)
 
 (use-package move-text
-  :config
+  :commands (move-text-up move-text-down)
+  :init
   (global-set-key (kbd "M-p") 'move-text-up)
   (global-set-key (kbd "M-n") 'move-text-down))
 
@@ -70,8 +71,7 @@
   (global-set-key (kbd "C->")         'mc/mark-next-like-this)
   (global-set-key (kbd "C-<")         'mc/mark-previous-like-this)
   (global-set-key (kbd "C-c C-<")     'mc/mark-all-like-this)
-  (global-set-key (kbd "C-\"")        'mc/skip-to-next-like-this)
-  (global-set-key (kbd "C-:")         'mc/skip-to-previous-like-this))
+  (global-set-key (kbd "C-\"")        'mc/skip-to-next-like-this))
 
 (use-package typescript-ts-mode
   :defer t

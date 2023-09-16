@@ -84,7 +84,7 @@
    '("4c7228157ba3a48c288ad8ef83c490b94cb29ef01236205e360c2c4db200bb18" default))
  '(initial-frame-alist '((fullscreen . maximized)))
  '(package-selected-packages
-   '(multiple-cursors move-text vterm god-mode magit nord-theme markdown-mode exec-path-from-shell company no-littering eglot-fsharp which-key evil projectile)))
+   '(multiple-cursors move-text vterm god-mode magit nord-theme markdown-mode exec-path-from-shell company no-littering eglot-fsharp which-key projectile)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
