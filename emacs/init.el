@@ -1,8 +1,13 @@
-(add-to-list 'treesit-extra-load-path "~/.config/emacs/grammars")
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 (add-hook 'emacs-startup-hook (lambda ()
 				(message "Emacs loaded in %s."
                                          (emacs-init-time))))
+
+(set-face-attribute 'default nil
+                    :family "RobotoMono Nerd Font"
+                    :height 120
+                    :weight 'normal
+                    :width 'normal)
 
 (setq custom-file "~/.config/emacs/custom.el")
 (load custom-file)
@@ -20,10 +25,6 @@
 
 (require 'use-package)
 
-(use-package nord-theme
-  :config
-  (load-theme 'nord t))
-
 (use-package god-mode
   :config
   (define-key god-local-mode-map (kbd ".") #'repeat)
@@ -36,6 +37,23 @@
 
 (use-package magit
   :commands (magit-status))
+
+(use-package git-link
+  :commands (git-link)
+  :config
+  (setq git-link-open-in-browser t))
+
+(defun my/open-jira()
+  "Open JIRA in browser."
+  (interactive)
+  (let (name (magit-get-current-branch))
+    (browse-url (concat "https://jira.nib.com.au/browse/" name))))
+
+(defun my/open-buildkite()
+  "Open Buildkite in browser."
+  (interactive)
+  (let ((name (projectile-project-name)))
+    (browse-url (concat "https://buildkite.com/nib-health-funds-ltd/" name))))
 
 (use-package company
   :config
@@ -62,16 +80,15 @@
 (use-package move-text
   :commands (move-text-up move-text-down)
   :init
-  (global-set-key (kbd "M-p") 'move-text-up)
-  (global-set-key (kbd "M-n") 'move-text-down))
+  (global-set-key (kbd "M-<up>") 'move-text-up)
+  (global-set-key (kbd "M-<down>") 'move-text-down))
 
 (use-package multiple-cursors
   :config
-  (global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
-  (global-set-key (kbd "C->")         'mc/mark-next-like-this)
-  (global-set-key (kbd "C-<")         'mc/mark-previous-like-this)
-  (global-set-key (kbd "C-c C-<")     'mc/mark-all-like-this)
-  (global-set-key (kbd "C-\"")        'mc/skip-to-next-like-this))
+  (global-set-key (kbd "C-S-<up>")         'mc/mark-previous-like-this)
+  (global-set-key (kbd "C-S-<down>")         'mc/mark-next-like-this)
+  (global-set-key (kbd "C-S-<left>")     'mc/mark-all-like-this)
+  (global-set-key (kbd "C-S-<right>")        'mc/skip-to-next-like-this))
 
 (use-package typescript-ts-mode
   :defer t
@@ -79,6 +96,8 @@
   :hook ((typescript-ts-mode . eglot-ensure)))
 
 (use-package vterm)
+
+(use-package all-the-icons)
 
 (fido-mode)
 (fido-vertical-mode)
