@@ -27,9 +27,17 @@
 
 (use-package god-mode
   :config
+  (setq god-exempt-major-modes nil)
+  (setq god-exempt-predicates nil)
   (define-key god-local-mode-map (kbd ".") #'repeat)
-  (define-key god-local-mode-map (kbd "i") #'god-local-mode)
-  (global-set-key (kbd "<escape>") #'god-local-mode))
+  (define-key god-local-mode-map (kbd "i") #'god-mode-all)
+  (define-key god-local-mode-map (kbd "[") #'backward-paragraph)
+  (define-key god-local-mode-map (kbd "]") #'forward-paragraph)
+  (global-set-key (kbd "<escape>") #'god-local-mode)
+  (global-set-key (kbd "C-x C-1") #'delete-other-windows)
+  (global-set-key (kbd "C-x C-2") #'split-window-below)
+  (global-set-key (kbd "C-x C-3") #'split-window-right)
+  (global-set-key (kbd "C-x C-0") #'delete-window))
 
 (use-package which-key
   :config
@@ -70,7 +78,7 @@
   ;; Recommended keymap prefix on Windows/Linux
   (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
   (projectile-mode))
-	
+
 (use-package fsharp-mode
   :defer t)
 
@@ -96,7 +104,6 @@
   :hook ((typescript-ts-mode . eglot-ensure)))
 
 (use-package vterm)
-
 (use-package all-the-icons)
 
 (fido-mode)
