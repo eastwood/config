@@ -16,6 +16,8 @@
 (setq native-comp-deferred-compilation t)
 (setq use-package-always-ensure t)
 (setq inhibit-startup-message t)
+(setq visible-bell t)
+(setq ring-bell-function 'ignore)
 
 (defun open-config()
   (interactive)
@@ -71,6 +73,7 @@
   :config
   (exec-path-from-shell-initialize))
 
+
 (use-package projectile
   :config
   ;; Recommended keymap prefix on macOS
@@ -78,6 +81,13 @@
   ;; Recommended keymap prefix on Windows/Linux
   (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
   (projectile-mode))
+
+(use-package perspective
+  :init
+  (global-set-key (kbd "<f12>") 'persp-switch)
+  (setq persp-suppress-no-prefix-key-warning t)
+  :config
+  (persp-mode))
 
 (use-package fsharp-mode
   :defer t)
@@ -99,12 +109,13 @@
   (global-set-key (kbd "C-S-<right>")        'mc/skip-to-next-like-this))
 
 (use-package typescript-ts-mode
-  :defer t
   :mode "\\.ts\\'"
-  :hook ((typescript-ts-mode . eglot-ensure)))
+  :hook ((typescript-ts-mode . eglot-ensure))
+  :config
+  (setq-default typescript-indent-level 2))
 
 (use-package vterm)
-(use-package all-the-icons)
 
 (fido-mode)
 (fido-vertical-mode)
+(load-theme 'leuven t)
