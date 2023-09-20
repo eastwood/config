@@ -8,14 +8,11 @@ end
 
 require('packer').startup(function(use)
   use 'wbthomason/packer.nvim'
-  use {'nvim-lualine/lualine.nvim', requires = { 'kyazdani42/nvim-web-devicons', opt = true }}
+  use {'nvim-lualine/lualine.nvim', requires = { 'kyazdani42/nvim-web-devicons' }}
   use 'folke/tokyonight.nvim'
-  use 'tomasiser/vim-code-dark'
-  use 'kongo2002/fsharp-vim'
   use {"peitalin/vim-jsx-typescript", ft={'typescriptreact'}}
   use {"iamcco/markdown-preview.nvim", ft={'markdown'}}
   use 'nvim-treesitter/nvim-treesitter'
-  use 'kdheepak/lazygit.nvim'
   use 'tpope/vim-fugitive'
   use 'tpope/vim-rhubarb'
   use 'junegunn/vim-easy-align'
@@ -23,18 +20,22 @@ require('packer').startup(function(use)
   use 'junegunn/fzf'
   use 'junegunn/fzf.vim'
   use 'David-Kunz/jester'
-  use 'folke/which-key.nvim'
   use 'scrooloose/nerdcommenter'
   use {
     'kyazdani42/nvim-tree.lua',
     requires = {
-      'kyazdani42/nvim-web-devicons', -- optional, for file icons
+      'kyazdani42/nvim-web-devicons'
     },
-    command = ':NvimTreeToggle',
+    cmd = 'NvimTreeToggle',
+    opt = true,
     config = function()
-      require('nvim-tree').setup()
-    end,
-    tag = 'nightly'
+      require('nvim-tree').setup({
+        view = {
+          width = 50,
+          side = "right"
+        }
+      })
+    end
   }
   -- LSP configuration
   use {
@@ -64,6 +65,11 @@ require('packer').startup(function(use)
 		  require('nvim-surround').setup()
 	  end
   }
-
+  use {
+    "windwp/nvim-autopairs",
+    config = function()
+      require("nvim-autopairs").setup()
+    end
+  }
 end)
 

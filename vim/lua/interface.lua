@@ -1,11 +1,13 @@
 local set = vim.opt
 
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
+
 -- User Interface
 set.colorcolumn = '120'
 set.cursorline = true
 set.title = true
 set.number = true
-set.lazyredraw = true
 set.signcolumn = 'yes'
 set.hidden = true
 set.showmode = true
@@ -17,7 +19,7 @@ set.modelines = 0
 set.history = 500
 set.showmatch = true
 set.splitbelow = true
-set.splitright = true 
+set.splitright = true
 set.termguicolors = true
 
 if (vim.fn.has('gui_running') == 1) then
@@ -30,7 +32,7 @@ end
 
 vim.cmd [[
   syntax enable
-  colorscheme tokyonight-storm
+  colorscheme tokyonight-moon
 ]]
 
 require('lualine').setup()
