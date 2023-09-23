@@ -65,14 +65,15 @@
   (let ((name (projectile-project-name)))
     (browse-url (concat "https://buildkite.com/nib-health-funds-ltd/" name))))
 
-(use-package company
+(use-package corfu
   :config
-  (global-company-mode))
+  (global-set-key (kbd "C-.") #'complete-symbol)
+  (setq tab-always-indent 'complete)
+  (global-corfu-mode))
 
 (use-package exec-path-from-shell
   :config
   (exec-path-from-shell-initialize))
-
 
 (use-package projectile
   :config
@@ -119,3 +120,30 @@
 (fido-mode)
 (fido-vertical-mode)
 (load-theme 'leuven t)
+
+(defconst my/WINDOWS (memq window-system '(w32)))
+(defconst my/TERM    (memq window-system '(nil)))
+(defconst my/OSX     (memq window-system '(ns mac)))
+(defconst my/WSL     (memq window-system '(x  nil)))
+(defconst my/GTK     (memq window-system '(pgtk)))
+
+(defun my/configure-wayland-clipboard()
+    (setq wl-copy-process nil)    
+    (defun wl-copy (text)
+      (setq wl-copy-process
+	    (make-process :name "wl-copy"
+			  :buffer nil
+			  :command '("wl-copy" "-f" "-n")
+			  :connection-type 'pipe))
+      (process-send-string wl-copy-process text)
+      (process-send-eof wl-copy-process))
+  
+  (defun wl-paste ()
+    (if (and wl-copy-process (process-live-p wl-copy-process))
+	nil ; should return nil if we're the current paste owner
+      (shell-command-to-string "wl-paste -n | tr -d \r")))
+
+
+  (setq interprogram-cut-function 'wl-copy))
+
+(my/configure-wayland-clipboard)
