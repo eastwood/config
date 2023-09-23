@@ -20,6 +20,7 @@ npm-debug.log
 /emacs/etc
 /emacs/var
 /emacs/grammars
+/emacs/projectile-bookmarks.eld
 
 !/emacs.d/init.el
 !/emacs.d/early-init.el
