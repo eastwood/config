@@ -18,6 +18,7 @@
 (setq inhibit-startup-message t)
 (setq visible-bell t)
 (setq ring-bell-function 'ignore)
+(electric-pair-mode t)
 
 (defun open-config()
   (interactive)
@@ -31,6 +32,7 @@
   :config
   (setq god-exempt-major-modes nil)
   (setq god-exempt-predicates nil)
+
   (define-key god-local-mode-map (kbd ".") #'repeat)
   (define-key god-local-mode-map (kbd "i") #'god-mode-all)
   (define-key god-local-mode-map (kbd "[") #'backward-paragraph)
@@ -39,7 +41,31 @@
   (global-set-key (kbd "C-x C-1") #'delete-other-windows)
   (global-set-key (kbd "C-x C-2") #'split-window-below)
   (global-set-key (kbd "C-x C-3") #'split-window-right)
-  (global-set-key (kbd "C-x C-0") #'delete-window))
+  (global-set-key (kbd "C-x C-0") #'delete-window)
+
+  (defun my-god-mode-update-mode-line ()
+    (cond
+     (god-local-mode
+      (set-face-attribute 'mode-line nil
+                          :foreground "#604000"
+                          :background "#fff29a")
+      (set-face-attribute 'mode-line-inactive nil
+                          :foreground "#3f3000"
+                          :background "#fff3da"))
+     (t
+      (set-face-attribute 'mode-line nil
+			  :foreground "#0a0a0a"
+			  :background "#d7d7d7")
+      (set-face-attribute 'mode-line-inactive nil
+			  :foreground "#404148"
+			  :background "#efefef"))))
+  (add-hook 'post-command-hook #'my-god-mode-update-mode-line)
+  ;; this is a nice addition to making sure that the cursor changes for visual help
+  (defun my-god-mode-update-cursor-type ()
+    (setq god-mode-enable-function-key-translation nil)
+    (setq cursor-type (if (or god-local-mode buffer-read-only) 'box 'bar)))
+
+  (add-hook 'post-command-hook #'my-god-mode-update-cursor-type))
 
 (use-package which-key
   :config
@@ -119,7 +145,11 @@
 
 (fido-mode)
 (fido-vertical-mode)
-(load-theme 'leuven t)
+(load-theme 'leuven-dark t)
+
+(use-package doom-modeline
+  :init
+  (doom-modeline-mode 1))
 
 (defconst my/WINDOWS (memq window-system '(w32)))
 (defconst my/TERM    (memq window-system '(nil)))
@@ -127,6 +157,10 @@
 (defconst my/WSL     (memq window-system '(x  nil)))
 (defconst my/GTK     (memq window-system '(pgtk)))
 
+;; You'll need to download wl-clipboard to get this working for
+;; WSL2. Otherwise, there's some really shit freezes and experiences.
+;; This will also make it so that have a separate process running
+;; Called wl-copy in the background, which you'll need to exit
 (defun my/configure-wayland-clipboard()
     (setq wl-copy-process nil)    
     (defun wl-copy (text)
