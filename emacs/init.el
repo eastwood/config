@@ -45,7 +45,7 @@
 
   (defun my-god-mode-update-mode-line ()
     (cond
-     (god-local-mode
+     (god-mode
       (set-face-attribute 'mode-line nil
                           :foreground "#604000"
                           :background "#ffff0b")
