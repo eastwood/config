@@ -48,14 +48,14 @@
      (god-local-mode
       (set-face-attribute 'mode-line nil
                           :foreground "#604000"
-                          :background "#fff29a")
+                          :background "#ffff0b")
       (set-face-attribute 'mode-line-inactive nil
                           :foreground "#3f3000"
                           :background "#fff3da"))
      (t
       (set-face-attribute 'mode-line nil
 			  :foreground "#0a0a0a"
-			  :background "#d7d7d7")
+			  :background "#eeeeee")
       (set-face-attribute 'mode-line-inactive nil
 			  :foreground "#404148"
 			  :background "#efefef"))))
