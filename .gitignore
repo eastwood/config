@@ -12,3 +12,4 @@
 /emacs/auto-save-list/
 /emacs/transient/
 /emacs/tree-sitter/libtree-sitter-yaml.so
+*.dylib
