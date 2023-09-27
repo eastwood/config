@@ -1,7 +1,7 @@
 (defconst my/WINDOWS (memq window-system '(w32)))
 (defconst my/TERM    (memq window-system '(nil)))
 (defconst my/OSX     (memq window-system '(ns mac)))
-(defconst my/WSL     (memq window-system '(x  nil)))
+(defconst my/WSL     (memq window-system '(x nil)))
 (defconst my/GTK     (memq window-system '(pgtk)))
 
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
@@ -10,11 +10,12 @@
 	    (message "Emacs loaded in %s."
                      (emacs-init-time))))
 
-(set-face-attribute 'default nil
-                    :family "RobotoMono Nerd Font"
-                    :height 120
-                    :weight 'normal
-                    :width 'normal)
+(set-face-attribute
+ 'default nil
+ :family "RobotoMono Nerd Font"
+ :height 120
+ :weight 'normal
+ :width 'normal)
 
 (set-fontset-font t 'symbol "Apple Color Emoji")
 
@@ -32,11 +33,14 @@
 (global-set-key (kbd "C-x C-2") #'split-window-below)
 (global-set-key (kbd "C-x C-3") #'split-window-right)
 (global-set-key (kbd "C-x C-0") #'delete-window)
+(global-set-key (kbd "C-x C-o") #'other-window)
 (global-set-key (kbd "C-.") #'eglot-code-actions)
 (global-set-key (kbd "M-<up>") 'move-text-up)
 (global-set-key (kbd "M-<down>") 'move-text-down)
 (global-set-key (kbd "C-<up>") 'backward-paragraph)
 (global-set-key (kbd "C-<down>") 'forward-paragraph)
+(global-set-key (kbd "s-<up>") 'backward-paragraph)
+(global-set-key (kbd "s-<down>") 'forward-paragraph)
 (global-set-key (kbd "C-M-<up>")  'mc/mark-previous-like-this)
 (global-set-key (kbd "C-M-<down>") 'mc/mark-next-like-this)
 (global-set-key (kbd "C-M-<left>") 'mc/mark-all-like-this)
@@ -90,12 +94,14 @@
     (browse-url (concat "https://buildkite.com/nib-health-funds-ltd/" name))))
 
 (use-package corfu
+  :custom
+  (corfu-auto t) 
   :config
   (setq tab-always-indent 'complete)
   (global-corfu-mode))
 
 (use-package exec-path-from-shell
-  :config
+  :init
   (exec-path-from-shell-initialize))
 
 (use-package projectile
@@ -168,6 +174,8 @@
       (shell-command-to-string "wl-paste -n | tr -d \r")))
   (setq interprogram-cut-function 'wl-copy))
 
-(my/configure-wayland-clipboard)
+(when my/WSL
+  (my/configure-wayland-clipboard))
+
 (electric-pair-mode t)
 (load custom-file)
