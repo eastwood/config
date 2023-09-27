@@ -174,7 +174,7 @@
       (shell-command-to-string "wl-paste -n | tr -d \r")))
   (setq interprogram-cut-function 'wl-copy))
 
-(when my/WSL
+(when my/GTK
   (my/configure-wayland-clipboard))
 
 (electric-pair-mode t)
