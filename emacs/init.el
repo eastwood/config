@@ -7,6 +7,9 @@
 (defconst my/WSL     (memq window-system '(x nil)))
 (defconst my/GTK     (memq window-system '(pgtk)))
 
+(require 'package)
+(require 'use-package)
+
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 (add-hook 'emacs-startup-hook
 	  (lambda ()
@@ -17,7 +20,7 @@
 (set-face-attribute
  'default nil
  :family "RobotoMono Nerd Font"
- :height 120
+ :height 140
  :weight 'normal
  :width 'normal)
 
@@ -47,7 +50,7 @@
   (define-key god-local-mode-map (kbd ".") #'repeat)
   (define-key god-local-mode-map (kbd "i") #'god-mode-all)
   (define-key god-local-mode-map (kbd "[") #'backward-paragraph)
-  (define-key god-local-mode-map (kbd "]") #'forward-paragraph)  
+  (define-key god-local-mode-map (kbd "]") #'forward-paragraph)
   ;; this is a nice addition to making sure that the cursor changes for visual help
   (defun my-god-mode-update-cursor-type ()
     (setq god-mode-enable-function-key-translation nil)
@@ -60,7 +63,9 @@
   (which-key-mode))
 
 (use-package magit
-  :commands (magit-status))
+  :commands (magit-status)
+  :config
+  (setq magit-bury-buffer-function 'kill-buffer))
 
 (use-package git-link
   :commands (git-link)
@@ -95,11 +100,12 @@
 
 (use-package projectile
   :commands (projectile-switch-project)
+  :init
+  (projectile-mode)
   :config
   (define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
   (define-key projectile-mode-map (kbd "C-S-f") 'projectile-ripgrep)
-  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
-  (projectile-mode))
+  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map))
 
 (use-package perspective
   :init
@@ -184,6 +190,8 @@
 (global-set-key (kbd "C-M-<right>") 'mc/skip-to-next-like-this)
 (global-set-key (kbd "<f12>") 'persp-switch)
 (global-set-key (kbd "C-=") 'er/expand-region)
+(global-set-key (kbd "M-n") 'flymake-goto-next-error)
+(global-set-key (kbd "M-p") 'flymake-goto-prev-error)
 
 (load custom-file)
 (load-theme 'nord t)
