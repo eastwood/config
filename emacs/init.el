@@ -1,4 +1,4 @@
-(setq user-full-name "Clinton Ryan"
+`(setq user-full-name "Clinton Ryan"
       user-mail-address "hello@clintonryan.com")
 
 (defconst my/WINDOWS (memq window-system '(w32)))
@@ -44,9 +44,10 @@
   (global-set-key (kbd "C-S-z") 'undo-redo))
 
 (use-package god-mode
-  :config
+  :init
   (setq god-mode-enable-function-key-translation nil)
   (setq god-exempt-major-modes '(vterm-mode info-mode))
+  :config
   (define-key god-local-mode-map (kbd ".") #'repeat)
   (define-key god-local-mode-map (kbd "i") #'god-mode-all)
   (define-key god-local-mode-map (kbd "[") #'backward-paragraph)
@@ -150,6 +151,8 @@
 (use-package vterm)
 (use-package doom-modeline)
 (use-package rg)
+(use-package markdown-mode)
+(use-package zenburn-theme)
 
 ;; You'll need to download wl-clipboard to get this working for
 ;; WSL2. Otherwise, there's some really shit freezes and experiences.
@@ -183,8 +186,8 @@
 (global-set-key (kbd "C-x C-o") #'other-window)
 (global-set-key (kbd "<escape>") (lambda () (interactive) (god-local-mode t)))
 (global-set-key (kbd "C-.") #'eglot-code-actions)
-(global-set-key (kbd "M-<up>") 'backward-paragraph)
-(global-set-key (kbd "M-<down>") 'forward-paragraph)
+(global-set-key (kbd "M-<up>") 'flymake-goto-prev-error)
+(global-set-key (kbd "M-<down>") 'flymake-goto-next-error)
 (global-set-key (kbd "C-<up>") 'move-text-up)
 (global-set-key (kbd "C-<down>") 'move-text-down)
 (global-set-key (kbd "s-<up>") 'backward-paragraph)
@@ -193,10 +196,11 @@
 (global-set-key (kbd "C-M-<down>") 'mc/mark-next-like-this)
 (global-set-key (kbd "C-M-<left>") 'mc/mark-all-like-this)
 (global-set-key (kbd "C-M-<right>") 'mc/skip-to-next-like-this)
+(global-set-key (kbd "M-n") 'forward-paragraph)
+(global-set-key (kbd "M-p") 'backward-paragraph)
 (global-set-key (kbd "<f12>") 'persp-switch)
 (global-set-key (kbd "C-=") 'er/expand-region)
-(global-set-key (kbd "M-n") 'flymake-goto-next-error)
-(global-set-key (kbd "M-p") 'flymake-goto-prev-error)
 
 (load custom-file)
-(load-theme 'nord t)
+(load-theme 'leuven-dark t)
+ 
