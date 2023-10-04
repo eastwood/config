@@ -62,10 +62,15 @@
   :config
   (which-key-mode))
 
+(defun my/kill-magit-buffer ()
+  (interactive)
+  (setq current-prefix-arg '(16))
+  (magit-mode-bury-buffer))
+
 (use-package magit
   :commands (magit-status)
   :config
-  (setq magit-bury-buffer-function 'kill-buffer))
+  (define-key magit-mode-map (kbd "q") 'my/kill-magit-buffer))
 
 (use-package git-link
   :commands (git-link)
