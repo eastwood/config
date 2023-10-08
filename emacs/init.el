@@ -94,7 +94,7 @@
 
 (use-package corfu
   :custom
-  (corfu-auto t) 
+  (corfu-auto t)
   :config
   (setq tab-always-indent 'complete)
   (global-corfu-mode))
