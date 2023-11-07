@@ -13,3 +13,4 @@
 /emacs/transient/
 /emacs/tree-sitter/libtree-sitter-yaml.so
 *.dylib
+emacs/projectile-bookmarks.eld

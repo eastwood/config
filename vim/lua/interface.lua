@@ -1,8 +1,5 @@
 local set = vim.opt
 
-vim.g.loaded_netrw = 1
-vim.g.loaded_netrwPlugin = 1
-
 -- User Interface
 set.colorcolumn = '120'
 set.cursorline = true
