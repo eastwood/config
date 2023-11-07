@@ -198,4 +198,4 @@
 (global-set-key (kbd "M-p") 'flymake-goto-prev-error)
 
 (load custom-file)
-(load-theme 'nord t)
+(load-theme 'leuven-dark t)

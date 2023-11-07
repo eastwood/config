@@ -11,6 +11,6 @@
 /emacs/FsAutoComplete/
 /emacs/auto-save-list/
 /emacs/transient/
-/emacs/tree-sitter/libtree-sitter-yaml.so
+/emacs/tree-sitter/*.so
 *.dylib
-emacs/projectile-bookmarks.eld
+/emacs/multisession/
