@@ -100,7 +100,8 @@
   (global-corfu-mode))
 
 (use-package exec-path-from-shell
-  :commands (exec-path-from-shell-initialize))
+  :config
+  (exec-path-from-shell-initialize))
 
 (use-package projectile
   :commands (projectile-switch-project)
