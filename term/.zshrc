@@ -2,12 +2,13 @@
 export ZSH=~/.oh-my-zsh
 # export LD_LIBRARY_PATH=/usr/local/lib/
 export CUSTOM_SCRIPTS=~/.scripts
-export GOPATH=~/Workspace/github.com/eastwood/go/
+export GOBIN=~/Workspace/github.com/eastwood/go/bin
 export LOCAL_SCRIPTS=~/.local/bin
 export NODE_BIN="/home/eastwd/.nvm/versions/node/v16.7.0/bin"
 export RUST_ANALYSER="home/eastwd/.local/bin"
 export EMACS="/home/eastwd/emacs"
-export PATH=$EMACS/bin:$LOCAL_SCRIPTS:/usr/local/bin:$PATH:$CUSTOM_SCRIPTS:$NODE_BIN:$RUST_ANALYSER
+export DOTNET_TOOLS=~/.dotnet/tools
+export PATH=$EMACS/bin:$LOCAL_SCRIPTS:/usr/local/bin:$PATH:$CUSTOM_SCRIPTS:$NODE_BIN:$RUST_ANALYSER:$GOBIN:$DOTNET_TOOLS
 
 ZSH_THEME="lambda"
 
@@ -70,3 +71,5 @@ fi
 source $ZSH/oh-my-zsh.sh
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+

@@ -120,10 +120,19 @@
 
 (use-package fsharp-mode
   :mode "\\.fs\\'"
-  :mode "\\.fsx\\'")
+  :mode "\\.fsx\\'"
+  :config
+  (define-key fsharp-mode-map (kbd "M-RET") 'fsharp-eval-phrase)
+  (define-key fsharp-mode-map (kbd "M-n") 'flymake-goto-next-error)
+  (define-key fsharp-mode-map (kbd "M-p") 'flymake-goto-prev-error)
+  (setq inferior-fsharp-program "dotnet fsi --readline-"))
 
 (use-package eglot-fsharp
-  :defer t)
+  :config
+  ;; I had to manually call (eglot-fsharp 9) to interactively install the FS stuff
+  ;; I'd recommend doing this, otherwise you have to manually install it yourself and set
+  ;; parameters
+  )
 
 (use-package move-text
   :commands (move-text-up move-text-down))
@@ -136,6 +145,12 @@
   :hook ((typescript-ts-mode . eglot-ensure))
   :config
   (setq-default typescript-indent-level 2))
+
+(use-package go-ts-mode
+  :mode "\\.go\\'"
+  :hook ((go-ts-mode . eglot-ensure))
+  :config
+  (setq go-ts-mode-indent-offset 2))
 
 (use-package elfeed
   :config
