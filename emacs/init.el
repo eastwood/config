@@ -118,20 +118,18 @@
   (persp-mode))
 
 (use-package fsharp-mode
-  :mode "\\.fs\\'"
-  :mode "\\.fsx\\'"
+  :defer t
   :config
   (define-key fsharp-mode-map (kbd "M-RET") 'fsharp-eval-phrase)
   (define-key fsharp-mode-map (kbd "M-n") 'flymake-goto-next-error)
   (define-key fsharp-mode-map (kbd "M-p") 'flymake-goto-prev-error)
+  (require 'eglot-fsharp)
   (setq inferior-fsharp-program "dotnet fsi --readline-"))
 
-(use-package eglot-fsharp
-  :config
+(use-package eglot-fsharp)
   ;; I had to manually call (eglot-fsharp 9) to interactively install the FS stuff
   ;; I'd recommend doing this, otherwise you have to manually install it yourself and set
   ;; parameters
-  )
 
 (use-package move-text
   :commands (move-text-up move-text-down))

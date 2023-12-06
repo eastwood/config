@@ -16,6 +16,9 @@ require('packer').startup(function(use)
   use 'tpope/vim-fugitive'
   use 'tpope/vim-rhubarb'
   use 'junegunn/vim-easy-align'
+  use {'ionide/Ionide-vim', config = function()
+    vim.cmd[[let g:fsharp#fsi_keymap = "vim-fsharp"]]
+  end}
   use 'qpkorr/vim-bufkill'
   use 'junegunn/fzf'
   use 'junegunn/fzf.vim'
