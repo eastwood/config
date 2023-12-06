@@ -29,7 +29,7 @@ require('packer').startup(function(use)
     requires = {
       'kyazdani42/nvim-web-devicons'
     },
-    cmd = { 'NvimTreeToggle', 'NvimTreeFindFile', 'NvimTreeFocus' },
+    cmd = { 'NvimTreeToggle', 'NvimTreeFocus', 'NvimTreeFindFile' },
     opt = true,
     config = function()
       require('nvim-tree').setup({

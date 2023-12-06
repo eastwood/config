@@ -88,7 +88,7 @@
    '("4c7228157ba3a48c288ad8ef83c490b94cb29ef01236205e360c2c4db200bb18" default))
  '(initial-frame-alist '((fullscreen . maximized)))
  '(package-selected-packages
-   '(elfeed rg expand-region doom-modeline corfu eglot perspective xclip which-key vterm projectile nord-theme no-littering multiple-cursors move-text markdown-mode magit goto-chg god-mode git-link exec-path-from-shell eglot-fsharp all-the-icons)))
+   '(eglot elfeed rg expand-region doom-modeline corfu perspective xclip which-key vterm projectile nord-theme no-littering multiple-cursors move-text markdown-mode magit goto-chg god-mode git-link exec-path-from-shell eglot-fsharp all-the-icons)))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.

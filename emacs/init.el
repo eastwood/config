@@ -100,7 +100,8 @@
   (global-corfu-mode))
 
 (use-package exec-path-from-shell
-  :commands (exec-path-from-shell-initialize))
+  :init
+  (exec-path-from-shell-initialize))
 
 (use-package projectile
   :commands (projectile-switch-project)
@@ -120,6 +121,7 @@
 (use-package fsharp-mode
   :defer t
   :config
+  (require 'eglot-fsharp)
   (define-key fsharp-mode-map (kbd "M-RET") 'fsharp-eval-phrase)
   (define-key fsharp-mode-map (kbd "M-n") 'flymake-goto-next-error)
   (define-key fsharp-mode-map (kbd "M-p") 'flymake-goto-prev-error)
