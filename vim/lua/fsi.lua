@@ -32,13 +32,9 @@ local function fsi_lines()
   end
 end
 
-vim.api.nvim_create_user_command("FsiSend", function() fsi_send() end, { nargs = 0, range = 1 })
-vim.api.nvim_create_user_command("FsiLines", function() fsi_lines() end, { nargs = 0, range = 1 })
-vim.api.nvim_create_user_command("FsiOpen", function() fsi_open() end, { nargs = 0, range = 1 })
-
-local bind = vim.keymap.set
-bind('v', '<leader>rr', ':FsiLines<CR>')
-bind('n', '<leader>rr', ':FsiSend<CR>')
+-- vim.api.nvim_create_user_command("FsiSend", function() fsi_send() end, { nargs = 0, range = 1 })
+-- vim.api.nvim_create_user_command("FsiLines", function() fsi_lines() end, { nargs = 0, range = 1 })
+-- vim.api.nvim_create_user_command("FsiOpen", function() fsi_open() end, { nargs = 0, range = 1 })
 
 return {
   fsi_open = fsi_open,

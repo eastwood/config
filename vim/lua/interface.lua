@@ -29,7 +29,7 @@ end
 
 vim.cmd [[
   syntax enable
-  colorscheme tokyonight-moon
+  colorscheme photon
 ]]
 
 require('lualine').setup()
