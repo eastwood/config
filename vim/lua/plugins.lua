@@ -9,8 +9,14 @@ end
 require('packer').startup(function(use)
   use 'wbthomason/packer.nvim'
   use {'nvim-lualine/lualine.nvim', requires = { 'kyazdani42/nvim-web-devicons' }}
-  use 'folke/tokyonight.nvim'
-  use 'axvr/photon.vim'
+  use ({
+    'navarasu/onedark.nvim', config = function()
+      require("onedark").setup({
+        style = "darker"
+      })
+      require('onedark').load()
+    end
+  })
   use {"peitalin/vim-jsx-typescript", ft={'typescriptreact'}}
   use {"iamcco/markdown-preview.nvim", ft={'markdown'}}
   use 'nvim-treesitter/nvim-treesitter'

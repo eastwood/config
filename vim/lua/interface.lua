@@ -17,7 +17,8 @@ set.history = 500
 set.showmatch = true
 set.splitbelow = true
 set.splitright = true
-set.termguicolors = true
+-- set.termguicolors = true
+set.background = "dark"
 
 if (vim.fn.has('gui_running') == 1) then
   set.guioptions= set.guioptions - 'm' --no menu
@@ -27,9 +28,6 @@ if (vim.fn.has('gui_running') == 1) then
   set.guioptions= set.guioptions - 'b' --no scrollbar on the bottom
 end
 
-vim.cmd [[
-  syntax enable
-  colorscheme photon
-]]
+vim.cmd [[colorscheme onedark]]
 
 require('lualine').setup()
