@@ -186,7 +186,7 @@ _G.packer_plugins = {
   },
   ["nvim-tree.lua"] = {
     commands = { "NvimTreeToggle", "NvimTreeFocus", "NvimTreeFindFile" },
-    config = { "\27LJ\2\na\0\0\4\0\6\0\t6\0\0\0'\2\1\0B\0\2\0029\0\2\0005\2\4\0005\3\3\0=\3\5\2B\0\2\1K\0\1\0\tview\1\0\0\1\0\2\tside\nright\nwidth\0032\nsetup\14nvim-tree\frequire\0" },
+    config = { "\27LJ\2\na\0\0\4\0\6\0\t6\0\0\0'\2\1\0B\0\2\0029\0\2\0005\2\4\0005\3\3\0=\3\5\2B\0\2\1K\0\1\0\tview\1\0\0\1\0\2\nwidth\0032\tside\nright\nsetup\14nvim-tree\frequire\0" },
     loaded = false,
     needs_bufread = false,
     only_cond = false,
@@ -244,6 +244,10 @@ _G.packer_plugins = {
 }
 
 time([[Defining packer_plugins]], false)
+-- Config for: Ionide-vim
+time([[Config for Ionide-vim]], true)
+try_loadstring("\27LJ\2\nJ\0\0\3\0\3\0\0056\0\0\0009\0\1\0'\2\2\0B\0\2\1K\0\1\0+let g:fsharp#fsi_keymap = \"vim-fsharp\"\bcmd\bvim\0", "config", "Ionide-vim")
+time([[Config for Ionide-vim]], false)
 -- Config for: nvim-surround
 time([[Config for nvim-surround]], true)
 try_loadstring("\27LJ\2\n;\0\0\3\0\3\0\0066\0\0\0'\2\1\0B\0\2\0029\0\2\0B\0\1\1K\0\1\0\nsetup\18nvim-surround\frequire\0", "config", "nvim-surround")
@@ -252,10 +256,6 @@ time([[Config for nvim-surround]], false)
 time([[Config for onedark.nvim]], true)
 try_loadstring("\27LJ\2\nb\0\0\3\0\5\0\f6\0\0\0'\2\1\0B\0\2\0029\0\2\0005\2\3\0B\0\2\0016\0\0\0'\2\1\0B\0\2\0029\0\4\0B\0\1\1K\0\1\0\tload\1\0\1\nstyle\vdarker\nsetup\fonedark\frequire\0", "config", "onedark.nvim")
 time([[Config for onedark.nvim]], false)
--- Config for: Ionide-vim
-time([[Config for Ionide-vim]], true)
-try_loadstring("\27LJ\2\nJ\0\0\3\0\3\0\0056\0\0\0009\0\1\0'\2\2\0B\0\2\1K\0\1\0+let g:fsharp#fsi_keymap = \"vim-fsharp\"\bcmd\bvim\0", "config", "Ionide-vim")
-time([[Config for Ionide-vim]], false)
 -- Config for: nvim-autopairs
 time([[Config for nvim-autopairs]], true)
 try_loadstring("\27LJ\2\n<\0\0\3\0\3\0\0066\0\0\0'\2\1\0B\0\2\0029\0\2\0B\0\1\1K\0\1\0\nsetup\19nvim-autopairs\frequire\0", "config", "nvim-autopairs")
@@ -263,13 +263,6 @@ time([[Config for nvim-autopairs]], false)
 
 -- Command lazy-loads
 time([[Defining lazy-load commands]], true)
-pcall(vim.api.nvim_create_user_command, 'NvimTreeFocus', function(cmdargs)
-          require('packer.load')({'nvim-tree.lua'}, { cmd = 'NvimTreeFocus', l1 = cmdargs.line1, l2 = cmdargs.line2, bang = cmdargs.bang, args = cmdargs.args, mods = cmdargs.mods }, _G.packer_plugins)
-        end,
-        {nargs = '*', range = true, bang = true, complete = function()
-          require('packer.load')({'nvim-tree.lua'}, {}, _G.packer_plugins)
-          return vim.fn.getcompletion('NvimTreeFocus ', 'cmdline')
-      end})
 pcall(vim.api.nvim_create_user_command, 'NvimTreeFindFile', function(cmdargs)
           require('packer.load')({'nvim-tree.lua'}, { cmd = 'NvimTreeFindFile', l1 = cmdargs.line1, l2 = cmdargs.line2, bang = cmdargs.bang, args = cmdargs.args, mods = cmdargs.mods }, _G.packer_plugins)
         end,
@@ -283,6 +276,13 @@ pcall(vim.api.nvim_create_user_command, 'NvimTreeToggle', function(cmdargs)
         {nargs = '*', range = true, bang = true, complete = function()
           require('packer.load')({'nvim-tree.lua'}, {}, _G.packer_plugins)
           return vim.fn.getcompletion('NvimTreeToggle ', 'cmdline')
+      end})
+pcall(vim.api.nvim_create_user_command, 'NvimTreeFocus', function(cmdargs)
+          require('packer.load')({'nvim-tree.lua'}, { cmd = 'NvimTreeFocus', l1 = cmdargs.line1, l2 = cmdargs.line2, bang = cmdargs.bang, args = cmdargs.args, mods = cmdargs.mods }, _G.packer_plugins)
+        end,
+        {nargs = '*', range = true, bang = true, complete = function()
+          require('packer.load')({'nvim-tree.lua'}, {}, _G.packer_plugins)
+          return vim.fn.getcompletion('NvimTreeFocus ', 'cmdline')
       end})
 time([[Defining lazy-load commands]], false)
 
