@@ -62,7 +62,7 @@ bind(normal_mode, '<leader>fs',  ':w!<CR>')
 bind(normal_mode, '<leader>ft',  ':NvimTreeFindFile<CR>')
 bind(normal_mode, '<leader>feR', ':source ~/.config/nvim/init.lua<CR>')
 bind(normal_mode, '<leader>fed', ':FZF ~/.config/nvim/<CR>')
-bind(normal_mode, '<leader>fo',  ':edit ~/Documents/notes/backlog.md<CR>')
+bind(normal_mode, '<leader>fo',  ':edit ~/Workspace/github.com/eastwood/notes/scratch.md<CR>')
 
 -- Searching
 bind(normal_mode, '<Leader>sw', ':Rg <C-r><C-w>')

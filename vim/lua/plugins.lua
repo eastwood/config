@@ -8,14 +8,22 @@ end
 
 require('packer').startup(function(use)
   use 'wbthomason/packer.nvim'
-  use {'nvim-lualine/lualine.nvim', requires = { 'kyazdani42/nvim-web-devicons' }}
-  use ({
-    'navarasu/onedark.nvim', config = function()
-      require("onedark").setup({
-        style = "darker"
+  use {
+    'nvim-lualine/lualine.nvim',
+    requires = { 'kyazdani42/nvim-web-devicons' },
+    config = function()
+      require("lualine").setup({
+        options = {
+          theme = "everforest"
+        }
       })
-      require('onedark').load()
-    end
+    end}
+  use({
+    "neanias/everforest-nvim",
+    -- Optional; default configuration will be used if setup isn't called.
+    config = function()
+      require("everforest").load()
+    end,
   })
   use {"peitalin/vim-jsx-typescript", ft={'typescriptreact'}}
   use {"iamcco/markdown-preview.nvim", ft={'markdown'}}
