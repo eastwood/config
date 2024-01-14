@@ -99,3 +99,14 @@ bind(normal_mode, 'gr', vim.lsp.buf.references, bufopts)
 
 -- Jest
 bind(normal_mode, '<space>jt', function() require('jester').run() end, opts)
+
+-- Snippet
+local ls = require('luasnip')
+bind({"i"}, "<C-K>", function() ls.expand() end, {silent = true})
+bind({"i", "s"}, "<C-L>", function() ls.jump( 1) end, {silent = true})
+bind({"i", "s"}, "<C-J>", function() ls.jump(-1) end, {silent = true})
+bind({"i", "s"}, "<C-E>", function()
+	if ls.choice_active() then
+		ls.change_choice(1)
+	end
+end, {silent = true})
