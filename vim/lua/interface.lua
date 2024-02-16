@@ -26,4 +26,5 @@ if (vim.fn.has('gui_running') == 1) then
   set.guioptions= set.guioptions - 'b' --no scrollbar on the bottom
 end
 
+
 require('lualine').setup()

@@ -20,7 +20,7 @@
 (set-face-attribute
  'default nil
  :family "RobotoMono Nerd Font"
- :height 140
+ :height 120
  :weight 'normal
  :width 'normal)
 
@@ -43,20 +43,24 @@
   (global-set-key (kbd "C-z") 'undo)
   (global-set-key (kbd "C-S-z") 'undo-redo))
 
-(use-package god-mode
-  :config
-  (setq god-mode-enable-function-key-translation nil)
-  (setq god-exempt-major-modes '(vterm-mode info-mode))
-  (define-key god-local-mode-map (kbd ".") #'repeat)
-  (define-key god-local-mode-map (kbd "i") #'god-mode-all)
-  (define-key god-local-mode-map (kbd "[") #'backward-paragraph)
-  (define-key god-local-mode-map (kbd "]") #'forward-paragraph)
-  ;; this is a nice addition to making sure that the cursor changes for visual help
-  (defun my-god-mode-update-cursor-type ()
-    (setq god-mode-enable-function-key-translation nil)
-    (setq cursor-type (if (or god-local-mode buffer-read-only) 'box 'bar)))
+;; (use-package evil
+;;   :config
+;;   (evil-mode 1))
 
-  (add-hook 'post-command-hook #'my-god-mode-update-cursor-type))
+(use-package god-mode
+ :config
+ (setq god-mode-enable-function-key-translation nil)
+ (setq god-exempt-major-modes '(vterm-mode info-mode))
+ (define-key god-local-mode-map (kbd ".") #'repeat)
+ (define-key god-local-mode-map (kbd "i") #'god-mode-all)
+ (define-key god-local-mode-map (kbd "[") #'backward-paragraph)
+ (define-key god-local-mode-map (kbd "]") #'forward-paragraph)
+ ;; this is a nice addition to making sure that the cursor changes for visual help
+ (defun my-god-mode-update-cursor-type ()
+   (setq god-mode-enable-function-key-translation nil)
+   (setq cursor-type (if (or god-local-mode buffer-read-only) 'box 'bar)))
+
+ (add-hook 'post-command-hook #'my-god-mode-update-cursor-type))
 
 (use-package which-key
   :config
@@ -128,10 +132,10 @@
   (require 'eglot-fsharp)
   (setq inferior-fsharp-program "dotnet fsi --readline-"))
 
+;; I had to manually call (eglot-fsharp 9) to interactively install the FS stuff
+;; I'd recommend doing this, otherwise you have to manually install it yourself and set
+;; parameters
 (use-package eglot-fsharp)
-  ;; I had to manually call (eglot-fsharp 9) to interactively install the FS stuff
-  ;; I'd recommend doing this, otherwise you have to manually install it yourself and set
-  ;; parameters
 
 (use-package move-text
   :commands (move-text-up move-text-down))
@@ -139,11 +143,21 @@
 (use-package expand-region
   :commands (er/expand-region))
 
+(use-package treesit-auto
+  :custom
+  (treesit-auto-install 'prompt)
+  :config
+  (treesit-auto-add-to-auto-mode-alist 'all)
+  (global-treesit-auto-mode))
+
 (use-package typescript-ts-mode
   :mode "\\.ts\\'"
   :hook ((typescript-ts-mode . eglot-ensure))
   :config
   (setq-default typescript-indent-level 2))
+
+(use-package json-ts-mode
+  :mode "\\.json\\'")
 
 (use-package go-ts-mode
   :mode "\\.go\\'"
@@ -151,44 +165,37 @@
   :config
   (setq go-ts-mode-indent-offset 2))
 
-(use-package elfeed
-  :config
-  (setq elfeed-feeds
-	'(("https://reddit.com/r/programming/.rss" programming)
-	  ("https://reddit.com/r/golang/.rss" programming golang)
-	  ("https://medium.com/feed/coryodaniel" blog)
-	  ("https://reddit.com/r/fsharp/.rss" programming fsharp))))
-
 (use-package multiple-cursors)
 (use-package yaml-ts-mode)
 (use-package vterm)
 (use-package doom-modeline)
 (use-package rg)
 
-;; You'll need to download wl-clipboard to get this working for
-;; WSL2. Otherwise, there's some really shit freezes and experiences.
-;; This will also make it so that have a separate process running
-;; Called wl-copy in the background, which you'll need to exit
-(defun my/configure-wayland-clipboard()
-    (setq wl-copy-process nil)    
-    (defun wl-copy (text)
-      (setq wl-copy-process
-	    (make-process :name "wl-copy"
-			  :buffer nil
-			  :command '("wl-copy" "-f" "-n")
-			  :connection-type 'pipe))
-      (process-send-string wl-copy-process text)
-      (process-send-eof wl-copy-process))
-  
-  (defun wl-paste ()
-    (if (and wl-copy-process (process-live-p wl-copy-process))
-	nil ; should return nil if we're the current paste owner
-      (shell-command-to-string "wl-paste -n | tr -d \r")))
-  (setq interprogram-cut-function 'wl-copy))
+(use-package xclip
+  :config
+  (xclip-mode))
 
-(when my/GTK
-  (my/configure-wayland-clipboard))
+(defun wsl-copy-region-to-clipboard (start end)
+  "Copy region to Windows clipboard."
+  (interactive "r")
+  (call-process-region start end "clip.exe" nil 0))
 
+(defun wsl-clipboard-to-string ()
+  "Return Windows clipboard as string."
+  (let ((coding-system-for-read 'dos))
+    (substring				; remove added trailing \n
+     (shell-command-to-string
+      "powershell.exe -Command Get-Clipboard") 0 -1)))
+
+(defun wsl-paste-from-clipboard (arg)
+  "Insert Windows clipboard at point. With prefix ARG, also add to kill-ring"
+  (interactive "P")
+  (let ((clip (wsl-clipboard-to-string)))
+    (insert clip)
+    (if arg (kill-new clip))))
+
+(global-set-key (kbd "C-S-c") 'wsl-copy-region-to-clipboard)
+(global-set-key (kbd "C-S-v") 'wsl-paste-from-clipboard)
 (global-set-key (kbd "C-c fed") 'open-config)
 (global-set-key (kbd "C-x C-0") #'delete-window)
 (global-set-key (kbd "C-x C-1") #'delete-other-windows)
@@ -211,6 +218,7 @@
 (global-set-key (kbd "C-=") 'er/expand-region)
 (global-set-key (kbd "M-n") 'flymake-goto-next-error)
 (global-set-key (kbd "M-p") 'flymake-goto-prev-error)
+(global-set-key (kbd "<f10>") 'vterm)
 
 (load custom-file)
 (load-theme 'leuven-dark t)

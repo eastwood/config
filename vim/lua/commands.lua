@@ -38,9 +38,7 @@ vim.api.nvim_create_autocmd('TermOpen', {
   group = augroup,
   command = 'nnoremap <buffer> <C-c> i<C-c>' -- change this to func later
 })
-
 -- Useful functions
-
 -- Create scratch buffer from R input
 -- Use like :R echo 'hello'
 vim.cmd [[
