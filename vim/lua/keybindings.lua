@@ -74,6 +74,7 @@ bind(terminal_mode, '<Esc>',      '<C-\\><C-n>')
 -- Other
 bind(visual_mode, 'ga',    '<Plug>(EasyAlign)')
 bind(normal_mode, 'ga',    '<Plug>(EasyAlign)')
+bind(normal_mode, 'gv',    ':vsp | lua vim.lsp.buf.definition()<CR>')
 bind(normal_mode, '<f12>', ':10split term://zsh<cr>')
 bind(normal_mode, '<leader>tt', ':10split term://zsh<cr>')
 bind(normal_mode, '\\',    ':NvimTreeToggle<CR>')

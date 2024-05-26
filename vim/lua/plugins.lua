@@ -8,6 +8,7 @@ end
 
 require('packer').startup(function(use)
   use 'wbthomason/packer.nvim'
+  use 'github/copilot.vim'
   use {
     'nvim-lualine/lualine.nvim',
     requires = { 'kyazdani42/nvim-web-devicons' },
@@ -27,6 +28,7 @@ require('packer').startup(function(use)
   })
   use {"peitalin/vim-jsx-typescript", ft={'typescriptreact'}}
   use {"iamcco/markdown-preview.nvim", ft={'markdown'}}
+  use {"vimwiki/vimwiki", ft={'markdown'}}
   use 'nvim-treesitter/nvim-treesitter'
   use 'tpope/vim-fugitive'
   use 'tpope/vim-rhubarb'
@@ -34,6 +36,7 @@ require('packer').startup(function(use)
   use {'ionide/Ionide-vim', config = function()
     vim.cmd[[let g:fsharp#fsi_keymap = "vim-fsharp"]]
   end}
+  use 'mg979/vim-visual-multi'
   use 'qpkorr/vim-bufkill'
   use 'junegunn/fzf'
   use 'junegunn/fzf.vim'

@@ -16,15 +16,7 @@
 	    (message "Emacs loaded in %s."
                      (emacs-init-time))))
 
-;; My prefered font
-(set-face-attribute
- 'default nil
- :family "RobotoMono Nerd Font"
- :height 120
- :weight 'normal
- :width 'normal)
-
-;; Gotta have that emoji support
+(set-face-attribute 'default nil :family "RobotoMono Nerd Font" :height 120 :weight 'normal :width 'normal)
 (set-fontset-font t 'symbol "Apple Color Emoji")
 
 (setq custom-file "~/.config/emacs/custom.el")
@@ -43,9 +35,7 @@
   (global-set-key (kbd "C-z") 'undo)
   (global-set-key (kbd "C-S-z") 'undo-redo))
 
-;; (use-package evil
-;;   :config
-;;   (evil-mode 1))
+(use-package evil)
 
 (use-package god-mode
  :config
@@ -55,6 +45,7 @@
  (define-key god-local-mode-map (kbd "i") #'god-mode-all)
  (define-key god-local-mode-map (kbd "[") #'backward-paragraph)
  (define-key god-local-mode-map (kbd "]") #'forward-paragraph)
+ 
  ;; this is a nice addition to making sure that the cursor changes for visual help
  (defun my-god-mode-update-cursor-type ()
    (setq god-mode-enable-function-key-translation nil)
@@ -79,22 +70,6 @@
   :commands (git-link)
   :config
   (setq git-link-open-in-browser t))
-
-(defun my/open-jira()
-  "Open JIRA in browser."
-  (interactive)
-  (let (name (magit-get-current-branch))
-    (browse-url (concat "https://jira.nib.com.au/browse/" name))))
-
-(defun my/open-buildkite()
-  "Open Buildkite in browser."
-  (interactive)
-  (let ((name (projectile-project-name)))
-    (browse-url (concat "https://buildkite.com/nib-health-funds-ltd/" name))))
-
-(defun open-config()
-  (interactive)
-  (find-file "~/.config/emacs/init.el"))
 
 (use-package corfu
   :custom
@@ -171,10 +146,7 @@
 (use-package doom-modeline)
 (use-package rg)
 
-(use-package xclip
-  :config
-  (xclip-mode))
-
+;; Functions
 (defun wsl-copy-region-to-clipboard (start end)
   "Copy region to Windows clipboard."
   (interactive "r")
@@ -193,6 +165,22 @@
   (let ((clip (wsl-clipboard-to-string)))
     (insert clip)
     (if arg (kill-new clip))))
+
+(defun my/open-jira()
+  "Open JIRA in browser."
+  (interactive)
+  (let (name (magit-get-current-branch))
+    (browse-url (concat "https://jira.nib.com.au/browse/" name))))
+
+(defun my/open-buildkite()
+  "Open Buildkite in browser."
+  (interactive)
+  (let ((name (projectile-project-name)))
+    (browse-url (concat "https://buildkite.com/nib-health-funds-ltd/" name))))
+
+(defun open-config()
+  (interactive)
+  (find-file "~/.config/emacs/init.el"))
 
 (global-set-key (kbd "C-S-c") 'wsl-copy-region-to-clipboard)
 (global-set-key (kbd "C-S-v") 'wsl-paste-from-clipboard)
