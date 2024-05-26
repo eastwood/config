@@ -25,6 +25,7 @@ require('packer').startup(function(use)
       require("everforest").load()
     end,
   })
+  use 'github/copilot.vim'
   use {"peitalin/vim-jsx-typescript", ft={'typescriptreact'}}
   use {"iamcco/markdown-preview.nvim", ft={'markdown'}}
   use 'nvim-treesitter/nvim-treesitter'

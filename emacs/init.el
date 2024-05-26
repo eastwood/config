@@ -20,7 +20,7 @@
 (set-face-attribute
  'default nil
  :family "RobotoMono Nerd Font"
- :height 120
+ :height 140
  :weight 'normal
  :width 'normal)
 
