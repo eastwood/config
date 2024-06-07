@@ -35,7 +35,7 @@
   (global-set-key (kbd "C-z") 'undo)
   (global-set-key (kbd "C-S-z") 'undo-redo))
 
-(use-package evil)
+;; (use-package evil)
 
 (use-package god-mode
  :config
