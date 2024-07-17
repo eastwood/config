@@ -259,9 +259,9 @@ require("lazy").setup({
 
       local servers = {
         clangd = {},
-        gopls = {},
-        pyright = {},
-        fsautocomplete = {},
+        -- gopls = {},
+        -- pyright = {},
+        -- fsautocomplete = {},
         rust_analyzer = {},
         tsserver = {},
         lua_ls = {
