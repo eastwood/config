@@ -7,10 +7,8 @@
 (defconst my/WSL     (memq window-system '(x nil)))
 (defconst my/GTK     (memq window-system '(pgtk)))
 
-(require 'package)
 (require 'use-package)
 
-(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 (add-hook 'emacs-startup-hook
 	  (lambda ()
 	    (message "Emacs loaded in %s."
@@ -20,12 +18,32 @@
 (set-fontset-font t 'symbol "Apple Color Emoji")
 
 (setq custom-file "~/.config/emacs/custom.el")
+(setq auto-save-file-name-transforms
+      `((".*" "~/.config/emacs/autosaves/" t)))
+
 (setq native-comp-async-report-warnings-errors nil)
 (setq native-comp-deferred-compilation t)
-(setq use-package-always-ensure t)
 (setq inhibit-startup-message t)
 (setq visible-bell t)
 (setq ring-bell-function 'ignore)
+
+(defvar bootstrap-version)
+(let ((bootstrap-file
+       (expand-file-name
+        "straight/repos/straight.el/bootstrap.el"
+        (or (bound-and-true-p straight-base-dir)
+            user-emacs-directory)))
+      (bootstrap-version 7))
+  (unless (file-exists-p bootstrap-file)
+    (with-current-buffer
+        (url-retrieve-synchronously
+         "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
+         'silent 'inhibit-cookies)
+      (goto-char (point-max))
+      (eval-print-last-sexp)))
+  (load bootstrap-file nil 'nomessage))
+
+(setq straight-use-package-by-default t)
 
 (fido-vertical-mode t)
 (fido-mode t)
@@ -34,8 +52,6 @@
 (unless my/TERM
   (global-set-key (kbd "C-z") 'undo)
   (global-set-key (kbd "C-S-z") 'undo-redo))
-
-;; (use-package evil)
 
 (use-package god-mode
  :config
@@ -107,11 +123,6 @@
   (require 'eglot-fsharp)
   (setq inferior-fsharp-program "dotnet fsi --readline-"))
 
-;; I had to manually call (eglot-fsharp 9) to interactively install the FS stuff
-;; I'd recommend doing this, otherwise you have to manually install it yourself and set
-;; parameters
-(use-package eglot-fsharp)
-
 (use-package move-text
   :commands (move-text-up move-text-down))
 
@@ -140,11 +151,34 @@
   :config
   (setq go-ts-mode-indent-offset 2))
 
+(use-package rust-ts-modeq
+  :mode "\\.rs\\'"
+  :hook ((rust-ts-mode . eglot-ensure)))
+
+(use-package ruby-ts-mode
+  :mode "\\.rb\\'"
+  :config
+  (add-to-list 'eglot-server-programs '((ruby-mode ruby-ts-mode) "ruby-lsp"))
+  :hook ((ruby-ts-mode . eglot-ensure)))
+
+(use-package python-mode
+  :mode "\\.rb\\'"
+  :hook ((python-mode . eglot-ensure)))
+
 (use-package multiple-cursors)
 (use-package yaml-ts-mode)
 (use-package vterm)
 (use-package doom-modeline)
 (use-package rg)
+
+(use-package copilot
+  :straight (:host github :repo "copilot-emacs/copilot.el" :files ("*.el"))
+  :hook (prog-mode . copilot-mode)
+  :config
+  (add-to-list 'copilot-indentation-alist '(prog-mode 2))
+  (setq copilot-indent-offset-warning-disable t)
+  (define-key copilot-completion-map (kbd "<tab>") 'copilot-accept-completion)
+  (define-key copilot-completion-map (kbd "TAB") 'copilot-accept-completion))
 
 ;; Functions
 (defun wsl-copy-region-to-clipboard (start end)
