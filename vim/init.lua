@@ -260,11 +260,11 @@ require("lazy").setup({
       local servers = {
         clangd = {},
         -- gopls = {},
-        -- pyright = {},
+        pyright = {},
         -- fsautocomplete = {},
         rust_analyzer = {},
         tsserver = {},
-        ruby_lsp = {},
+        -- ruby_lsp = {},
         lua_ls = {
           settings = {
             Lua = {
@@ -406,7 +406,7 @@ require("lazy").setup({
       vim.keymap.set("n", "<leader>gs", ":Git<CR>", { desc = "Git [S]tatus" })
     end
   },
-  { "jlcrochet/vim-razor" },
+  "jlcrochet/vim-razor",
   "github/copilot.vim",
   {
     "CopilotC-Nvim/CopilotChat.nvim",

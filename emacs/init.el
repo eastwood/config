@@ -14,7 +14,7 @@
 	    (message "Emacs loaded in %s."
                      (emacs-init-time))))
 
-(set-face-attribute 'default nil :family "RobotoMono Nerd Font" :height 120 :weight 'normal :width 'normal)
+(set-face-attribute 'default nil :family "RobotoMono Nerd Font" :height 140 :weight 'normal :width 'normal)
 (set-fontset-font t 'symbol "Apple Color Emoji")
 
 (setq custom-file "~/.config/emacs/custom.el")
@@ -151,7 +151,7 @@
   :config
   (setq go-ts-mode-indent-offset 2))
 
-(use-package rust-ts-modeq
+(use-package rust-ts-mode
   :mode "\\.rs\\'"
   :hook ((rust-ts-mode . eglot-ensure)))
 
@@ -162,7 +162,7 @@
   :hook ((ruby-ts-mode . eglot-ensure)))
 
 (use-package python-mode
-  :mode "\\.rb\\'"
+  :mode "\\.py\\'"
   :hook ((python-mode . eglot-ensure)))
 
 (use-package multiple-cursors)

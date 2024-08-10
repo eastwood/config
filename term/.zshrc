@@ -7,8 +7,8 @@ export LOCAL_SCRIPTS=~/.local/bin
 export NODE_BIN="/home/eastwd/.nvm/versions/node/v16.7.0/bin"
 export RUST_ANALYSER="home/eastwd/.local/bin"
 export EMACS="/home/eastwd/emacs"
-export DOTNET_TOOLS=~/.dotnet/tools
-export PATH=$EMACS/bin:$LOCAL_SCRIPTS:/usr/local/bin:$PATH:$CUSTOM_SCRIPTS:$NODE_BIN:$RUST_ANALYSER:$GOBIN:$DOTNET_TOOLS
+export DOTNET=/usr/local/share/dotnet
+export PATH=$EMACS/bin:$LOCAL_SCRIPTS:/usr/local/bin:$PATH:$CUSTOM_SCRIPTS:$NODE_BIN:$RUST_ANALYSER:$GOBIN:$DOTNET
 
 # User configuration
 # export MANPATH="/usr/local/man:$MANPATH"
