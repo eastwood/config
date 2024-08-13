@@ -7,7 +7,10 @@
 (defconst my/WSL     (memq window-system '(x nil)))
 (defconst my/GTK     (memq window-system '(pgtk)))
 
+(require 'package)
 (require 'use-package)
+
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 
 (add-hook 'emacs-startup-hook
 	  (lambda ()
@@ -23,27 +26,12 @@
 
 (setq native-comp-async-report-warnings-errors nil)
 (setq native-comp-deferred-compilation t)
+(setq use-package-always-ensure t)
 (setq inhibit-startup-message t)
 (setq visible-bell t)
 (setq ring-bell-function 'ignore)
 
 (defvar bootstrap-version)
-(let ((bootstrap-file
-       (expand-file-name
-        "straight/repos/straight.el/bootstrap.el"
-        (or (bound-and-true-p straight-base-dir)
-            user-emacs-directory)))
-      (bootstrap-version 7))
-  (unless (file-exists-p bootstrap-file)
-    (with-current-buffer
-        (url-retrieve-synchronously
-         "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
-         'silent 'inhibit-cookies)
-      (goto-char (point-max))
-      (eval-print-last-sexp)))
-  (load bootstrap-file nil 'nomessage))
-
-(setq straight-use-package-by-default t)
 
 (fido-vertical-mode t)
 (fido-mode t)
@@ -161,9 +149,18 @@
   (add-to-list 'eglot-server-programs '((ruby-mode ruby-ts-mode) "ruby-lsp"))
   :hook ((ruby-ts-mode . eglot-ensure)))
 
-(use-package python-mode
-  :mode "\\.py\\'"
-  :hook ((python-mode . eglot-ensure)))
+(add-to-list 'auto-mode-alist '("\\.py\\'" . python-ts-mode))
+(add-hook 'python-ts-mode-hook
+          (lambda ()
+            (pyvenv-tracking-mode 1)
+	    (eglot-ensure)))
+
+(use-package python-black
+  :hook (python-ts-mode . python-black-on-save-mode-enable-dwim))
+
+(use-package pyvenv
+  :after python
+  :hook ((python-ts-mode . pyvenv-tracking-mode)))
 
 (use-package multiple-cursors)
 (use-package yaml-ts-mode)
@@ -171,14 +168,13 @@
 (use-package doom-modeline)
 (use-package rg)
 
-(use-package copilot
-  :straight (:host github :repo "copilot-emacs/copilot.el" :files ("*.el"))
-  :hook (prog-mode . copilot-mode)
-  :config
-  (add-to-list 'copilot-indentation-alist '(prog-mode 2))
-  (setq copilot-indent-offset-warning-disable t)
-  (define-key copilot-completion-map (kbd "<tab>") 'copilot-accept-completion)
-  (define-key copilot-completion-map (kbd "TAB") 'copilot-accept-completion))
+;; (use-package copilot
+;;   :hook (prog-mode . copilot-mode)
+;;   :config
+;;   (add-to-list 'copilot-indentation-alist '(prog-mode 2))
+;;   (setq copilot-indent-offset-warning-disable t)
+;;   (define-key copilot-completion-map (kbd "<tab>") 'copilot-accept-completion)
+;;   (define-key copilot-completion-map (kbd "TAB") 'copilot-accept-completion))
 
 ;; Functions
 (defun wsl-copy-region-to-clipboard (start end)

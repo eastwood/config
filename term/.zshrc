@@ -31,8 +31,16 @@ alias npmi="npm i --legacy-peer-deps"
 bindkey -s '^P' 'cdw^M'
 export tmux="tmux"
 
-export NVM_DIR="$HOME/.nvm"
-[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
+function act!() {
+  [ -f '.venv/bin/activate' ] && source .venv/bin/activate
+  return 0
+}
+function act() {
+  [ -z "$TMUX" ] && return 0
+  act!
+}
+
+[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh" --no-use # This loads nvm
 [ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
 
 eval "$(starship init zsh)"
