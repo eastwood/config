@@ -30,6 +30,7 @@
 (setq inhibit-startup-message t)
 (setq visible-bell t)
 (setq ring-bell-function 'ignore)
+(global-display-line-numbers-mode t)
 
 (defvar bootstrap-version)
 
