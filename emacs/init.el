@@ -17,7 +17,7 @@
 	    (message "Emacs loaded in %s."
                      (emacs-init-time))))
 
-(set-face-attribute 'default nil :family "RobotoMono Nerd Font" :height 140 :weight 'normal :width 'normal)
+(set-face-attribute 'default nil :family "RobotoMono Nerd Font" :height 120 :weight 'normal :width 'normal)
 (set-fontset-font t 'symbol "Apple Color Emoji")
 
 (setq custom-file "~/.config/emacs/custom.el")
@@ -41,6 +41,10 @@
 (unless my/TERM
   (global-set-key (kbd "C-z") 'undo)
   (global-set-key (kbd "C-S-z") 'undo-redo))
+
+;; (use-package evil
+;;   :init
+;;   (evil-mode))
 
 (use-package god-mode
  :config
@@ -241,3 +245,4 @@
 
 (load custom-file)
 (load-theme 'leuven-dark t)
+(put 'dired-find-alternate-file 'disabled nil)
