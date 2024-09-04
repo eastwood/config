@@ -46,21 +46,21 @@
 ;;   :init
 ;;   (evil-mode))
 
-(use-package god-mode
- :config
- (setq god-mode-enable-function-key-translation nil)
- (setq god-exempt-major-modes '(vterm-mode info-mode))
- (define-key god-local-mode-map (kbd ".") #'repeat)
- (define-key god-local-mode-map (kbd "i") #'god-mode-all)
- (define-key god-local-mode-map (kbd "[") #'backward-paragraph)
- (define-key god-local-mode-map (kbd "]") #'forward-paragraph)
+;; (use-package god-mode
+;;  :config
+;;  (setq god-mode-enable-function-key-translation nil)
+;;  (setq god-exempt-major-modes '(vterm-mode info-mode))
+;;  (define-key god-local-mode-map (kbd ".") #'repeat)
+;;  (define-key god-local-mode-map (kbd "i") #'god-mode-all)
+;;  (define-key god-local-mode-map (kbd "[") #'backward-paragraph)
+;;  (define-key god-local-mode-map (kbd "]") #'forward-paragraph)
  
  ;; this is a nice addition to making sure that the cursor changes for visual help
- (defun my-god-mode-update-cursor-type ()
-   (setq god-mode-enable-function-key-translation nil)
-   (setq cursor-type (if (or god-local-mode buffer-read-only) 'box 'bar)))
+ ;; (defun my-god-mode-update-cursor-type ()
+ ;;   (setq god-mode-enable-function-key-translation nil)
+ ;;   (setq cursor-type (if (or god-local-mode buffer-read-only) 'box 'bar)))
 
- (add-hook 'post-command-hook #'my-god-mode-update-cursor-type))
+ ;; (add-hook 'post-command-hook #'my-god-mode-update-cursor-type))
 
 (use-package which-key
   :config
@@ -103,6 +103,7 @@
 (use-package perspective
   :init
   (setq persp-suppress-no-prefix-key-warning t)
+  (setq persp-initial-frame-name "config")
   :config
   (persp-mode))
 
@@ -169,17 +170,42 @@
 
 (use-package multiple-cursors)
 (use-package yaml-ts-mode)
-(use-package vterm)
+(use-package vterm
+  :config
+  (add-hook 'vterm-mode-hook
+	    (lambda()
+	      (display-line-numbers-mode -1))))
 (use-package doom-modeline)
 (use-package rg)
 
-;; (use-package copilot
-;;   :hook (prog-mode . copilot-mode)
-;;   :config
-;;   (add-to-list 'copilot-indentation-alist '(prog-mode 2))
-;;   (setq copilot-indent-offset-warning-disable t)
-;;   (define-key copilot-completion-map (kbd "<tab>") 'copilot-accept-completion)
-;;   (define-key copilot-completion-map (kbd "TAB") 'copilot-accept-completion))
+(use-package markdown-mode
+  :ensure t
+  :mode ("README\\.md\\'" . gfm-mode)
+  :init (setq markdown-command "multimarkdown"))
+
+(use-package terraform-mode
+  :custom (terraform-indent-level 2)
+  :config
+  (defun my-terraform-mode-init ()
+    (outline-minor-mode 1))
+  (add-hook 'terraform-mode-hook 'my-terraform-mode-init))
+
+(use-package editorconfig)
+
+(defun install-copilot()
+  (unless (file-exists-p "~/.config/emacs/copilot.el")
+    (let ((url "https://raw.githubusercontent.com/copilot-emacs/copilot.el/main/copilot.el"))
+      (url-copy-file url "~/.config/emacs/copilot.el" t)))
+  (add-to-list 'load-path "~/.config/emacs/copilot.el")
+  (require 'copilot)
+  
+  (add-hook 'prog-mode-hook 'copilot-mode)
+  (add-to-list 'copilot-indentation-alist '(prog-mode 2))
+  (setq copilot-indent-offset-warning-disable t)
+  (define-key copilot-completion-map (kbd "<tab>") 'copilot-accept-completion)
+  (define-key copilot-completion-map (kbd "TAB") 'copilot-accept-completion))
+
+(install-copilot)
 
 ;; Functions
 (defun wsl-copy-region-to-clipboard (start end)
