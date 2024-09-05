@@ -31,6 +31,7 @@
 (setq visible-bell t)
 (setq ring-bell-function 'ignore)
 (global-display-line-numbers-mode t)
+(setq warning-minimum-level :error)
 
 (defvar bootstrap-version)
 
@@ -46,21 +47,21 @@
 ;;   :init
 ;;   (evil-mode))
 
-;; (use-package god-mode
-;;  :config
-;;  (setq god-mode-enable-function-key-translation nil)
-;;  (setq god-exempt-major-modes '(vterm-mode info-mode))
-;;  (define-key god-local-mode-map (kbd ".") #'repeat)
-;;  (define-key god-local-mode-map (kbd "i") #'god-mode-all)
-;;  (define-key god-local-mode-map (kbd "[") #'backward-paragraph)
-;;  (define-key god-local-mode-map (kbd "]") #'forward-paragraph)
+(use-package god-mode
+ :config
+ (setq god-mode-enable-function-key-translation nil)
+ (setq god-exempt-major-modes '(vterm-mode info-mode))
+ (define-key god-local-mode-map (kbd ".") #'repeat)
+ (define-key god-local-mode-map (kbd "i") #'god-mode-all)
+ (define-key god-local-mode-map (kbd "[") #'backward-paragraph)
+ (define-key god-local-mode-map (kbd "]") #'forward-paragraph)
  
  ;; this is a nice addition to making sure that the cursor changes for visual help
- ;; (defun my-god-mode-update-cursor-type ()
- ;;   (setq god-mode-enable-function-key-translation nil)
- ;;   (setq cursor-type (if (or god-local-mode buffer-read-only) 'box 'bar)))
+ (defun my-god-mode-update-cursor-type ()
+   (setq god-mode-enable-function-key-translation nil)
+   (setq cursor-type (if (or god-local-mode buffer-read-only) 'box 'bar)))
 
- ;; (add-hook 'post-command-hook #'my-god-mode-update-cursor-type))
+ (add-hook 'post-command-hook #'my-god-mode-update-cursor-type))
 
 (use-package which-key
   :config
@@ -169,6 +170,7 @@
   :hook ((python-ts-mode . pyvenv-tracking-mode)))
 
 (use-package multiple-cursors)
+
 (use-package yaml-ts-mode)
 (use-package vterm
   :config
