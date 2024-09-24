@@ -1,3 +1,4 @@
+vim.cmd.colorscheme("retrobox")
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 vim.g.have_nerd_font = true
@@ -319,14 +320,6 @@ require("lazy").setup({
       })
     end,
   },
-  {
-    "folke/tokyonight.nvim",
-    priority = 1000, -- Make sure to load this before all the other start plugins.
-    init = function()
-      vim.cmd.colorscheme("tokyonight-night")
-      vim.cmd.hi("Comment gui=none")
-    end,
-  },
   { -- Collection of various small independent plugins/modules
     "echasnovski/mini.nvim",
     config = function()
@@ -358,7 +351,6 @@ require("lazy").setup({
   },
   {
     "tpope/vim-fugitive",
-    cmd = "Git",
     dependencies = 'tpope/vim-rhubarb',
     init = function ()
       vim.keymap.set("n", "<leader>gs", ":Git<CR>", { desc = "Git [S]tatus" })

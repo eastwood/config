@@ -5,6 +5,11 @@
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
 
-;; Fullscreen window
-(custom-set-variables
- '(initial-frame-alist (quote ((fullscreen . maximized)))))
+
+;; Remove fringes
+(set-fringe-mode 0)
+
+;; Set internal border width
+(setq default-frame-alist '((internal-border-width . 24)))
+
+;; Add a header line to simulate a top border

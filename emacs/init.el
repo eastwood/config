@@ -20,6 +20,7 @@
 (set-face-attribute 'default nil :family "RobotoMono Nerd Font" :height 120 :weight 'normal :width 'normal)
 (set-fontset-font t 'symbol "Apple Color Emoji")
 
+
 (setq custom-file "~/.config/emacs/custom.el")
 (setq auto-save-file-name-transforms
       `((".*" "~/.config/emacs/autosaves/" t)))
@@ -267,10 +268,26 @@
 (global-set-key (kbd "C-M-<right>") 'mc/skip-to-next-like-this)
 (global-set-key (kbd "<f12>") 'persp-switch)
 (global-set-key (kbd "C-=") 'er/expand-region)
+(global-set-key (kbd "C-j") 'join-line)
 (global-set-key (kbd "M-n") 'flymake-goto-next-error)
 (global-set-key (kbd "M-p") 'flymake-goto-prev-error)
-(global-set-key (kbd "<f10>") 'vterm)
-
-(load custom-file)
-(load-theme 'leuven-dark t)
+(global-set-key (kbd "<f10>") 'vterm)(load custom-file)
 (put 'dired-find-alternate-file 'disabled nil)
+
+;; Theme settings
+
+(defun modeline-compose (primary secondary)
+  "Compose a string with provided information, using theme colors."
+  (let* ((char-width    (window-font-width nil 'header-line))
+         (window        (get-buffer-window (current-buffer)))
+         (space-up       +0.15)
+         (space-down     -0.20)
+         (left           (propertize primary 'face 'mode-line))  ;; Use the 'mode-line' face for primary text
+         (right          (propertize (concat secondary " ") 'face 'mode-line))  ;; Use the 'mode-line' face for secondary text
+         (available-width (- (window-total-width) 
+			     (length left) (length right)
+			     (/ (window-right-divider-width) char-width)))
+	 (available-width (max 1 available-width)))
+    (concat left
+            (propertize (make-string available-width ?\ ) 'face 'mode-line)  ;; Use theme color for padding
+            right)))
