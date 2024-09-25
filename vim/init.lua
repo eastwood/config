@@ -264,6 +264,7 @@ require("lazy").setup({
         -- fsautocomplete = {},
         rust_analyzer = {},
         tsserver = {},
+        elixirls = {},
         -- ruby_lsp = {},
         lua_ls = {
           settings = {
