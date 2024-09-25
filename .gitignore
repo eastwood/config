@@ -1,6 +1,8 @@
 .DS_Store
 /emacs/*.cache
 /emacs/eln-cache
+/emacs/lsp
+/emacs/copilot.el/
 /emacs/elpa
 /emacs/etc
 /emacs/var
