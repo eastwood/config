@@ -83,12 +83,12 @@
      (tramp-connection-local-default-system-profile
       (path-separator . ":")
       (null-device . "/dev/null"))))
- '(custom-enabled-themes '(nord))
+ '(custom-enabled-themes '(leuven-dark))
  '(custom-safe-themes
    '("18cf5d20a45ea1dff2e2ffd6fbcd15082f9aa9705011a3929e77129a971d1cb3" "4c7228157ba3a48c288ad8ef83c490b94cb29ef01236205e360c2c4db200bb18" default))
  '(initial-frame-alist '((fullscreen . maximized)))
  '(package-selected-packages
-   '(god-mode editorconfig terraform-mode python-mode pyenv python-ts-mode copilot quelpa-use-package quelpa treesit-auto tsx-ts-mode eglot elfeed rg expand-region doom-modeline corfu perspective xclip which-key vterm projectile nord-theme no-littering multiple-cursors move-text markdown-mode magit goto-chg git-link exec-path-from-shell eglot-fsharp all-the-icons)))
+   '(yaml-mode inf-ruby god-mode editorconfig terraform-mode python-mode pyenv python-ts-mode copilot quelpa-use-package quelpa treesit-auto tsx-ts-mode eglot elfeed rg expand-region doom-modeline corfu perspective xclip which-key vterm projectile nord-theme no-littering multiple-cursors move-text markdown-mode magit goto-chg git-link exec-path-from-shell eglot-fsharp all-the-icons)))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.

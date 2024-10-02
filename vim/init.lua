@@ -7,6 +7,8 @@ vim.opt.mouse = "a"
 vim.opt.showmode = false
 vim.opt.clipboard = "unnamedplus"
 vim.opt.breakindent = true
+vim.opt.smartindent = true
+vim.opt.autoindent = true
 vim.opt.undofile = true
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
@@ -95,23 +97,30 @@ require("lazy").setup({
     event = "VimEnter", -- Sets the loading event to 'VimEnter'
     config = function() -- This is the function that runs, AFTER loading
       require("which-key").setup()
-
-      -- Document existing key chains
-      require("which-key").register({
-        ["<leader>c"] = { name = "[C]ode", _ = "which_key_ignore" },
-        ["<leader>d"] = { name = "[D]ocument", _ = "which_key_ignore" },
-        ["<leader>f"] = { name = "[F]iles", _ = "which_key_ignore" },
-        ["<leader>g"] = { name = "[G]it", _ = "which_key_ignore" },
-        ["<leader>r"] = { name = "[R]ename", _ = "which_key_ignore" },
-        ["<leader>s"] = { name = "[S]earch", _ = "which_key_ignore" },
-        ["<leader>w"] = { name = "[W]orkspace", _ = "which_key_ignore" },
-        ["<leader>t"] = { name = "[T]oggle", _ = "which_key_ignore" },
-        ["<leader>h"] = { name = "Git [H]unk", _ = "which_key_ignore" },
+      require("which-key").add({
+        { "<leader>c", group = "[C]ode" },
+        { "<leader>c_", hidden = true },
+        { "<leader>d", group = "[D]ocument" },
+        { "<leader>d_", hidden = true },
+        { "<leader>f", group = "[F]iles" },
+        { "<leader>f_", hidden = true },
+        { "<leader>g", group = "[G]it" },
+        { "<leader>g_", hidden = true },
+        { "<leader>h", group = "Git [H]unk" },
+        { "<leader>h_", hidden = true },
+        { "<leader>r", group = "[R]ename" },
+        { "<leader>r_", hidden = true },
+        { "<leader>s", group = "[S]earch" },
+        { "<leader>s_", hidden = true },
+        { "<leader>t", group = "[T]oggle" },
+        { "<leader>t_", hidden = true },
+        { "<leader>w", group = "[W]orkspace" },
+        { "<leader>w_", hidden = true },
       })
       -- visual mode
-      require("which-key").register({
-        ["<leader>h"] = { "Git [H]unk" },
-      }, { mode = "v" })
+      require("which-key").add({
+        { "<leader>h", desc = "Git [H]unk", mode = "v" },
+      })
     end,
   },
   {
@@ -259,13 +268,13 @@ require("lazy").setup({
 
       local servers = {
         clangd = {},
-        -- gopls = {},
+        gopls = {},
         pyright = {},
         -- fsautocomplete = {},
         rust_analyzer = {},
-        tsserver = {},
+        ts_ls = {},
         elixirls = {},
-        -- ruby_lsp = {},
+        ruby_lsp = {},
         lua_ls = {
           settings = {
             Lua = {

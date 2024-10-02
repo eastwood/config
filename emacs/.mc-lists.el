@@ -4,6 +4,7 @@
 (setq mc/cmds-to-run-for-all
       '(
 	god-mode-all
+	wdired--self-insert
 	))
 
 (setq mc/cmds-to-run-once

@@ -20,11 +20,10 @@
 (set-face-attribute 'default nil :family "RobotoMono Nerd Font" :height 120 :weight 'normal :width 'normal)
 (set-fontset-font t 'symbol "Apple Color Emoji")
 
-
 (setq custom-file "~/.config/emacs/custom.el")
 (setq auto-save-file-name-transforms
       `((".*" "~/.config/emacs/autosaves/" t)))
-
+(setq backup-directory-alist `(("." . "~/.config/emacs/_backups/")))
 (setq native-comp-async-report-warnings-errors nil)
 (setq native-comp-deferred-compilation t)
 (setq use-package-always-ensure t)
@@ -33,8 +32,7 @@
 (setq ring-bell-function 'ignore)
 (global-display-line-numbers-mode t)
 (setq warning-minimum-level :error)
-
-(defvar bootstrap-version)
+(setq-default dired-kill-when-opening-new-dired-buffer t)
 
 (fido-vertical-mode t)
 (fido-mode t)
@@ -43,10 +41,6 @@
 (unless my/TERM
   (global-set-key (kbd "C-z") 'undo)
   (global-set-key (kbd "C-S-z") 'undo-redo))
-
-;; (use-package evil
-;;   :init
-;;   (evil-mode))
 
 (use-package god-mode
  :config
@@ -166,13 +160,13 @@
 (use-package python-black
   :hook (python-ts-mode . python-black-on-save-mode-enable-dwim))
 
+(use-package inf-ruby)
 (use-package pyvenv
   :after python
   :hook ((python-ts-mode . pyvenv-tracking-mode)))
 
 (use-package multiple-cursors)
-
-(use-package yaml-ts-mode)
+(use-package yaml-mode)
 (use-package vterm
   :config
   (add-hook 'vterm-mode-hook
@@ -271,23 +265,22 @@
 (global-set-key (kbd "C-j") 'join-line)
 (global-set-key (kbd "M-n") 'flymake-goto-next-error)
 (global-set-key (kbd "M-p") 'flymake-goto-prev-error)
-(global-set-key (kbd "<f10>") 'vterm)(load custom-file)
-(put 'dired-find-alternate-file 'disabled nil)
+(global-set-key (kbd "<f10>") 'vterm)
 
-;; Theme settings
+(load custom-file)
+(put 'dired-find-alternate-file 'disabled nil
+(define-key dired-mode-map (kbd "w") 'wdired-change-to-wdired-mode)
 
-(defun modeline-compose (primary secondary)
-  "Compose a string with provided information, using theme colors."
-  (let* ((char-width    (window-font-width nil 'header-line))
-         (window        (get-buffer-window (current-buffer)))
-         (space-up       +0.15)
-         (space-down     -0.20)
-         (left           (propertize primary 'face 'mode-line))  ;; Use the 'mode-line' face for primary text
-         (right          (propertize (concat secondary " ") 'face 'mode-line))  ;; Use the 'mode-line' face for secondary text
-         (available-width (- (window-total-width) 
-			     (length left) (length right)
-			     (/ (window-right-divider-width) char-width)))
-	 (available-width (max 1 available-width)))
-    (concat left
-            (propertize (make-string available-width ?\ ) 'face 'mode-line)  ;; Use theme color for padding
-            right)))
+;; General Editor Settings
+(setq-default indent-tabs-mode nil)
+(setq-default tab-width 2)
+(setq-default standard-indent 2)
+
+;; Org mode
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((ruby . t)
+   (shell . t)))
+
+(setq org-confirm-babel-evaluate nil)
+

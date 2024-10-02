@@ -18,5 +18,6 @@
 /emacs/multisession/
 /emacs/straight/
 /emacs/autosaves
+/emacs/_backups
 rqp
 /term/scripts/rqp
