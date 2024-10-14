@@ -84,8 +84,7 @@
   (global-corfu-mode))
 
 (use-package exec-path-from-shell
-  :init
-  (exec-path-from-shell-initialize))
+  :hook (after-init . exec-path-from-shell-initialize))
 
 (use-package projectile
   :commands (projectile-switch-project)
@@ -189,7 +188,18 @@
 
 (use-package editorconfig)
 
+(use-package org
+  :config
+  (setq org-directory "~/Workspace/github.com/eastwood/notes")
+  (setq org-agenda-files (list org-directory))
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((ruby . t)
+     (shell . t)))
+  )
+
 (defun install-copilot()
+  (interactive)
   (unless (file-exists-p "~/.config/emacs/copilot.el")
     (let ((url "https://raw.githubusercontent.com/copilot-emacs/copilot.el/main/copilot.el"))
       (url-copy-file url "~/.config/emacs/copilot.el" t)))
@@ -202,7 +212,7 @@
   (define-key copilot-completion-map (kbd "<tab>") 'copilot-accept-completion)
   (define-key copilot-completion-map (kbd "TAB") 'copilot-accept-completion))
 
-(install-copilot)
+;; (install-copilot)
 
 ;; Functions
 (defun wsl-copy-region-to-clipboard (start end)
@@ -268,19 +278,15 @@
 (global-set-key (kbd "<f10>") 'vterm)
 
 (load custom-file)
-(put 'dired-find-alternate-file 'disabled nil
-(define-key dired-mode-map (kbd "w") 'wdired-change-to-wdired-mode)
+
+(eval-after-load "dired"
+  '(progn
+     (put 'dired-find-alternate-file 'disabled nil)
+     (define-key dired-mode-map (kbd "w") 'wdired-change-to-wdired-mode)))
 
 ;; General Editor Settings
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 2)
 (setq-default standard-indent 2)
 
-;; Org mode
-(org-babel-do-load-languages
- 'org-babel-load-languages
- '((ruby . t)
-   (shell . t)))
-
 (setq org-confirm-babel-evaluate nil)
-

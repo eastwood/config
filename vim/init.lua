@@ -378,7 +378,33 @@ require("lazy").setup({
       debug = true, -- Enable debugging
       -- See Configuration section for rest
     },
-    -- See Commands section for default commands if you want to lazy load on them
+  },
+  {
+    "nvim-neo-tree/neo-tree.nvim",
+    branch = "v3.x",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "nvim-tree/nvim-web-devicons", -- not strictly required, but recommended
+      "MunifTanjim/nui.nvim",
+      -- "3rd/image.nvim", -- Optional image support in preview window: See `# Preview Mode` for more information
+    },
+    commands = {
+      "Neotree",
+    },
+    config = function()
+      require("neo-tree").setup({
+        disable_netrw = true,
+        auto_open = true,
+        update_to_buf_dir = {
+          enable = true,
+          auto_open = true,
+        },
+        window = {
+          position = "right",
+        },
+      })
+      vim.keymap.set("n", "\\", ":Neotree toggle<CR>", { desc = "[N]vim [T]ree [T]oggle" })
+    end
   },
   require("plugins.gitsigns"),
 }, {
