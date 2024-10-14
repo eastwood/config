@@ -270,7 +270,6 @@ require("lazy").setup({
         clangd = {},
         gopls = {},
         pyright = {},
-        -- fsautocomplete = {},
         rust_analyzer = {},
         ts_ls = {},
         elixirls = {},
