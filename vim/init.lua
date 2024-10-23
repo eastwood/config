@@ -66,6 +66,9 @@ vim.api.nvim_create_autocmd("TextYankPost", {
   end,
 })
 
+-- open file under cursor in other window
+vim.api.nvim_set_keymap('t', 'gf', '<C-\\><C-n><C-w>w:edit <C-R>=expand("<cfile>")<CR><CR>', { noremap = true })
+
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"

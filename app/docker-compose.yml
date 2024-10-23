@@ -1,0 +1,22 @@
+services:
+  transmission-openvpn:
+    cap_add:
+      - NET_ADMIN
+    volumes:
+      - '/share:/shared'
+      - '/share/Docker/Transmission/config:/config'
+      - '/share/Download/Transmission:/data'
+    environment:
+      - OPENVPN_PROVIDER=PROTONVPN
+      - OPENVPN_USERNAME=
+      - OPENVPN_CONFIG=au.protonvpn.udp
+      - OPENVPN_PASSWORD=
+      - LOCAL_NETWORK=192.168.0.0/16
+      - OPENVPN_OPTS=--mute-replay-warnings
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+    ports:
+      - 29091:9091
+    image: haugene/transmission-openvpn
