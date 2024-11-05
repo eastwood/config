@@ -39,7 +39,7 @@ vim.keymap.set("n", "<leader>ff", ":edit ", { desc = "Open [F]ile" })
 vim.keymap.set("n", "<leader>fs", ":w!<CR>", { desc = "[S]ave file" })
 vim.keymap.set("n", "<leader>qq", ":wqall!<CR>", { desc = "[Q]ave file" })
 vim.keymap.set("t", "<Esc><Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" })
-vim.keymap.set("n", "<f12>", ":10split term://zsh<cr>")
+vim.keymap.set("n", "<f12>", ":term://zsh<cr>")
 
 --  See `:help wincmd` for a list of all window commands
 vim.keymap.set("n", "<C-h>", "<C-w><C-h>", { desc = "Move focus to the left window" })
@@ -429,4 +429,5 @@ require("lazy").setup({
         lazy = "💤 ",
       },
     },
-  })
+  }
+)
