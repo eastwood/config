@@ -39,7 +39,7 @@ vim.keymap.set("n", "<leader>ff", ":edit ", { desc = "Open [F]ile" })
 vim.keymap.set("n", "<leader>fs", ":w!<CR>", { desc = "[S]ave file" })
 vim.keymap.set("n", "<leader>qq", ":wqall!<CR>", { desc = "[Q]ave file" })
 vim.keymap.set("t", "<Esc><Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" })
-vim.keymap.set("n", "<f12>", ":10split term://zsh<cr>")
+vim.keymap.set("n", "<f12>", ":term://zsh<cr>")
 
 --  See `:help wincmd` for a list of all window commands
 vim.keymap.set("n", "<C-h>", "<C-w><C-h>", { desc = "Move focus to the left window" })
@@ -65,6 +65,9 @@ vim.api.nvim_create_autocmd("TextYankPost", {
     vim.highlight.on_yank()
   end,
 })
+
+-- open file under cursor in other window
+vim.api.nvim_set_keymap('t', 'gf', '<C-\\><C-n><C-w>w:edit <C-R>=expand("<cfile>")<CR><CR>', { noremap = true })
 
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info
@@ -425,4 +428,5 @@ require("lazy").setup({
         lazy = "💤 ",
       },
     },
-  })
+  }
+)

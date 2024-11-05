@@ -4,14 +4,18 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(connection-local-criteria-alist
-   '(((:application tramp :machine "localhost")
+   '(((:application eshell)
+      eshell-connection-default-profile)
+     ((:application tramp :machine "localhost")
       tramp-connection-local-darwin-ps-profile)
      ((:application tramp :machine "eastwds-MacBook-Pro.local")
       tramp-connection-local-darwin-ps-profile)
      ((:application tramp)
       tramp-connection-local-default-system-profile tramp-connection-local-default-shell-profile)))
  '(connection-local-profile-alist
-   '((tramp-connection-local-darwin-ps-profile
+   '((eshell-connection-default-profile
+      (eshell-path-env-list))
+     (tramp-connection-local-darwin-ps-profile
       (tramp-process-attributes-ps-args "-acxww" "-o" "pid,uid,user,gid,comm=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" "-o" "state=abcde" "-o" "ppid,pgid,sess,tty,tpgid,minflt,majflt,time,pri,nice,vsz,rss,etime,pcpu,pmem,args")
       (tramp-process-attributes-ps-format
        (pid . number)
@@ -90,7 +94,7 @@
  '(org-agenda-files
    '("~/Workspace/github.com/eastwood/notes/personal/amazon-setup.org"))
  '(package-selected-packages
-   '(yaml-mode inf-ruby god-mode editorconfig terraform-mode python-mode pyenv python-ts-mode copilot quelpa-use-package quelpa treesit-auto tsx-ts-mode eglot elfeed rg expand-region doom-modeline corfu perspective xclip which-key vterm projectile nord-theme no-littering multiple-cursors move-text markdown-mode magit goto-chg git-link exec-path-from-shell eglot-fsharp all-the-icons)))
+   '(ein yaml-mode inf-ruby god-mode editorconfig terraform-mode python-mode pyenv python-ts-mode copilot quelpa-use-package quelpa treesit-auto tsx-ts-mode eglot elfeed rg expand-region doom-modeline corfu perspective xclip which-key vterm projectile nord-theme no-littering multiple-cursors move-text markdown-mode magit goto-chg git-link exec-path-from-shell eglot-fsharp all-the-icons)))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
