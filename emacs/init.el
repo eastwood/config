@@ -127,6 +127,7 @@
 
 (use-package typescript-ts-mode
   :mode "\\.ts\\'"
+  :mode "\\.js\\'"
   :hook ((typescript-ts-mode . eglot-ensure))
   :config
   (setq-default typescript-indent-level 2))
@@ -214,6 +215,13 @@
 
 ;; (install-copilot)
 
+(use-package gptel
+  :vc (:url "https://github.com/karthink/gptel"
+            :rev :newest)
+  :config
+  (setq auth-sources '("~/.authinfo"))
+  (setq gptel-api-key (auth-source-pick-first-password :host "api.openai.com")))
+
 ;; Functions
 (defun wsl-copy-region-to-clipboard (start end)
   "Copy region to Windows clipboard."
@@ -249,6 +257,8 @@
 (defun open-config()
   (interactive)
   (find-file "~/.config/emacs/init.el"))
+
+
 
 (global-set-key (kbd "C-S-c") 'wsl-copy-region-to-clipboard)
 (global-set-key (kbd "C-S-v") 'wsl-paste-from-clipboard)
@@ -288,5 +298,4 @@
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 2)
 (setq-default standard-indent 2)
-
 (setq org-confirm-babel-evaluate nil)
