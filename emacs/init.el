@@ -118,6 +118,13 @@
 (use-package expand-region
   :commands (er/expand-region))
 
+(use-package ace-window
+  :bind (("M-o" . ace-window)))
+
+(use-package ace-link
+  :config
+  (ace-link-setup-default))
+
 (use-package treesit-auto
   :custom
   (treesit-auto-install 'prompt)
@@ -126,8 +133,7 @@
   (global-treesit-auto-mode))
 
 (use-package typescript-ts-mode
-  :mode "\\.ts\\'"
-  :mode "\\.js\\'"
+  :mode ("\\.ts\\'" "\\.js\\'")
   :hook ((typescript-ts-mode . eglot-ensure))
   :config
   (setq-default typescript-indent-level 2))
@@ -191,6 +197,10 @@
 
 (use-package org
   :config
+  (setq org-hide-emphasis-markers t)
+  (setq org-level-faces '((1 . (:inherit outline-1 :weight bold :height 1.5))
+                          (2 . (:inherit outline-2 :weight bold :height 1.4))
+                          (3 . (:inherit outline-3 :weight bold :height 1.3))))
   (setq org-directory "~/Workspace/github.com/eastwood/notes")
   (setq org-agenda-files (list org-directory))
   (org-babel-do-load-languages
@@ -218,7 +228,7 @@
 (use-package gptel
   :vc (:url "https://github.com/karthink/gptel"
             :rev :newest)
-  :config
+  :init
   (setq auth-sources '("~/.authinfo"))
   (setq gptel-api-key (auth-source-pick-first-password :host "api.openai.com")))
 
@@ -258,11 +268,21 @@
   (interactive)
   (find-file "~/.config/emacs/init.el"))
 
+(use-package erc
+  :config
+  (setq erc-default-server "irc.digitalcore.club"
+	erc-default-port 7000
+	erc-default-nick "eastwd")
 
+  ;; Add your server configuration
+  (add-to-list 'erc-server-alist
+               '("your.irc.server"
+		 "YourName"
+		 "YourNick")))
 
-(global-set-key (kbd "C-S-c") 'wsl-copy-region-to-clipboard)
-(global-set-key (kbd "C-S-v") 'wsl-paste-from-clipboard)
-(global-set-key (kbd "C-c fed") 'open-config)
+(global-set-key (kbd "C-S-c") #'wsl-copy-region-to-clipboard)
+(global-set-key (kbd "C-S-v") #'wsl-paste-from-clipboard)
+(global-set-key (kbd "C-c fed") #'open-config)
 (global-set-key (kbd "C-x C-0") #'delete-window)
 (global-set-key (kbd "C-x C-1") #'delete-other-windows)
 (global-set-key (kbd "C-x C-2") #'split-window-below)
@@ -270,22 +290,22 @@
 (global-set-key (kbd "C-x C-o") #'other-window)
 (global-set-key (kbd "<escape>") (lambda () (interactive) (god-local-mode t)))
 (global-set-key (kbd "C-.") #'eglot-code-actions)
-(global-set-key (kbd "M-<up>") 'backward-paragraph)
-(global-set-key (kbd "M-<down>") 'forward-paragraph)
-(global-set-key (kbd "C-<up>") 'move-text-up)
-(global-set-key (kbd "C-<down>") 'move-text-down)
-(global-set-key (kbd "s-<up>") 'backward-paragraph)
-(global-set-key (kbd "s-<down>") 'forward-paragraph)
-(global-set-key (kbd "C-M-<up>")  'mc/mark-previous-like-this)
-(global-set-key (kbd "C-M-<down>") 'mc/mark-next-like-this)
-(global-set-key (kbd "C-M-<left>") 'mc/mark-all-like-this)
-(global-set-key (kbd "C-M-<right>") 'mc/skip-to-next-like-this)
-(global-set-key (kbd "<f12>") 'persp-switch)
-(global-set-key (kbd "C-=") 'er/expand-region)
-(global-set-key (kbd "C-j") 'join-line)
-(global-set-key (kbd "M-n") 'flymake-goto-next-error)
-(global-set-key (kbd "M-p") 'flymake-goto-prev-error)
-(global-set-key (kbd "<f10>") 'vterm)
+(global-set-key (kbd "M-<up>") #'backward-paragraph)
+(global-set-key (kbd "M-<down>") #'forward-paragraph)
+(global-set-key (kbd "C-<up>") #'move-text-up)
+(global-set-key (kbd "C-<down>") #'move-text-down)
+(global-set-key (kbd "s-<up>") #'backward-paragraph)y
+(global-set-key (kbd "s-<down>") #'forward-paragraph)
+(global-set-key (kbd "C-M-<up>") #'mc/mark-previous-like-this)
+(global-set-key (kbd "C-M-<down>") #'mc/mark-next-like-this)
+(global-set-key (kbd "C-M-<left>") #'mc/mark-all-like-this)
+(global-set-key (kbd "C-M-<right>") #'mc/skip-to-next-like-this)
+(global-set-key (kbd "<f12>") #'persp-switch)
+(global-set-key (kbd "C-=") #'er/expand-region)
+(global-set-key (kbd "C-j") #'join-line)
+(global-set-key (kbd "M-n") #'flymake-goto-next-error)
+(global-set-key (kbd "M-p") #'flymake-goto-prev-error)
+(global-set-key (kbd "<f10>") #'vterm)
 
 (load custom-file)
 

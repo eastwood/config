@@ -6,6 +6,6 @@
 (scroll-bar-mode -1)
 
 ;; Set internal border width
-(setq default-frame-alist '((internal-border-width . 24)))
+;; (setq default-frame-alist '((internal-border-width . 24)))
 
 ;; Add a header line to simulate a top border

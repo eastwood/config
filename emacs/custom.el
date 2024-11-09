@@ -83,7 +83,7 @@
       (shell-file-name . "/bin/sh") (shell-command-switch . "-c"))
      (tramp-connection-local-default-system-profile
       (path-separator . ":") (null-device . "/dev/null"))))
- '(custom-enabled-themes '(leuven-dark))
+ '(custom-enabled-themes '(modus-vivendi-tritanopia))
  '(custom-safe-themes
    '("18cf5d20a45ea1dff2e2ffd6fbcd15082f9aa9705011a3929e77129a971d1cb3"
      "4c7228157ba3a48c288ad8ef83c490b94cb29ef01236205e360c2c4db200bb18"
@@ -92,15 +92,14 @@
  '(org-agenda-files
    '("~/Workspace/github.com/eastwood/notes/personal/amazon-setup.org"))
  '(package-selected-packages
-   '(all-the-icons copilot corfu doom-modeline editorconfig eglot
-                   eglot-fsharp ein elfeed evil evil-leader
-                   exec-path-from-shell expand-region git-link
-                   god-mode goto-chg gptel inf-ruby magit
-                   markdown-mode move-text multiple-cursors
-                   no-littering nord-theme perspective projectile
-                   pyenv python-mode python-ts-mode quelpa
-                   quelpa-use-package rg terraform-mode treesit-auto
-                   tsx-ts-mode vterm which-key xclip yaml-mode)))
+   '(ace-link ace-window all-the-icons copilot corfu doom-modeline
+              editorconfig eglot eglot-fsharp ein elfeed evil
+              evil-leader exec-path-from-shell expand-region git-link
+              god-mode goto-chg gptel inf-ruby magit markdown-mode
+              move-text multiple-cursors no-littering nord-theme
+              perspective projectile pyenv python-mode python-ts-mode
+              quelpa quelpa-use-package rg terraform-mode treesit-auto
+              tsx-ts-mode vterm which-key xclip yaml-mode)))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
