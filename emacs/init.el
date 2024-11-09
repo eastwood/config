@@ -272,13 +272,7 @@
   :config
   (setq erc-default-server "irc.digitalcore.club"
 	erc-default-port 7000
-	erc-default-nick "eastwd")
-
-  ;; Add your server configuration
-  (add-to-list 'erc-server-alist
-               '("your.irc.server"
-		 "YourName"
-		 "YourNick")))
+	erc-default-nick "eastwd"))
 
 (global-set-key (kbd "C-S-c") #'wsl-copy-region-to-clipboard)
 (global-set-key (kbd "C-S-v") #'wsl-paste-from-clipboard)
@@ -294,7 +288,7 @@
 (global-set-key (kbd "M-<down>") #'forward-paragraph)
 (global-set-key (kbd "C-<up>") #'move-text-up)
 (global-set-key (kbd "C-<down>") #'move-text-down)
-(global-set-key (kbd "s-<up>") #'backward-paragraph)y
+(global-set-key (kbd "s-<up>") #'backward-paragraph)
 (global-set-key (kbd "s-<down>") #'forward-paragraph)
 (global-set-key (kbd "C-M-<up>") #'mc/mark-previous-like-this)
 (global-set-key (kbd "C-M-<down>") #'mc/mark-next-like-this)
