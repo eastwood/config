@@ -4,7 +4,8 @@
 (defconst my/WINDOWS (memq window-system '(w32)))
 (defconst my/TERM    (memq window-system '(nil)))
 (defconst my/OSX     (memq window-system '(ns mac)))
-(defconst my/WSL     (memq window-system '(x nil)))
+(defconst my/WSL     (and (eq system-type 'gnu/linux)
+                          (getenv "WSLENV")))
 (defconst my/GTK     (memq window-system '(pgtk)))
 
 (require 'package)
@@ -36,6 +37,12 @@
 (fido-vertical-mode t)
 (fido-mode t)
 (electric-pair-mode t)
+
+(setq tramp-default-method "sshx")
+
+(when my/WSL
+  (setq browse-url-browser-function 'browse-url-generic
+        browse-url-generic-program "wslview"))
 
 (unless my/TERM
   (global-set-key (kbd "C-z") 'undo)
