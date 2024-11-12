@@ -1,12 +1,9 @@
 (setq user-full-name "Clinton Ryan"
       user-mail-address "hello@clintonryan.com")
 
-(defconst my/WINDOWS (memq window-system '(w32)))
 (defconst my/TERM    (memq window-system '(nil)))
-(defconst my/OSX     (memq window-system '(ns mac)))
 (defconst my/WSL     (and (eq system-type 'gnu/linux)
                           (getenv "WSLENV")))
-(defconst my/GTK     (memq window-system '(pgtk)))
 
 (require 'package)
 (require 'use-package)
@@ -315,3 +312,14 @@
 (setq-default tab-width 2)
 (setq-default standard-indent 2)
 (setq org-confirm-babel-evaluate nil)
+
+(setq webjump-sites
+      '(("Nib Github" .
+         [simple-query "github.com"
+                       "https://github.com/search?type=repositories&q=org%3Anib-group+"
+                       #1=""])
+        ("Nib JIRA" .
+         [simple-query "nibgroup.atlassian.net"
+                       "https://nibgroup.atlassian.net/browse/"
+                       #1=""])
+        ))
