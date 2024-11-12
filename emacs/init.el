@@ -14,15 +14,13 @@
 
 (add-hook 'emacs-startup-hook
 	  (lambda ()
-	    (message "Emacs loaded in %s."
-                     (emacs-init-time))))
+	    (message "Emacs loaded in %s." (emacs-init-time))))
 
 (set-face-attribute 'default nil :family "RobotoMono Nerd Font" :height 120 :weight 'normal :width 'normal)
 (set-fontset-font t 'symbol "Apple Color Emoji")
 
 (setq custom-file "~/.config/emacs/custom.el")
-(setq auto-save-file-name-transforms
-      `((".*" "~/.config/emacs/autosaves/" t)))
+(setq auto-save-file-name-transforms `((".*" "~/.config/emacs/autosaves/" t)))
 (setq backup-directory-alist `(("." . "~/.config/emacs/_backups/")))
 (setq native-comp-async-report-warnings-errors nil)
 (setq native-comp-deferred-compilation t)
@@ -30,9 +28,10 @@
 (setq inhibit-startup-message t)
 (setq visible-bell t)
 (setq ring-bell-function 'ignore)
-(global-display-line-numbers-mode t)
 (setq warning-minimum-level :error)
 (setq-default dired-kill-when-opening-new-dired-buffer t)
+
+(global-display-line-numbers-mode t)
 
 (fido-vertical-mode t)
 (fido-mode t)
@@ -45,8 +44,10 @@
 (use-package god-mode
  :config
  (setq god-mode-enable-function-key-translation nil)
- (setq god-exempt-major-modes '(vterm-mode info-mode))
+ (setq god-exempt-major-modes '(vterm-mode info-mode compilation-mode))
  (define-key god-local-mode-map (kbd ".") #'repeat)
+ (define-key god-local-mode-map (kbd "C-<f12>") #'persp-switch)
+ (define-key god-local-mode-map (kbd "C-<f10>") #'vterm)
  (define-key god-local-mode-map (kbd "i") #'god-mode-all)
  (define-key god-local-mode-map (kbd "[") #'backward-paragraph)
  (define-key god-local-mode-map (kbd "]") #'forward-paragraph)
@@ -79,12 +80,19 @@
 (use-package corfu
   :custom
   (corfu-auto t)
-  :config
-  (setq tab-always-indent 'complete)
+  (tab-always-indent 'complete)
+  (text-mode-ispell-word-completion nil)
+  :init
   (global-corfu-mode))
 
 (use-package exec-path-from-shell
   :hook (after-init . exec-path-from-shell-initialize))
+
+;; When switching projectile projects, also switch to the corresponding perspective
+(defun my/persp-switch-project ()
+  (let ((persp (projectile-project-name)))
+    (when persp
+      (persp-switch persp))))
 
 (use-package projectile
   :commands (projectile-switch-project)
@@ -93,7 +101,10 @@
   :config
   (define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
   (define-key projectile-mode-map (kbd "C-S-f") 'projectile-ripgrep)
-  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map))
+  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+
+  ;; When switching projectile projects, also switch to the corresponding perspective
+  (add-hook 'projectile-after-switch-project-hook 'my/persp-switch-project))
 
 (use-package perspective
   :init
@@ -109,11 +120,12 @@
   (define-key fsharp-mode-map (kbd "M-RET") 'fsharp-eval-phrase)
   (define-key fsharp-mode-map (kbd "M-n") 'flymake-goto-next-error)
   (define-key fsharp-mode-map (kbd "M-p") 'flymake-goto-prev-error)
-  (require 'eglot-fsharp)
   (setq inferior-fsharp-program "dotnet fsi --readline-"))
 
 (use-package move-text
-  :commands (move-text-up move-text-down))
+  :commands (move-text-up move-text-down)
+  :bind (("C-<up>" . move-text-up)
+         ("C-<down>" . move-text-down)))
 
 (use-package expand-region
   :commands (er/expand-region))
@@ -153,32 +165,34 @@
 
 (use-package ruby-ts-mode
   :mode "\\.rb\\'"
+  :hook ((ruby-ts-mode . eglot-ensure))
   :config
-  (add-to-list 'eglot-server-programs '((ruby-mode ruby-ts-mode) "ruby-lsp"))
-  :hook ((ruby-ts-mode . eglot-ensure)))
+  (add-to-list 'eglot-server-programs '((ruby-mode ruby-ts-mode) "ruby-lsp")))
 
-(add-to-list 'auto-mode-alist '("\\.py\\'" . python-ts-mode))
-(add-hook 'python-ts-mode-hook
-          (lambda ()
-            (pyvenv-tracking-mode 1)
-	    (eglot-ensure)))
+(use-package inf-ruby)
+
+(use-package python-mode
+  :mode "\\.py\\'"
+  :hook ((python-ts-mode . eglot-ensure))
+  :config
+  (setq python-indent-offset 4))
 
 (use-package python-black
   :hook (python-ts-mode . python-black-on-save-mode-enable-dwim))
 
-(use-package inf-ruby)
 (use-package pyvenv
   :after python
   :hook ((python-ts-mode . pyvenv-tracking-mode)))
 
 (use-package multiple-cursors)
+
 (use-package yaml-mode)
+
 (use-package vterm
-  :config
-  (add-hook 'vterm-mode-hook
-	    (lambda()
-	      (display-line-numbers-mode -1))))
+  :hook (vterm-mode . (lambda () (display-line-numbers-mode -1))))
+
 (use-package doom-modeline)
+
 (use-package rg)
 
 (use-package markdown-mode
@@ -196,38 +210,26 @@
 (use-package editorconfig)
 
 (use-package org
+  :init
+  (setq org-startup-indented t)
   :config
-  (setq org-hide-emphasis-markers t)
-  (setq org-level-faces '((1 . (:inherit outline-1 :weight bold :height 1.5))
-                          (2 . (:inherit outline-2 :weight bold :height 1.4))
-                          (3 . (:inherit outline-3 :weight bold :height 1.3))))
   (setq org-directory "~/Workspace/github.com/eastwood/notes")
   (setq org-agenda-files (list org-directory))
   (org-babel-do-load-languages
    'org-babel-load-languages
    '((ruby . t)
-     (shell . t)))
-  )
+     (shell . t))))
 
-(defun install-copilot()
-  (interactive)
-  (unless (file-exists-p "~/.config/emacs/copilot.el")
-    (let ((url "https://raw.githubusercontent.com/copilot-emacs/copilot.el/main/copilot.el"))
-      (url-copy-file url "~/.config/emacs/copilot.el" t)))
-  (add-to-list 'load-path "~/.config/emacs/copilot.el")
-  (require 'copilot)
-  
+(use-package copilot
+  :vc (:url "https://github.com/copilot-emacs/copilot.el" :rev :newest :branch "main")
+  :config
   (add-hook 'prog-mode-hook 'copilot-mode)
-  (add-to-list 'copilot-indentation-alist '(prog-mode 2))
   (setq copilot-indent-offset-warning-disable t)
   (define-key copilot-completion-map (kbd "<tab>") 'copilot-accept-completion)
   (define-key copilot-completion-map (kbd "TAB") 'copilot-accept-completion))
 
-;; (install-copilot)
-
 (use-package gptel
-  :vc (:url "https://github.com/karthink/gptel"
-            :rev :newest)
+  :vc (:url "https://github.com/karthink/gptel" :rev :newest)
   :init
   (setq auth-sources '("~/.authinfo"))
   (setq gptel-api-key (auth-source-pick-first-password :host "api.openai.com")))
@@ -268,12 +270,6 @@
   (interactive)
   (find-file "~/.config/emacs/init.el"))
 
-(use-package erc
-  :config
-  (setq erc-default-server "irc.digitalcore.club"
-	erc-default-port 7000
-	erc-default-nick "eastwd"))
-
 (global-set-key (kbd "C-S-c") #'wsl-copy-region-to-clipboard)
 (global-set-key (kbd "C-S-v") #'wsl-paste-from-clipboard)
 (global-set-key (kbd "C-c fed") #'open-config)
@@ -286,8 +282,6 @@
 (global-set-key (kbd "C-.") #'eglot-code-actions)
 (global-set-key (kbd "M-<up>") #'backward-paragraph)
 (global-set-key (kbd "M-<down>") #'forward-paragraph)
-(global-set-key (kbd "C-<up>") #'move-text-up)
-(global-set-key (kbd "C-<down>") #'move-text-down)
 (global-set-key (kbd "s-<up>") #'backward-paragraph)
 (global-set-key (kbd "s-<down>") #'forward-paragraph)
 (global-set-key (kbd "C-M-<up>") #'mc/mark-previous-like-this)
@@ -300,6 +294,7 @@
 (global-set-key (kbd "M-n") #'flymake-goto-next-error)
 (global-set-key (kbd "M-p") #'flymake-goto-prev-error)
 (global-set-key (kbd "<f10>") #'vterm)
+(global-set-key (kbd "<f5>") #'toggle-frame-maximized)
 
 (load custom-file)
 
