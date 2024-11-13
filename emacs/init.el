@@ -30,10 +30,15 @@
 (setq-default dired-kill-when-opening-new-dired-buffer t)
 
 (global-display-line-numbers-mode t)
-
 (fido-vertical-mode t)
 (fido-mode t)
 (electric-pair-mode t)
+
+;; General Editor Settings
+(setq-default indent-tabs-mode nil)
+(setq-default tab-width 2)
+(setq-default standard-indent 2)
+(setq org-confirm-babel-evaluate nil)
 
 (setq tramp-default-method "sshx")
 
@@ -44,6 +49,10 @@
 (unless my/TERM
   (global-set-key (kbd "C-z") 'undo)
   (global-set-key (kbd "C-S-z") 'undo-redo))
+
+(defun my/kill-this-buffer ()
+  (interactive)
+  (kill-buffer (current-buffer)))
 
 (use-package god-mode
  :config
@@ -57,11 +66,11 @@
  (define-key god-local-mode-map (kbd "]") #'forward-paragraph)
  
  ;; this is a nice addition to making sure that the cursor changes for visual help
- (defun my-god-mode-update-cursor-type ()
+ (defun my/god-mode-update-cursor-type ()
    (setq god-mode-enable-function-key-translation nil)
    (setq cursor-type (if (or god-local-mode buffer-read-only) 'box 'bar)))
 
- (add-hook 'post-command-hook #'my-god-mode-update-cursor-type))
+ (add-hook 'post-command-hook #'my/god-mode-update-cursor-type))
 
 (use-package which-key
   :config
@@ -78,8 +87,8 @@
 
 (use-package git-link
   :commands (git-link)
-  :config
-  (setq git-link-open-in-browser t))
+  :custom
+  (git-link-open-in-browser t))
 
 (use-package corfu
   :custom
@@ -91,24 +100,6 @@
 
 (use-package exec-path-from-shell
   :hook (after-init . exec-path-from-shell-initialize))
-
-;; When switching projectile projects, also switch to the corresponding perspective
-(defun my/persp-switch-project ()
-  (let ((persp (projectile-project-name)))
-    (when persp
-      (persp-switch persp))))
-
-(use-package projectile
-  :commands (projectile-switch-project)
-  :init
-  (projectile-mode)
-  :config
-  (define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
-  (define-key projectile-mode-map (kbd "C-S-f") 'projectile-ripgrep)
-  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
-
-  ;; When switching projectile projects, also switch to the corresponding perspective
-  (add-hook 'projectile-after-switch-project-hook 'my/persp-switch-project))
 
 (use-package perspective
   :init
@@ -160,8 +151,8 @@
 (use-package go-ts-mode
   :mode "\\.go\\'"
   :hook ((go-ts-mode . eglot-ensure))
-  :config
-  (setq go-ts-mode-indent-offset 2))
+  :custom
+  (go-ts-mode-indent-offset 2))
 
 (use-package rust-ts-mode
   :mode "\\.rs\\'"
@@ -216,9 +207,10 @@
 (use-package org
   :init
   (setq org-startup-indented t)
+  :custom
+  (org-directory "~/Workspace/github.com/eastwood/notes")
+  (org-agenda-files (list org-directory))
   :config
-  (setq org-directory "~/Workspace/github.com/eastwood/notes")
-  (setq org-agenda-files (list org-directory))
   (org-babel-do-load-languages
    'org-babel-load-languages
    '((ruby . t)
@@ -226,9 +218,10 @@
 
 (use-package copilot
   :vc (:url "https://github.com/copilot-emacs/copilot.el" :rev :newest :branch "main")
+  :custom
+  (copilot-indent-offset-warning-disable t)
   :config
   (add-hook 'prog-mode-hook 'copilot-mode)
-  (setq copilot-indent-offset-warning-disable t)
   (define-key copilot-completion-map (kbd "<tab>") 'copilot-accept-completion)
   (define-key copilot-completion-map (kbd "TAB") 'copilot-accept-completion))
 
@@ -239,7 +232,7 @@
   (setq gptel-api-key (auth-source-pick-first-password :host "api.openai.com")))
 
 ;; Functions
-(defun wsl-copy-region-to-clipboard (start end)
+(defun my/wsl-copy (start end)
   "Copy region to Windows clipboard."
   (interactive "r")
   (call-process-region start end "clip.exe" nil 0))
@@ -251,7 +244,7 @@
      (shell-command-to-string
       "powershell.exe -Command Get-Clipboard") 0 -1)))
 
-(defun wsl-paste-from-clipboard (arg)
+(defun my/wsl-paste (arg)
   "Insert Windows clipboard at point. With prefix ARG, also add to kill-ring"
   (interactive "P")
   (let ((clip (wsl-clipboard-to-string)))
@@ -274,14 +267,44 @@
   (interactive)
   (find-file "~/.config/emacs/init.el"))
 
-(global-set-key (kbd "C-S-c") #'wsl-copy-region-to-clipboard)
-(global-set-key (kbd "C-S-v") #'wsl-paste-from-clipboard)
+;; Project configuration
+(eval-after-load "dired"
+  '(progn
+     (put 'dired-find-alternate-file 'disabled nil)
+     (define-key dired-mode-map (kbd "w") 'wdired-change-to-wdired-mode)))
+
+(setq webjump-sites
+      '(("Nib Github" .
+         [simple-query "github.com"
+                       "https://github.com/search?type=repositories&q=org%3Anib-group+"
+                       #1=""])
+        ("Nib JIRA" .
+         [simple-query "nibgroup.atlassian.net"
+                       "https://nibgroup.atlassian.net/browse/"
+                       #1=""])
+        ))
+
+(defun my/project-switch-perspective (&rest _)
+  "Switch to a perspective based on the current project's name."
+  (when (project-current)
+    (let ((project-name (file-name-nondirectory
+                         (directory-file-name (project-root (project-current))))))
+      (persp-switch project-name))))
+
+(advice-add 'project-switch-project :after #'my/project-switch-perspective)
+
+;; Keybindings
+(global-set-key (kbd "C-x f") #'project-find-file)
+(global-set-key (kbd "C-S-f") #'project-find-regexp)
+(global-set-key (kbd "C-S-c") #'my/wsl-copy)
+(global-set-key (kbd "C-S-v") #'my/wsl-paste)
 (global-set-key (kbd "C-c fed") #'open-config)
 (global-set-key (kbd "C-x C-0") #'delete-window)
 (global-set-key (kbd "C-x C-1") #'delete-other-windows)
 (global-set-key (kbd "C-x C-2") #'split-window-below)
 (global-set-key (kbd "C-x C-3") #'split-window-right)
 (global-set-key (kbd "C-x C-o") #'other-window)
+(global-set-key (kbd "C-x k") #'my/kill-this-buffer)g
 (global-set-key (kbd "<escape>") (lambda () (interactive) (god-local-mode t)))
 (global-set-key (kbd "C-.") #'eglot-code-actions)
 (global-set-key (kbd "M-<up>") #'backward-paragraph)
@@ -301,25 +324,3 @@
 (global-set-key (kbd "<f5>") #'toggle-frame-maximized)
 
 (load custom-file)
-
-(eval-after-load "dired"
-  '(progn
-     (put 'dired-find-alternate-file 'disabled nil)
-     (define-key dired-mode-map (kbd "w") 'wdired-change-to-wdired-mode)))
-
-;; General Editor Settings
-(setq-default indent-tabs-mode nil)
-(setq-default tab-width 2)
-(setq-default standard-indent 2)
-(setq org-confirm-babel-evaluate nil)
-
-(setq webjump-sites
-      '(("Nib Github" .
-         [simple-query "github.com"
-                       "https://github.com/search?type=repositories&q=org%3Anib-group+"
-                       #1=""])
-        ("Nib JIRA" .
-         [simple-query "nibgroup.atlassian.net"
-                       "https://nibgroup.atlassian.net/browse/"
-                       #1=""])
-        ))
