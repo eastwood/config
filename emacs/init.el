@@ -8,40 +8,41 @@
 (require 'package)
 (require 'use-package)
 
+(setq use-package-always-ensure t)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 
 (add-hook 'emacs-startup-hook
 	  (lambda ()
 	    (message "Emacs loaded in %s." (emacs-init-time))))
 
+;; General Editor Settings
+(setq-default indent-tabs-mode nil)
+(setq-default tab-width 2)
+(setq-default standard-indent 2)
+
+;; Interface
 (set-face-attribute 'default nil :family "RobotoMono Nerd Font" :height 120 :weight 'normal :width 'normal)
 (set-fontset-font t 'symbol "Apple Color Emoji")
-
-(setq custom-file "~/.config/emacs/custom.el")
-(setq auto-save-file-name-transforms `((".*" "~/.config/emacs/autosaves/" t)))
-(setq backup-directory-alist `(("." . "~/.config/emacs/_backups/")))
-(setq native-comp-async-report-warnings-errors nil)
-(setq native-comp-deferred-compilation t)
-(setq use-package-always-ensure t)
-(setq inhibit-startup-message t)
-(setq visible-bell t)
-(setq ring-bell-function 'ignore)
-(setq warning-minimum-level :error)
-(setq-default dired-kill-when-opening-new-dired-buffer t)
-
+(pixel-scroll-precision-mode t)
 (global-display-line-numbers-mode t)
 (fido-vertical-mode t)
 (fido-mode t)
 (electric-pair-mode t)
 
-;; General Editor Settings
-(setq-default indent-tabs-mode nil)
-(setq-default tab-width 2)
-(setq-default standard-indent 2)
-(setq org-confirm-babel-evaluate nil)
+;; Variables and Warnings
+(setq inhibit-startup-message t)
+(setq-default dired-kill-when-opening-new-dired-buffer t)
+(setq auto-save-file-name-transforms `((".*" "~/.config/emacs/autosaves/" t)))
+(setq backup-directory-alist `(("." . "~/.config/emacs/_backups/")))
+(setq native-comp-async-report-warnings-errors nil)
+(setq native-comp-deferred-compilation t)
+(setq warning-minimum-level :error)
+(setq ring-bell-function 'ignore)
+(setq visible-bell t)
 
 (setq tramp-default-method "sshx")
 
+;; OS Specific Settings
 (when my/WSL
   (setq browse-url-browser-function 'browse-url-generic
         browse-url-generic-program "wslview"))
@@ -50,10 +51,7 @@
   (global-set-key (kbd "C-z") 'undo)
   (global-set-key (kbd "C-S-z") 'undo-redo))
 
-(defun my/kill-this-buffer ()
-  (interactive)
-  (kill-buffer (current-buffer)))
-
+;; Package Configuration
 (use-package god-mode
  :config
  (setq god-mode-enable-function-key-translation nil)
@@ -108,15 +106,6 @@
   :config
   (persp-mode))
 
-(use-package fsharp-mode
-  :defer t
-  :config
-  (require 'eglot-fsharp)
-  (define-key fsharp-mode-map (kbd "M-RET") 'fsharp-eval-phrase)
-  (define-key fsharp-mode-map (kbd "M-n") 'flymake-goto-next-error)
-  (define-key fsharp-mode-map (kbd "M-p") 'flymake-goto-prev-error)
-  (setq inferior-fsharp-program "dotnet fsi --readline-"))
-
 (use-package move-text
   :commands (move-text-up move-text-down)
   :bind (("C-<up>" . move-text-up)
@@ -142,8 +131,8 @@
 (use-package typescript-ts-mode
   :mode ("\\.ts\\'" "\\.js\\'")
   :hook ((typescript-ts-mode . eglot-ensure))
-  :config
-  (setq-default typescript-indent-level 2))
+  :custom
+  (typescript-indent-level 2))
 
 (use-package json-ts-mode
   :mode "\\.json\\'")
@@ -210,6 +199,7 @@
   :custom
   (org-directory "~/Workspace/github.com/eastwood/notes")
   (org-agenda-files (list org-directory))
+  (org-confirm-babel-evaluate nil)
   :config
   (org-babel-do-load-languages
    'org-babel-load-languages
@@ -231,7 +221,7 @@
   (setq auth-sources '("~/.authinfo"))
   (setq gptel-api-key (auth-source-pick-first-password :host "api.openai.com")))
 
-;; Functions
+;; Custom Functions
 (defun my/wsl-copy (start end)
   "Copy region to Windows clipboard."
   (interactive "r")
@@ -266,6 +256,10 @@
 (defun open-config()
   (interactive)
   (find-file "~/.config/emacs/init.el"))
+
+(defun my/kill-this-buffer ()
+  (interactive)
+  (kill-buffer (current-buffer)))
 
 ;; Project configuration
 (eval-after-load "dired"
@@ -323,4 +317,5 @@
 (global-set-key (kbd "<f10>") #'vterm)
 (global-set-key (kbd "<f5>") #'toggle-frame-maximized)
 
+(setq custom-file "~/.config/emacs/custom.el")
 (load custom-file)
