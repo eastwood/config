@@ -21,3 +21,9 @@
 /emacs/_backups
 rqp
 /term/scripts/rqp
+/emacs/projects
+/emacs/request/
+/emacs/tramp
+/emacs/url/
+/emacs/copilot.el
+/emacs/.mc-lists.el
