@@ -29,3 +29,7 @@ export tmux="tmux"
 
 # export BROWSER="/mnt/c/Windows/explorer.exe"
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+export PYENV_ROOT="$HOME/.pyenv"
+[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"
