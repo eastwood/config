@@ -15,6 +15,9 @@
 	  (lambda ()
 	    (message "Emacs loaded in %s." (emacs-init-time))))
 
+;; Load custom file
+(setq custom-file "~/.config/emacs/custom.el")
+
 ;; General Editor Settings
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 2)
@@ -39,7 +42,6 @@
 (setq warning-minimum-level :error)
 (setq ring-bell-function 'ignore)
 (setq visible-bell t)
-
 (setq tramp-default-method "sshx")
 
 ;; OS Specific Settings
@@ -57,8 +59,8 @@
  (setq god-mode-enable-function-key-translation nil)
  (setq god-exempt-major-modes '(vterm-mode info-mode compilation-mode))
  (define-key god-local-mode-map (kbd ".") #'repeat)
- (define-key god-local-mode-map (kbd "C-<f12>") #'persp-switch)
- (define-key god-local-mode-map (kbd "C-<f10>") #'vterm)
+ (define-key god-local-mode-map (kbd "C-<f11>") #'persp-switch)
+ (define-key god-local-mode-map (kbd "C-<f12>") #'vterm)
  (define-key god-local-mode-map (kbd "i") #'god-mode-all)
  (define-key god-local-mode-map (kbd "[") #'backward-paragraph)
  (define-key god-local-mode-map (kbd "]") #'forward-paragraph)
@@ -250,7 +252,10 @@
 (defun my/open-buildkite()
   "Open Buildkite in browser."
   (interactive)
-  (let ((name (projectile-project-name)))
+  (let* ((project (project-current))
+         (name (if project
+                   (file-name-nondirectory (directory-file-name (project-root project)))
+                 "default-project"))) ; fallback if no project is found
     (browse-url (concat "https://buildkite.com/nib-health-funds-ltd/" name))))
 
 (defun open-config()
@@ -278,16 +283,8 @@
                        #1=""])
         ))
 
-(defun my/project-switch-perspective (&rest _)
-  "Switch to a perspective based on the current project's name."
-  (when (project-current)
-    (let ((project-name (file-name-nondirectory
-                         (directory-file-name (project-root (project-current))))))
-      (persp-switch project-name))))
-
-(advice-add 'project-switch-project :after #'my/project-switch-perspective)
-
 ;; Keybindings
+(global-set-key (kbd "C-x k") #'my/kill-this-buffer)
 (global-set-key (kbd "C-x f") #'project-find-file)
 (global-set-key (kbd "C-S-f") #'project-find-regexp)
 (global-set-key (kbd "C-S-c") #'my/wsl-copy)
@@ -298,7 +295,6 @@
 (global-set-key (kbd "C-x C-2") #'split-window-below)
 (global-set-key (kbd "C-x C-3") #'split-window-right)
 (global-set-key (kbd "C-x C-o") #'other-window)
-(global-set-key (kbd "C-x k") #'my/kill-this-buffer)g
 (global-set-key (kbd "<escape>") (lambda () (interactive) (god-local-mode t)))
 (global-set-key (kbd "C-.") #'eglot-code-actions)
 (global-set-key (kbd "M-<up>") #'backward-paragraph)
@@ -309,13 +305,34 @@
 (global-set-key (kbd "C-M-<down>") #'mc/mark-next-like-this)
 (global-set-key (kbd "C-M-<left>") #'mc/mark-all-like-this)
 (global-set-key (kbd "C-M-<right>") #'mc/skip-to-next-like-this)
-(global-set-key (kbd "<f12>") #'persp-switch)
 (global-set-key (kbd "C-=") #'er/expand-region)
 (global-set-key (kbd "C-j") #'join-line)
-(global-set-key (kbd "M-n") #'flymake-goto-next-error)
 (global-set-key (kbd "M-p") #'flymake-goto-prev-error)
-(global-set-key (kbd "<f10>") #'vterm)
-(global-set-key (kbd "<f5>") #'toggle-frame-maximized)
+(global-set-key (kbd "M-n") #'flymake-goto-next-error)
 
-(setq custom-file "~/.config/emacs/custom.el")
+(define-prefix-command 'my/gptel-map)
+(define-key my/gptel-map (kbd "a") #'gptel-add)
+(define-key my/gptel-map (kbd "g") #'gptel)
+(define-key my/gptel-map (kbd "m") #'gptel-menu)
+
+(define-prefix-command 'my/website-map)
+(define-key my/website-map (kbd "j") #'my/open-jira)
+(define-key my/website-map (kbd "b") #'my/open-buildkite)
+(define-key my/website-map (kbd "w") #'webjump)
+
+(with-eval-after-load 'which-key
+  (which-key-add-key-based-replacements
+    "<f2> a" "Add Section"
+    "<f2> g" "Open Chat"
+    "<f2> m" "Menu"
+    "<f6> j" "Open JIRA branch"
+    "<f6> b" "Open Project in Buildkite"
+    "<f6> w" "Search"))
+
+(global-set-key (kbd "<f2>") #'my/gptel-map)
+(global-set-key (kbd "<f5>") #'toggle-frame-maximized)
+(global-set-key (kbd "<f6>") #'my/website-map)
+(global-set-key (kbd "<f11>") #'persp-switch)
+(global-set-key (kbd "<f12>") #'vterm)
+
 (load custom-file)
