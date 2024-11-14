@@ -59,8 +59,6 @@
  (setq god-mode-enable-function-key-translation nil)
  (setq god-exempt-major-modes '(vterm-mode info-mode compilation-mode))
  (define-key god-local-mode-map (kbd ".") #'repeat)
- (define-key god-local-mode-map (kbd "C-<f11>") #'persp-switch)
- (define-key god-local-mode-map (kbd "C-<f12>") #'vterm)
  (define-key god-local-mode-map (kbd "i") #'god-mode-all)
  (define-key god-local-mode-map (kbd "[") #'backward-paragraph)
  (define-key god-local-mode-map (kbd "]") #'forward-paragraph)
@@ -262,7 +260,7 @@
                  "default-project"))) ; fallback if no project is found
     (browse-url (concat "https://buildkite.com/nib-health-funds-ltd/" name))))
 
-(defun open-config()
+(defun my/open-config()
   (interactive)
   (find-file "~/.config/emacs/init.el"))
 
@@ -289,12 +287,12 @@
 
 ;; Keybindings
 (global-set-key (kbd "C-`") #'vterm)
+(global-set-key (kbd "C-x *") #'isearch-forward-symbol-at-point)
 (global-set-key (kbd "C-x k") #'my/kill-this-buffer)
 (global-set-key (kbd "C-x f") #'project-find-file)
 (global-set-key (kbd "C-S-f") #'project-find-regexp)
 (global-set-key (kbd "C-S-c") #'my/wsl-copy)
 (global-set-key (kbd "C-S-v") #'my/wsl-paste)
-(global-set-key (kbd "C-c fed") #'open-config)
 
 ;; for god-mode
 (global-set-key (kbd "C-x C-0") #'delete-window)
@@ -307,35 +305,22 @@
 (global-set-key (kbd "C-.") #'eglot-code-actions)
 (global-set-key (kbd "M-<up>") #'backward-paragraph)
 (global-set-key (kbd "M-<down>") #'forward-paragraph)
-(global-set-key (kbd "C-M-<down>") #'mc/mark-more-like-this-extended)
-(global-set-key (kbd "C-M-<up>") #'mc/mark-all-like-this-dwim)
 (global-set-key (kbd "C-=") #'er/expand-region)
 (global-set-key (kbd "C-j") #'join-line)
 (global-set-key (kbd "M-p") #'flymake-goto-prev-error)
 (global-set-key (kbd "M-n") #'flymake-goto-next-error)
 
-(define-prefix-command 'my/gptel-map)
-(define-key my/gptel-map (kbd "a") #'gptel-add)
-(define-key my/gptel-map (kbd "g") #'gptel)
-(define-key my/gptel-map (kbd "m") #'gptel-menu)
+(define-prefix-command 'my/editor-map)
+(define-key my/editor-map (kbd "r") #'eglot-rename)
+(define-key my/editor-map (kbd "g") #'gptel)
+(define-key my/editor-map (kbd "*") #'mc/mark-all-dwim)
+(define-key my/editor-map (kbd "l") #'mc/edit-beginnings-of-lines)
+(define-key my/editor-map (kbd "c") #'my/open-config)
 
-(define-prefix-command 'my/website-map)
-(define-key my/website-map (kbd "j") #'my/open-jira)
-(define-key my/website-map (kbd "b") #'my/open-buildkite)
-(define-key my/website-map (kbd "w") #'webjump)
-
-(with-eval-after-load 'which-key
-  (which-key-add-key-based-replacements
-    "<f2> a" "Add Section"
-    "<f2> g" "Open Chat"
-    "<f2> m" "Menu"
-    "<f6> j" "Open JIRA branch"
-    "<f6> b" "Open Project in Buildkite"
-    "<f6> w" "Search"))
-
-(global-set-key (kbd "<f2>") #'my/gptel-map)
+;; Function binds for my maps
+(global-set-key (kbd "C-c SPC") #'my/editor-map)
+(global-set-key (kbd "<f2>") #'my/editor-map)
 (global-set-key (kbd "<f5>") #'toggle-frame-maximized)
-(global-set-key (kbd "<f6>") #'my/website-map)
-(global-set-key (kbd "<f10>") #'mc/mark-all-dwim)
+(global-set-key (kbd "<f12>") project-prefix-map)
 
 (load custom-file)
