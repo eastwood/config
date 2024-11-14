@@ -246,10 +246,9 @@
     (if arg (kill-new clip))))
 
 (defun my/open-jira()
-  "Open JIRA in browser."
-  (interactive)
-  (let (name (magit-get-current-branch))
-    (browse-url (concat "https://jira.nib.com.au/browse/" name))))
+  (let ((name (magit-get-current-branch)))
+    (message name)
+    (browse-url (concat "https://nibgroup.atlassian.net/browse/" name))))
 
 (defun my/open-buildkite()
   "Open Buildkite in browser."
@@ -286,7 +285,9 @@
         ))
 
 ;; Keybindings
+(global-set-key (kbd "C-c fed") #'my/open-config)
 (global-set-key (kbd "C-`") #'vterm)
+
 (global-set-key (kbd "C-x *") #'isearch-forward-symbol-at-point)
 (global-set-key (kbd "C-x k") #'my/kill-this-buffer)
 (global-set-key (kbd "C-x f") #'project-find-file)
@@ -323,4 +324,9 @@
 (global-set-key (kbd "<f5>") #'toggle-frame-maximized)
 (global-set-key (kbd "<f12>") project-prefix-map)
 
+(define-key project-prefix-map (kbd "J") #'my/open-jira)
+(define-key project-prefix-map (kbd "B") #'my/open-buildkite)
+(define-key project-prefix-map (kbd ".") #'persp-switch)
+
 (load custom-file)
+ 
