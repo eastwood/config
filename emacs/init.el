@@ -208,6 +208,10 @@
    '((ruby . t)
      (shell . t))))
 
+(use-package ein
+  :custom
+  (ein:output-area-inlined-images t))
+
 (use-package copilot
   :vc (:url "https://github.com/copilot-emacs/copilot.el" :rev :newest :branch "main")
   :custom
@@ -284,27 +288,27 @@
         ))
 
 ;; Keybindings
+(global-set-key (kbd "C-`") #'vterm)
 (global-set-key (kbd "C-x k") #'my/kill-this-buffer)
 (global-set-key (kbd "C-x f") #'project-find-file)
 (global-set-key (kbd "C-S-f") #'project-find-regexp)
 (global-set-key (kbd "C-S-c") #'my/wsl-copy)
 (global-set-key (kbd "C-S-v") #'my/wsl-paste)
 (global-set-key (kbd "C-c fed") #'open-config)
+
+;; for god-mode
 (global-set-key (kbd "C-x C-0") #'delete-window)
 (global-set-key (kbd "C-x C-1") #'delete-other-windows)
 (global-set-key (kbd "C-x C-2") #'split-window-below)
 (global-set-key (kbd "C-x C-3") #'split-window-right)
 (global-set-key (kbd "C-x C-o") #'other-window)
 (global-set-key (kbd "<escape>") (lambda () (interactive) (god-local-mode t)))
+
 (global-set-key (kbd "C-.") #'eglot-code-actions)
 (global-set-key (kbd "M-<up>") #'backward-paragraph)
 (global-set-key (kbd "M-<down>") #'forward-paragraph)
-(global-set-key (kbd "s-<up>") #'backward-paragraph)
-(global-set-key (kbd "s-<down>") #'forward-paragraph)
-(global-set-key (kbd "C-M-<up>") #'mc/mark-previous-like-this)
-(global-set-key (kbd "C-M-<down>") #'mc/mark-next-like-this)
-(global-set-key (kbd "C-M-<left>") #'mc/mark-all-like-this)
-(global-set-key (kbd "C-M-<right>") #'mc/skip-to-next-like-this)
+(global-set-key (kbd "C-M-<down>") #'mc/mark-more-like-this-extended)
+(global-set-key (kbd "C-M-<up>") #'mc/mark-all-like-this-dwim)
 (global-set-key (kbd "C-=") #'er/expand-region)
 (global-set-key (kbd "C-j") #'join-line)
 (global-set-key (kbd "M-p") #'flymake-goto-prev-error)
@@ -332,7 +336,6 @@
 (global-set-key (kbd "<f2>") #'my/gptel-map)
 (global-set-key (kbd "<f5>") #'toggle-frame-maximized)
 (global-set-key (kbd "<f6>") #'my/website-map)
-(global-set-key (kbd "<f11>") #'persp-switch)
-(global-set-key (kbd "<f12>") #'vterm)
+(global-set-key (kbd "<f10>") #'mc/mark-all-dwim)
 
 (load custom-file)

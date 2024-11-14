@@ -91,7 +91,12 @@
  '(initial-frame-alist '((fullscreen . maximized)))
  '(org-agenda-files
    '("~/Workspace/github.com/eastwood/notes/personal/amazon-setup.org"))
- '(package-selected-packages nil)
+ '(package-selected-packages
+   '(ace-link ace-window copilot corfu doom-modeline ein
+              exec-path-from-shell expand-region git-link god-mode
+              gptel inf-ruby magit markdown-mode move-text
+              multiple-cursors perspective python-black python-mode
+              pyvenv rg terraform-mode treesit-auto vterm yaml-mode))
  '(package-vc-selected-packages
    '((copilot :url "https://github.com/copilot-emacs/copilot.el" :branch
               "main"))))
