@@ -231,7 +231,7 @@
   (interactive "r")
   (call-process-region start end "clip.exe" nil 0))
 
-(defun wsl-clipboard-to-string ()
+(defun my/wsl()
   "Return Windows clipboard as string."
   (let ((coding-system-for-read 'dos))
     (substring				; remove added trailing \n
