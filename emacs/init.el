@@ -55,20 +55,20 @@
 
 ;; Package Configuration
 (use-package god-mode
- :config
- (setq god-mode-enable-function-key-translation nil)
- (setq god-exempt-major-modes '(vterm-mode info-mode compilation-mode))
- (define-key god-local-mode-map (kbd ".") #'repeat)
- (define-key god-local-mode-map (kbd "i") #'god-mode-all)
- (define-key god-local-mode-map (kbd "[") #'backward-paragraph)
- (define-key god-local-mode-map (kbd "]") #'forward-paragraph)
- 
- ;; this is a nice addition to making sure that the cursor changes for visual help
- (defun my/god-mode-update-cursor-type ()
-   (setq god-mode-enable-function-key-translation nil)
-   (setq cursor-type (if (or god-local-mode buffer-read-only) 'box 'bar)))
+  :config
+  (require 'god-mode-isearch)
+  (define-key isearch-mode-map (kbd "<escape>") #'god-mode-isearch-activate)
+  (define-key god-mode-isearch-map (kbd "<escape>") #'god-mode-isearch-disable)
 
- (add-hook 'post-command-hook #'my/god-mode-update-cursor-type))
+  (define-key god-local-mode-map (kbd ".") #'repeat)
+  (define-key god-local-mode-map (kbd "i") #'god-mode-all)
+  (define-key god-local-mode-map (kbd "[") #'backward-paragraph)
+  (define-key god-local-mode-map (kbd "]") #'forward-paragraph)
+  ;; this is a nice addition to making sure that the cursor changes for visual help
+  (defun my/god-mode-update-cursor-type ()
+    (setq god-mode-enable-function-key-translation nil)
+    (setq cursor-type (if (or god-local-mode buffer-read-only) 'box 'bar)))
+  (add-hook 'post-command-hook #'my/god-mode-update-cursor-type))
 
 (use-package which-key
   :config
@@ -245,9 +245,11 @@
     (insert clip)
     (if arg (kill-new clip))))
 
+(defun my/open/zoom()
+  )
+
 (defun my/open-jira()
   (let ((name (magit-get-current-branch)))
-    (message name)
     (browse-url (concat "https://nibgroup.atlassian.net/browse/" name))))
 
 (defun my/open-buildkite()
@@ -274,11 +276,11 @@
      (define-key dired-mode-map (kbd "w") 'wdired-change-to-wdired-mode)))
 
 (setq webjump-sites
-      '(("Nib Github" .
+      '(("Repository Search (nib)" .
          [simple-query "github.com"
                        "https://github.com/search?type=repositories&q=org%3Anib-group+"
                        #1=""])
-        ("Nib JIRA" .
+        ("Story Search (nib)" .
          [simple-query "nibgroup.atlassian.net"
                        "https://nibgroup.atlassian.net/browse/"
                        #1=""])
@@ -296,12 +298,14 @@
 (global-set-key (kbd "C-S-v") #'my/wsl-paste)
 
 ;; for god-mode
+(global-set-key (kbd "<escape>") #'god-mode-all)
 (global-set-key (kbd "C-x C-0") #'delete-window)
 (global-set-key (kbd "C-x C-1") #'delete-other-windows)
 (global-set-key (kbd "C-x C-2") #'split-window-below)
 (global-set-key (kbd "C-x C-3") #'split-window-right)
 (global-set-key (kbd "C-x C-o") #'other-window)
-(global-set-key (kbd "<escape>") (lambda () (interactive) (god-local-mode t)))
+(define-key god-local-mode-map (kbd "<f2>") #'my/editor-map)
+(define-key god-local-mode-map (kbd "<f12>") project-prefix-map)
 
 (global-set-key (kbd "C-.") #'eglot-code-actions)
 (global-set-key (kbd "M-<up>") #'backward-paragraph)
@@ -313,7 +317,7 @@
 
 (define-prefix-command 'my/editor-map)
 (define-key my/editor-map (kbd "r") #'eglot-rename)
-(define-key my/editor-map (kbd "g") #'gptel)
+(define-key my/editor-map (kbd "g") #'gptel-menu)
 (define-key my/editor-map (kbd "*") #'mc/mark-all-dwim)
 (define-key my/editor-map (kbd "l") #'mc/edit-beginnings-of-lines)
 (define-key my/editor-map (kbd "c") #'my/open-config)
@@ -321,7 +325,7 @@
 ;; Function binds for my maps
 (global-set-key (kbd "C-c SPC") #'my/editor-map)
 (global-set-key (kbd "<f2>") #'my/editor-map)
-(global-set-key (kbd "<f5>") #'toggle-frame-maximized)
+(global-set-key (kbd "<f11>") #'toggle-frame-maximized)
 (global-set-key (kbd "<f12>") project-prefix-map)
 
 (define-key project-prefix-map (kbd "J") #'my/open-jira)
@@ -329,4 +333,3 @@
 (define-key project-prefix-map (kbd ".") #'persp-switch)
 
 (load custom-file)
- 
