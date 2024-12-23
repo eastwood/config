@@ -89,15 +89,17 @@
      "4c7228157ba3a48c288ad8ef83c490b94cb29ef01236205e360c2c4db200bb18"
      default))
  '(god-mode-enable-function-key-translation t)
+ '(impatient-showdown-flavor 'github)
  '(initial-frame-alist '((fullscreen . maximized)))
  '(org-agenda-files
    '("~/Workspace/github.com/eastwood/notes/personal/amazon-setup.org"))
  '(package-selected-packages
    '(ace-link ace-window copilot corfu doom-modeline ein
               exec-path-from-shell expand-region git-link god-mode
-              gptel inf-ruby magit markdown-mode move-text
-              multiple-cursors perspective python-black python-mode
-              pyvenv rg terraform-mode treesit-auto vterm yaml-mode))
+              gptel grip-mode inf-ruby magit markdown-mode move-text
+              multiple-cursors perspective poetry python-black
+              python-mode pyvenv rg terraform-mode treesit-auto vterm
+              yaml-mode))
  '(package-vc-selected-packages
    '((copilot :url "https://github.com/copilot-emacs/copilot.el" :branch
               "main"))))

@@ -1,7 +1,7 @@
 (setq user-full-name "Clinton Ryan"
       user-mail-address "hello@clintonryan.com")
 
-(defconst my/TERM    (memq window-system '(nil)))
+(defconst my/TERM   (eq window-system nil))
 (defconst my/WSL     (and (eq system-type 'gnu/linux)
                           (getenv "WSLENV")))
 
@@ -12,8 +12,8 @@
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 
 (add-hook 'emacs-startup-hook
-	  (lambda ()
-	    (message "Emacs loaded in %s." (emacs-init-time))))
+          (lambda ()
+	          (message "Emacs loaded in %s." (emacs-init-time))))
 
 ;; Load custom file
 (setq custom-file "~/.config/emacs/custom.el")
@@ -74,10 +74,6 @@
   :config
   (which-key-mode))
 
-(defun my/kill-magit-buffer ()
-  (interactive)
-  (magit-mode-bury-buffer 16))
-
 (use-package magit
   :commands (magit-status)
   :config
@@ -97,7 +93,8 @@
   (global-corfu-mode))
 
 (use-package exec-path-from-shell
-  :hook (after-init . exec-path-from-shell-initialize))
+  :config
+  (exec-path-from-shell-initialize))
 
 (use-package perspective
   :init
@@ -162,11 +159,14 @@
   (setq python-indent-offset 4))
 
 (use-package python-black
-  :hook (python-ts-mode . python-black-on-save-mode-enable-dwim))
+  :hook (python-ts-mode . python-black-on-save-mode))
 
 (use-package pyvenv
   :after python
   :hook ((python-ts-mode . pyvenv-tracking-mode)))
+
+(use-package poetry
+  :hook (python-ts-mode . poetry-tracking-mode))
 
 (use-package multiple-cursors)
 
@@ -181,8 +181,7 @@
 
 (use-package markdown-mode
   :ensure t
-  :mode ("README\\.md\\'" . gfm-mode)
-  :init (setq markdown-command "multimarkdown"))
+  :mode ("README\\.md\\'" . gfm-mode))
 
 (use-package terraform-mode
   :custom (terraform-indent-level 2)
@@ -230,7 +229,6 @@
   "Copy region to Windows clipboard."
   (interactive "r")
   (call-process-region start end "clip.exe" nil 0))
-
 (defun my/wsl()
   "Return Windows clipboard as string."
   (let ((coding-system-for-read 'dos))
@@ -245,8 +243,10 @@
     (insert clip)
     (if arg (kill-new clip))))
 
-(defun my/open/zoom()
-  )
+(defun my/open-zoom()
+  (interactive)
+  (let ((baseUrl "https://nibgroup.zoom.us/j/815911628?pwd=UnJBQ2hYaFBxOHBJazNzdzJ6TDc2UT09"))
+    (browse-url baseUrl)))
 
 (defun my/open-jira()
   (let ((name (magit-get-current-branch)))
@@ -269,6 +269,14 @@
   (interactive)
   (kill-buffer (current-buffer)))
 
+(defun my/open-notes()
+  (interactive)
+  (find-file (concat org-directory "/inbox.org")))
+
+(defun my/kill-magit-buffer ()
+  (interactive)
+  (magit-mode-bury-buffer 16))
+
 ;; Project configuration
 (eval-after-load "dired"
   '(progn
@@ -286,27 +294,24 @@
                        #1=""])
         ))
 
-;; Keybindings
-(global-set-key (kbd "C-c fed") #'my/open-config)
-(global-set-key (kbd "C-`") #'vterm)
+(defun my/define-god-key (kbd-combination fn)
+  "Set a key binding for activating `god-mode` and add it to the global keymap."
+  (let ((key (kbd kbd-combination)))
+    (define-key god-local-mode-map key fn)
+    (global-set-key key fn)))
 
+;; General Keybindings
+(global-set-key (kbd "<escape>") #'god-mode-all)
+(global-set-key (kbd "C-c fed") #'my/open-config)
+(global-set-key (kbd "C-S-s") #'save-buffer)
+(global-set-key (kbd "C-S-a") #'mark-whole-buffer)
+(global-set-key (kbd "C-`") #'vterm)
 (global-set-key (kbd "C-x *") #'isearch-forward-symbol-at-point)
 (global-set-key (kbd "C-x k") #'my/kill-this-buffer)
 (global-set-key (kbd "C-x f") #'project-find-file)
 (global-set-key (kbd "C-S-f") #'project-find-regexp)
 (global-set-key (kbd "C-S-c") #'my/wsl-copy)
 (global-set-key (kbd "C-S-v") #'my/wsl-paste)
-
-;; for god-mode
-(global-set-key (kbd "<escape>") #'god-mode-all)
-(global-set-key (kbd "C-x C-0") #'delete-window)
-(global-set-key (kbd "C-x C-1") #'delete-other-windows)
-(global-set-key (kbd "C-x C-2") #'split-window-below)
-(global-set-key (kbd "C-x C-3") #'split-window-right)
-(global-set-key (kbd "C-x C-o") #'other-window)
-(define-key god-local-mode-map (kbd "<f2>") #'my/editor-map)
-(define-key god-local-mode-map (kbd "<f12>") project-prefix-map)
-
 (global-set-key (kbd "C-.") #'eglot-code-actions)
 (global-set-key (kbd "M-<up>") #'backward-paragraph)
 (global-set-key (kbd "M-<down>") #'forward-paragraph)
@@ -315,21 +320,22 @@
 (global-set-key (kbd "M-p") #'flymake-goto-prev-error)
 (global-set-key (kbd "M-n") #'flymake-goto-next-error)
 
+(my/define-god-key "<f11>" #'toggle-frame-maximized)
+
+;; Project bindings
+(my/define-god-key "C-c p" project-prefix-map)
+(define-key project-prefix-map (kbd "J") #'my/open-jira)
+(define-key project-prefix-map (kbd "B") #'my/open-buildkite)
+(define-key project-prefix-map (kbd ".") #'persp-switch)
+
+;; Editor bindings
+(my/define-god-key "<f2>" #'my/editor-map)
 (define-prefix-command 'my/editor-map)
 (define-key my/editor-map (kbd "r") #'eglot-rename)
 (define-key my/editor-map (kbd "g") #'gptel-menu)
 (define-key my/editor-map (kbd "*") #'mc/mark-all-dwim)
 (define-key my/editor-map (kbd "l") #'mc/edit-beginnings-of-lines)
 (define-key my/editor-map (kbd "c") #'my/open-config)
-
-;; Function binds for my maps
-(global-set-key (kbd "C-c SPC") #'my/editor-map)
-(global-set-key (kbd "<f2>") #'my/editor-map)
-(global-set-key (kbd "<f11>") #'toggle-frame-maximized)
-(global-set-key (kbd "<f12>") project-prefix-map)
-
-(define-key project-prefix-map (kbd "J") #'my/open-jira)
-(define-key project-prefix-map (kbd "B") #'my/open-buildkite)
-(define-key project-prefix-map (kbd ".") #'persp-switch)
+(define-key my/editor-map (kbd "n") #'my/open-notes)
 
 (load custom-file)
