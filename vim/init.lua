@@ -160,7 +160,6 @@ require("lazy").setup({
           hidden = true,
           shorten_path = true,
           layout_strategy = "horizontal",
-          cwd = require("lspconfig.util").root_pattern(".git")(vim.fn.expand("%:p")),
         })
       end
 
@@ -270,13 +269,13 @@ require("lazy").setup({
       capabilities = vim.tbl_deep_extend("force", capabilities, require("cmp_nvim_lsp").default_capabilities())
 
       local servers = {
-        clangd = {},
+        -- clangd = {},
         gopls = {},
         pyright = {},
-        rust_analyzer = {},
+        -- rust_analyzer = {},
         ts_ls = {},
-        elixirls = {},
-        ruby_lsp = {},
+        -- elixirls = {},
+        -- ruby_lsp = {},
         lua_ls = {
           settings = {
             Lua = {
@@ -368,11 +367,10 @@ require("lazy").setup({
       vim.keymap.set("n", "<leader>gs", ":Git<CR>", { desc = "Git [S]tatus" })
     end
   },
-  "jlcrochet/vim-razor",
   "github/copilot.vim",
   {
     "CopilotC-Nvim/CopilotChat.nvim",
-    branch = "canary",
+    branch = "main",
     dependencies = {
       { "github/copilot.vim" }, -- or github/copilot.vim
       { "nvim-lua/plenary.nvim" }, -- for curl, log wrapper

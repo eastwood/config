@@ -54,22 +54,6 @@
   (global-set-key (kbd "C-S-z") 'undo-redo))
 
 ;; Package Configuration
-(use-package god-mode
-  :config
-  (require 'god-mode-isearch)
-  (define-key isearch-mode-map (kbd "<escape>") #'god-mode-isearch-activate)
-  (define-key god-mode-isearch-map (kbd "<escape>") #'god-mode-isearch-disable)
-
-  (define-key god-local-mode-map (kbd ".") #'repeat)
-  (define-key god-local-mode-map (kbd "i") #'god-mode-all)
-  (define-key god-local-mode-map (kbd "[") #'backward-paragraph)
-  (define-key god-local-mode-map (kbd "]") #'forward-paragraph)
-  ;; this is a nice addition to making sure that the cursor changes for visual help
-  (defun my/god-mode-update-cursor-type ()
-    (setq god-mode-enable-function-key-translation nil)
-    (setq cursor-type (if (or god-local-mode buffer-read-only) 'box 'bar)))
-  (add-hook 'post-command-hook #'my/god-mode-update-cursor-type))
-
 (use-package which-key
   :config
   (which-key-mode))
@@ -229,6 +213,7 @@
   "Copy region to Windows clipboard."
   (interactive "r")
   (call-process-region start end "clip.exe" nil 0))
+
 (defun my/wsl()
   "Return Windows clipboard as string."
   (let ((coding-system-for-read 'dos))
@@ -294,22 +279,67 @@
                        #1=""])
         ))
 
-(defun my/define-god-key (kbd-combination fn)
-  "Set a key binding for activating `god-mode` and add it to the global keymap."
-  (let ((key (kbd kbd-combination)))
-    (define-key god-local-mode-map key fn)
-    (global-set-key key fn)))
+(use-package evil
+  :init
+  (setq evil-want-keybinding nil)
+  (setq evil-want-integration nil)
+  :config
+  (setq evil-normal-state-cursor '("green" box))
+  (setq evil-insert-state-cursor '("red" bar))
+  (setq evil-visual-state-cursor '("orange" box))
+  (setq evil-replace-state-cursor '("red" hollow))
+  (setq evil-operator-state-cursor '("purple" hollow))
+  (evil-mode 1))
 
-;; General Keybindings
-(global-set-key (kbd "<escape>") #'god-mode-all)
-(global-set-key (kbd "C-c fed") #'my/open-config)
-(global-set-key (kbd "C-S-s") #'save-buffer)
-(global-set-key (kbd "C-S-a") #'mark-whole-buffer)
+(use-package evil-collection
+  :after evil
+  :config
+  (evil-collection-init))
+
+(define-prefix-command 'my/buffer-map)
+(define-prefix-command 'my/files-map)
+(define-prefix-command 'my/eval-prefix-map)
+(define-prefix-command 'my/editor-map)
+
+(use-package evil-leader
+  :after evil
+  :config
+  (global-evil-leader-mode)
+  (evil-leader/set-leader "<SPC>")
+
+  (evil-leader/set-key
+    "x" 'my/kill-this-buffer
+    "b" 'my/buffer-map
+    "f" 'my/files-map
+    "g" 'magit-status
+    "e" 'my/eval-prefix-map
+    "." 'my/editor-map
+    "p" project-prefix-map))
+
+;; File Bindings
+(define-key 'my/files-map (kbd "c") #'my/open-config)
+(define-key 'my/files-map (kbd "s") #'save-buffer)
+(define-key 'my/files-map (kbd "f") #'find-file)
+
+;; Buffer Bindings
+(define-key 'my/buffer-map (kbd "k") #'kill-buffer)
+(define-key 'my/buffer-map (kbd "n") #'next-buffer)
+(define-key 'my/buffer-map (kbd "p") #'previous-buffer)
+(define-key 'my/buffer-map (kbd "b") #'switch-to-buffer)
+(define-key 'my/buffer-map (kbd "d") #'dired)
+
+;; Eval bindings
+(define-key 'my/eval-prefix-map (kbd "e") #'eval-last-sexp)
+(define-key 'my/eval-prefix-map (kbd "b") #'eval-buffer)
+(define-key 'my/eval-prefix-map (kbd "r") #'eval-region)
+
+;; Project bindings
+(define-key project-prefix-map (kbd "J") #'my/open-jira)
+(define-key project-prefix-map (kbd "B") #'my/open-buildkite)
+(define-key project-prefix-map (kbd ".") #'persp-switch)
+
+;; Global Bindings
 (global-set-key (kbd "C-`") #'vterm)
-(global-set-key (kbd "C-x *") #'isearch-forward-symbol-at-point)
-(global-set-key (kbd "C-x k") #'my/kill-this-buffer)
-(global-set-key (kbd "C-x f") #'project-find-file)
-(global-set-key (kbd "C-S-f") #'project-find-regexp)
 (global-set-key (kbd "C-S-c") #'my/wsl-copy)
 (global-set-key (kbd "C-S-v") #'my/wsl-paste)
 (global-set-key (kbd "C-.") #'eglot-code-actions)
@@ -320,17 +350,7 @@
 (global-set-key (kbd "M-p") #'flymake-goto-prev-error)
 (global-set-key (kbd "M-n") #'flymake-goto-next-error)
 
-(my/define-god-key "<f11>" #'toggle-frame-maximized)
-
-;; Project bindings
-(my/define-god-key "C-c p" project-prefix-map)
-(define-key project-prefix-map (kbd "J") #'my/open-jira)
-(define-key project-prefix-map (kbd "B") #'my/open-buildkite)
-(define-key project-prefix-map (kbd ".") #'persp-switch)
-
 ;; Editor bindings
-(my/define-god-key "<f2>" #'my/editor-map)
-(define-prefix-command 'my/editor-map)
 (define-key my/editor-map (kbd "r") #'eglot-rename)
 (define-key my/editor-map (kbd "g") #'gptel-menu)
 (define-key my/editor-map (kbd "*") #'mc/mark-all-dwim)
