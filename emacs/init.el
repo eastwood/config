@@ -110,9 +110,10 @@
   (global-treesit-auto-mode))
 
 (use-package typescript-ts-mode
-  :mode ("\\.ts\\'" "\\.js\\'")
+  :mode ("\\.ts\\'" "\\.tsx\\'" "\\.js\\'" "\\.mjs\\'")
   :hook ((typescript-ts-mode . eglot-ensure))
   :custom
+  (typescript-ts-mode-indent-offset 2)
   (typescript-indent-level 2))
 
 (use-package json-ts-mode
@@ -224,7 +225,7 @@
 (defun my/wsl-paste (arg)
   "Insert Windows clipboard at point. With prefix ARG, also add to kill-ring"
   (interactive "P")
-  (let ((clip (wsl-clipboard-to-string)))
+  (let ((clip (my/wsl)))
     (insert clip)
     (if arg (kill-new clip))))
 
@@ -283,12 +284,20 @@
   :init
   (setq evil-want-keybinding nil)
   (setq evil-want-integration nil)
+  (setq evil-undo-system 'undo-redo)
+  (setq evil-want-C-u-scroll t)
   :config
+  (setq evil-shift-width 2)
   (setq evil-normal-state-cursor '("green" box))
   (setq evil-insert-state-cursor '("red" bar))
   (setq evil-visual-state-cursor '("orange" box))
   (setq evil-replace-state-cursor '("red" hollow))
   (setq evil-operator-state-cursor '("purple" hollow))
+  (define-key evil-normal-state-map (kbd "C-d") 'evil-scroll-down)
+  (define-key evil-normal-state-map (kbd "C-l") 'evil-window-right)
+  (define-key evil-normal-state-map (kbd "C-h") 'evil-window-left)
+  (define-key evil-normal-state-map (kbd "C-j") 'evil-window-down)
+  (define-key evil-normal-state-map (kbd "C-k") 'evil-window-up)
   (evil-mode 1))
 
 (use-package evil-collection
@@ -308,13 +317,15 @@
   (evil-leader/set-leader "<SPC>")
 
   (evil-leader/set-key
+    "SPC" 'execute-extended-command
     "x" 'my/kill-this-buffer
     "b" 'my/buffer-map
     "f" 'my/files-map
     "g" 'magit-status
     "e" 'my/eval-prefix-map
     "." 'my/editor-map
-    "p" project-prefix-map))
+    "p" project-prefix-map
+  ))
 
 ;; File Bindings
 (define-key 'my/files-map (kbd "c") #'my/open-config)
@@ -357,5 +368,4 @@
 (define-key my/editor-map (kbd "l") #'mc/edit-beginnings-of-lines)
 (define-key my/editor-map (kbd "c") #'my/open-config)
 (define-key my/editor-map (kbd "n") #'my/open-notes)
-
 (load custom-file)
