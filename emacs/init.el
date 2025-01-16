@@ -110,11 +110,14 @@
   (global-treesit-auto-mode))
 
 (use-package typescript-ts-mode
-  :mode ("\\.ts\\'" "\\.tsx\\'" "\\.js\\'" "\\.mjs\\'")
+  :mode ("\\.ts\\'" "\\.js\\'" "\\.mjs\\'")
   :hook ((typescript-ts-mode . eglot-ensure))
+  :hook ((tsx-ts-mode . eglot-ensure))
   :custom
   (typescript-ts-mode-indent-offset 2)
-  (typescript-indent-level 2))
+  (typescript-indent-level 2)
+  :config
+  (add-to-list 'auto-mode-alist '("\\.tsx\\'" . tsx-ts-mode)))
 
 (use-package json-ts-mode
   :mode "\\.json\\'")
@@ -162,11 +165,8 @@
 
 (use-package doom-modeline)
 
-(use-package rg)
-
 (use-package markdown-mode
-  :ensure t
-  :mode ("README\\.md\\'" . gfm-mode))
+  :mode ("\\.md\\'" . gfm-mode))
 
 (use-package terraform-mode
   :custom (terraform-indent-level 2)
@@ -294,6 +294,8 @@
   (setq evil-replace-state-cursor '("red" hollow))
   (setq evil-operator-state-cursor '("purple" hollow))
   (define-key evil-normal-state-map (kbd "C-d") 'evil-scroll-down)
+  (define-key evil-normal-state-map (kbd "M-.") 'eglot-code-actions)
+  (define-key evil-normal-state-map (kbd "C-.") 'eglot-code-actions)
   (define-key evil-normal-state-map (kbd "C-l") 'evil-window-right)
   (define-key evil-normal-state-map (kbd "C-h") 'evil-window-left)
   (define-key evil-normal-state-map (kbd "C-j") 'evil-window-down)
@@ -328,7 +330,6 @@
   ))
 
 ;; File Bindings
-(define-key 'my/files-map (kbd "c") #'my/open-config)
 (define-key 'my/files-map (kbd "s") #'save-buffer)
 (define-key 'my/files-map (kbd "f") #'find-file)
 
@@ -354,6 +355,7 @@
 (global-set-key (kbd "C-S-c") #'my/wsl-copy)
 (global-set-key (kbd "C-S-v") #'my/wsl-paste)
 (global-set-key (kbd "C-.") #'eglot-code-actions)
+(global-set-key (kbd "M-.") #'eglot-code-actions)
 (global-set-key (kbd "M-<up>") #'backward-paragraph)
 (global-set-key (kbd "M-<down>") #'forward-paragraph)
 (global-set-key (kbd "C-=") #'er/expand-region)
@@ -368,4 +370,5 @@
 (define-key my/editor-map (kbd "l") #'mc/edit-beginnings-of-lines)
 (define-key my/editor-map (kbd "c") #'my/open-config)
 (define-key my/editor-map (kbd "n") #'my/open-notes)
+
 (load custom-file)
