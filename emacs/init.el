@@ -235,6 +235,7 @@
     (browse-url baseUrl)))
 
 (defun my/open-jira()
+  (interactive)
   (let ((name (magit-get-current-branch)))
     (browse-url (concat "https://nibgroup.atlassian.net/browse/" name))))
 
@@ -262,6 +263,24 @@
 (defun my/kill-magit-buffer ()
   (interactive)
   (magit-mode-bury-buffer 16))
+
+(defun my/fetch (url &rest args)
+  (interactive (browse-url-interactive-arg "URL: "))
+  "Fetch URL and display in a new *response* buffer."
+  (url-retrieve url
+                (lambda (status)
+                  (if (plist-get status :error)
+                      (message "Error fetching offers: %S" (plist-get status :error))
+                    (goto-char (point-min))
+                    (search-forward "\n\n")
+                    (let ((content (buffer-substring (point) (point-max)))
+                          (buffer (get-buffer-create "*response*")))
+                      (with-current-buffer buffer
+                        (erase-buffer)
+                        (insert content)
+                        (goto-char (point-min))
+                        (json-pretty-print-buffer)
+                        (display-buffer buffer)))))))
 
 ;; Project configuration
 (eval-after-load "dired"
