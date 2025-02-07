@@ -10,7 +10,7 @@ export DOTNET_TOOLS="/home/eastwd/.dotnet/tools"
 export PATH=$EMACS/bin:$LOCAL_SCRIPTS:/usr/local/bin:$PATH:$CUSTOM_SCRIPTS:$NODE_BIN:$RUST_ANALYSER:$GO_BIN:$YT:$DOTNET_TOOLS
 
 ZSH_THEME="nicoulaj"
-plugins=(git rbenv)
+plugins=(git)
 source $ZSH/oh-my-zsh.sh
 
 # User configuration
@@ -32,4 +32,4 @@ export tmux="tmux"
 
 export PYENV_ROOT="$HOME/.pyenv"
 [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init -)"
+# eval "$(pyenv init -)"

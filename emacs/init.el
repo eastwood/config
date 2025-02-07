@@ -76,9 +76,7 @@
   :init
   (global-corfu-mode))
 
-(use-package exec-path-from-shell
-  :config
-  (exec-path-from-shell-initialize))
+(use-package exec-path-from-shell)
 
 (use-package perspective
   :init
@@ -196,9 +194,12 @@
 
 (use-package copilot
   :vc (:url "https://github.com/copilot-emacs/copilot.el" :rev :newest :branch "main")
+  :init
+  (add-to-list 'exec-path "/opt/homebrew/bin")
   :custom
   (copilot-indent-offset-warning-disable t)
   :config
+  (add-to-list 'exec-path "/opt/homebrew/bin")
   (add-hook 'prog-mode-hook 'copilot-mode)
   (define-key copilot-completion-map (kbd "<tab>") 'copilot-accept-completion)
   (define-key copilot-completion-map (kbd "TAB") 'copilot-accept-completion))
