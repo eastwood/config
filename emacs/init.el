@@ -22,6 +22,7 @@
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 2)
 (setq-default standard-indent 2)
+(setq-default truncate-lines t)
 
 ;; Interface
 (set-face-attribute 'default nil :family "RobotoMono Nerd Font" :height 120 :weight 'normal :width 'normal)
@@ -81,7 +82,7 @@
 (use-package perspective
   :init
   (setq persp-suppress-no-prefix-key-warning t)
-  (setq persp-initial-frame-name "config")
+  (setq persp-initial-frame-name "main")
   :config
   (persp-mode))
 
@@ -183,6 +184,7 @@
   (org-agenda-files (list org-directory))
   (org-confirm-babel-evaluate nil)
   :config
+
   (org-babel-do-load-languages
    'org-babel-load-languages
    '((ruby . t)
@@ -230,7 +232,7 @@
     (insert clip)
     (if arg (kill-new clip))))
 
-(defun my/open-zoom()
+(defun my/open-sales-zoom()
   (interactive)
   (let ((baseUrl "https://nibgroup.zoom.us/j/815911628?pwd=UnJBQ2hYaFBxOHBJazNzdzJ6TDc2UT09"))
     (browse-url baseUrl)))
@@ -282,6 +284,17 @@
                         (goto-char (point-min))
                         (json-pretty-print-buffer)
                         (display-buffer buffer)))))))
+
+(defun my/switch-to-project ()
+  "Switch to a project and associate it with a perspective."
+  (interactive)
+  (let* ((project (project-prompt-project-dir))
+         (project-name (file-name-nondirectory (directory-file-name project))))
+    (if (member project-name (persp-all-names))
+        (persp-switch project-name)
+      (progn
+        (persp-switch project-name)
+        (project-switch-project project)))))
 
 ;; Project configuration
 (eval-after-load "dired"
@@ -367,8 +380,14 @@
 
 ;; Project bindings
 (define-key project-prefix-map (kbd "J") #'my/open-jira)
+(define-key project-prefix-map (kbd "Z") #'my/open-sales-zoom)
 (define-key project-prefix-map (kbd "B") #'my/open-buildkite)
-(define-key project-prefix-map (kbd ".") #'persp-switch)
+(define-key project-prefix-map (kbd ".") #'my/switch-to-project)
+
+;; Org mode bindings
+(define-key org-mode-map (kbd "C-c c") #'org-toggle-checkbox)
+(evil-leader/set-key-for-mode 'org-mode "t" #'org-toggle-checkbox)
+(evil-leader/set-key-for-mode 'org-mode "r" #'org-refile)
 
 ;; Global Bindings
 (global-set-key (kbd "C-`") #'vterm)
@@ -390,5 +409,6 @@
 (define-key my/editor-map (kbd "l") #'mc/edit-beginnings-of-lines)
 (define-key my/editor-map (kbd "c") #'my/open-config)
 (define-key my/editor-map (kbd "n") #'my/open-notes)
+(define-key my/editor-map (kbd ".") #'persp-switch)
 
 (load custom-file)
