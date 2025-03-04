@@ -25,7 +25,7 @@
 (setq-default truncate-lines t)
 
 ;; Interface
-(set-face-attribute 'default nil :family "RobotoMono Nerd Font" :height 120 :weight 'normal :width 'normal)
+(set-face-attribute 'default nil :family "RobotoMono Nerd Font" :height 160 :weight 'normal :width 'normal)
 (set-fontset-font t 'symbol "Apple Color Emoji")
 (pixel-scroll-precision-mode t)
 (global-display-line-numbers-mode t)
