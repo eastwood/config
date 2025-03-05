@@ -1,3 +1,6 @@
+;; Notes
+;; Windows will need to install ripgrep + xargs
+
 (setq user-full-name "Clinton Ryan"
       user-mail-address "hello@clintonryan.com")
 
@@ -15,8 +18,10 @@
           (lambda ()
 	          (message "Emacs loaded in %s." (emacs-init-time))))
 
-;; Load custom file
-(setq custom-file "~/.config/emacs/custom.el")
+(defun my/get-config-dir()
+  (cond((eq 'w32 window-system) "~/.emacs.d/")
+        (t "~/.confg/emacs/")))
+
 
 ;; General Editor Settings
 (setq-default indent-tabs-mode nil)
@@ -36,14 +41,17 @@
 ;; Variables and Warnings
 (setq inhibit-startup-message t)
 (setq-default dired-kill-when-opening-new-dired-buffer t)
-(setq auto-save-file-name-transforms `((".*" "~/.config/emacs/autosaves/" t)))
-(setq backup-directory-alist `(("." . "~/.config/emacs/_backups/")))
+;; (setq auto-save-file-name-transforms `((".*" ,(concat (my/get-config-dir) "autosaves/") t)))
+(setq backup-directory-alist `(("." . ,(concat (my/get-config-dir) "_backups/"))))
 (setq native-comp-async-report-warnings-errors nil)
 (setq native-comp-deferred-compilation t)
 (setq warning-minimum-level :error)
 (setq ring-bell-function 'ignore)
 (setq visible-bell t)
 (setq tramp-default-method "sshx")
+
+(setq org-todo-keywords
+      '((sequence "TODO(t)" "IN-PROGRESS(p)" "BLOCKED(b)" "|" "DONE(d)" "CANCELLED(c)")))
 
 ;; OS Specific Settings
 (when my/WSL
@@ -53,6 +61,114 @@
 (unless my/TERM
   (global-set-key (kbd "C-z") 'undo)
   (global-set-key (kbd "C-S-z") 'undo-redo))
+
+;; Custom Functions
+(defvar my-clone-dir
+  "Directory where repositories should be cloned."
+  (cond ((eq 'w32 window-system) "D:/Code")
+        (t "~/Workspace/github.com/eastwood/")))
+
+(defun clone-repo (repo)
+  "Clone each repository in `my-repos` into `my-clone-dir`."
+  (interactive)
+  (unless (file-directory-p my-clone-dir)
+    (make-directory my-clone-dir t))
+  (let ((repo-url (format "git@github.com:nib-group/%s.git" repo))
+        (repo-path (expand-file-name repo my-clone-dir)))
+    (unless (file-directory-p repo-path)
+      (shell-command (format "git clone %s %s" repo-url repo-path)))))
+
+(defun my/wsl-copy (start end)
+  "Copy region to Windows clipboard."
+  (interactive "r")
+  (call-process-region start end "clip.exe" nil 0))
+
+(defun my/wsl()
+  "Return Windows clipboard as string."
+  (let ((coding-system-for-read 'dos))
+    (substring				; remove added trailing \n
+     (shell-command-to-string
+      "powershell.exe -Command Get-Clipboard") 0 -1)))
+
+(defun my/wsl-paste (arg)
+  "Insert Windows clipboard at point. With prefix ARG, also add to kill-ring"
+  (interactive "P")
+  (let ((clip (my/wsl)))
+    (insert clip)
+    (if arg (kill-new clip))))
+
+(defun my/open-sales-zoom()
+  (interactive)
+  (let ((baseUrl "https://nibgroup.zoom.us/j/815911628?pwd=UnJBQ2hYaFBxOHBJazNzdzJ6TDc2UT09"))
+    (browse-url baseUrl)))
+
+(defun my/open-jira()
+  (interactive)
+  (let ((name (magit-get-current-branch)))
+    (browse-url (concat "https://nibgroup.atlassian.net/browse/" name))))
+
+(defun my/open-buildkite()
+  "Open Buildkite in browser."
+  (interactive)
+  (let* ((project (project-current))
+         (name (if project
+                   (file-name-nondirectory (directory-file-name (project-root project)))
+                 "default-project"))) ; fallback if no project is found
+    (browse-url (concat "https://buildkite.com/nib-health-funds-ltd/" name))))
+
+(defun my/kill-this-buffer ()
+  (interactive)
+  (kill-buffer (current-buffer)))
+
+(defun my/open-notes()
+  (interactive)
+  (find-file (concat org-directory "/inbox.org")))
+
+(defun my/kill-magit-buffer ()
+  (interactive)
+  (magit-mode-bury-buffer 16))
+
+(defun my/fetch (url &rest args)
+  (interactive (browse-url-interactive-arg "URL: "))
+  "Fetch URL and display in a new *response* buffer."
+  (url-retrieve url
+                (lambda (status)
+                  (if (plist-get status :error)
+                      (message "Error fetching offers: %S" (plist-get status :error))
+                    (goto-char (point-min))
+                    (search-forward "\n\n")
+                    (let ((content (buffer-substring (point) (point-max)))
+                          (buffer (get-buffer-create "*response*")))
+                      (with-current-buffer buffer
+                        (erase-buffer)
+                        (insert content)
+                        (goto-char (point-min))
+                        (json-pretty-print-buffer)
+                        (display-buffer buffer)))))))
+
+(defun my/switch-to-project ()
+  "Switch to a project and associate it with a perspective."
+  (interactive)
+  (let* ((project (project-prompt-project-dir))
+         (project-name (file-name-nondirectory (directory-file-name project))))
+    (if (member project-name (persp-all-names))
+        (persp-switch project-name)
+      (progn
+        (persp-switch project-name)
+        (project-switch-project project)))))
+
+(defun my/code-directory(&optional suffix_path)
+  (interactive)
+  (let ((code-dir (cond ((eq 'w32 window-system) "D:/Code/")
+                          (t "~/Workspace/github.com/eastwood/"))))
+    (if suffix_path
+        (concat code-dir suffix_path)
+      code-dir)))
+
+
+(defun my/open-config()
+  (interactive)
+  (find-file (concat (my/get-config-dir) "init.el")))
 
 ;; Package Configuration
 (use-package which-key
@@ -78,6 +194,7 @@
   (global-corfu-mode))
 
 (use-package exec-path-from-shell
+  :unless (eq window-system 'w32)
   :config
   (exec-path-from-shell-initialize))
 
@@ -162,6 +279,7 @@
 (use-package yaml-mode)
 
 (use-package vterm
+  :unless (eq window-system 'w32)
   :hook (vterm-mode . (lambda () (display-line-numbers-mode -1))))
 
 (use-package doom-modeline)
@@ -181,12 +299,11 @@
 (use-package org
   :init
   (setq org-startup-indented t)
+  (setq org-directory (my/code-directory "notes"))
   :custom
-  (org-directory "~/Workspace/github.com/eastwood/notes")
   (org-agenda-files (list org-directory))
   (org-confirm-babel-evaluate nil)
   :config
-
   (org-babel-do-load-languages
    'org-babel-load-languages
    '((ruby . t)
@@ -211,89 +328,6 @@
   (setq auth-sources '("~/.authinfo"))
   (setq gptel-api-key (auth-source-pick-first-password :host "api.openai.com")))
 
-;; Custom Functions
-(defun my/wsl-copy (start end)
-  "Copy region to Windows clipboard."
-  (interactive "r")
-  (call-process-region start end "clip.exe" nil 0))
-
-(defun my/wsl()
-  "Return Windows clipboard as string."
-  (let ((coding-system-for-read 'dos))
-    (substring				; remove added trailing \n
-     (shell-command-to-string
-      "powershell.exe -Command Get-Clipboard") 0 -1)))
-
-(defun my/wsl-paste (arg)
-  "Insert Windows clipboard at point. With prefix ARG, also add to kill-ring"
-  (interactive "P")
-  (let ((clip (my/wsl)))
-    (insert clip)
-    (if arg (kill-new clip))))
-
-(defun my/open-sales-zoom()
-  (interactive)
-  (let ((baseUrl "https://nibgroup.zoom.us/j/815911628?pwd=UnJBQ2hYaFBxOHBJazNzdzJ6TDc2UT09"))
-    (browse-url baseUrl)))
-
-(defun my/open-jira()
-  (interactive)
-  (let ((name (magit-get-current-branch)))
-    (browse-url (concat "https://nibgroup.atlassian.net/browse/" name))))
-
-(defun my/open-buildkite()
-  "Open Buildkite in browser."
-  (interactive)
-  (let* ((project (project-current))
-         (name (if project
-                   (file-name-nondirectory (directory-file-name (project-root project)))
-                 "default-project"))) ; fallback if no project is found
-    (browse-url (concat "https://buildkite.com/nib-health-funds-ltd/" name))))
-
-(defun my/open-config()
-  (interactive)
-  (find-file "~/.config/emacs/init.el"))
-
-(defun my/kill-this-buffer ()
-  (interactive)
-  (kill-buffer (current-buffer)))
-
-(defun my/open-notes()
-  (interactive)
-  (find-file (concat org-directory "/inbox.org")))
-
-(defun my/kill-magit-buffer ()
-  (interactive)
-  (magit-mode-bury-buffer 16))
-
-(defun my/fetch (url &rest args)
-  (interactive (browse-url-interactive-arg "URL: "))
-  "Fetch URL and display in a new *response* buffer."
-  (url-retrieve url
-                (lambda (status)
-                  (if (plist-get status :error)
-                      (message "Error fetching offers: %S" (plist-get status :error))
-                    (goto-char (point-min))
-                    (search-forward "\n\n")
-                    (let ((content (buffer-substring (point) (point-max)))
-                          (buffer (get-buffer-create "*response*")))
-                      (with-current-buffer buffer
-                        (erase-buffer)
-                        (insert content)
-                        (goto-char (point-min))
-                        (json-pretty-print-buffer)
-                        (display-buffer buffer)))))))
-
-(defun my/switch-to-project ()
-  "Switch to a project and associate it with a perspective."
-  (interactive)
-  (let* ((project (project-prompt-project-dir))
-         (project-name (file-name-nondirectory (directory-file-name project))))
-    (if (member project-name (persp-all-names))
-        (persp-switch project-name)
-      (progn
-        (persp-switch project-name)
-        (project-switch-project project)))))
 
 ;; Project configuration
 (eval-after-load "dired"
@@ -410,4 +444,8 @@
 (define-key my/editor-map (kbd "n") #'my/open-notes)
 (define-key my/editor-map (kbd ".") #'persp-switch)
 
+;; Load custom file
+(setq custom-file (concat (my/get-config-dir) "custom.el"))
 (load custom-file)
+
+(setq-default xref-search-program 'ripgrep)
