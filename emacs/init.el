@@ -30,7 +30,7 @@
 (setq-default truncate-lines t)
 
 ;; Interface
-(set-face-attribute 'default nil :family "RobotoMono Nerd Font" :height 120 :weight 'normal :width 'normal)
+(set-face-attribute 'default nil :family "RobotoMono Nerd Font" :height 160 :weight 'normal :width 'normal)
 (set-fontset-font t 'symbol "Apple Color Emoji")
 (pixel-scroll-precision-mode t)
 (global-display-line-numbers-mode t)
@@ -315,9 +315,12 @@
 
 (use-package copilot
   :vc (:url "https://github.com/copilot-emacs/copilot.el" :rev :newest :branch "main")
+  :init
+  (add-to-list 'exec-path "/opt/homebrew/bin")
   :custom
   (copilot-indent-offset-warning-disable t)
   :config
+  (add-to-list 'exec-path "/opt/homebrew/bin")
   (add-hook 'prog-mode-hook 'copilot-mode)
   (define-key copilot-completion-map (kbd "<tab>") 'copilot-accept-completion)
   (define-key copilot-completion-map (kbd "TAB") 'copilot-accept-completion))
