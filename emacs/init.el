@@ -1,5 +1,7 @@
 ;; Notes
-;; Windows will need to install ripgrep + xargs
+;; Windows will need to install ripgrep + xargs ie:
+;; winget.exe install GnuWin32.FindUtils
+;; winget.exe install ripgrep
 
 (setq user-full-name "Clinton Ryan"
       user-mail-address "hello@clintonryan.com")
@@ -30,7 +32,7 @@
 (setq-default truncate-lines t)
 
 ;; Interface
-(set-face-attribute 'default nil :family "RobotoMono Nerd Font" :height 160 :weight 'normal :width 'normal)
+(set-face-attribute 'default nil :family "RobotoMono Nerd Font" :height 140 :weight 'normal :width 'normal)
 (set-fontset-font t 'symbol "Apple Color Emoji")
 (pixel-scroll-precision-mode t)
 (global-display-line-numbers-mode t)
@@ -63,18 +65,18 @@
   (global-set-key (kbd "C-S-z") 'undo-redo))
 
 ;; Custom Functions
-(defvar my-clone-dir
-  "Directory where repositories should be cloned."
+(defvar my/clone-dir
   (cond ((eq 'w32 window-system) "D:/Code")
         (t "~/Workspace/github.com/eastwood/")))
 
-(defun clone-repo (repo)
+(defun my/clone-repo (repo &rest args)
   "Clone each repository in `my-repos` into `my-clone-dir`."
-  (interactive)
-  (unless (file-directory-p my-clone-dir)
+  (interactive (list (read-string "repo: ")))
+  (unless (file-directory-p my/clone-dir)
     (make-directory my-clone-dir t))
   (let ((repo-url (format "git@github.com:nib-group/%s.git" repo))
-        (repo-path (expand-file-name repo my-clone-dir)))
+        (repo-path (expand-file-name repo my/clone-dir)))
+    (message "Cloning %s into %s" repo-url repo-path)
     (unless (file-directory-p repo-path)
       (shell-command (format "git clone %s %s" repo-url repo-path)))))
 
