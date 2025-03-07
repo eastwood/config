@@ -22,7 +22,7 @@
 
 (defun my/get-config-dir()
   (cond((eq 'w32 window-system) "~/.emacs.d/")
-        (t "~/.confg/emacs/")))
+        (t "~/.config/emacs/")))
 
 
 ;; General Editor Settings
