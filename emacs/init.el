@@ -53,7 +53,7 @@
 (setq tramp-default-method "sshx")
 
 (setq org-todo-keywords
-      '((sequence "TODO(t)" "IN-PROGRESS(p)" "BLOCKED(b)" "|" "DONE(d)" "CANCELLED(c)")))
+      '((sequence "TODO(t)" "IN-PROGRESS(i)" "BLOCKED(b)" "|" "DONE(d)" "CANCELLED(c)")))
 
 ;; OS Specific Settings
 (when my/WSL
@@ -167,7 +167,6 @@
         (concat code-dir suffix_path)
       code-dir)))
 
-
 (defun my/open-config()
   (interactive)
   (find-file (concat (my/get-config-dir) "init.el")))
@@ -276,7 +275,9 @@
 (use-package poetry
   :hook (python-ts-mode . poetry-tracking-mode))
 
-(use-package multiple-cursors)
+(use-package evil-multiedit
+  :config
+  (evil-multiedit-default-keybinds))
 
 (use-package yaml-mode)
 
