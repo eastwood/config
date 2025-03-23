@@ -444,8 +444,6 @@
 ;; Editor bindings
 (define-key my/editor-map (kbd "r") #'eglot-rename)
 (define-key my/editor-map (kbd "g") #'gptel-menu)
-(define-key my/editor-map (kbd "*") #'mc/mark-all-dwim)
-(define-key my/editor-map (kbd "l") #'mc/edit-beginnings-of-lines)
 (define-key my/editor-map (kbd "c") #'my/open-config)
 (define-key my/editor-map (kbd "n") #'my/open-notes)
 (define-key my/editor-map (kbd ".") #'persp-switch)
