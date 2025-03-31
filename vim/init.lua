@@ -1,4 +1,5 @@
 -- Basic settings
+vim.keymap.set("n", "<leader>pg", ":Rg<CR>", { desc = "Grep in project" })
 vim.cmd.colorscheme("retrobox")
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
@@ -30,19 +31,21 @@ vim.opt.cursorline = true
 vim.opt.scrolloff = 10
 vim.opt.hlsearch = true
 
+local vimrc_path = vim.fn.stdpath("config") .. "/init.lua"
+local code_path = "~/Workspace/github.com/eastwood/"
+
 -- Basic keymaps
 vim.keymap.set("i", "<A-BS>", "<C-w>", { desc = "Delete back word"} )
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
-vim.keymap.set("n", "<leader>ff", ":FZF<CR>", { desc = "Find files" })
-vim.keymap.set("n", "<leader>fg", ":Rg<CR>", { desc = "Grep files" })
+vim.keymap.set("n", "<leader>ff", ":e ", { desc = "Find files" })
 vim.keymap.set("n", "<leader>fs", ":w!<CR>", { desc = "[S]ave file" })
 vim.keymap.set("n", "<leader>qq", ":wqall!<CR>", { desc = "[Q]uit" })
 
 -- Add new keybindings here
-vim.keymap.set("n", "<leader>pf", ":Files<CR>", { desc = "Search files in project" })
-vim.keymap.set("n", "<leader>pg", ":Rg<CR>", { desc = "Grep in project" })
 vim.keymap.set("n", "<leader><leader>", ":", { desc = "Enter command mode" })
-vim.keymap.set("n", "<leader>gs", ":Git<CR>", { desc = "Git status" })
+
+-- Find the vimrc file
+vim.keymap.set("n", "<leader>.c", ":e " .. vimrc_path .. "<CR>", { desc = "Open vim config" })
 
 -- Window navigation
 vim.keymap.set("n", "<C-h>", "<C-w><C-h>", { desc = "Move focus to the left window" })
@@ -67,8 +70,21 @@ vim.opt.rtp:prepend(lazypath)
 -- Minimal plugin list
 require("lazy").setup({
   "tpope/vim-sleuth",
-  "tpope/vim-fugitive",
-  "junegunn/fzf.vim",
+  {
+    "tpope/vim-fugitive",
+    config = function()
+      vim.keymap.set("n", "<leader>gs", ":Git<CR>", { desc = "Git status" })
+    end
+  },
+  {
+    "junegunn/fzf.vim",
+    init = function()
+      vim.keymap.set("n", "<leader>.n", ":Files " .. code_path .. "notes/<CR>", { desc = "Find in notes" })
+      vim.keymap.set("n", "<leader>fg", ":Rg<CR>", { desc = "Grep files" })
+      vim.keymap.set("n", "<leader>pf", ":Files<CR>", { desc = "Search files in project" })
+      vim.keymap.set("n", "<leader>pg", ":Rg<CR>", { desc = "Grep in project" })
+    end
+  },
   "junegunn/fzf",
   { "lewis6991/gitsigns.nvim", opts = {
     signs = {
@@ -79,12 +95,11 @@ require("lazy").setup({
       changedelete = { text = "~" },
     },
   }},
-  { 
+  {
     "neovim/nvim-lspconfig",
     config = function()
       -- Simple LSP setup
       local lspconfig = require('lspconfig')
-      
       -- Common LSP keybindings
       local on_attach = function(_, bufnr)
         local opts = { buffer = bufnr }

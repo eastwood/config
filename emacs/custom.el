@@ -5,7 +5,7 @@
  ;; If there is more than one, they won't work right.
  '(custom-enabled-themes '(modus-vivendi-tinted))
  '(ignored-local-variable-values '((evil-shift-width . 2)))
- '(package-selected-packages '(gptel))
+ '(package-selected-packages nil)
  '(xref-search-program-alist
    '((grep . "xargs -0 -s 10000 grep <C> --null -snHE -e <R>")
      (ripgrep
