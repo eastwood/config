@@ -29,8 +29,10 @@ local code_path = "~/Workspace/github.com/eastwood/"
 
 -- Basic keymaps
 vim.keymap.set("i", "<A-BS>", "<C-w>", { desc = "Delete back word"} )
+vim.keymap.set("i", "<A-o>", "<C-o><C-w>w", { desc = "Switch window"} )
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
-vim.keymap.set("n", "<leader>ff", ":e ", { desc = "Find files" })
+vim.keymap.set("n", "<leader>bd", ":bd!<CR>", { desc = "[B]uffer Delete" })
+vim.keymap.set("n", "<leader>ff", ":e ", { desc = "[F]ind files" })
 vim.keymap.set("n", "<leader>fs", ":w!<CR>", { desc = "[S]ave file" })
 vim.keymap.set("n", "<leader>qq", ":wqall!<CR>", { desc = "[Q]uit" })
 
@@ -87,11 +89,7 @@ require("lazy").setup({
     config = function()
       local lspconfig = require('lspconfig')
       local on_attach = function(_, bufnr)
-        local opts = { buffer = bufnr }
-        vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
-        vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
-        vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, opts)
-        vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, opts)
+        vim.keymap.set('n', 'gd', vim.lsp.buf.definition, { buffer = bufnr })
       end
       local servers = { "gopls", "ts_ls", "lua_ls" }
       for _, server in ipairs(servers) do
