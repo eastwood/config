@@ -79,6 +79,7 @@ require("lazy").setup({
     "junegunn/fzf.vim",
     init = function()
       vim.keymap.set("n", "<leader>.n", ":Files " .. code_path .. "notes/<CR>", { desc = "Find in notes" })
+      vim.keymap.set("n", "<leader>", ":Buffers<CR>", { desc = "Find in notes" })
       vim.keymap.set("n", "<leader>fg", ":Rg<CR>", { desc = "Grep files" })
       vim.keymap.set("n", "<leader>pf", ":Files<CR>", { desc = "Search files in project" })
       vim.keymap.set("n", "<leader>pg", ":Rg<CR>", { desc = "Grep in project" })
