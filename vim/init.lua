@@ -30,11 +30,15 @@ local code_path = "~/Workspace/github.com/eastwood/"
 -- Basic keymaps
 vim.keymap.set("i", "<A-BS>", "<C-w>", { desc = "Delete back word"} )
 vim.keymap.set("i", "<A-o>", "<C-o><C-w>w", { desc = "Switch window"} )
+
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
 vim.keymap.set("n", "<leader>bd", ":bd!<CR>", { desc = "[B]uffer Delete" })
 vim.keymap.set("n", "<leader>ff", ":e ", { desc = "[F]ind files" })
 vim.keymap.set("n", "<leader>fs", ":w!<CR>", { desc = "[S]ave file" })
 vim.keymap.set("n", "<leader>qq", ":wqall!<CR>", { desc = "[Q]uit" })
+vim.keymap.set("n", "<leader>lc", ":%!llm -c<CR>", { desc = "[C]ontinue Conversation" })
+vim.keymap.set("n", "<leader>ll", ":%!llm<CR>", { desc = "New [L]LM Conversation" })
+
 vim.keymap.set("t", "<Esc>", "<C-\\><C-n>", { noremap = true, silent = true })
 vim.keymap.set("n", "<leader>tt", ":split | terminal<CR>", { desc = "Open terminal" })
 
