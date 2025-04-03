@@ -112,3 +112,32 @@ require("lazy").setup({
     end
   },
 })
+
+function RunLLM()
+  local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
+  local input_text = table.concat(lines, "\n")
+
+  local tmpfile = vim.fn.tempname()
+  local file = io.open(tmpfile, "w")
+  if file then
+    file:write(input_text)
+    file:close()
+  else
+    print("Error: Unable to create temp file")
+    return
+  end
+
+  vim.cmd("split | terminal cat " .. vim.fn.shellescape(tmpfile) .. " | llm")
+
+  vim.cmd("autocmd TermClose * ++once lua SaveLLMOutputToRegister()")
+end
+
+function SaveLLMOutputToRegister()
+  local bufnr = vim.api.nvim_get_current_buf()
+  local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
+
+  vim.fn.setreg("L", table.concat(lines, "\n"))
+end
+
+-- Create a Neovim command
+vim.api.nvim_create_user_command("RunLLM", RunLLM, {})
