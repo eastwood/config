@@ -1,5 +1,5 @@
 -- Basic settings
-vim.cmd.colorscheme("retrobox")
+vim.cmd.colorscheme("sorbet")
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
@@ -10,6 +10,7 @@ vim.opt.cursorline = true
 vim.opt.expandtab = true
 vim.opt.hlsearch = true
 vim.opt.inccommand = "split"
+vim.opt.laststatus = 1
 vim.opt.list = true
 vim.opt.listchars = { tab = "» ", trail = "·", nbsp = "␣" }
 vim.opt.number = true
