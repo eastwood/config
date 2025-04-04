@@ -1,0 +1,15 @@
+#!/bin/bash
+case $( uname -s ) in
+  Darwin)   open='open';;
+  MINGW*)   open='start';;
+  MSYS*)    open='start';;
+  CYGWIN*)  open='cygstart';;
+  *)        # Try to detect WSL (Windows Subsystem for Linux)
+            if uname -r | grep -q -i Microsoft; then
+              open='powershell.exe Start'
+            else
+              open='xdg-open'
+            fi;;
+esac
+
+$open https://nibgroup.zoom.us/j/815911628?pwd=UnJBQ2hYaFBxOHBJazNzdzJ6TDc2UT09
