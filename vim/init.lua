@@ -118,3 +118,17 @@ require("lazy").setup({
     end
   },
 })
+
+local gitlink = require("plugins.gitlink")
+
+-- Create command
+vim.api.nvim_create_user_command("GitLink", function(opts)
+  gitlink.generate(opts.line1, opts.line2)
+end, {
+  desc = "Generate GitHub link for the current file and copy to clipboard",
+  range = true,
+})
+
+-- Key mappings
+vim.keymap.set('n', '<leader>gl', ':GitLink<CR>', { noremap = true, silent = true })
+vim.keymap.set('v', '<leader>gl', ':GitLink<CR>', { noremap = true, silent = true })
