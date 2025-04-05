@@ -1,5 +1,7 @@
 -- Basic settings
 vim.cmd.colorscheme("sorbet")
+
+-- AI? What does this mean?
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
@@ -37,8 +39,7 @@ vim.keymap.set("n", "<leader>bd", ":bd!<CR>", { desc = "[B]uffer Delete" })
 vim.keymap.set("n", "<leader>ff", ":e ", { desc = "[F]ind files" })
 vim.keymap.set("n", "<leader>fs", ":w!<CR>", { desc = "[S]ave file" })
 vim.keymap.set("n", "<leader>qq", ":wqall!<CR>", { desc = "[Q]uit" })
-vim.keymap.set("n", "<leader>lc", ":%!llm -c>", { desc = "[C]ontinue Conversation" })
-vim.keymap.set("n", "<leader>ll", ":%!llm", { desc = "New [L]LM Conversation" })
+vim.keymap.set("n", "<leader>ll", ":vsplit | terminal aider --no-auto-commits", { desc = "New [L]LM Conversation" })
 
 vim.keymap.set("t", "<Esc>", "<C-\\><C-n>", { noremap = true, silent = true })
 vim.keymap.set("n", "<leader>tt", ":split | terminal<CR>", { desc = "Open terminal" })

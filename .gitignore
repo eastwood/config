@@ -31,3 +31,4 @@ rqp
 /emacs/eshell/
 /emacs/org-persist/
 /emacs/custom.el
+.aider*
