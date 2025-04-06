@@ -1,10 +1,9 @@
 -- Basic settings
-vim.cmd.colorscheme("sorbet")
+vim.cmd.colorscheme("retrobox")
 
 -- AI? What does this mean?
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
-
 -- Basic options
 vim.opt.breakindent = true
 vim.opt.clipboard = "unnamedplus"
@@ -35,6 +34,7 @@ vim.keymap.set("i", "<A-BS>", "<C-w>", { desc = "Delete back word"} )
 vim.keymap.set("i", "<A-o>", "<C-o><C-w>w", { desc = "Switch window"} )
 
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
+vim.keymap.set("n", "<leader>bb", ":Buffers<CR>", { desc = "List [B]uffers" })
 vim.keymap.set("n", "<leader>bd", ":bd!<CR>", { desc = "[B]uffer Delete" })
 vim.keymap.set("n", "<leader>ff", ":e ", { desc = "[F]ind files" })
 vim.keymap.set("n", "<leader>fs", ":w!<CR>", { desc = "[S]ave file" })
@@ -54,6 +54,15 @@ vim.keymap.set("n", "<C-l>", "<C-w><C-l>", { desc = "Move focus to the right win
 vim.keymap.set("n", "<C-j>", "<C-w><C-j>", { desc = "Move focus to the lower window" })
 vim.keymap.set("n", "<C-k>", "<C-w><C-k>", { desc = "Move focus to the upper window" })
 
+vim.diagnostic.config({
+  -- virtual_text = true,
+  float = { border = 'rounded', source = 'if_many' },
+  signs = true,
+  underline = true,
+  update_in_insert = false,
+  severity_sort = true,
+})
+
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
   vim.fn.system({
@@ -70,6 +79,7 @@ vim.opt.rtp:prepend(lazypath)
 require("lazy").setup({
   "github/copilot.vim",
   "tpope/vim-sleuth",
+  "folke/which-key.nvim",
   {
     "lewis6991/gitsigns.nvim",
     config = function()
@@ -99,11 +109,13 @@ require("lazy").setup({
       local lspconfig = require('lspconfig')
       local on_attach = function(_, bufnr)
         vim.keymap.set('n', 'gd', vim.lsp.buf.definition, { buffer = bufnr })
+        vim.keymap.set("n", "gh", ":lua vim.diagnostic.open_float()<CR>", { buffer = bufnr })
+        vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, { buffer = bufnr })
       end
       local servers = { "gopls", "ts_ls", "lua_ls" }
       for _, server in ipairs(servers) do
         lspconfig[server].setup({
-          on_attach = on_attach,
+          on_attach = on_attach
         })
       end
     end
