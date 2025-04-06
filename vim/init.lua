@@ -4,6 +4,7 @@ vim.cmd.colorscheme("retrobox")
 -- AI? What does this mean?
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
+
 -- Basic options
 vim.opt.breakindent = true
 vim.opt.clipboard = "unnamedplus"
@@ -29,33 +30,37 @@ vim.opt.undofile = true
 local vimrc_path = vim.fn.stdpath("config") .. "/init.lua"
 local code_path = "~/Workspace/github.com/eastwood/"
 
--- Basic keymaps
+-- Insert mode keymaps
 vim.keymap.set("i", "<A-BS>", "<C-w>", { desc = "Delete back word"} )
 vim.keymap.set("i", "<A-o>", "<C-o><C-w>w", { desc = "Switch window"} )
 
+-- Normal mode keymaps
+vim.keymap.set("n", "<leader><leader>", ":", { desc = "Enter command mode" })
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
+vim.keymap.set("n", "<leader>.c", ":e " .. vimrc_path .. "<CR>", { desc = "Open vim config" })
 vim.keymap.set("n", "<leader>bb", ":Buffers<CR>", { desc = "List [B]uffers" })
 vim.keymap.set("n", "<leader>bd", ":bd!<CR>", { desc = "[B]uffer Delete" })
 vim.keymap.set("n", "<leader>ff", ":e ", { desc = "[F]ind files" })
 vim.keymap.set("n", "<leader>fs", ":w!<CR>", { desc = "[S]ave file" })
 vim.keymap.set("n", "<leader>qq", ":wqall!<CR>", { desc = "[Q]uit" })
 vim.keymap.set("n", "<leader>ll", ":vsplit | terminal aider --no-auto-commits", { desc = "New [L]LM Conversation" })
-
-vim.keymap.set("t", "<Esc>", "<C-\\><C-n>", { noremap = true, silent = true })
 vim.keymap.set("n", "<leader>tt", ":split | terminal<CR>", { desc = "Open terminal" })
-
--- Add new keybindings here
-vim.keymap.set("n", "<leader><leader>", ":", { desc = "Enter command mode" })
-vim.keymap.set("n", "<leader>.c", ":e " .. vimrc_path .. "<CR>", { desc = "Open vim config" })
-
--- Window navigation
 vim.keymap.set("n", "<C-h>", "<C-w><C-h>", { desc = "Move focus to the left window" })
 vim.keymap.set("n", "<C-l>", "<C-w><C-l>", { desc = "Move focus to the right window" })
 vim.keymap.set("n", "<C-j>", "<C-w><C-j>", { desc = "Move focus to the lower window" })
 vim.keymap.set("n", "<C-k>", "<C-w><C-k>", { desc = "Move focus to the upper window" })
 
+-- Code maps
+vim.keymap.set('n', 'gd', vim.lsp.buf.definition, { desc = "Go to definition" })
+vim.keymap.set("n", "gh", ":lua vim.diagnostic.open_float()<CR>", { desc = "Show line diagnostic" })
+vim.keymap.set("n", "gb", ":lua vim.diagnostic.setloclist()<CR>", { desc = "Show buffer diagnostic" })
+vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, { desc = "[C]ode [A]ction" })
+
+-- Terminal commands
+vim.keymap.set("t", "<Esc>", "<C-\\><C-n>", { noremap = true, silent = true })
+
 vim.diagnostic.config({
-  -- virtual_text = true,
+  virtual_text = true,
   float = { border = 'rounded', source = 'if_many' },
   signs = true,
   underline = true,
@@ -108,9 +113,6 @@ require("lazy").setup({
     config = function()
       local lspconfig = require('lspconfig')
       local on_attach = function(_, bufnr)
-        vim.keymap.set('n', 'gd', vim.lsp.buf.definition, { buffer = bufnr })
-        vim.keymap.set("n", "gh", ":lua vim.diagnostic.open_float()<CR>", { buffer = bufnr })
-        vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, { buffer = bufnr })
       end
       local servers = { "gopls", "ts_ls", "lua_ls" }
       for _, server in ipairs(servers) do
