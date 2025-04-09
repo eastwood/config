@@ -103,8 +103,7 @@ require("lazy").setup({
     init = function()
       vim.keymap.set("n", "<leader>.n", ":Files " .. code_path .. "notes/<CR>", { desc = "Find in notes" })
       vim.keymap.set("n", "<leader>", ":Buffers<CR>", { desc = "Find in notes" })
-      vim.keymap.set("n", "<leader>fg", ":Rg<CR>", { desc = "Grep files" })
-      vim.keymap.set("n", "<leader>pf", ":Files<CR>", { desc = "Search files in project" })
+      vim.keymap.set("n", "<leader>pf", ":GitFiles<CR>", { desc = "Search files in project" })
       vim.keymap.set("n", "<leader>pg", ":Rg<CR>", { desc = "Grep in project" })
     end
   },
@@ -148,3 +147,11 @@ end, {
 -- Key mappings
 vim.keymap.set('n', '<leader>gl', ':GitLink<CR>', { noremap = true, silent = true })
 vim.keymap.set('v', '<leader>gl', ':GitLink<CR>', { noremap = true, silent = true })
+
+vim.api.nvim_create_user_command('RunCmd', function(opts)
+  local cmd = opts.args ~= "" and opts.args or "eslint -f unix ."
+  vim.cmd("cexpr system('" .. cmd .. "')")
+  vim.cmd("copen")
+end, {
+  nargs = "*", -- Accept any number of arguments
+})
