@@ -328,12 +328,16 @@
   (define-key copilot-completion-map (kbd "<tab>") 'copilot-accept-completion)
   (define-key copilot-completion-map (kbd "TAB") 'copilot-accept-completion))
 
-(use-package gptel
-  :vc (:url "https://github.com/karthink/gptel" :rev :newest)
-  :init
+(use-package aider
+  :vc (:url "https://github.com/tninja/aider.el" :rev :newest :branch "main")
+  :config
   (setq auth-sources '("~/.authinfo"))
-  (setq gptel-api-key (auth-source-pick-first-password :host "api.openai.com")))
-
+  (setq aider-args '("--model" "o3-mini" "--no-auto-commits"))
+  (let ((key (auth-source-pick-first-password
+              :host "api.openai.com"
+              :max 1)))
+    (setenv "OPENAI_API_KEY" key))
+  (global-set-key (kbd "C-c a") 'aider-transient-menu))
 
 ;; Project configuration
 (eval-after-load "dired"
@@ -368,6 +372,7 @@
   (define-key evil-normal-state-map (kbd "C-d") 'evil-scroll-down)
   (define-key evil-normal-state-map (kbd "M-.") 'eglot-code-actions)
   (define-key evil-normal-state-map (kbd "C-.") 'eglot-code-actions)
+  (define-key evil-normal-state-map (kbd "=") 'eglot-format)
   (define-key evil-normal-state-map (kbd "C-l") 'evil-window-right)
   (define-key evil-normal-state-map (kbd "C-h") 'evil-window-left)
   (define-key evil-normal-state-map (kbd "C-j") 'evil-window-down)
@@ -398,6 +403,7 @@
     "g" 'magit-status
     "e" 'my/eval-prefix-map
     "." 'my/editor-map
+    "," 'persp-switch
     "p" project-prefix-map
   ))
 
