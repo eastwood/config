@@ -10,6 +10,8 @@
 (defconst my/WSL     (and (eq system-type 'gnu/linux)
                           (getenv "WSLENV")))
 
+(defconst my/IS-MAC (eq system-type 'darwin))
+
 (require 'package)
 (require 'use-package)
 
@@ -236,6 +238,7 @@
   (typescript-ts-mode-indent-offset 2)
   (typescript-indent-level 2)
   :config
+  (setq js-indent-level 2)
   (add-to-list 'auto-mode-alist '("\\.tsx\\'" . tsx-ts-mode)))
 
 (use-package json-ts-mode
