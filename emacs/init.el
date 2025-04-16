@@ -26,7 +26,6 @@
   (cond((eq 'w32 window-system) "~/.emacs.d/")
         (t "~/.config/emacs/")))
 
-
 ;; General Editor Settings
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 2)
@@ -60,7 +59,10 @@
 ;; OS Specific Settings
 (when my/WSL
   (setq browse-url-browser-function 'browse-url-generic
-        browse-url-generic-program "wslview"))
+        browse-url-generic-program "wslview")
+  (use-package evil-terminal-cursor-changer
+    :config
+    (evil-terminal-cursor-changer-activate)))
 
 (unless my/TERM
   (global-set-key (kbd "C-z") 'undo)
@@ -213,8 +215,9 @@
   :bind (("C-<up>" . move-text-up)
          ("C-<down>" . move-text-down)))
 
-(use-package expand-region
-  :commands (er/expand-region))
+;; Don't need this with evil
+;; (use-package expand-region
+;;   :commands (er/expand-region))
 
 (use-package ace-window
   :bind (("M-o" . ace-window)))
