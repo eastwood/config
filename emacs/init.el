@@ -198,6 +198,10 @@
   :init
   (global-corfu-mode))
 
+(use-package corfu-terminal
+  :init
+  (corfu-terminal-mode))
+
 (use-package exec-path-from-shell
   :unless (eq window-system 'w32)
   :config
@@ -375,6 +379,7 @@
   (setq evil-visual-state-cursor '("orange" box))
   (setq evil-replace-state-cursor '("red" hollow))
   (setq evil-operator-state-cursor '("purple" hollow))
+  (evil-define-key 'normal org-mode-map (kbd "TAB") 'org-cycle)
   (define-key evil-normal-state-map (kbd "C-d") 'evil-scroll-down)
   (define-key evil-normal-state-map (kbd "M-.") 'eglot-code-actions)
   (define-key evil-normal-state-map (kbd "C-.") 'eglot-code-actions)

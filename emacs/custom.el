@@ -5,7 +5,7 @@
  ;; If there is more than one, they won't work right.
  '(custom-enabled-themes '(modus-vivendi))
  '(ignored-local-variable-values '((evil-shift-width . 2)))
- '(package-selected-packages '(aider evil-terminal-cursor evil-terminal-cursor-changer))
+ '(package-selected-packages nil)
  '(package-vc-selected-packages
    '((aider :url "https://github.com/tninja/aider.el" :branch "main")))
  '(xref-search-program-alist
