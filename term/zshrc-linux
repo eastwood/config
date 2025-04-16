@@ -1,0 +1,48 @@
+PROMPT='%F{green}%2~%f %# '
+
+HISTFILE=~/.zsh_history
+HISTSIZE=10000
+SAVEHIST=10000
+
+# User configuration
+export MANPATH="/usr/local/man:$MANPATH"
+export LD_LIBRARY_PATH=/usr/lib64/:/usr/local/lib/:$LD_LIBRARY_PATH
+export GO_BIN=~/go/bin:/usr/local/go/bin
+export CUSTOM_SCRIPTS=~/.scripts
+export LOCAL_SCRIPTS=~/.local/bin
+export RUST_ANALYSER="home/eastwd/.local/bin"
+export EMACS="/home/eastwd/emacs"
+export DOTNET_TOOLS="/home/eastwd/.dotnet/tools"
+export GEM_HOME=$HOME/.gem/ruby/3.3.0
+export LUA_LS="/opt/lua-language-server/bin"
+export PATH=$GEM_HOME/bin:$EMACS/bin:$LOCAL_SCRIPTS:/usr/local/bin:$PATH:$CUSTOM_SCRIPTS:$NODE_BIN:$RUST_ANALYSER:$GO_BIN:$YT:$DOTNET_TOOLS:$LUA_LS
+
+# Preferred editor for local and remote sessions
+export EDITOR='nvim'
+
+alias ai="aider --dark-mode --no-auto-commits"
+alias cdw='cd ~/Workspace/github.com/eastwood && cd $(ls | fzf) && clear'
+alias vim="nvim"
+alias emacsd="emacs --daemon"
+alias ec="emacsclient"
+alias npmi="npm i --legacy-peer-deps"
+bindkey -s '^P' 'cdw^M'
+
+autoload -z edit-command-line
+zle -N edit-command-line
+bindkey '^X^E' edit-command-line
+
+export BROWSER="/mnt/c/Windows/explorer.exe"
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# rbenv
+# export PATH="$HOME/.rbenv/bin:$PATH"
+# eval "$(rbenv init -)"
+
+export PYENV_ROOT="$HOME/.pyenv"
+[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
