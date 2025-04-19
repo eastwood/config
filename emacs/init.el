@@ -10,6 +10,8 @@
 (defconst my/WSL     (and (eq system-type 'gnu/linux)
                           (getenv "WSLENV")))
 
+(defconst my/IS-MAC (eq system-type 'darwin))
+
 (require 'package)
 (require 'use-package)
 
@@ -57,7 +59,10 @@
 ;; OS Specific Settings
 (when my/WSL
   (setq browse-url-browser-function 'browse-url-generic
-        browse-url-generic-program "wslview"))
+        browse-url-generic-program "wslview")
+  (use-package evil-terminal-cursor-changer
+    :config
+    (evil-terminal-cursor-changer-activate)))
 
 (unless my/TERM
   (global-set-key (kbd "C-z") 'undo)
@@ -193,6 +198,10 @@
   :init
   (global-corfu-mode))
 
+(use-package corfu-terminal
+  :init
+  (corfu-terminal-mode))
+
 (use-package exec-path-from-shell
   :unless (eq window-system 'w32)
   :config
@@ -210,8 +219,9 @@
   :bind (("C-<up>" . move-text-up)
          ("C-<down>" . move-text-down)))
 
-(use-package expand-region
-  :commands (er/expand-region))
+;; Don't need this with evil
+;; (use-package expand-region
+;;   :commands (er/expand-region))
 
 (use-package ace-window
   :bind (("M-o" . ace-window)))
@@ -235,6 +245,7 @@
   (typescript-ts-mode-indent-offset 2)
   (typescript-indent-level 2)
   :config
+  (setq js-indent-level 2)
   (add-to-list 'auto-mode-alist '("\\.tsx\\'" . tsx-ts-mode)))
 
 (use-package json-ts-mode
@@ -369,6 +380,7 @@
   (setq evil-visual-state-cursor '("orange" box))
   (setq evil-replace-state-cursor '("red" hollow))
   (setq evil-operator-state-cursor '("purple" hollow))
+  (evil-define-key 'normal org-mode-map (kbd "TAB") 'org-cycle)
   (define-key evil-normal-state-map (kbd "C-d") 'evil-scroll-down)
   (define-key evil-normal-state-map (kbd "M-.") 'eglot-code-actions)
   (define-key evil-normal-state-map (kbd "C-.") 'eglot-code-actions)

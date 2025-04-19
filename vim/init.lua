@@ -6,6 +6,7 @@ vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
 -- Basic options
+vim.opt.autoread = true
 vim.opt.breakindent = true
 vim.opt.clipboard = "unnamedplus"
 vim.opt.cursorline = true
@@ -43,7 +44,7 @@ vim.keymap.set("n", "<leader>bd", ":bd!<CR>", { desc = "[B]uffer Delete" })
 vim.keymap.set("n", "<leader>fe", ":e ", { desc = "[F]ind files" })
 vim.keymap.set("n", "<leader>fs", ":w!<CR>", { desc = "[S]ave file" })
 vim.keymap.set("n", "<leader>qq", ":wqall!<CR>", { desc = "[Q]uit" })
-vim.keymap.set("n", "<leader>ll", ":vsplit | terminal aider --no-auto-commits", { desc = "New [L]LM Conversation" })
+vim.keymap.set("n", "<leader>ll", ":vsplit | terminal aider --no-auto-commits --dark-mode", { desc = "New [L]LM Conversation" })
 vim.keymap.set("n", "<leader>tt", ":split | terminal<CR>", { desc = "Open terminal" })
 vim.keymap.set("n", "<C-h>", "<C-w><C-h>", { desc = "Move focus to the left window" })
 vim.keymap.set("n", "<C-l>", "<C-w><C-l>", { desc = "Move focus to the right window" })
@@ -54,6 +55,8 @@ vim.keymap.set("n", "<C-k>", "<C-w><C-k>", { desc = "Move focus to the upper win
 vim.keymap.set('n', 'gd', vim.lsp.buf.definition, { desc = "Go to definition" })
 vim.keymap.set("n", "gh", ":lua vim.diagnostic.open_float()<CR>", { desc = "Show line diagnostic" })
 vim.keymap.set("n", "gb", ":lua vim.diagnostic.setloclist()<CR>", { desc = "Show buffer diagnostic" })
+-- rename
+vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, { desc = "[R]e[n]ame" })
 vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, { desc = "[C]ode [A]ction" })
 
 -- Terminal commands
