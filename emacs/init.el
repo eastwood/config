@@ -24,7 +24,6 @@
   (cond((eq 'w32 window-system) "~/.emacs.d/")
         (t "~/.config/emacs/")))
 
-
 ;; General Editor Settings
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 2)
@@ -306,6 +305,7 @@
   :custom
   (org-agenda-files (list org-directory))
   (org-confirm-babel-evaluate nil)
+  (dired-dwim-target t)
   :config
   (org-babel-do-load-languages
    'org-babel-load-languages

@@ -1,15 +1,10 @@
 # Path to your oh-my-zsh installation.
-export ZSH=$HOME/.oh-my-zsh
-# export LD_LIBRARY_PATH=/usr/local/lib/:$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=/usr/local/lib/:$LD_LIBRARY_PATH
 export GO_BIN=~/go/bin:/usr/local/go/bin
 export CUSTOM_SCRIPTS=~/.scripts
 export LOCAL_SCRIPTS=~/.local/bin
 export DOTNET_TOOLS="/home/eastwd/.dotnet/tools"
 export PATH=$LOCAL_SCRIPTS:/usr/local/bin:$PATH:$CUSTOM_SCRIPTS:$GO_BIN:$DOTNET_TOOLS
-
-ZSH_THEME="lambda"
-plugins=()
-source $ZSH/oh-my-zsh.sh
 
 # User configuration
 export MANPATH="/usr/local/man:$MANPATH"
@@ -26,8 +21,10 @@ alias npmi="npm i --legacy-peer-deps"
 bindkey -s '^P' 'cdw^M'
 export tmux="tmux"
 
-# export BROWSER="/mnt/c/Windows/explorer.exe"
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+PROMPT='%F{green}%2~%f %\$ '
 
 # export PYENV_ROOT="$HOME/.pyenv"
 # [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
+# export BROWSER="/mnt/c/Windows/explorer.exe"
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
