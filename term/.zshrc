@@ -13,7 +13,7 @@ export MANPATH="/usr/local/man:$MANPATH"
 export EDITOR='nvim'
 
 alias ai="aider --no-auto-commit --dark-mode"
-alias cdw='cd ~/Workspace/github.com/eastwood && $(ls | fzf) && clear'
+alias cdw='cd ~/Workspace/github.com/eastwood && cd $(ls | fzf)'
 alias vim="nvim"
 alias emacsd="emacs --daemon"
 alias ec="emacsclient -t"
