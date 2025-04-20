@@ -28,3 +28,8 @@ PROMPT='%F{green}%2~%f %\$ '
 # export BROWSER="/mnt/c/Windows/explorer.exe"
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
+# Add C-x C-e to edit the current command line in nvim
+autoload -z edit-command-line
+zle -N edit-command-line
+bindkey '^X^E' edit-command-line
+
