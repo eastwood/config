@@ -6,6 +6,7 @@
 (setq user-full-name "Clinton Ryan"
       user-mail-address "hello@clintonryan.com")
 
+
 (defconst my/TERM   (eq window-system nil))
 (defconst my/WSL     (and (eq system-type 'gnu/linux)
                           (getenv "WSLENV")))
@@ -16,6 +17,7 @@
 (require 'use-package)
 
 (setq use-package-always-ensure t)
+(setq use-package-compute-statistics t)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 
 (add-hook 'emacs-startup-hook
@@ -44,6 +46,7 @@
 ;; Variables and Warnings
 (setq inhibit-startup-message t)
 (setq-default dired-kill-when-opening-new-dired-buffer t)
+(setq dired-dwim-target t)
 ;; (setq auto-save-file-name-transforms `((".*" ,(concat (my/get-config-dir) "autosaves/") t)))
 (setq backup-directory-alist `(("." . ,(concat (my/get-config-dir) "_backups/"))))
 (setq native-comp-async-report-warnings-errors nil)
@@ -59,7 +62,9 @@
 ;; OS Specific Settings
 (when my/WSL
   (setq browse-url-browser-function 'browse-url-generic
-        browse-url-generic-program "wslview")
+        browse-url-generic-program "wslview"))
+
+(when my/TERM
   (use-package evil-terminal-cursor-changer
     :config
     (evil-terminal-cursor-changer-activate)))
@@ -267,7 +272,8 @@
   :config
   (add-to-list 'eglot-server-programs '((ruby-mode ruby-ts-mode) "ruby-lsp")))
 
-(use-package inf-ruby)
+(use-package inf-ruby
+  :mode ("\\.rb\\'"))
 
 (use-package python-mode
   :mode "\\.py\\'"
@@ -285,17 +291,15 @@
 (use-package poetry
   :hook (python-ts-mode . poetry-tracking-mode))
 
-(use-package evil-multiedit
-  :config
-  (evil-multiedit-default-keybinds))
-
 (use-package yaml-mode)
 
 (use-package vterm
+  :bind (("C-`" . vterm))
   :unless (eq window-system 'w32)
   :hook (vterm-mode . (lambda () (display-line-numbers-mode -1))))
 
-(use-package doom-modeline)
+(use-package doom-modeline
+  :hook (after-init . doom-modeline-mode))
 
 (use-package markdown-mode
   :mode ("\\.md\\'" . gfm-mode))
@@ -310,36 +314,35 @@
 (use-package editorconfig)
 
 (use-package org
-  :init
+  :hook ((after-init . org-mode))
+  :commands (org-agenda org-capture org-toggle-checkbox org-directory)
+  :config
   (setq org-startup-indented t)
   (setq org-directory (my/code-directory "notes"))
-  :custom
-  (org-agenda-files (list org-directory))
-  (org-confirm-babel-evaluate nil)
-  (dired-dwim-target t)
-  :config
+  (setq org-agenda-files (list org-directory))
+  (setq org-confirm-babel-evaluate nil)
+  ;; Org mode bindings
+  (define-key org-mode-map (kbd "C-c c") #'org-toggle-checkbox)
+  (evil-leader/set-key-for-mode 'org-mode "t" #'org-toggle-checkbox)
+  (evil-leader/set-key-for-mode 'org-mode "r" #'org-refile)
   (org-babel-do-load-languages
    'org-babel-load-languages
    '((ruby . t)
      (shell . t))))
 
-(use-package ein
-  :custom
-  (ein:output-area-inlined-images t))
-
 (use-package copilot
+  :defer t
+  :hook ((prog-mode . copilot-mode))
   :vc (:url "https://github.com/copilot-emacs/copilot.el" :rev :newest :branch "main")
-  :init
-  (add-to-list 'exec-path "/opt/homebrew/bin")
   :custom
   (copilot-indent-offset-warning-disable t)
   :config
-  (add-to-list 'exec-path "/opt/homebrew/bin")
-  (add-hook 'prog-mode-hook 'copilot-mode)
   (define-key copilot-completion-map (kbd "<tab>") 'copilot-accept-completion)
   (define-key copilot-completion-map (kbd "TAB") 'copilot-accept-completion))
 
 (use-package aider
+  :defer t
+  :bind (("C-c a" . aider-transient-menu))
   :vc (:url "https://github.com/tninja/aider.el" :rev :newest :branch "main")
   :config
   (setq auth-sources '("~/.authinfo"))
@@ -347,8 +350,7 @@
   (let ((key (auth-source-pick-first-password
               :host "api.openai.com"
               :max 1)))
-    (setenv "OPENAI_API_KEY" key))
-  (global-set-key (kbd "C-c a") 'aider-transient-menu))
+    (setenv "OPENAI_API_KEY" key)))
 
 ;; Project configuration
 (eval-after-load "dired"
@@ -441,11 +443,6 @@
 (define-key project-prefix-map (kbd "B") #'my/open-buildkite)
 (define-key project-prefix-map (kbd ".") #'my/switch-to-project)
 
-;; Org mode bindings
-(define-key org-mode-map (kbd "C-c c") #'org-toggle-checkbox)
-(evil-leader/set-key-for-mode 'org-mode "t" #'org-toggle-checkbox)
-(evil-leader/set-key-for-mode 'org-mode "r" #'org-refile)
-
 ;; Global Bindings
 (global-set-key (kbd "C-`") #'vterm)
 (global-set-key (kbd "C-S-c") #'my/wsl-copy)
@@ -462,12 +459,11 @@
 ;; Editor bindings
 (define-key my/editor-map (kbd "r") #'eglot-rename)
 (define-key my/editor-map (kbd "g") #'gptel-menu)
-(define-key my/editor-map (kbd "c") #'my/open-config)
-(define-key my/editor-map (kbd "n") #'my/open-notes)
+(define-key my/editor-map (kbd "c") 'my/open-config)
+(define-key my/editor-map (kbd "n") 'my/open-notes)
 (define-key my/editor-map (kbd ".") #'persp-switch)
 
 ;; Load custom file
 (setq custom-file (concat (my/get-config-dir) "custom.el"))
 (load custom-file)
-
 (setq-default xref-search-program 'ripgrep)
