@@ -6,7 +6,6 @@
 (setq user-full-name "Clinton Ryan"
       user-mail-address "hello@clintonryan.com")
 
-
 (defconst my/TERM   (eq window-system nil))
 (defconst my/WSL     (and (eq system-type 'gnu/linux)
                           (getenv "WSLENV")))
@@ -180,6 +179,9 @@
   (interactive)
   (find-file (concat (my/get-config-dir) "init.el")))
 
+(use-package expand-region
+  :bind ("C-=" . er/expand-region))
+
 ;; Package Configuration
 (use-package which-key
   :config
@@ -206,11 +208,6 @@
 (use-package corfu-terminal
   :init
   (corfu-terminal-mode))
-
-(use-package exec-path-from-shell
-  :unless (eq window-system 'w32)
-  :config
-  (exec-path-from-shell-initialize))
 
 (use-package perspective
   :init
@@ -330,9 +327,13 @@
    '((ruby . t)
      (shell . t))))
 
-(use-package copilot
+(use-package exec-path-from-shell
   :defer t
-  :hook ((prog-mode . copilot-mode))
+  :hook (after-init . exec-path-from-shell-initialize)
+  :unless (eq window-system 'w32))
+
+(use-package copilot
+  :after exec-path-from-shell
   :vc (:url "https://github.com/copilot-emacs/copilot.el" :rev :newest :branch "main")
   :custom
   (copilot-indent-offset-warning-disable t)
@@ -396,7 +397,7 @@
 (use-package evil-collection
   :after evil
   :config
-  (evil-collection-init))
+  (evil-collection-init '(magit dired xref)))
 
 (define-prefix-command 'my/buffer-map)
 (define-prefix-command 'my/files-map)
@@ -467,3 +468,18 @@
 (setq custom-file (concat (my/get-config-dir) "custom.el"))
 (load custom-file)
 (setq-default xref-search-program 'ripgrep)
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-vc-selected-packages
+   '((aider :url "https://github.com/tninja/aider.el" :branch "main")
+     (copilot :url "https://github.com/copilot-emacs/copilot.el"
+              :branch "main"))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
