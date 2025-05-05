@@ -2,7 +2,6 @@
 ;; Windows will need to install ripgrep + xargs ie:
 ;; winget.exe install GnuWin32.FindUtils
 ;; winget.exe install ripgrep
-
 (setq user-full-name "Clinton Ryan"
       user-mail-address "hello@clintonryan.com")
 
@@ -310,6 +309,29 @@
 
 (use-package editorconfig)
 
+(use-package verb)
+
+(defun my/export-archive ()
+  "Export current Org heading subtree to UTF-8 text and save to archive/<date>.txt"
+  (interactive)
+  (let* ((timestamp (format-time-string "Exported at %Y-%m-%d %H:%M"))
+         (archive-dir "archive/")
+         (file (concat archive-dir (format-time-string "%Y-%m-%d") ".txt")))
+    (save-excursion
+      (org-back-to-heading t)
+      (org-narrow-to-subtree)
+      (let* ((exported (org-export-as 'ascii t nil nil '(:ascii-charset utf-8)))
+             (lines (split-string exported "\n"))
+             (lines (reverse (cons timestamp
+                                   (seq-drop-while #'string-empty-p (reverse lines)))))
+             (final (mapconcat #'identity lines "\n")))
+        (unless (file-directory-p archive-dir)
+          (make-directory archive-dir))
+        (with-temp-file file
+          (insert final))))
+    (widen)
+    (message "Exported to %s" file)))
+
 (use-package org
   :hook ((after-init . org-mode))
   :commands (org-agenda org-capture org-toggle-checkbox org-directory)
@@ -320,11 +342,14 @@
   (setq org-confirm-babel-evaluate nil)
   ;; Org mode bindings
   (define-key org-mode-map (kbd "C-c c") #'org-toggle-checkbox)
+  (define-key org-mode-map (kbd "C-c C-r") verb-command-map)
   (evil-leader/set-key-for-mode 'org-mode "t" #'org-toggle-checkbox)
   (evil-leader/set-key-for-mode 'org-mode "r" #'org-refile)
   (org-babel-do-load-languages
    'org-babel-load-languages
    '((ruby . t)
+     (verb . t)
+     (js . t)
      (shell . t))))
 
 (use-package exec-path-from-shell
@@ -387,6 +412,8 @@
   (define-key evil-normal-state-map (kbd "C-d") 'evil-scroll-down)
   (define-key evil-normal-state-map (kbd "M-.") 'eglot-code-actions)
   (define-key evil-normal-state-map (kbd "C-.") 'eglot-code-actions)
+  (define-key evil-normal-state-map (kbd "gr") 'xref-find-references)
+  (define-key evil-normal-state-map (kbd "K") 'eglot-find-typeDefinition)
   (define-key evil-normal-state-map (kbd "=") 'eglot-format)
   (define-key evil-normal-state-map (kbd "C-l") 'evil-window-right)
   (define-key evil-normal-state-map (kbd "C-h") 'evil-window-left)
@@ -416,6 +443,7 @@
     "b" 'my/buffer-map
     "f" 'my/files-map
     "g" 'magit-status
+    "d" 'dired
     "e" 'my/eval-prefix-map
     "." 'my/editor-map
     "," 'persp-switch
@@ -431,7 +459,6 @@
 (define-key 'my/buffer-map (kbd "n") #'next-buffer)
 (define-key 'my/buffer-map (kbd "p") #'previous-buffer)
 (define-key 'my/buffer-map (kbd "b") #'switch-to-buffer)
-(define-key 'my/buffer-map (kbd "d") #'dired)
 
 ;; Eval bindings
 (define-key 'my/eval-prefix-map (kbd "e") #'eval-last-sexp)
@@ -468,18 +495,3 @@
 (setq custom-file (concat (my/get-config-dir) "custom.el"))
 (load custom-file)
 (setq-default xref-search-program 'ripgrep)
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-vc-selected-packages
-   '((aider :url "https://github.com/tninja/aider.el" :branch "main")
-     (copilot :url "https://github.com/copilot-emacs/copilot.el"
-              :branch "main"))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )

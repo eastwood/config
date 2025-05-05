@@ -5,9 +5,16 @@
  ;; If there is more than one, they won't work right.
  '(custom-enabled-themes '(modus-vivendi))
  '(ignored-local-variable-values '((evil-shift-width . 2)))
- '(package-selected-packages nil)
+ '(package-selected-packages
+   '(ace-link ace-window aider copilot corfu-terminal doom-modeline
+              evil-collection evil-leader exec-path-from-shell
+              expand-region git-link inf-ruby move-text perspective
+              poetry python-black python-mode terraform-mode
+              treesit-auto verb vterm yaml-mode))
  '(package-vc-selected-packages
-   '((aider :url "https://github.com/tninja/aider.el" :branch "main")))
+   '((aider :url "https://github.com/tninja/aider.el" :branch "main")
+     (copilot :url "https://github.com/copilot-emacs/copilot.el"
+              :branch "main")))
  '(xref-search-program-alist
    '((grep . "xargs -0 -s 10000 grep <C> --null -snHE -e <R>")
      (ripgrep
