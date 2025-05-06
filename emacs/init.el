@@ -30,7 +30,7 @@
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 2)
 (setq-default standard-indent 2)
-(setq-default truncate-lines t)
+(setq-default truncate-lines nil)
 
 ;; Interface
 (set-face-attribute 'default nil :family "RobotoMono Nerd Font" :height 140 :weight 'normal :width 'normal)
@@ -129,9 +129,11 @@
   (interactive)
   (kill-buffer (current-buffer)))
 
+(setq-local my/notes-file (concat org-directory "/inbox.org"))
+
 (defun my/open-notes()
   (interactive)
-  (find-file (concat org-directory "/inbox.org")))
+  (find-file my/notes-file))
 
 (defun my/kill-magit-buffer ()
   (interactive)
@@ -340,11 +342,16 @@
   (setq org-directory (my/code-directory "notes"))
   (setq org-agenda-files (list org-directory))
   (setq org-confirm-babel-evaluate nil)
-  ;; Org mode bindings
+
+  (setq org-capture-templates
+        '(("t" "Todo" entry (file+headline my/notes-file "Inbox")
+           "* TODO %?\n  Created: %u")))
+
   (define-key org-mode-map (kbd "C-c c") #'org-toggle-checkbox)
   (define-key org-mode-map (kbd "C-c C-r") verb-command-map)
   (evil-leader/set-key-for-mode 'org-mode "t" #'org-toggle-checkbox)
   (evil-leader/set-key-for-mode 'org-mode "r" #'org-refile)
+  (evil-leader/set-key-for-mode 'org-mode ">" #'org-toggle-narrow-to-subtree)
   (org-babel-do-load-languages
    'org-babel-load-languages
    '((ruby . t)
@@ -365,6 +372,10 @@
   :config
   (define-key copilot-completion-map (kbd "<tab>") 'copilot-accept-completion)
   (define-key copilot-completion-map (kbd "TAB") 'copilot-accept-completion))
+
+(use-package gptel
+  :config
+  (gptel-make-gh-copilot "Copilot"))
 
 (use-package aider
   :defer t
@@ -453,6 +464,8 @@
 ;; File Bindings
 (define-key 'my/files-map (kbd "s") #'save-buffer)
 (define-key 'my/files-map (kbd "f") #'find-file)
+(define-key my/editor-map (kbd "c") 'my/open-config)
+(define-key my/editor-map (kbd "n") 'my/open-notes)
 
 ;; Buffer Bindings
 (define-key 'my/buffer-map (kbd "k") #'kill-buffer)
@@ -484,12 +497,11 @@
 (global-set-key (kbd "M-p") #'flymake-goto-prev-error)
 (global-set-key (kbd "M-n") #'flymake-goto-next-error)
 
-;; Editor bindings
+;; Utility bindings
 (define-key my/editor-map (kbd "r") #'eglot-rename)
-(define-key my/editor-map (kbd "g") #'gptel-menu)
-(define-key my/editor-map (kbd "c") 'my/open-config)
-(define-key my/editor-map (kbd "n") 'my/open-notes)
+(define-key my/editor-map (kbd "l") #'gptel-menu)
 (define-key my/editor-map (kbd ".") #'persp-switch)
+(define-key my/editor-map (kbd "c") #'org-capture)
 
 ;; Load custom file
 (setq custom-file (concat (my/get-config-dir) "custom.el"))
