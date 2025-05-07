@@ -5,7 +5,13 @@
  ;; If there is more than one, they won't work right.
  '(custom-enabled-themes '(modus-vivendi))
  '(ignored-local-variable-values '((evil-shift-width . 2)))
- '(package-selected-packages nil)
+ '(package-selected-packages
+   '(ace-link ace-window aider copilot corfu-terminal doom-modeline ein
+              evil-collection evil-leader evil-multiedit
+              exec-path-from-shell expand-region git-link gptel
+              inf-ruby move-text perspective poetry python-black
+              python-mode terraform-mode treesit-auto verb vterm
+              yaml-mode))
  '(package-vc-selected-packages
    '((aider :url "https://github.com/tninja/aider.el" :branch "main")
      (copilot :url "https://github.com/copilot-emacs/copilot.el"

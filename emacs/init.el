@@ -345,7 +345,7 @@
   (setq org-confirm-babel-evaluate nil)
 
   (setq org-capture-templates
-        '(("t" "Todo" entry (file+headline (my/notes-file) "Inbox")
+        `(("t" "Todo" entry (file+headline ,(my/notes-file) "Inbox")
            "* TODO %?\n  Created: %u")))
 
   (define-key org-mode-map (kbd "C-c c") #'org-toggle-checkbox)
@@ -442,6 +442,7 @@
 (define-prefix-command 'my/files-map)
 (define-prefix-command 'my/eval-prefix-map)
 (define-prefix-command 'my/editor-map)
+(define-prefix-command 'my/org-map)
 
 (use-package evil-leader
   :after evil
@@ -459,6 +460,7 @@
     "e" 'my/eval-prefix-map
     "." 'my/editor-map
     "," 'persp-switch
+    "o" 'my/org-map
     "p" project-prefix-map
   ))
 
@@ -502,7 +504,9 @@
 (define-key my/editor-map (kbd "r") #'eglot-rename)
 (define-key my/editor-map (kbd "l") #'gptel-menu)
 (define-key my/editor-map (kbd ".") #'persp-switch)
-(define-key my/editor-map (kbd "c") #'org-capture)
+
+;; Org bindings
+(define-key my/org-map (kbd "c") #'org-capture)
 
 ;; Load custom file
 (setq custom-file (concat (my/get-config-dir) "custom.el"))
