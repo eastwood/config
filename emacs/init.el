@@ -129,11 +129,12 @@
   (interactive)
   (kill-buffer (current-buffer)))
 
-(setq-local my/notes-file (concat org-directory "/inbox.org"))
-
+(defun my/notes-file()
+  (concat org-directory "/inbox.org"))
+  
 (defun my/open-notes()
   (interactive)
-  (find-file my/notes-file))
+  (find-file (my/notes-file)))
 
 (defun my/kill-magit-buffer ()
   (interactive)
@@ -344,7 +345,7 @@
   (setq org-confirm-babel-evaluate nil)
 
   (setq org-capture-templates
-        '(("t" "Todo" entry (file+headline my/notes-file "Inbox")
+        '(("t" "Todo" entry (file+headline (my/notes-file) "Inbox")
            "* TODO %?\n  Created: %u")))
 
   (define-key org-mode-map (kbd "C-c c") #'org-toggle-checkbox)
@@ -464,8 +465,8 @@
 ;; File Bindings
 (define-key 'my/files-map (kbd "s") #'save-buffer)
 (define-key 'my/files-map (kbd "f") #'find-file)
-(define-key my/editor-map (kbd "c") 'my/open-config)
-(define-key my/editor-map (kbd "n") 'my/open-notes)
+(define-key 'my/files-map (kbd "c") 'my/open-config)
+(define-key 'my/files-map (kbd "n") 'my/open-notes)
 
 ;; Buffer Bindings
 (define-key 'my/buffer-map (kbd "k") #'kill-buffer)
