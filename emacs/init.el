@@ -131,7 +131,7 @@
 
 (defun my/notes-file()
   (concat org-directory "/inbox.org"))
-  
+
 (defun my/open-notes()
   (interactive)
   (find-file (my/notes-file)))
