@@ -408,10 +408,11 @@
         ))
 
 (use-package evil
+  :custom
+  (evil-undo-system 'undo-redo)
   :init
   (setq evil-want-keybinding nil)
   (setq evil-want-integration nil)
-  (setq evil-undo-system 'undo-redo)
   (setq evil-want-C-u-scroll t)
   :config
   (setq evil-shift-width 2)
