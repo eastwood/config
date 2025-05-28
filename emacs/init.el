@@ -315,25 +315,37 @@
 (use-package verb)
 
 (defun my/export-archive ()
-  "Export current Org heading subtree to UTF-8 text and save to archive/<date>.txt"
+  "Export current Org heading subtree to UTF-8 text and append to archive/<date>.txt."
   (interactive)
-  (let* ((timestamp (format-time-string "Exported at %Y-%m-%d %H:%M"))
+  (let* ((date-str (format-time-string "%Y-%m-%d"))
          (archive-dir "archive/")
-         (file (concat archive-dir (format-time-string "%Y-%m-%d") ".txt")))
+         (file (concat archive-dir date-str ".txt")))
     (save-excursion
       (org-back-to-heading t)
       (org-narrow-to-subtree)
-      (let* ((exported (org-export-as 'ascii t nil nil '(:ascii-charset utf-8)))
+      (let* ((exported (org-export-as 'ascii t nil t '(:ascii-charset utf-8)))
              (lines (split-string exported "\n"))
-             (lines (reverse (cons timestamp
-                                   (seq-drop-while #'string-empty-p (reverse lines)))))
-             (final (mapconcat #'identity lines "\n")))
+             ;; Remove the header/banner lines (assumes org-export-as ASCII output)
+             (content (seq-drop-while (lambda (line)
+                                        (or (string-match-p "\\`[ ━═]*\\'" line)
+                                            (string-match-p "\\`Table of Contents\\'" line)))
+                                      lines))
+             ;; Remove "Exported at..." line if present
+             (content (seq-remove (lambda (line)
+                                    (string-match-p "\\`Exported at " line))
+                                  content))
+             ;; Build final text
+             (final (concat "Archived: " date-str "\n\n"
+                            (mapconcat #'identity content "\n"))))
         (unless (file-directory-p archive-dir)
           (make-directory archive-dir))
-        (with-temp-file file
-          (insert final))))
+        (with-temp-buffer
+          (insert final "\n\n")
+          (if (file-exists-p file)
+              (append-to-file (point-min) (point-max) file)
+            (write-region (point-min) (point-max) file)))))
     (widen)
-    (message "Exported to %s" file)))
+    (message "Archived to %s" file)))
 
 (use-package org
   :hook ((after-init . org-mode))
@@ -425,6 +437,8 @@
   (define-key evil-normal-state-map (kbd "C-d") 'evil-scroll-down)
   (define-key evil-normal-state-map (kbd "C-.") 'eglot-code-actions)
   (define-key evil-normal-state-map (kbd "M-.") 'eglot-code-actions)
+  (define-key evil-normal-state-map (kbd "gd") 'xref-find-definitions)
+  (define-key evil-normal-state-map (kbd "gD") 'xref-find-definitions-other-window)
   (define-key evil-normal-state-map (kbd "gr") 'xref-find-references)
   (define-key evil-normal-state-map (kbd "gD") 'xref-find-definitions-other-window)
   (define-key evil-normal-state-map (kbd "K") 'eglot-find-typeDefinition)
@@ -438,7 +452,7 @@
 (use-package evil-collection
   :after evil
   :config
-  (evil-collection-init '(magit dired xref)))
+  (evil-collection-init '(magit dired)))
 
 (define-prefix-command 'my/buffer-map)
 (define-prefix-command 'my/files-map)
@@ -501,6 +515,7 @@
 (global-set-key (kbd "C-j") #'join-line)
 (global-set-key (kbd "M-p") #'flymake-goto-prev-error)
 (global-set-key (kbd "M-n") #'flymake-goto-next-error)
+(global-set-key (kbd "M-l") #'flymake-show-buffer-diagnostics)
 
 ;; Utility bindings
 (define-key my/editor-map (kbd "r") #'eglot-rename)
