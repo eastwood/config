@@ -20,6 +20,7 @@
 
 (add-hook 'emacs-startup-hook
           (lambda ()
+            (require 'project)
 	          (message "Emacs loaded in %s." (emacs-init-time))))
 
 (defun my/get-config-dir()
@@ -200,23 +201,21 @@
   (git-link-open-in-browser t))
 
 (use-package corfu
+  :hook (after-init . global-corfu-mode)
   :custom
   (corfu-auto t)
   (tab-always-indent 'complete)
-  (text-mode-ispell-word-completion nil)
-  :init
-  (global-corfu-mode))
+  (text-mode-ispell-word-completion nil))
 
 (use-package corfu-terminal
-  :init
+  :config
   (corfu-terminal-mode))
 
 (use-package perspective
+  :hook (after-init . persp-mode)
   :init
   (setq persp-suppress-no-prefix-key-warning t)
-  (setq persp-initial-frame-name "main")
-  :config
-  (persp-mode))
+  (setq persp-initial-frame-name "main"))
 
 (use-package move-text
   :commands (move-text-up move-text-down)
@@ -436,14 +435,14 @@
                        #1=""])
         ))
 
+(setq evil-want-keybinding nil)
+(setq evil-want-integration nil)
+
 (use-package evil
   :custom
   (evil-undo-system 'undo-redo)
-  :init
-  (setq evil-want-keybinding nil)
-  (setq evil-want-integration nil)
-  (setq evil-want-C-u-scroll t)
   :config
+  (setq evil-want-C-u-scroll t)
   (setq evil-shift-width 2)
   (setq evil-normal-state-cursor '("green" box))
   (setq evil-insert-state-cursor '("red" bar))
@@ -469,7 +468,7 @@
 (use-package evil-collection
   :after evil
   :config
-  (evil-collection-init '(magit dired xref)))
+  (evil-collection-init '(magit dired xref messages)))
 
 (define-prefix-command 'my/buffer-map)
 (define-prefix-command 'my/files-map)
