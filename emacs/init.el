@@ -361,6 +361,7 @@
     (let ((final-output (format "👋 Ready for review\n%s\nJira: %s\nPull Request: %s\nBuildkite: %s\nNotes:\n%s"
                                  title jira pull-request buildkite formatted-notes)))
       (kill-new final-output)
+      (message final-output)
       (message "Captured build info copied to clipboard"))))
 
 (use-package org
