@@ -33,7 +33,7 @@
 (setq-default truncate-lines t)
 
 ;; Interface
-(set-face-attribute 'default nil :family "RobotoMono Nerd Font" :height 160 :weight 'normal :width 'normal)
+(set-face-attribute 'default nil :family "RobotoMono Nerd Font" :height 140 :weight 'normal :width 'normal)
 (set-fontset-font t 'symbol "Apple Color Emoji")
 (pixel-scroll-precision-mode t)
 (global-display-line-numbers-mode t)
@@ -347,6 +347,22 @@
     (widen)
     (message "Archived to %s" file)))
 
+(defun my/create-review-notes ()
+  "Capture Build Info and save it to the clipboard."
+  (interactive)
+  (let* ((title (read-string "Title: "))
+         (jira (read-string "Jira: "))
+         (pull-request (read-string "Pull Request: "))
+         (buildkite (read-string "Buildkite: "))
+         (notes (read-string "Notes (multi-line, separate with ;): "))
+         (formatted-notes (mapconcat (lambda (note) 
+                                        (format "  - %s" (string-trim note)))
+                                      (split-string notes ";") "\n")))
+    (let ((final-output (format "👋 Ready for review\n%s\nJira: %s\nPull Request: %s\nBuildkite: %s\nNotes:\n%s"
+                                 title jira pull-request buildkite formatted-notes)))
+      (kill-new final-output)
+      (message "Captured build info copied to clipboard"))))
+
 (use-package org
   :hook ((after-init . org-mode))
   :commands (org-agenda org-capture org-toggle-checkbox org-directory)
@@ -452,7 +468,7 @@
 (use-package evil-collection
   :after evil
   :config
-  (evil-collection-init '(magit dired)))
+  (evil-collection-init '(magit dired xref)))
 
 (define-prefix-command 'my/buffer-map)
 (define-prefix-command 'my/files-map)

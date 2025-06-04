@@ -38,7 +38,7 @@ vim.keymap.set("i", "<A-o>", "<C-o><C-w>w", { desc = "Switch window"} )
 -- Normal mode keymaps
 vim.keymap.set("n", "<leader><leader>", ":", { desc = "Enter command mode" })
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
-vim.keymap.set("n", "<leader>.c", ":e " .. vimrc_path .. "<CR>", { desc = "Open vim config" })
+vim.keymap.set("n", "<leader>fc", ":e " .. vimrc_path .. "<CR>", { desc = "Open vim config" })
 vim.keymap.set("n", "<leader>bb", ":Buffers<CR>", { desc = "List [B]uffers" })
 vim.keymap.set("n", "<leader>bd", ":bd!<CR>", { desc = "[B]uffer Delete" })
 vim.keymap.set("n", "<leader>fe", ":e ", { desc = "[F]ind files" })
@@ -52,6 +52,10 @@ vim.keymap.set("n", "<C-j>", "<C-w><C-j>", { desc = "Move focus to the lower win
 vim.keymap.set("n", "<C-k>", "<C-w><C-k>", { desc = "Move focus to the upper window" })
 
 -- Code maps
+vim.keymap.set('n', 'gD', function()
+  vim.cmd('vsplit')  -- or 'split' for horizontal
+  vim.lsp.buf.definition()
+end, { desc = "Go to definition in split" })
 vim.keymap.set('n', 'gd', vim.lsp.buf.definition, { desc = "Go to definition" })
 vim.keymap.set("n", "gh", ":lua vim.diagnostic.open_float()<CR>", { desc = "Show line diagnostic" })
 vim.keymap.set("n", "gb", ":lua vim.diagnostic.setloclist()<CR>", { desc = "Show buffer diagnostic" })
@@ -104,11 +108,11 @@ require("lazy").setup({
   {
     "junegunn/fzf.vim",
     init = function()
-      vim.keymap.set("n", "<leader>.n", ":Files " .. code_path .. "notes/<CR>", { desc = "Find in notes" })
+      vim.keymap.set("n", "<leader>fn", ":Files " .. code_path .. "notes/<CR>", { desc = "Find in notes" })
       vim.keymap.set("n", "<leader>", ":Buffers<CR>", { desc = "Find in notes" })
       vim.keymap.set("n", "<leader>ff", ":Files<CR>", { desc = "Find files" })
       vim.keymap.set("n", "<leader>pf", ":GitFiles<CR>", { desc = "Search files in project" })
-      vim.keymap.set("n", "<leader>pg", ":Rg<CR>", { desc = "Grep in project" })
+      vim.keymap.set("n", "<leader>pg", ":RG<CR>", { desc = "Grep in project" })
     end
   },
   {
