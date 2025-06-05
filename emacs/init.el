@@ -349,8 +349,7 @@
 (defun my/create-review-notes ()
   "Capture Build Info and save it to the clipboard."
   (interactive)
-  (let* ((title (read-string "Title: "))
-         (jira (read-string "Jira: "))
+  (let* ((jira (read-string "Jira: "))
          (pull-request (read-string "Pull Request: "))
          (buildkite (read-string "Buildkite: "))
          (notes (read-string "Notes (multi-line, separate with ;): "))
@@ -358,23 +357,25 @@
                                         (format "\t- %s" (string-trim note)))
                                       (split-string notes ";") "\n")))
     (let ((final-output
-           (format "👋 (%s)\n\n**Jira**: %s\n\n**Pull Request**: %s\n\n**Buildkite**: %s\n\n**Notes**:\n%s \n"
-                                 title jira pull-request buildkite formatted-notes)))
-      (kill-new final-output)
+           (format "👋 **[[https://nibgroup.atlassian.net/browse/%s][%s]]** is ready for review 🙏\n\n**Pull Request:** %s\n\n**Buildkite:** %s\n\nNotes:\n%s"
+                   jira jira pull-request buildkite formatted-notes))
+          (buf (generate-new-buffer "*Review Notes*")))
       (message final-output)
-      (message "Captured build info copied to clipboard"))))
+      (with-current-buffer buf
+        (org-mode)
+        (insert final-output)
+        (write-file "/tmp/review-notes.org")
+        (org-html-export-to-html)
+      (browse-url-of-file (expand-file-name "/tmp/review-notes.html")))
+      (message "Captured saved to messages"))))
 
 (defun review-template()
-"*** 👋 Ready for review
-**Title**: %^{Title}
-**Jira**: %^{Jira}
-**Pull Request**: %^{Pull Request}
-**Buildkite**: %^{Buildkite}
+"👋 **[[https://nibgroup.atlassian.net/browse/%^{Jira}][%\\1]]** is ready for review 🙏
+**Pull Request:** %^{Pull Request}
+**Buildkite:** %^{Buildkite}
 Notes:
 - %?
-Created: %U
 ")
-    
 
 (use-package org
   :hook ((after-init . org-mode))
@@ -384,7 +385,7 @@ Created: %U
   (setq org-directory (my/code-directory "notes"))
   (setq org-agenda-files (list org-directory))
   (setq org-confirm-babel-evaluate nil)
-
+  (setq org-export-with-section-numbers nil)
   (setq org-capture-templates
         `(("t" "Todo" entry (file+headline ,(my/notes-file) "Inbox") "* TODO %?\n  Created: %u")
           ("r" "Review Note" entry (file+headline ,(my/notes-file) "Review Notes")
