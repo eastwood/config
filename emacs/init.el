@@ -34,7 +34,7 @@
 (setq-default truncate-lines t)
 
 ;; Interface
-(set-face-attribute 'default nil :family "RobotoMono Nerd Font" :height 140 :weight 'normal :width 'normal)
+(set-face-attribute 'default nil :family "RobotoMono Nerd Font" :height 160 :weight 'normal :width 'normal)
 (set-fontset-font t 'symbol "Apple Color Emoji")
 (pixel-scroll-precision-mode t)
 (global-display-line-numbers-mode t)
@@ -355,13 +355,26 @@
          (buildkite (read-string "Buildkite: "))
          (notes (read-string "Notes (multi-line, separate with ;): "))
          (formatted-notes (mapconcat (lambda (note) 
-                                        (format "  - %s" (string-trim note)))
+                                        (format "\t- %s" (string-trim note)))
                                       (split-string notes ";") "\n")))
-    (let ((final-output (format "👋 Ready for review\n%s\nJira: %s\nPull Request: %s\nBuildkite: %s\nNotes:\n%s"
+    (let ((final-output
+           (format "👋 (%s)\n\n**Jira**: %s\n\n**Pull Request**: %s\n\n**Buildkite**: %s\n\n**Notes**:\n%s \n"
                                  title jira pull-request buildkite formatted-notes)))
       (kill-new final-output)
       (message final-output)
       (message "Captured build info copied to clipboard"))))
+
+(defun review-template()
+"*** 👋 Ready for review
+**Title**: %^{Title}
+**Jira**: %^{Jira}
+**Pull Request**: %^{Pull Request}
+**Buildkite**: %^{Buildkite}
+Notes:
+- %?
+Created: %U
+")
+    
 
 (use-package org
   :hook ((after-init . org-mode))
@@ -373,8 +386,9 @@
   (setq org-confirm-babel-evaluate nil)
 
   (setq org-capture-templates
-        `(("t" "Todo" entry (file+headline ,(my/notes-file) "Inbox")
-           "* TODO %?\n  Created: %u")))
+        `(("t" "Todo" entry (file+headline ,(my/notes-file) "Inbox") "* TODO %?\n  Created: %u")
+          ("r" "Review Note" entry (file+headline ,(my/notes-file) "Review Notes")
+           (function review-template) :empty-lines 1)))
 
   (define-key org-mode-map (kbd "C-c c") #'org-toggle-checkbox)
   (define-key org-mode-map (kbd "C-c C-r") verb-command-map)

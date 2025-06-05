@@ -30,11 +30,7 @@ autoload -z edit-command-line
 zle -N edit-command-line
 bindkey '^X^E' edit-command-line
 # set browser when using WSL
-if grep -q Microsoft /proc/version; then
-  export BROWSER="wslview"
-else
-  export BROWSER="xdg-open"
-fi
+export BROWSER="xdg-open"
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
