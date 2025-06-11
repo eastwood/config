@@ -34,7 +34,7 @@
 (setq-default truncate-lines t)
 
 ;; Interface
-(set-face-attribute 'default nil :family "RobotoMono Nerd Font" :height 160 :weight 'normal :width 'normal)
+(set-face-attribute 'default nil :family "RobotoMono Nerd Font" :height 140 :weight 'normal :width 'normal)
 (set-fontset-font t 'symbol "Apple Color Emoji")
 (pixel-scroll-precision-mode t)
 (global-display-line-numbers-mode t)
@@ -311,7 +311,10 @@
 
 (use-package editorconfig)
 
-(use-package verb)
+(use-package verb
+  :config
+  (setq verb-auto-kill-response-buffers 2)
+  (setq verb-suppress-load-unsecure-prelude-warning t))
 
 (defun my/export-archive ()
   "Export current Org heading subtree to UTF-8 text and append to archive/<date>.txt."
@@ -349,15 +352,15 @@
 (defun my/create-review-notes ()
   "Capture Build Info and save it to the clipboard."
   (interactive)
-  (let* ((jira (read-string "Jira: "))
-         (pull-request (read-string "Pull Request: "))
-         (buildkite (read-string "Buildkite: "))
+  (let* ((jira (read-string "Jira ID (PHISL-1000): "))
+         (pull-request (read-string "Pull Request (URL): "))
+         (buildkite (read-string "Buildkite (URL): "))
          (notes (read-string "Notes (multi-line, separate with ;): "))
          (formatted-notes (mapconcat (lambda (note) 
                                         (format "\t- %s" (string-trim note)))
                                       (split-string notes ";") "\n")))
     (let ((final-output
-           (format "👋 **[[https://nibgroup.atlassian.net/browse/%s][%s]]** is ready for review 🙏\n\n**Pull Request:** %s\n\n**Buildkite:** %s\n\nNotes:\n%s"
+           (format "👋 **[[https://nibgroup.atlassian.net/browse/%s][%s]]** is ready for review 🙏\n\n**Pull Request:** %s\n\n**Buildkite:** %s\n\n**Notes:**\n%s"
                    jira jira pull-request buildkite formatted-notes))
           (buf (generate-new-buffer "*Review Notes*")))
       (message final-output)
