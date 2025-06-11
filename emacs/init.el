@@ -312,6 +312,7 @@
 (use-package editorconfig)
 
 (use-package verb
+  :commands (verb-command-map verb-fetch)
   :config
   (setq verb-auto-kill-response-buffers 2)
   (setq verb-suppress-load-unsecure-prelude-warning t))
@@ -381,7 +382,7 @@ Notes:
 ")
 
 (use-package org
-  :hook ((after-init . org-mode))
+  :hook (after-init . org-mode)
   :commands (org-agenda org-capture org-toggle-checkbox org-directory)
   :config
   (setq org-startup-indented t)
