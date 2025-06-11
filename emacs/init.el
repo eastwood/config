@@ -412,6 +412,7 @@ Notes:
   :unless (eq window-system 'w32))
 
 (use-package copilot
+  :hook (prog-mode . copilot-mode)
   :after exec-path-from-shell
   :vc (:url "https://github.com/copilot-emacs/copilot.el" :rev :newest :branch "main")
   :custom
