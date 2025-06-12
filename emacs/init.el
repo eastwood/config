@@ -350,6 +350,35 @@
     (widen)
     (message "Archived to %s" file)))
 
+(defun my/retrieve-id (url)
+  "Fetch JSON from join API by ID and pretty-print the response body in *Join* buffer."
+  (with-current-buffer (url-retrieve-synchronously url t t)
+    (goto-char url-http-end-of-headers)
+    (let ((response (string-trim (buffer-substring-no-properties (point) (point-max)))))
+      (with-current-buffer (get-buffer-create "*Join Response*")
+        (erase-buffer)
+        (insert response)
+        (json-pretty-print-buffer)
+        (display-buffer (current-buffer))
+        (json-ts-mode)))))
+
+(defun my/retrieve-join-id (id is-prod)
+  "Retrieve Join API data by ID and display in *Join Response* buffer."
+  (interactive
+   (list (read-string "ID: ")
+         (y-or-n-p "Is this a production? ")))
+  (let* ((environment (if is-prod "prod" "kaos"))
+         (url (format "https://join-api.%s.internal.nibit.com.au/retrieve?id=%s" environment id)))
+    (my/retrieve-id url)))
+
+(defun my/retrieve-session-id (id is-prod)
+  (interactive
+   (list (read-string "ID: ")
+         (y-or-n-p "Is this a production? ")))
+  (let* ((environment (if is-prod "prod" "kaos"))
+         (url (format "https://session-api.%s.internal.nibit.com.au/v1/session/%s" environment id)))
+    (my/retrieve-id url)))
+
 (defun my/create-review-notes ()
   "Capture Build Info and save it to the clipboard."
   (interactive)
