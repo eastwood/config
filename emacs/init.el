@@ -505,7 +505,6 @@ Notes:
   (define-key evil-normal-state-map (kbd "gd") 'xref-find-definitions)
   (define-key evil-normal-state-map (kbd "gD") 'xref-find-definitions-other-window)
   (define-key evil-normal-state-map (kbd "gr") 'xref-find-references)
-  (define-key evil-normal-state-map (kbd "gD") 'xref-find-definitions-other-window)
   (define-key evil-normal-state-map (kbd "K") 'eglot-find-typeDefinition)
   (define-key evil-normal-state-map (kbd "=") 'eglot-format)
   (define-key evil-normal-state-map (kbd "C-l") 'evil-window-right)
@@ -563,9 +562,6 @@ Notes:
 (define-key 'my/eval-prefix-map (kbd "r") #'eval-region)
 
 ;; Project bindings
-(define-key project-prefix-map (kbd "J") #'my/open-jira)
-(define-key project-prefix-map (kbd "Z") #'my/open-sales-zoom)
-(define-key project-prefix-map (kbd "B") #'my/open-buildkite)
 (define-key project-prefix-map (kbd ".") #'my/switch-to-project)
 
 ;; Global Bindings
@@ -586,6 +582,10 @@ Notes:
 (define-key my/editor-map (kbd "r") #'eglot-rename)
 (define-key my/editor-map (kbd "l") #'gptel-menu)
 (define-key my/editor-map (kbd ".") #'persp-switch)
+(define-key my/editor-map (kbd "j") #'my/open-jira)
+(define-key my/editor-map (kbd "z") #'my/open-sales-zoom)
+(define-key my/editor-map (kbd "b") #'my/open-buildkite)
+(define-key my/editor-map (kbd "g") #'git-link-dispatch)
 
 ;; Org bindings
 (define-key my/org-map (kbd "c") #'org-capture)
