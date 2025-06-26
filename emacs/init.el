@@ -112,23 +112,29 @@
   (let ((baseUrl "https://nibgroup.zoom.us/j/815911628?pwd=UnJBQ2hYaFBxOHBJazNzdzJ6TDc2UT09"))
     (browse-url baseUrl)))
 
-(defun my/open-jira()
-  (interactive)
-  (let ((name (magit-get-current-branch)))
-    (browse-url (concat "https://nibgroup.atlassian.net/browse/" name))))
+(defun my/set-interactive-param (name default-value)
+  "Set an interactive parameter NAME with a DEFAULT-VALUE."
+  (read-string (concat name " [" default-value "]: ") nil nil default-value))
 
-(defun my/open-buildkite()
+(defun my/open-jira()
+  "Open Jira issue for the given NAME or current branch if not provided."
+  (interactive)
+  (let* ((branch (my/set-interactive-param "Jira" (magit-get-current-branch))))
+    (browse-url (concat "https://nibgroup.atlassian.net/browse/" branch))))
+
+(defun my/open-buildkite ()
   "Open Buildkite in browser."
   (interactive)
-  (let* ((project (project-current))
-         (name (if project
-                   (file-name-nondirectory (directory-file-name (project-root project)))
-                 "default-project"))) ; fallback if no project is found
-    (browse-url (concat "https://buildkite.com/nib-health-funds-ltd/" name))))
+  (condition-case err
+      (let* ((name (file-name-nondirectory (directory-file-name (project-root (project-current)))))
+             (project (my/set-interactive-param "Project" name)))
+        (browse-url (concat "https://buildkite.com/nib-health-funds-ltd/" project)))
+    (error
+     (message "Error opening in BK, check you're in a valid project"))))
 
 (defun my/kill-this-buffer ()
   (interactive)
-  (kill-buffer (current-buffer)))
+  (kill-buffer-and-window))
 
 (defun my/notes-file()
   (concat org-directory "/inbox.org"))
@@ -533,6 +539,7 @@ Notes:
   (evil-leader/set-key
     "SPC" 'execute-extended-command
     "x" 'my/kill-this-buffer
+    "X" 'my/kill-this-buffer
     "b" 'my/buffer-map
     "f" 'my/files-map
     "g" 'magit-status
