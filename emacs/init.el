@@ -300,7 +300,9 @@
 (use-package vterm
   :bind (("C-`" . vterm))
   :unless (eq window-system 'w32)
-  :hook (vterm-mode . (lambda () (display-line-numbers-mode -1))))
+  :hook (vterm-mode . (lambda ()
+                        (display-line-numbers-mode -1)
+                        (turn-off-evil-mode))))
 
 (use-package doom-modeline
   :hook (after-init . doom-modeline-mode))
