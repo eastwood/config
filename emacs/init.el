@@ -34,7 +34,7 @@
 (setq-default truncate-lines t)
 
 ;; Interface
-(set-face-attribute 'default nil :family "RobotoMono Nerd Font" :height 140 :weight 'normal :width 'normal)
+(set-face-attribute 'default nil :family "RobotoMono Nerd Font" :height (cond (my/IS-MAC 160) (t 140)) :weight 'normal :width 'normal)
 (set-fontset-font t 'symbol "Apple Color Emoji")
 (pixel-scroll-precision-mode t)
 (global-display-line-numbers-mode t)
@@ -76,6 +76,21 @@
 (defvar my/clone-dir
   (cond ((eq 'w32 window-system) "D:/Code")
         (t "~/Workspace/github.com/eastwood/")))
+
+(defun my/notes-file()
+  (concat org-directory "/inbox.org"))
+
+(defun my/downloads-folder()
+  "Return the path to the Downloads folder."
+  (cond (my/WSL "/mnt/c/Users/clint/Downloads")
+        (t "~/Downloads/")))
+
+(defun my/open-downloads ()
+  (interactive)
+  (dired default-directory)
+  (split-window-right)
+  (other-window 1)
+  (dired (my/downloads-folder)))
 
 (defun my/clone-repo (repo &rest args)
   "Clone each repository in `my-repos` into `my-clone-dir`."
@@ -136,9 +151,6 @@
   (interactive)
   (kill-buffer-and-window))
 
-(defun my/notes-file()
-  (concat org-directory "/inbox.org"))
-
 (defun my/open-notes()
   (interactive)
   (find-file (my/notes-file)))
@@ -187,6 +199,8 @@
 (defun my/open-config()
   (interactive)
   (find-file (concat (my/get-config-dir) "init.el")))
+
+(use-package nord-theme)
 
 (use-package expand-region
   :bind ("C-=" . er/expand-region))
@@ -322,7 +336,7 @@
 (use-package verb
   :commands (verb-command-map verb-fetch)
   :config
-  (setq verb-auto-kill-response-buffers 2)
+  (setq verb-auto-kill-response-buffers t)
   (setq verb-suppress-load-unsecure-prelude-warning t))
 
 (defun my/export-archive ()
@@ -422,6 +436,8 @@ Notes:
   :hook (after-init . org-mode)
   :commands (org-agenda org-capture org-toggle-checkbox org-directory)
   :config
+  (setq org-agenda-files (list (my/notes-file)))
+  (setq org-tag-alist '(("work" . ?w) ("personal" . ?p)))
   (setq org-startup-indented t)
   (setq org-directory (my/code-directory "notes"))
   (setq org-agenda-files (list org-directory))
@@ -597,7 +613,9 @@ Notes:
 (define-key my/editor-map (kbd "g") #'git-link-dispatch)
 
 ;; Org bindings
+(define-key my/org-map (kbd "a") #'org-agenda)
 (define-key my/org-map (kbd "c") #'org-capture)
+(define-key my/org-map (kbd "d") #'my/open-downloads)
 
 ;; Load custom file
 (setq custom-file (concat (my/get-config-dir) "custom.el"))

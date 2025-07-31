@@ -3,10 +3,19 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(custom-enabled-themes '(modus-vivendi-tinted))
+ '(custom-enabled-themes '(nord))
+ '(custom-safe-themes
+   '("5a4cdc4365122d1a17a7ad93b6e3370ffe95db87ed17a38a94713f6ffe0d8ceb"
+     default))
  '(evil-undo-system 'undo-redo)
  '(ignored-local-variable-values '((evil-shift-width . 2)))
- '(package-selected-packages nil)
+ '(package-selected-packages
+   '(ace-link ace-window aider copilot corfu-terminal doom-modeline eglot
+              ein evil-collection evil-leader evil-multiedit
+              exec-path-from-shell expand-region git-link gptel
+              inf-ruby move-text nord-theme perspective poetry
+              python-black python-mode terraform-mode treesit-auto
+              verb vterm yaml-mode))
  '(package-vc-selected-packages
    '((aider :url "https://github.com/tninja/aider.el" :branch "main")
      (copilot :url "https://github.com/copilot-emacs/copilot.el"
