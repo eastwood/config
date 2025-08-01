@@ -200,7 +200,9 @@
   (interactive)
   (find-file (concat (my/get-config-dir) "init.el")))
 
-(use-package nord-theme)
+(use-package nord-theme
+  :init
+  (load-theme 'nord t))
 
 (use-package expand-region
   :bind ("C-=" . er/expand-region))
@@ -285,13 +287,13 @@
   :hook ((rust-ts-mode . eglot-ensure)))
 
 (use-package ruby-ts-mode
-  :mode "\\.rb\\'"
-  :hook ((ruby-ts-mode . eglot-ensure))
-  :config
-  (add-to-list 'eglot-server-programs '((ruby-mode ruby-ts-mode) "ruby-lsp")))
+  :mode "\\.rb\\'")
+  ;;:hook ((ruby-ts-mode . eglot-ensure)))
+  ;;:config
+  ;;(add-to-list 'eglot-server-programs '((ruby-mode ruby-ts-mode) "ruby-lsp")))
 
-(use-package inf-ruby
-  :mode ("\\.rb\\'"))
+;; (use-package inf-ruby
+;;   :mode ("\\.rb\\'"))
 
 (use-package python-mode
   :mode "\\.py\\'"
@@ -515,7 +517,7 @@ Notes:
   :custom
   (evil-undo-system 'undo-redo)
   :config
-  (setq evil-want-C-u-scroll t)
+  (setq evil-want-C-u-scroll nil)
   (setq evil-shift-width 2)
   (setq evil-normal-state-cursor '("green" box))
   (setq evil-insert-state-cursor '("red" bar))
@@ -540,7 +542,7 @@ Notes:
 (use-package evil-collection
   :after evil
   :config
-  (evil-collection-init '(magit dired xref messages)))
+  (evil-collection-init '(magit dired xref messages compile)))
 
 (define-prefix-command 'my/buffer-map)
 (define-prefix-command 'my/files-map)
@@ -616,6 +618,9 @@ Notes:
 (define-key my/org-map (kbd "a") #'org-agenda)
 (define-key my/org-map (kbd "c") #'org-capture)
 (define-key my/org-map (kbd "d") #'my/open-downloads)
+(define-key my/org-map (kbd "i") #'org-toggle-inline-images)
+
+(define-key image-mode-map (kbd "C-c -") 'image-increase-size)
 
 ;; Load custom file
 (setq custom-file (concat (my/get-config-dir) "custom.el"))
