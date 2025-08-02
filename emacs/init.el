@@ -341,39 +341,6 @@
   (setq verb-auto-kill-response-buffers t)
   (setq verb-suppress-load-unsecure-prelude-warning t))
 
-(defun my/export-archive ()
-  "Export current Org heading subtree to UTF-8 text and append to archive/<date>.txt."
-  (interactive)
-  (let* ((date-str (format-time-string "%Y-%m-%d"))
-         (archive-dir "archive/")
-         (file (concat archive-dir date-str ".txt")))
-    (save-excursion
-      (org-back-to-heading t)
-      (org-narrow-to-subtree)
-      (let* ((exported (org-export-as 'ascii t nil t '(:ascii-charset utf-8)))
-             (lines (split-string exported "\n"))
-             ;; Remove the header/banner lines (assumes org-export-as ASCII output)
-             (content (seq-drop-while (lambda (line)
-                                        (or (string-match-p "\\`[ ━═]*\\'" line)
-                                            (string-match-p "\\`Table of Contents\\'" line)))
-                                      lines))
-             ;; Remove "Exported at..." line if present
-             (content (seq-remove (lambda (line)
-                                    (string-match-p "\\`Exported at " line))
-                                  content))
-             ;; Build final text
-             (final (concat "Archived: " date-str "\n\n"
-                            (mapconcat #'identity content "\n"))))
-        (unless (file-directory-p archive-dir)
-          (make-directory archive-dir))
-        (with-temp-buffer
-          (insert final "\n\n")
-          (if (file-exists-p file)
-              (append-to-file (point-min) (point-max) file)
-            (write-region (point-min) (point-max) file)))))
-    (widen)
-    (message "Archived to %s" file)))
-
 (defun my/retrieve-id (url)
   "Fetch JSON from join API by ID and pretty-print the response body in *Join* buffer."
   (with-current-buffer (url-retrieve-synchronously url t t)
@@ -426,18 +393,12 @@
       (browse-url-of-file (expand-file-name "/tmp/review-notes.html")))
       (message "Captured saved to messages"))))
 
-(defun review-template()
-"👋 **[[https://nibgroup.atlassian.net/browse/%^{Jira}][%\\1]]** is ready for review 🙏
-**Pull Request:** %^{Pull Request}
-**Buildkite:** %^{Buildkite}
-Notes:
-- %?
-")
-
 (use-package org
   :hook (after-init . org-mode)
   :commands (org-agenda org-capture org-toggle-checkbox org-directory)
   :config
+  (setq org-refile-targets '((nil :maxlevel . 1)
+                             (org-agenda-files :maxlevel . 1)))
   (setq org-agenda-files (list (my/notes-file)))
   (setq org-tag-alist '(("work" . ?w) ("personal" . ?p)))
   (setq org-startup-indented t)
@@ -447,9 +408,7 @@ Notes:
   (setq org-export-with-section-numbers nil)
   (setq org-capture-templates
         `(("t" "Todo" entry (file+headline ,(my/notes-file) "Inbox") "* TODO %?\n  Created: %u")
-          ("r" "Review Note" entry (file+headline ,(my/notes-file) "Review Notes")
-           (function review-template) :empty-lines 1)))
-
+          ("m" "Meeting Notes" entry (file+headline ,(my/notes-file) "Notes ✏️") "* %^{Meeting}\n  SCHEDULED: %u\n  %?")))
   (define-key org-mode-map (kbd "C-c c") #'org-toggle-checkbox)
   (define-key org-mode-map (kbd "C-c C-r") verb-command-map)
   (evil-leader/set-key-for-mode 'org-mode "t" #'org-toggle-checkbox)
