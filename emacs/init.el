@@ -38,8 +38,8 @@
 (set-fontset-font t 'symbol "Apple Color Emoji")
 (pixel-scroll-precision-mode t)
 (global-display-line-numbers-mode t)
-(fido-vertical-mode t)
 (fido-mode t)
+(fido-vertical-mode t)
 (electric-pair-mode t)
 
 ;; Variables and Warnings
@@ -48,15 +48,9 @@
 (setq dired-dwim-target t)
 ;; (setq auto-save-file-name-transforms `((".*" ,(concat (my/get-config-dir) "autosaves/") t)))
 (setq backup-directory-alist `(("." . ,(concat (my/get-config-dir) "_backups/"))))
-(setq native-comp-async-report-warnings-errors nil)
-(setq native-comp-deferred-compilation t)
-(setq warning-minimum-level :error)
 (setq ring-bell-function 'ignore)
 (setq visible-bell t)
 (setq tramp-default-method "sshx")
-
-(setq org-todo-keywords
-      '((sequence "TODO(t)" "IN-PROGRESS(i)" "BLOCKED(b)" "|" "DONE(d)" "CANCELLED(c)")))
 
 ;; OS Specific Settings
 (when my/WSL
@@ -67,10 +61,6 @@
   (use-package evil-terminal-cursor-changer
     :config
     (evil-terminal-cursor-changer-activate)))
-
-(unless my/TERM
-  (global-set-key (kbd "C-z") 'undo)
-  (global-set-key (kbd "C-S-z") 'undo-redo))
 
 ;; Custom Functions
 (defvar my/clone-dir
@@ -159,24 +149,6 @@
   (interactive)
   (magit-mode-bury-buffer 16))
 
-(defun my/fetch (url &rest args)
-  (interactive (browse-url-interactive-arg "URL: "))
-  "Fetch URL and display in a new *response* buffer."
-  (url-retrieve url
-                (lambda (status)
-                  (if (plist-get status :error)
-                      (message "Error fetching offers: %S" (plist-get status :error))
-                    (goto-char (point-min))
-                    (search-forward "\n\n")
-                    (let ((content (buffer-substring (point) (point-max)))
-                          (buffer (get-buffer-create "*response*")))
-                      (with-current-buffer buffer
-                        (erase-buffer)
-                        (insert content)
-                        (goto-char (point-min))
-                        (json-pretty-print-buffer)
-                        (display-buffer buffer)))))))
-
 (defun my/switch-to-project ()
   "Switch to a project and associate it with a perspective."
   (interactive)
@@ -188,7 +160,7 @@
         (persp-switch project-name)
         (project-switch-project project)))))
 
-(defun my/code-directory(&optional suffix_path)
+(defun my/code-directory (&optional suffix_path)
   (interactive)
   (let ((code-dir (cond ((eq 'w32 window-system) "D:/Code/")
                           (t "~/Workspace/github.com/eastwood/"))))
@@ -207,7 +179,6 @@
 (use-package expand-region
   :bind ("C-=" . er/expand-region))
 
-;; Package Configuration
 (use-package which-key
   :config
   (which-key-mode))
@@ -244,16 +215,8 @@
   :bind (("C-<up>" . move-text-up)
          ("C-<down>" . move-text-down)))
 
-;; Don't need this with evil
-;; (use-package expand-region
-;;   :commands (er/expand-region))
-
 (use-package ace-window
   :bind (("M-o" . ace-window)))
-
-(use-package ace-link
-  :config
-  (ace-link-setup-default))
 
 (use-package treesit-auto
   :custom
@@ -273,45 +236,22 @@
   (setq js-indent-level 2)
   (add-to-list 'auto-mode-alist '("\\.tsx\\'" . tsx-ts-mode)))
 
-(use-package json-ts-mode
-  :mode "\\.json\\'")
-
 (use-package go-ts-mode
   :mode "\\.go\\'"
   :hook ((go-ts-mode . eglot-ensure))
   :custom
   (go-ts-mode-indent-offset 2))
 
-(use-package rust-ts-mode
-  :mode "\\.rs\\'"
-  :hook ((rust-ts-mode . eglot-ensure)))
-
 (use-package ruby-ts-mode
-  :mode "\\.rb\\'")
-  ;;:hook ((ruby-ts-mode . eglot-ensure)))
-  ;;:config
-  ;;(add-to-list 'eglot-server-programs '((ruby-mode ruby-ts-mode) "ruby-lsp")))
+  :hook ((ruby-ts-mode . eglot-ensure)))
 
 ;; (use-package inf-ruby
 ;;   :mode ("\\.rb\\'"))
 
 (use-package python-mode
-  :mode "\\.py\\'"
   :hook ((python-ts-mode . eglot-ensure))
   :config
   (setq python-indent-offset 4))
-
-(use-package python-black
-  :hook (python-ts-mode . python-black-on-save-mode))
-
-(use-package pyvenv
-  :after python
-  :hook ((python-ts-mode . pyvenv-tracking-mode)))
-
-(use-package poetry
-  :hook (python-ts-mode . poetry-tracking-mode))
-
-(use-package yaml-mode)
 
 (use-package vterm
   :bind (("C-`" . vterm))
@@ -325,13 +265,6 @@
 
 (use-package markdown-mode
   :mode ("\\.md\\'" . gfm-mode))
-
-(use-package terraform-mode
-  :custom (terraform-indent-level 2)
-  :config
-  (defun my-terraform-mode-init ()
-    (outline-minor-mode 1))
-  (add-hook 'terraform-mode-hook 'my-terraform-mode-init))
 
 (use-package editorconfig)
 
@@ -397,6 +330,8 @@
   :hook (after-init . org-mode)
   :commands (org-agenda org-capture org-toggle-checkbox org-directory)
   :config
+  (setq org-todo-keywords
+        '((sequence "TODO(t)" "IN-PROGRESS(i)" "BLOCKED(b)" "|" "DONE(d)" "CANCELLED(c)")))
   (setq org-refile-targets '((nil :maxlevel . 1)
                              (org-agenda-files :maxlevel . 1)))
   (setq org-agenda-files (list (my/notes-file)))
@@ -440,18 +375,6 @@
   :config
   (gptel-make-gh-copilot "Copilot"))
 
-(use-package aider
-  :defer t
-  :bind (("C-c a" . aider-transient-menu))
-  :vc (:url "https://github.com/tninja/aider.el" :rev :newest :branch "main")
-  :config
-  (setq auth-sources '("~/.authinfo"))
-  (setq aider-args '("--model" "o3-mini" "--no-auto-commits"))
-  (let ((key (auth-source-pick-first-password
-              :host "api.openai.com"
-              :max 1)))
-    (setenv "OPENAI_API_KEY" key)))
-
 ;; Project configuration
 (eval-after-load "dired"
   '(progn
@@ -463,18 +386,22 @@
          [simple-query "github.com"
                        "https://github.com/search?type=repositories&q=org%3Anib-group+"
                        #1=""])
+        ("Code Search (nib)" .
+         [simple-query "github.com/nib-group"
+                       "https://github.com/search?type=code&q=org%3Anib-group+"
+                       #1=""])
         ("Story Search (nib)" .
          [simple-query "nibgroup.atlassian.net"
                        "https://nibgroup.atlassian.net/browse/"
                        #1=""])
         ))
 
-(setq evil-want-keybinding nil)
-(setq evil-want-integration nil)
-
 (use-package evil
   :custom
   (evil-undo-system 'undo-redo)
+  :init
+  (setq evil-want-keybinding nil)
+  (setq evil-want-integration nil)
   :config
   (setq evil-want-C-u-scroll nil)
   (setq evil-shift-width 2)
@@ -572,6 +499,7 @@
 (define-key my/editor-map (kbd "z") #'my/open-sales-zoom)
 (define-key my/editor-map (kbd "b") #'my/open-buildkite)
 (define-key my/editor-map (kbd "g") #'git-link-dispatch)
+(define-key my/editor-map (kbd "w") #'webjump)
 
 ;; Org bindings
 (define-key my/org-map (kbd "a") #'org-agenda)
@@ -579,7 +507,8 @@
 (define-key my/org-map (kbd "d") #'my/open-downloads)
 (define-key my/org-map (kbd "i") #'org-toggle-inline-images)
 
-(define-key image-mode-map (kbd "C-c -") 'image-increase-size)
+(with-eval-after-load 'image-mode
+  (define-key image-mode-map (kbd "C-c -") 'image-increase-size))
 
 ;; Load custom file
 (setq custom-file (concat (my/get-config-dir) "custom.el"))
