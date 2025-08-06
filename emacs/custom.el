@@ -9,7 +9,14 @@
      default))
  '(evil-undo-system 'undo-redo)
  '(ignored-local-variable-values '((evil-shift-width . 2)))
- '(package-selected-packages nil)
+ '(package-selected-packages
+   '(ace-link ace-window aider copilot corfu-terminal doom-modeline
+              evil-collection evil-leader evil-mc
+              evil-terminal-cursor-changer exec-path-from-shell
+              expand-region git-link gptel inf-ruby mcp move-text
+              nord-theme org-download perspective poetry python-black
+              python-mode request terraform-mode treesit-auto verb
+              vterm yaml-mode))
  '(package-vc-selected-packages
    '((aider :url "https://github.com/tninja/aider.el" :branch "main")
      (copilot :url "https://github.com/copilot-emacs/copilot.el"
