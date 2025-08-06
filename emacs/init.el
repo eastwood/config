@@ -173,7 +173,7 @@
   (find-file (concat (my/get-config-dir) "init.el")))
 
 (use-package nord-theme
-  :init
+  :config
   (load-theme 'nord t))
 
 (use-package expand-region
@@ -502,6 +502,7 @@
 (define-key my/org-map (kbd "i") #'org-toggle-inline-images)
 
 (with-eval-after-load 'image-mode
+  (define-key image-mode-map (kbd "C-c -") 'image-decrease-size)
   (define-key image-mode-map (kbd "C-c -") 'image-increase-size))
 
 ;; Load custom file
