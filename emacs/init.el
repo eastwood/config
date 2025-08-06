@@ -237,7 +237,6 @@
   (add-to-list 'auto-mode-alist '("\\.tsx\\'" . tsx-ts-mode)))
 
 (use-package go-ts-mode
-  :mode "\\.go\\'"
   :hook ((go-ts-mode . eglot-ensure))
   :custom
   (go-ts-mode-indent-offset 2))
@@ -349,12 +348,7 @@
   (evil-leader/set-key-for-mode 'org-mode "t" #'org-toggle-checkbox)
   (evil-leader/set-key-for-mode 'org-mode "r" #'org-refile)
   (evil-leader/set-key-for-mode 'org-mode ">" #'org-toggle-narrow-to-subtree)
-  (org-babel-do-load-languages
-   'org-babel-load-languages
-   '((ruby . t)
-     (verb . t)
-     (js . t)
-     (shell . t))))
+  (org-babel-do-load-languages 'org-babel-load-languages '((ruby . t) (verb . t) (js . t) (shell . t))))
 
 (use-package exec-path-from-shell
   :defer t
