@@ -173,7 +173,7 @@
   (find-file (concat (my/get-config-dir) "init.el")))
 
 (use-package nord-theme
-  :config
+  :init
   (load-theme 'nord t))
 
 (use-package expand-region
@@ -333,11 +333,10 @@
         '((sequence "TODO(t)" "IN-PROGRESS(i)" "BLOCKED(b)" "|" "DONE(d)" "CANCELLED(c)")))
   (setq org-refile-targets '((nil :maxlevel . 1)
                              (org-agenda-files :maxlevel . 1)))
-  (setq org-agenda-files (list (my/notes-file)))
   (setq org-tag-alist '(("work" . ?w) ("personal" . ?p)))
   (setq org-startup-indented t)
   (setq org-directory (my/code-directory "notes"))
-  (setq org-agenda-files (list org-directory))
+  (setq org-agenda-files (list org-directory (concat org-directory "/personal") (concat org-directory "/nib")))
   (setq org-confirm-babel-evaluate nil)
   (setq org-export-with-section-numbers nil)
   (setq org-capture-templates
@@ -365,8 +364,16 @@
   (define-key copilot-completion-map (kbd "<tab>") 'copilot-accept-completion)
   (define-key copilot-completion-map (kbd "TAB") 'copilot-accept-completion))
 
+(use-package mcp
+  :after gptel
+  :config
+  :custom (mcp-hub-servers
+           '(("jira" . (:command "docker" :args ("run" "--rm" "-i" "--env-file" "/home/eastwd/.scripts/jira-mcp.env" "ghcr.io/sooperset/mcp-atlassian:latest")))))
+  )
+
 (use-package gptel
   :config
+  (require 'gptel-integrations)
   (gptel-make-gh-copilot "Copilot"))
 
 ;; Project configuration
