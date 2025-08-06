@@ -366,6 +366,7 @@
   (define-key copilot-completion-map (kbd "TAB") 'copilot-accept-completion))
 
 (use-package gptel
+  :custom (gptel-default-mode 'org-mode)
   :config
   (gptel-make-gh-copilot "Copilot"))
 
