@@ -332,7 +332,7 @@
   (setq org-refile-targets '((nil :maxlevel . 1)
                              (org-agenda-files :maxlevel . 1)))
   (setq org-tag-alist '(("work" . ?w) ("personal" . ?p)))
-  (setq org-startup-indented t)
+  (setq org-startup-indented nil)
   (setq org-directory (cond (my/WSL "/mnt/z/notes")
                             ((eq 'w32 window-system) "D:/Code/notes")
                             (my/IS-MAC "/Volumes/Documents/notes")
@@ -494,17 +494,10 @@ Assumes credentials are in the [default] section."
     "p" project-prefix-map
   ))
 
-(use-package nord-theme
-  :config
-  (setq org-fontify-quote-and-verse-blocks t)
-  (custom-set-faces
-   '(org-block ((t (:background "#2a2e36" :foreground "#d8dee9"))))
-   '(org-block-begin-line ((t (:foreground "#81a1c1" :background "#2a2e36" :weight bold))))
-   '(org-block-end-line ((t (:foreground "#81a1c1" :background "#2a2e36" :weight bold))))
-   '(org-quote ((t (:background "#2a2e36" :foreground "#d8dee9" :slant italic))))
-   '(org-quote-begin-line ((t (:foreground "#81a1c1" :background "#2a2e36" :weight bold))))
-   '(org-quote-end-line ((t (:foreground "#81a1c1" :background "#2a2e36" :weight bold)))))
-  (load-theme 'nord t))
+(use-package nano-theme
+  :ensure nil
+  :defer t
+  :vc (:url "https://github.com/rougier/nano-theme" :rev :newest :branch "main"))
 
 ;; File Bindings
 (define-key 'my/files-map (kbd "s") #'save-buffer)
