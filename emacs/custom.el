@@ -8,15 +8,12 @@
    '("5a4cdc4365122d1a17a7ad93b6e3370ffe95db87ed17a38a94713f6ffe0d8ceb"
      default))
  '(evil-undo-system 'undo-redo)
+ '(gptel-log-level 'debug)
  '(ignored-local-variable-values '((evil-shift-width . 2)))
- '(package-selected-packages
-   '(ace-link ace-window aider copilot corfu-terminal doom-modeline
-              evil-collection evil-leader evil-mc
-              evil-terminal-cursor-changer exec-path-from-shell
-              expand-region git-link gptel inf-ruby mcp move-text
-              nord-theme org-download perspective poetry python-black
-              python-mode request terraform-mode treesit-auto verb
-              vterm yaml-mode))
+ '(org-safe-remote-resources
+   '("\\`https://system2\\.io/assets/org/theme\\.setup\\'"
+     "\\`https://gitlab\\.com/OlMon/org-themes/-/raw/master/src/simple_inline/simple_inline\\.theme\\'"))
+ '(package-selected-packages nil)
  '(package-vc-selected-packages
    '((aider :url "https://github.com/tninja/aider.el" :branch "main")
      (copilot :url "https://github.com/copilot-emacs/copilot.el"
@@ -32,5 +29,10 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
+ '(org-block ((t (:background "#2a2e36" :foreground "#d8dee9"))))
+ '(org-block-begin-line ((t (:foreground "#81a1c1" :background "#2a2e36" :weight bold))))
+ '(org-block-end-line ((t (:foreground "#81a1c1" :background "#2a2e36" :weight bold))))
+ '(org-quote ((t (:background "#2a2e36" :foreground "#d8dee9" :slant italic))))
+ '(org-quote-begin-line ((t (:foreground "#81a1c1" :background "#2a2e36" :weight bold))))
+ '(org-quote-end-line ((t (:foreground "#81a1c1" :background "#2a2e36" :weight bold)))))
 (load-theme 'nord t)

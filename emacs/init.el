@@ -31,7 +31,6 @@
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 2)
 (setq-default standard-indent 2)
-(setq-default truncate-lines t)
 
 ;; Interface
 (set-face-attribute 'default nil :family "RobotoMono Nerd Font" :height (cond (my/IS-MAC 160) (t 140)) :weight 'normal :width 'normal)
@@ -54,6 +53,7 @@
 
 ;; OS Specific Settings
 (when my/WSL
+  (setenv "BROWSER" "explorer.exe")
   (setq browse-url-browser-function 'browse-url-generic
         browse-url-generic-program "wslview"))
 
@@ -172,10 +172,6 @@
   (interactive)
   (find-file (concat (my/get-config-dir) "init.el")))
 
-(use-package nord-theme
-  :init
-  (load-theme 'nord t))
-
 (use-package expand-region
   :bind ("C-=" . er/expand-region))
 
@@ -207,6 +203,7 @@
 (use-package perspective
   :hook (after-init . persp-mode)
   :init
+  (setq persp-modestring-short t)
   (setq persp-suppress-no-prefix-key-warning t)
   (setq persp-initial-frame-name "main"))
 
@@ -329,14 +326,18 @@
   :hook (after-init . org-mode)
   :commands (org-agenda org-capture org-toggle-checkbox org-directory)
   :config
+  (setq org-html-head "<link rel=\"stylesheet\" href=\"https://system2.io/assets/org/theme.css\">")
   (setq org-todo-keywords
         '((sequence "TODO(t)" "IN-PROGRESS(i)" "BLOCKED(b)" "|" "DONE(d)" "CANCELLED(c)")))
   (setq org-refile-targets '((nil :maxlevel . 1)
                              (org-agenda-files :maxlevel . 1)))
   (setq org-tag-alist '(("work" . ?w) ("personal" . ?p)))
   (setq org-startup-indented t)
-  (setq org-directory (my/code-directory "notes"))
-  (setq org-agenda-files (list org-directory (concat org-directory "/personal") (concat org-directory "/nib")))
+  (setq org-directory (cond (my/WSL "/mnt/z/notes")
+                            ((eq 'w32 window-system) "D:/Code/notes")
+                            (my/IS-MAC "/Volumes/Documents/notes")
+                            (t "~/Workspace/github.com/eastwood/notes")))
+  (setq org-agenda-files (list (concat org-directory "/inbox.org")))
   (setq org-confirm-babel-evaluate nil)
   (setq org-export-with-section-numbers nil)
   (setq org-capture-templates
@@ -367,14 +368,48 @@
 (use-package mcp
   :after gptel
   :config
+  (setq gptel-model 'gpt-4.1)
+  (setf (alist-get 'org-mode gptel-prompt-prefix-alist) "@user:\n")
+  (setf (alist-get 'org-mode gptel-response-prefix-alist) "@assistant:\n")
+  ;; :custom (gptel-org-branching-context t)
   :custom (mcp-hub-servers
-           '(("jira" . (:command "docker" :args ("run" "--rm" "-i" "--env-file" "/home/eastwd/.scripts/jira-mcp.env" "ghcr.io/sooperset/mcp-atlassian:latest")))))
+           '(("jira" . (:command "docker" :args ("run" "--rm" "-i" "--env-file" "/home/eastwd/.scripts/jira-mcp.env" "ghcr.io/sooperset/mcp-atlassian:latest")))
+             ("filesystem" . (:command "npx" :args ("-y" "@modelcontextprotocol/server-filesystem" "/home/eastwd/Workspace/github.com/eastwood")))
+             ))
   )
+
+(defun my/set-aws-env-vars-from-file (filepath)
+  "Extract AWS credentials from FILEPATH and set as environment variables.
+Assumes credentials are in the [default] section."
+  (interactive "fAWS credentials file: ")
+  (with-temp-buffer
+    (insert-file-contents filepath)
+    (goto-char (point-min))
+    (when (re-search-forward "^\\[default\\]" nil t)
+      (let ((section-end (or (and (re-search-forward "^\\[" nil t)
+                                  (match-beginning 0))
+                             (point-max))))
+        (save-excursion
+          (goto-char (point-at-eol)) ; after [default]
+          (when (re-search-forward "aws_access_key_id[ \t]*=[ \t]*\\([A-Z0-9]+\\)" section-end t)
+            (setenv "AWS_ACCESS_KEY_ID" (match-string 1)))
+          (goto-char (point-at-bol))
+          (when (re-search-forward "aws_secret_access_key[ \t]*=[ \t]*\\([A-Za-z0-9+/=]+\\)" section-end t)
+            (setenv "AWS_SECRET_ACCESS_KEY" (match-string 1)))
+          (goto-char (point-at-bol))
+          (when (re-search-forward "aws_session_token[ \t]*=[ \t]*\\([A-Za-z0-9+/=]+\\)" section-end t)
+            (setenv "AWS_SESSION_TOKEN" (match-string 1)))
+          (goto-char (point-at-bol))
+          (when (re-search-forward "expiration[ \t]*=[ \t]*\\([0-9T:-]+Z\\)" section-end t)
+            (setenv "AWS_EXPIRATION" (match-string 1))))))))
 
 (use-package gptel
   :custom (gptel-default-mode 'org-mode)
   :config
   (require 'gptel-integrations)
+  (gptel-make-bedrock "AWS"
+    :stream nil
+    :region "ap-southeast-2")
   (gptel-make-gh-copilot "Copilot"))
 
 ;; Project configuration
@@ -459,6 +494,18 @@
     "p" project-prefix-map
   ))
 
+(use-package nord-theme
+  :config
+  (setq org-fontify-quote-and-verse-blocks t)
+  (custom-set-faces
+   '(org-block ((t (:background "#2a2e36" :foreground "#d8dee9"))))
+   '(org-block-begin-line ((t (:foreground "#81a1c1" :background "#2a2e36" :weight bold))))
+   '(org-block-end-line ((t (:foreground "#81a1c1" :background "#2a2e36" :weight bold))))
+   '(org-quote ((t (:background "#2a2e36" :foreground "#d8dee9" :slant italic))))
+   '(org-quote-begin-line ((t (:foreground "#81a1c1" :background "#2a2e36" :weight bold))))
+   '(org-quote-end-line ((t (:foreground "#81a1c1" :background "#2a2e36" :weight bold)))))
+  (load-theme 'nord t))
+
 ;; File Bindings
 (define-key 'my/files-map (kbd "s") #'save-buffer)
 (define-key 'my/files-map (kbd "f") #'find-file)
@@ -517,3 +564,4 @@
 (setq custom-file (concat (my/get-config-dir) "custom.el"))
 (load custom-file)
 (setq-default xref-search-program 'ripgrep)
+
