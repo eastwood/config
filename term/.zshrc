@@ -7,11 +7,12 @@ SAVEHIST=10000
 # Set PATHS
 export MANPATH="/usr/local/man:$MANPATH"
 export LD_LIBRARY_PATH=/usr/lib64/:/usr/local/lib/:$LD_LIBRARY_PATH
+export CURL_PATH=/opt/homebrew/opt/curl/bin
 export GO_BIN=~/go/bin:/usr/local/go/bin
 export CUSTOM_SCRIPTS=~/.scripts
 export LOCAL_SCRIPTS=~/.local/bin
 export DOTNET_TOOLS=~/.dotnet/tools
-export PATH=$LOCAL_SCRIPTS:/usr/local/bin:$PATH:$CUSTOM_SCRIPTS:$GO_BIN:$DOTNET_TOOLS
+export PATH=$LOCAL_SCRIPTS:/usr/local/bin:$CUSTOM_SCRIPTS:$GO_BIN:$DOTNET_TOOLS:$CURL_PATH:$PATH
 export LUA_LS="/opt/lua-language-server/bin"
 export EDITOR='nvim'
 # Set aliases

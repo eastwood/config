@@ -1,4 +1,4 @@
-;; Notes
+;; Notes  -*- lexical-binding: t; -*-
 ;; Windows will need to install ripgrep + xargs ie:
 ;; winget.exe install GnuWin32.FindUtils
 ;; winget.exe install ripgrep
@@ -26,6 +26,11 @@
 (defun my/get-config-dir()
   (cond((eq 'w32 window-system) "~/.emacs.d/")
         (t "~/.config/emacs/")))
+
+(let ((bins (list "/Users/C.Ryan@nib.com.au/.nvm/versions/node/v22.15.0/bin" "/opt/homebrew/bin")))
+  (dolist (bin bins)
+    (add-to-list 'exec-path bin)
+    (setenv "PATH" (concat bin ":" (getenv "PATH")))))
 
 ;; General Editor Settings
 (setq-default indent-tabs-mode nil)
@@ -215,13 +220,6 @@
 (use-package ace-window
   :bind (("M-o" . ace-window)))
 
-(use-package treesit-auto
-  :custom
-  (treesit-auto-install 'prompt)
-  :config
-  (treesit-auto-add-to-auto-mode-alist 'all)
-  (global-treesit-auto-mode))
-
 (use-package typescript-ts-mode
   :mode ("\\.ts\\'" "\\.js\\'" "\\.mjs\\'")
   :hook ((typescript-ts-mode . eglot-ensure))
@@ -233,6 +231,7 @@
   (setq js-indent-level 2)
   (add-to-list 'auto-mode-alist '("\\.tsx\\'" . tsx-ts-mode)))
 
+(use-package json-ts-mode)
 (use-package go-ts-mode
   :hook ((go-ts-mode . eglot-ensure))
   :custom
@@ -323,7 +322,7 @@
       (message "Captured saved to messages"))))
 
 (use-package org
-  :hook (after-init . org-mode)
+  :mode ("\\.org\\'" . org-mode)
   :commands (org-agenda org-capture org-toggle-checkbox org-directory)
   :config
   (setq org-html-head "<link rel=\"stylesheet\" href=\"https://system2.io/assets/org/theme.css\">")
@@ -350,18 +349,10 @@
   (evil-leader/set-key-for-mode 'org-mode ">" #'org-toggle-narrow-to-subtree)
   (org-babel-do-load-languages 'org-babel-load-languages '((ruby . t) (verb . t) (js . t) (shell . t))))
 
-(use-package exec-path-from-shell
-  :defer t
-  :hook (after-init . exec-path-from-shell-initialize)
-  :unless (eq window-system 'w32))
-
 (use-package copilot
-  :hook (prog-mode . copilot-mode)
-  :after exec-path-from-shell
   :vc (:url "https://github.com/copilot-emacs/copilot.el" :rev :newest :branch "main")
-  :custom
-  (copilot-indent-offset-warning-disable t)
   :config
+  (setq copilot-indent-offset-warning-disable t)
   (define-key copilot-completion-map (kbd "<tab>") 'copilot-accept-completion)
   (define-key copilot-completion-map (kbd "TAB") 'copilot-accept-completion))
 
@@ -404,9 +395,10 @@ Assumes credentials are in the [default] section."
             (setenv "AWS_EXPIRATION" (match-string 1))))))))
 
 (use-package gptel
-  :custom (gptel-default-mode 'org-mode)
+  :commands (gptel-menu)
   :config
   (require 'gptel-integrations)
+  (setq gptel-default-mode 'org-mode)
   (gptel-make-bedrock "AWS"
     :stream nil
     :region "ap-southeast-2")
@@ -434,6 +426,7 @@ Assumes credentials are in the [default] section."
         ))
 
 (use-package evil
+  :hook (after-init . evil-mode)
   :custom
   (evil-undo-system 'undo-redo)
   :init
@@ -459,8 +452,8 @@ Assumes credentials are in the [default] section."
   (define-key evil-normal-state-map (kbd "C-l") 'evil-window-right)
   (define-key evil-normal-state-map (kbd "C-h") 'evil-window-left)
   (define-key evil-normal-state-map (kbd "C-j") 'evil-window-down)
-  (define-key evil-normal-state-map (kbd "C-k") 'evil-window-up)
-  (evil-mode 1))
+  (define-key evil-normal-state-map (kbd "C-k") 'evil-window-up))
+  
 
 (use-package evil-collection
   :after evil
@@ -492,12 +485,15 @@ Assumes credentials are in the [default] section."
     "," 'persp-switch
     "o" 'my/org-map
     "p" project-prefix-map
-  ))
+    ))
 
-(use-package nano-theme
-  :ensure nil
-  :defer t
-  :vc (:url "https://github.com/rougier/nano-theme" :rev :newest :branch "main"))
+(defun my/load-theme (&rest _)
+  (interactive)
+  (load-theme 'nord t))
+
+(use-package nord-theme
+  :config
+  (my/load-theme))
 
 ;; File Bindings
 (define-key 'my/files-map (kbd "s") #'save-buffer)
@@ -556,5 +552,3 @@ Assumes credentials are in the [default] section."
 ;; Load custom file
 (setq custom-file (concat (my/get-config-dir) "custom.el"))
 (load custom-file)
-(setq-default xref-search-program 'ripgrep)
-
