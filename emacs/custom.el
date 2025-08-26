@@ -12,7 +12,6 @@
      "5a4cdc4365122d1a17a7ad93b6e3370ffe95db87ed17a38a94713f6ffe0d8ceb"
      default))
  '(evil-undo-system 'undo-redo)
- '(gptel-log-level 'debug)
  '(ignored-local-variable-values '((evil-shift-width . 2)))
  '(org-safe-remote-resources
    '("\\`https://system2\\.io/assets/org/theme\\.setup\\'"

@@ -1,7 +1,4 @@
 ;; Notes  -*- lexical-binding: t; -*-
-;; Windows will need to install ripgrep + xargs ie:
-;; winget.exe install GnuWin32.FindUtils
-;; winget.exe install ripgrep
 (setq user-full-name "Clinton Ryan"
       user-mail-address "hello@clintonryan.com")
 
@@ -23,14 +20,15 @@
             (require 'project)
 	          (message "Emacs loaded in %s." (emacs-init-time))))
 
-(defun my/get-config-dir()
-  (cond((eq 'w32 window-system) "~/.emacs.d/")
-        (t "~/.config/emacs/")))
-
+;; Set paths for our packages
 (let ((bins (list "/Users/C.Ryan@nib.com.au/.nvm/versions/node/v22.15.0/bin" "/opt/homebrew/bin")))
   (dolist (bin bins)
     (add-to-list 'exec-path bin)
     (setenv "PATH" (concat bin ":" (getenv "PATH")))))
+
+(defun my/get-config-dir()
+  (cond((eq 'w32 window-system) "~/.emacs.d/")
+        (t "~/.config/emacs/")))
 
 ;; General Editor Settings
 (setq-default indent-tabs-mode nil)
@@ -45,6 +43,7 @@
 (fido-mode t)
 (fido-vertical-mode t)
 (electric-pair-mode t)
+(global-auto-revert-mode t)
 
 ;; Variables and Warnings
 (setq inhibit-startup-message t)
@@ -324,6 +323,10 @@
 (use-package org
   :mode ("\\.org\\'" . org-mode)
   :commands (org-agenda org-capture org-toggle-checkbox org-directory)
+  :custom (org-directory (cond (my/WSL "/mnt/z/notes")
+                               ((eq 'w32 window-system) "D:/Code/notes")
+                               (my/IS-MAC "/Volumes/Documents/notes")
+                               (t "~/Workspace/github.com/eastwood/notes")))
   :config
   (setq org-html-head "<link rel=\"stylesheet\" href=\"https://system2.io/assets/org/theme.css\">")
   (setq org-todo-keywords
@@ -332,10 +335,6 @@
                              (org-agenda-files :maxlevel . 1)))
   (setq org-tag-alist '(("work" . ?w) ("personal" . ?p)))
   (setq org-startup-indented nil)
-  (setq org-directory (cond (my/WSL "/mnt/z/notes")
-                            ((eq 'w32 window-system) "D:/Code/notes")
-                            (my/IS-MAC "/Volumes/Documents/notes")
-                            (t "~/Workspace/github.com/eastwood/notes")))
   (setq org-agenda-files (list (concat org-directory "/inbox.org")))
   (setq org-confirm-babel-evaluate nil)
   (setq org-export-with-section-numbers nil)
@@ -365,7 +364,7 @@
   ;; :custom (gptel-org-branching-context t)
   :custom (mcp-hub-servers
            '(("jira" . (:command "docker" :args ("run" "--rm" "-i" "--env-file" "/home/eastwd/.scripts/jira-mcp.env" "ghcr.io/sooperset/mcp-atlassian:latest")))
-             ("filesystem" . (:command "npx" :args ("-y" "@modelcontextprotocol/server-filesystem" "/home/eastwd/Workspace/github.com/eastwood")))
+             ("filesystem" . (:command "npx" :args ("-y" "@modelcontextprotocol/server-filesystem" "~/Workspace/github.com/eastwood")))
              ))
   )
 
