@@ -42,7 +42,7 @@ require "nvim-treesitter.configs".setup({
 
 vim.keymap.set("n", "<leader><leader>", ":", { desc = "Enter command mode" })
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
-vim.keymap.set("n", "<leader>fc", ":e " .. vimrc_path .. "<CR>", { desc = "Open vim config" })
+vim.keymap.set("n", "<leader>.c", ":e " .. vimrc_path .. "<CR>", { desc = "Open vim config" })
 vim.keymap.set("n", "gh", ":lua vim.diagnostic.open_float()<CR>", { desc = "Open diagnostic float" })
 vim.keymap.set('n', '<leader>w', ":w!<CR>")
 vim.keymap.set('n', '<leader>b', ":Pick buffers<CR>")
