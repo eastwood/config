@@ -21,13 +21,13 @@
 	          (message "Emacs loaded in %s." (emacs-init-time))))
 
 ;; Set paths for our packages
-(let ((bins (list "/Users/C.Ryan@nib.com.au/.nvm/versions/node/v22.15.0/bin" "/opt/homebrew/bin")))
+(let ((bins (list "/home/eastwd/.nvm/versions/node/v22.18.0/bin")))
   (dolist (bin bins)
     (add-to-list 'exec-path bin)
     (setenv "PATH" (concat bin ":" (getenv "PATH")))))
 
 (defun my/get-config-dir()
-  (cond((eq 'w32 window-system) "~/.emacs.d/")
+  (cond ((eq 'w32 window-system) "~/.emacs.d/")
         (t "~/.config/emacs/")))
 
 ;; General Editor Settings
@@ -176,6 +176,8 @@
   (interactive)
   (find-file (concat (my/get-config-dir) "init.el")))
 
+(use-package dape)
+
 (use-package expand-region
   :bind ("C-=" . er/expand-region))
 
@@ -323,7 +325,7 @@
 (use-package org
   :mode ("\\.org\\'" . org-mode)
   :commands (org-agenda org-capture org-toggle-checkbox org-directory)
-  :custom (org-directory (cond (my/WSL "/mnt/z/notes")
+  :custom (org-directory (cond (my/WSL "/mnt/z")
                                ((eq 'w32 window-system) "D:/Code/notes")
                                (my/IS-MAC "/Volumes/Documents/notes")
                                (t "~/Workspace/github.com/eastwood/notes")))
@@ -335,11 +337,15 @@
                              (org-agenda-files :maxlevel . 1)))
   (setq org-tag-alist '(("work" . ?w) ("personal" . ?p)))
   (setq org-startup-indented nil)
-  (setq org-agenda-files (list (concat org-directory "/inbox.org")))
+  (setq org-agenda-files (list (concat org-directory "/inbox.org") (concat org-directory "/nib/nib-archive.org") (concat org-directory "/personal/personal-archive.org")))
+  (setq org-log-done 'time)
+  (setq org-agenda-custom-commands
+        '(("y" "Closed yesterday"
+           search (format "CLOSED: \[%s" (format-time-string "%Y-%m-%d" (time-subtract (current-time) (days-to-time 1)))))))
   (setq org-confirm-babel-evaluate nil)
   (setq org-export-with-section-numbers nil)
   (setq org-capture-templates
-        `(("t" "Todo" entry (file+headline ,(my/notes-file) "Inbox") "* TODO %?\n  Created: %u")
+        `(("t" "Todo" entry (file+headline ,(my/notes-file) "Inbox") "* TODO %?\nCREATED: %u")
           ("m" "Meeting Notes" entry (file+headline ,(my/notes-file) "Notes ✏️") "* %^{Meeting}\n  SCHEDULED: %u\n  %?")))
   (define-key org-mode-map (kbd "C-c c") #'org-toggle-checkbox)
   (define-key org-mode-map (kbd "C-c C-r") verb-command-map)
