@@ -16,12 +16,7 @@
  '(org-safe-remote-resources
    '("\\`https://system2\\.io/assets/org/theme\\.setup\\'"
      "\\`https://gitlab\\.com/OlMon/org-themes/-/raw/master/src/simple_inline/simple_inline\\.theme\\'"))
- '(package-selected-packages
-   '(ace-window copilot corfu-terminal doom-modeline evil-collection
-                evil-leader evil-terminal-cursor-changer expand-region
-                git-link gptel magit markdown-mode mcp move-text
-                nano-theme nord-theme perspective python-mode request
-                treesit-auto verb vterm))
+ '(package-selected-packages nil)
  '(package-vc-selected-packages
    '((nano-theme :url "https://github.com/rougier/nano-theme" :branch
                  "main")))

@@ -176,7 +176,7 @@
   (interactive)
   (find-file (concat (my/get-config-dir) "init.el")))
 
-(use-package dape)
+;; (use-package dape)
 
 (use-package expand-region
   :bind ("C-=" . er/expand-region))
