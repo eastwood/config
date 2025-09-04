@@ -20,9 +20,14 @@
             (require 'project)
 	          (message "Emacs loaded in %s." (emacs-init-time))))
 
+(setq my/paths-to-add
+      (cond (my/IS-MAC (list "/Users/C.Ryan@nib.com.au/.nvm/versions/node/v22.15.0/bin" "/opt/homebrew/opt/curl/bin" "/opt/homebrew/bin/emacsclient" ))
+            (my/WSL    (list "/home/eastwd/.nvm/versions/node/v22.18.0/bin"))))
+
 ;; Set paths for our packages
-(let ((bins (list "/home/eastwd/.nvm/versions/node/v22.18.0/bin")))
+(let ((bins my/paths-to-add))
   (dolist (bin bins)
+    (message "Bin: %S" bin)
     (add-to-list 'exec-path bin)
     (setenv "PATH" (concat bin ":" (getenv "PATH")))))
 
