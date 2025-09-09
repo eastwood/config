@@ -21,7 +21,7 @@
 	          (message "Emacs loaded in %s." (emacs-init-time))))
 
 (setq my/paths-to-add
-      (cond (my/IS-MAC (list "/Users/C.Ryan@nib.com.au/.nvm/versions/node/v22.15.0/bin" "/opt/homebrew/opt/curl/bin" "/opt/homebrew/bin/emacsclient" ))
+      (cond (my/IS-MAC (list "/Users/C.Ryan@nib.com.au/.nvm/versions/node/v22.15.0/bin" "/opt/homebrew/opt/curl/bin" "/opt/homebrew/bin" ))
             (my/WSL    (list "/home/eastwd/.nvm/versions/node/v22.18.0/bin"))))
 
 ;; Set paths for our packages
@@ -182,6 +182,7 @@
   (find-file (concat (my/get-config-dir) "init.el")))
 
 ;; (use-package dape)
+(use-package eldoc-box)
 
 (use-package expand-region
   :bind ("C-=" . er/expand-region))
@@ -457,7 +458,7 @@ Assumes credentials are in the [default] section."
   (define-key evil-normal-state-map (kbd "gd") 'xref-find-definitions)
   (define-key evil-normal-state-map (kbd "gD") 'xref-find-definitions-other-window)
   (define-key evil-normal-state-map (kbd "gr") 'xref-find-references)
-  (define-key evil-normal-state-map (kbd "K") 'eglot-find-typeDefinition)
+  (define-key evil-normal-state-map (kbd "K") 'eldoc-box-help-at-point)
   (define-key evil-normal-state-map (kbd "=") 'eglot-format)
   (define-key evil-normal-state-map (kbd "C-l") 'evil-window-right)
   (define-key evil-normal-state-map (kbd "C-h") 'evil-window-left)
