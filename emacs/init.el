@@ -182,7 +182,9 @@
   (find-file (concat (my/get-config-dir) "init.el")))
 
 ;; (use-package dape)
-(use-package eldoc-box)
+(use-package eldoc-box
+  :config
+  (eldoc-mode nil))
 
 (use-package expand-region
   :bind ("C-=" . er/expand-region))
@@ -237,6 +239,9 @@
   :config
   (setq js-indent-level 2)
   (add-to-list 'auto-mode-alist '("\\.tsx\\'" . tsx-ts-mode)))
+
+(use-package yaml-ts-mode
+  :mode ("\\.yaml\\'" "\\.yml'"))
 
 (use-package json-ts-mode)
 (use-package go-ts-mode
@@ -465,7 +470,6 @@ Assumes credentials are in the [default] section."
   (define-key evil-normal-state-map (kbd "C-j") 'evil-window-down)
   (define-key evil-normal-state-map (kbd "C-k") 'evil-window-up))
   
-
 (use-package evil-collection
   :after evil
   :config
@@ -527,15 +531,11 @@ Assumes credentials are in the [default] section."
 (define-key project-prefix-map (kbd ".") #'my/switch-to-project)
 
 ;; Global Bindings
-(global-set-key (kbd "C-`") #'vterm)
 (global-set-key (kbd "C-S-c") #'my/wsl-copy)
 (global-set-key (kbd "C-S-v") #'my/wsl-paste)
 (global-set-key (kbd "C-.") #'eglot-code-actions)
 (global-set-key (kbd "M-.") #'eglot-code-actions)
-(global-set-key (kbd "M-<up>") #'backward-paragraph)
-(global-set-key (kbd "M-<down>") #'forward-paragraph)
-(global-set-key (kbd "C-=") #'er/expand-region)
-(global-set-key (kbd "C-j") #'join-line)
+(global-set-key (kbd "M-j") #'duplicate-line)
 (global-set-key (kbd "M-p") #'flymake-goto-prev-error)
 (global-set-key (kbd "M-n") #'flymake-goto-next-error)
 (global-set-key (kbd "M-l") #'flymake-show-buffer-diagnostics)
