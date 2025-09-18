@@ -46,6 +46,7 @@ vim.keymap.set("n", "<leader>.c", ":e " .. vimrc_path .. "<CR>", { desc = "Open 
 vim.keymap.set("n", "gh", ":lua vim.diagnostic.open_float()<CR>", { desc = "Open diagnostic float" })
 vim.keymap.set('n', '<leader>x', ":bd!<CR>")
 vim.keymap.set('n', '<leader>w', ":w!<CR>")
+vim.keymap.set('n', '<leader>s', ":w!<CR>")
 vim.keymap.set('n', '<leader>b', ":Pick buffers<CR>")
 vim.keymap.set('n', '<leader>f', ":Pick files<CR>")
 vim.keymap.set('n', '<leader>h', ":Pick help<CR>")

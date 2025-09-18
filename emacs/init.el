@@ -22,7 +22,7 @@
 
 (setq my/paths-to-add
       (cond (my/IS-MAC (list "/Users/C.Ryan@nib.com.au/.nvm/versions/node/v22.15.0/bin" "/opt/homebrew/opt/curl/bin" "/opt/homebrew/bin" ))
-            (my/WSL    (list "/home/eastwd/.nvm/versions/node/v22.18.0/bin"))))
+            (my/WSL    (list "/home/eastwd/.nvm/versions/node/v22.18.0/bin" "/home/eastwd/go/bin"))))
 
 ;; Set paths for our packages
 (let ((bins my/paths-to-add))
@@ -91,6 +91,13 @@
   (other-window 1)
   (dired (my/downloads-folder)))
 
+(defun my/rqp-auth (stage)
+  "Authenticate RQP using SSO with the provided STAGE."
+  (interactive (list (read-string "Stage: " "kaos")))
+  (setenv "BROWSER" "xdg-open")
+  (let ((cmd (format "rqp auth --sso -r poweruser -z secure -s %s" stage)))
+    (async-shell-command cmd "*RQP Auth*")))
+
 (defun my/clone-repo (repo &rest args)
   "Clone each repository in `my-repos` into `my-clone-dir`."
   (interactive (list (read-string "repo: ")))
@@ -139,12 +146,14 @@
 (defun my/open-buildkite ()
   "Open Buildkite in browser."
   (interactive)
-  (condition-case err
-      (let* ((name (file-name-nondirectory (directory-file-name (project-root (project-current)))))
-             (project (my/set-interactive-param "Project" name)))
-        (browse-url (concat "https://buildkite.com/nib-health-funds-ltd/" project)))
-    (error
-     (message "Error opening in BK, check you're in a valid project"))))
+  (let* ((default
+           (ignore-errors
+             (file-name-nondirectory
+              (directory-file-name
+               (project-root (project-current))))))
+         (project (my/set-interactive-param "Project" (or default ""))))
+    (browse-url
+     (format "https://buildkite.com/nib-health-funds-ltd/%s" project))))
 
 (defun my/kill-this-buffer ()
   (interactive)
@@ -181,7 +190,7 @@
   (interactive)
   (find-file (concat (my/get-config-dir) "init.el")))
 
-;; (use-package dape)
+(use-package dape)
 (use-package eldoc-box
   :config
   (eldoc-mode nil))
@@ -223,8 +232,8 @@
 
 (use-package move-text
   :commands (move-text-up move-text-down)
-  :bind (("C-<up>" . move-text-up)
-         ("C-<down>" . move-text-down)))
+  :bind (("M-<up>" . move-text-up)
+         ("M-<down>" . move-text-down)))
 
 (use-package ace-window
   :bind (("M-o" . ace-window)))
@@ -541,6 +550,7 @@ Assumes credentials are in the [default] section."
 (global-set-key (kbd "M-l") #'flymake-show-buffer-diagnostics)
 
 ;; Utility bindings
+(define-key my/editor-map (kbd "c") #'compile)
 (define-key my/editor-map (kbd "r") #'eglot-rename)
 (define-key my/editor-map (kbd "l") #'gptel-menu)
 (define-key my/editor-map (kbd ".") #'persp-switch)
