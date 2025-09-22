@@ -345,10 +345,9 @@
 (use-package org
   :mode ("\\.org\\'" . org-mode)
   :commands (org-agenda org-capture org-toggle-checkbox org-directory)
-  :custom (org-directory (cond (my/WSL "/mnt/z")
-                               ((eq 'w32 window-system) "D:/Code/notes")
+  :custom (org-directory (cond ((eq 'w32 window-system) "D:/Code/notes")
                                (my/IS-MAC "/Volumes/Documents/notes")
-                               (t "~/Workspace/github.com/eastwood/notes")))
+                               (t "~/Workspace/github.com/eastwood/notes"))))
   :config
   (setq org-html-head "<link rel=\"stylesheet\" href=\"https://system2.io/assets/org/theme.css\">")
   (setq org-todo-keywords
