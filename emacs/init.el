@@ -21,7 +21,7 @@
 	          (message "Emacs loaded in %s." (emacs-init-time))))
 
 (setq my/paths-to-add
-      (cond (my/IS-MAC (list "/Users/C.Ryan@nib.com.au/.nvm/versions/node/v22.15.0/bin" "/opt/homebrew/opt/curl/bin" "/opt/homebrew/bin" ))
+      (cond (my/IS-MAC (list "/Users/C.Ryan@nib.com.au/.nvm/versions/node/v22.15.0/bin" "/opt/homebrew/opt/curl/bin" "/opt/homebrew/bin" "/usr/local/bin" ))
             (my/WSL    (list "/home/eastwd/.nvm/versions/node/v22.18.0/bin" "/home/eastwd/go/bin"))))
 
 ;; Set paths for our packages
@@ -342,13 +342,12 @@
       (browse-url-of-file (expand-file-name "/tmp/review-notes.html")))
       (message "Captured saved to messages"))))
 
+(setq org-directory (cond ((eq 'w32 window-system) "D:/Code/notes")
+                               (t "~/Workspace/github.com/eastwood/notes")))
 (use-package org
   :mode ("\\.org\\'" . org-mode)
   :commands (org-agenda org-capture org-toggle-checkbox org-directory)
-  :custom (org-directory (cond ((eq 'w32 window-system) "D:/Code/notes")
-                               (my/IS-MAC "/Volumes/Documents/notes")
-                               (t "~/Workspace/github.com/eastwood/notes"))))
-  :config
+   :config
   (setq org-html-head "<link rel=\"stylesheet\" href=\"https://system2.io/assets/org/theme.css\">")
   (setq org-todo-keywords
         '((sequence "TODO(t)" "IN-PROGRESS(i)" "BLOCKED(b)" "|" "DONE(d)" "CANCELLED(c)")))
