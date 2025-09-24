@@ -20,6 +20,7 @@
             (require 'project)
 	          (message "Emacs loaded in %s." (emacs-init-time))))
 
+;; using the default git is dogshit slow on apple, use the brew one for now for 50% improvement
 (setq my/paths-to-add
       (cond (my/IS-MAC (list "/Users/C.Ryan@nib.com.au/.nvm/versions/node/v22.15.0/bin" "/opt/homebrew/opt/curl/bin" "/opt/homebrew/bin" "/usr/local/bin" ))
             (my/WSL    (list "/home/eastwd/.nvm/versions/node/v22.18.0/bin" "/home/eastwd/go/bin"))))
