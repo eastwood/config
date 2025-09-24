@@ -5,7 +5,9 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
-   '("0ed2cdf8812079071bb9693e4c3a013ced99d3b18ef2bd24ee1796f92977779f"
+   '("2d74de1cc32d00b20b347f2d0037b945a4158004f99877630afc034a674e3ab7"
+     "f9d423fcd4581f368b08c720f04d206ee80b37bfb314fa37e279f554b6f415e9"
+     "0ed2cdf8812079071bb9693e4c3a013ced99d3b18ef2bd24ee1796f92977779f"
      "1781e8bccbd8869472c09b744899ff4174d23e4f7517b8a6c721100288311fa5"
      "e7820b899036ae7e966dcaaec29fd6b87aef253748b7de09e74fdc54407a7a02"
      "de8f2d8b64627535871495d6fe65b7d0070c4a1eb51550ce258cd240ff9394b0"
@@ -16,7 +18,14 @@
  '(org-safe-remote-resources
    '("\\`https://system2\\.io/assets/org/theme\\.setup\\'"
      "\\`https://gitlab\\.com/OlMon/org-themes/-/raw/master/src/simple_inline/simple_inline\\.theme\\'"))
- '(package-selected-packages nil)
+ '(package-selected-packages
+   '(ace-window catppuccin-theme catpuccin-theme copilot corfu-terminal
+                dape doom-modeline dracula-theme eldoc-box
+                evil-collection evil-leader
+                evil-terminal-cursor-changer exec-path-from-shell
+                expand-region git-link gptel magit markdown-mode mcp
+                move-text nano-theme nord-theme perspective
+                python-mode request treesit-auto verb vterm))
  '(package-vc-selected-packages
    '((nano-theme :url "https://github.com/rougier/nano-theme" :branch
                  "main")))
@@ -25,15 +34,9 @@
      (ripgrep
       . "xargs -0 -s 10000 rg <C> --null -nH --no-heading --no-messages -e <R>")
      (ugrep . "xargs -0 -s 10000 ugrep <C> --null -ns -e <R>"))))
-
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(org-block ((t (:background "#2a2e36" :foreground "#d8dee9"))))
- '(org-block-begin-line ((t (:foreground "#81a1c1" :background "#2a2e36" :weight bold))))
- '(org-block-end-line ((t (:foreground "#81a1c1" :background "#2a2e36" :weight bold))))
- '(org-quote ((t (:background "#2a2e36" :foreground "#d8dee9" :slant italic))))
- '(org-quote-begin-line ((t (:foreground "#81a1c1" :background "#2a2e36" :weight bold))))
- '(org-quote-end-line ((t (:foreground "#81a1c1" :background "#2a2e36" :weight bold)))))
+ '(icomplete-selected-match ((t (:background "#444444" :foreground "gray")))))

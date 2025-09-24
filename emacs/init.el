@@ -509,13 +509,9 @@ Assumes credentials are in the [default] section."
     "p" project-prefix-map
     ))
 
-(defun my/load-theme (&rest _)
-  (interactive)
-  (load-theme 'nord t))
-
-(use-package nord-theme
-  :config
-  (my/load-theme))
+(use-package nord-theme)
+(use-package dracula-theme)
+(use-package catppuccin-theme)
 
 ;; File Bindings
 (define-key 'my/files-map (kbd "s") #'save-buffer)
