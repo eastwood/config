@@ -28,7 +28,6 @@
 ;; Set paths for our packages
 (let ((bins my/paths-to-add))
   (dolist (bin bins)
-    (message "Bin: %S" bin)
     (add-to-list 'exec-path bin)
     (setenv "PATH" (concat bin ":" (getenv "PATH")))))
 
@@ -270,8 +269,19 @@
   :config
   (setq python-indent-offset 4))
 
+
+(defun my/open-vterm-at-project-root ()
+  "Open vterm at the `project-current' root directory."
+  (interactive)
+  (let ((root (if (fboundp 'project-current)
+                  (cdr (project-current))
+                default-directory)))
+    (when root
+      (let ((default-directory (car (cdr root))))
+        (vterm)))))
+
 (use-package vterm
-  :bind (("C-`" . vterm))
+  :bind (("C-`" . 'my/open-vterm-at-project-root))
   :unless (eq window-system 'w32)
   :hook (vterm-mode . (lambda ()
                         (display-line-numbers-mode -1)
@@ -509,10 +519,6 @@ Assumes credentials are in the [default] section."
     "o" 'my/org-map
     "p" project-prefix-map
     ))
-
-(use-package nord-theme)
-(use-package dracula-theme)
-(use-package catppuccin-theme)
 
 ;; File Bindings
 (define-key 'my/files-map (kbd "s") #'save-buffer)
