@@ -20,6 +20,9 @@
                 expand-region git-link gptel magit markdown-mode mcp
                 move-text nord-theme perspective python-mode request
                 treesit-auto verb vterm))
+ '(package-vc-selected-packages
+   '((opencode :url "https://github.com/colobas/opencode.el" :branch
+               "main")))
  '(xref-search-program-alist
    '((grep . "xargs -0 -s 10000 grep <C> --null -snHE -e <R>")
      (ripgrep

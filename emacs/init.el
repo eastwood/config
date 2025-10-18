@@ -239,15 +239,17 @@
   :bind (("M-o" . ace-window)))
 
 (use-package typescript-ts-mode
-  :mode ("\\.ts\\'" "\\.js\\'" "\\.mjs\\'")
-  :hook ((typescript-ts-mode . eglot-ensure))
-  :hook ((tsx-ts-mode . eglot-ensure))
+  :mode (("\\.ts\\'" . typescript-ts-mode)
+         ("\\.tsx\\'" . tsx-ts-mode)
+         ("\\.js\\'" . typescript-ts-mode)
+         ("\\.mjs\\'" . typescript-ts-mode))
+  :hook ((typescript-ts-mode . eglot-ensure)
+         (tsx-ts-mode . eglot-ensure))
   :custom
   (typescript-ts-mode-indent-offset 2)
   (typescript-indent-level 2)
   :config
-  (setq js-indent-level 2)
-  (add-to-list 'auto-mode-alist '("\\.tsx\\'" . tsx-ts-mode)))
+  (setq js-indent-level 2))
 
 (use-package yaml-ts-mode
   :mode ("\\.yaml\\'" "\\.yml'"))
@@ -390,17 +392,32 @@
   (define-key copilot-completion-map (kbd "<tab>") 'copilot-accept-completion)
   (define-key copilot-completion-map (kbd "TAB") 'copilot-accept-completion))
 
+(use-package gptel
+  :commands (gptel-menu)
+  :config
+  (require 'gptel-integrations)
+  (setq gptel-model 'gpt-5)
+  (setq gptel-default-mode 'org-mode)
+  (gptel-make-bedrock "AWS"
+    :stream nil
+    :region "ap-southeast-2")
+  (gptel-make-gh-copilot "Copilot"))
+
+(defun my/update-file-system()
+  (interactive)
+  (let ((directory (project-root (project-current))))
+    (setq mcp-hub-servers `(("filesystem" . (:command "npx" :args ("-y" "@modelcontextprotocol/server-filesystem" ,directory)))))))
+
+(add-hook 'project-switch-project-hook #'my/update-file-system)
+
 (use-package mcp
   :after gptel
   :config
-  (setq gptel-model 'gpt-4.1)
+  (setq mcp-hub-servers '(("filesystem" . (:command "npx" :args ("-y" "@modelcontextprotocol/server-filesystem" "~/Workspace/github.com/eastwood/dpx-form-fields")))))
   (setf (alist-get 'org-mode gptel-prompt-prefix-alist) "@user:\n")
   (setf (alist-get 'org-mode gptel-response-prefix-alist) "@assistant:\n")
+  (require 'mcp-hub)
   ;; :custom (gptel-org-branching-context t)
-  :custom (mcp-hub-servers
-           '(("jira" . (:command "docker" :args ("run" "--rm" "-i" "--env-file" "/home/eastwd/.scripts/jira-mcp.env" "ghcr.io/sooperset/mcp-atlassian:latest")))
-             ("filesystem" . (:command "npx" :args ("-y" "@modelcontextprotocol/server-filesystem" "~/Workspace/github.com/eastwood")))
-             ))
   )
 
 (defun my/set-aws-env-vars-from-file (filepath)
@@ -427,16 +444,6 @@ Assumes credentials are in the [default] section."
           (goto-char (point-at-bol))
           (when (re-search-forward "expiration[ \t]*=[ \t]*\\([0-9T:-]+Z\\)" section-end t)
             (setenv "AWS_EXPIRATION" (match-string 1))))))))
-
-(use-package gptel
-  :commands (gptel-menu)
-  :config
-  (require 'gptel-integrations)
-  (setq gptel-default-mode 'org-mode)
-  (gptel-make-bedrock "AWS"
-    :stream nil
-    :region "ap-southeast-2")
-  (gptel-make-gh-copilot "Copilot"))
 
 ;; Project configuration
 (eval-after-load "dired"
