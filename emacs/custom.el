@@ -14,14 +14,19 @@
  '(ignored-local-variable-values '((evil-shift-width . 2)))
  '(org-safe-remote-resources '("\\`https://system2\\.io/assets/org/theme\\.setup\\'"))
  '(package-selected-packages
-   '(ace-window catpuccin-theme copilot corfu-terminal dape doom-modeline
-                eldoc-box evil-collection evil-leader
+   '(ace-window acp agent-shell catpuccin-theme claude-code-ide copilot
+                corfu-terminal dape doom-modeline eldoc-box
+                evil-collection evil-leader
                 evil-terminal-cursor-changer exec-path-from-shell
                 expand-region git-link gptel magit markdown-mode mcp
                 move-text nord-theme perspective python-mode request
-                treesit-auto verb vterm))
+                shell-maker treesit-auto verb vterm))
  '(package-vc-selected-packages
-   '((opencode :url "https://github.com/colobas/opencode.el" :branch
+   '((claude-code-ide :url
+                      "https://github.com/manzaltu/claude-code-ide.el")
+     (agent-shell :url "https://github.com/xenodium/agent-shell")
+     (acp :url "https://github.com/xenodium/acp.el")
+     (opencode :url "https://github.com/colobas/opencode.el" :branch
                "main")))
  '(xref-search-program-alist
    '((grep . "xargs -0 -s 10000 grep <C> --null -snHE -e <R>")

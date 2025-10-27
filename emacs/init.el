@@ -252,7 +252,8 @@
   (setq js-indent-level 2))
 
 (use-package yaml-ts-mode
-  :mode ("\\.yaml\\'" "\\.yml'"))
+  :mode (("\\.yaml\\'" . yaml-ts-mode)
+         ("\\.yml\\'" . yaml-ts-mode)))
 
 (use-package json-ts-mode)
 (use-package go-ts-mode
@@ -391,6 +392,12 @@
   (setq copilot-indent-offset-warning-disable t)
   (define-key copilot-completion-map (kbd "<tab>") 'copilot-accept-completion)
   (define-key copilot-completion-map (kbd "TAB") 'copilot-accept-completion))
+
+(use-package claude-code-ide
+  :vc (:url "https://github.com/manzaltu/claude-code-ide.el" :rev :newest)
+  :bind ("C-c C-'" . claude-code-ide-menu)
+  :config
+  (claude-code-ide-emacs-tools-setup))
 
 (use-package gptel
   :commands (gptel-menu)
