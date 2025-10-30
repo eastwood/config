@@ -367,7 +367,7 @@
         '((sequence "TODO(t)" "IN-PROGRESS(i)" "BLOCKED(b)" "|" "DONE(d)" "CANCELLED(c)")))
   (setq org-refile-targets '((nil :maxlevel . 1)
                              (org-agenda-files :maxlevel . 1)))
-  (setq org-tag-alist '(("work" . ?w) ("personal" . ?p)))
+  (setq org-tag-alist '(("work" . ?w) ("personal" . ?p) ( "nz" . ?n)))
   (setq org-startup-indented nil)
   (setq org-agenda-files (list (concat org-directory "/inbox.org") (concat org-directory "/nib/nib-archive.org") (concat org-directory "/personal/personal-archive.org")))
   (setq org-log-done 'time)
