@@ -410,17 +410,10 @@
     :region "ap-southeast-2")
   (gptel-make-gh-copilot "Copilot"))
 
-(defun my/update-file-system()
-  (interactive)
-  (let ((directory (project-root (project-current))))
-    (setq mcp-hub-servers `(("filesystem" . (:command "npx" :args ("-y" "@modelcontextprotocol/server-filesystem" ,directory)))))))
-
-(add-hook 'project-switch-project-hook #'my/update-file-system)
-
 (use-package mcp
   :after gptel
   :config
-  (setq mcp-hub-servers '(("filesystem" . (:command "npx" :args ("-y" "@modelcontextprotocol/server-filesystem" "~/Workspace/github.com/eastwood/dpx-form-fields")))))
+  (setq mcp-hub-servers '(("filesystem" . (:command "npx" :args ("-y" "@modelcontextprotocol/server-filesystem" "~/Workspace/github.com/eastwood")))))
   (setf (alist-get 'org-mode gptel-prompt-prefix-alist) "@user:\n")
   (setf (alist-get 'org-mode gptel-response-prefix-alist) "@assistant:\n")
   (require 'mcp-hub)
