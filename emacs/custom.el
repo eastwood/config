@@ -13,7 +13,14 @@
  '(evil-undo-system 'undo-redo)
  '(ignored-local-variable-values '((evil-shift-width . 2)))
  '(org-safe-remote-resources '("\\`https://system2\\.io/assets/org/theme\\.setup\\'"))
- '(package-selected-packages nil)
+ '(package-selected-packages
+   '(ace-window catppuccin-theme claude-code-ide copilot corfu-terminal
+                dape doom-modeline dracula-theme eldoc-box
+                evil-collection evil-leader
+                evil-terminal-cursor-changer expand-region git-link
+                gptel magit markdown-mode mcp move-text nano-theme
+                nord-theme perspective python-mode request
+                treesit-auto verb vterm zenburn-theme))
  '(package-vc-selected-packages
    '((claude-code-ide :url
                       "https://github.com/manzaltu/claude-code-ide.el")

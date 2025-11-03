@@ -35,3 +35,14 @@ export BROWSER="xdg-open"
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+# ============================================================
+# HACKATHON: Claude Code + AWS Bedrock Configuration
+# Created: Mon  3 Nov 2025 21:45:29 AEDT
+# To disable: Run hackathon-undo.sh
+# ============================================================
+export CLAUDE_CODE_USE_BEDROCK=1
+export AWS_REGION=ap-southeast-2
+export ANTHROPIC_MODEL='arn:aws:bedrock:ap-southeast-2:384553929753:application-inference-profile/9msh6tdlsg7d'
+export ANTHROPIC_SMALL_FAST_MODEL='au.anthropic.claude-haiku-4-5-20251001-v1:0'
+# ============================================================

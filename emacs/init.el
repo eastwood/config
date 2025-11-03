@@ -396,6 +396,11 @@
 (use-package claude-code-ide
   :vc (:url "https://github.com/manzaltu/claude-code-ide.el" :rev :newest)
   :bind ("C-c C-'" . claude-code-ide-menu)
+  :init
+  (setenv "CLAUDE_CODE_USE_BEDROCK" "1")
+  (setenv "AWS_REGION" "ap-southeast-2")
+  (setenv "ANTHROPIC_MODEL" "arn:aws:bedrock:ap-southeast-2:384553929753:application-inference-profile/9msh6tdlsg7d")
+  (setenv "ANTHROPIC_SMALL_FAST_MODEL" "au.anthropic.claude-haiku-4-5-20251001-v1:0")
   :config
   (claude-code-ide-emacs-tools-setup))
 
@@ -403,19 +408,23 @@
   :commands (gptel-menu)
   :config
   (require 'gptel-integrations)
-  (setq gptel-model 'gpt-5)
+  (setf (alist-get 'org-mode gptel-prompt-prefix-alist) "@user:\n")
+  (setf (alist-get 'org-mode gptel-response-prefix-alist) "@assistant:\n")
   (setq gptel-default-mode 'org-mode)
-  (gptel-make-bedrock "AWS"
-    :stream nil
-    :region "ap-southeast-2")
-  (gptel-make-gh-copilot "Copilot"))
+  (setq gptel-model 'claude-sonnet-4.5
+        gptel-backend (gptel-make-gh-copilot "Copilot")))
+
+  ;; (gptel-make-bedrock "Bedrock"
+  ;;   :stream t
+  ;;   :region "ap-southeast-2"      ; your region
+  ;;   :models '(nib-claude)
+  ;;   :aws-profile "default")
+  ;; (push '(nib-claude . "au.anthropic.claude-sonnet-4-5-20250929-v1:0") gptel-bedrock--model-ids))
 
 (use-package mcp
   :after gptel
   :config
   (setq mcp-hub-servers '(("filesystem" . (:command "npx" :args ("-y" "@modelcontextprotocol/server-filesystem" "~/Workspace/github.com/eastwood")))))
-  (setf (alist-get 'org-mode gptel-prompt-prefix-alist) "@user:\n")
-  (setf (alist-get 'org-mode gptel-response-prefix-alist) "@assistant:\n")
   (require 'mcp-hub)
   ;; :custom (gptel-org-branching-context t)
   )
