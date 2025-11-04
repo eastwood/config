@@ -6,7 +6,11 @@
  ;; If there is more than one, they won't work right.
  '(custom-enabled-themes '(modus-vivendi-tinted))
  '(custom-safe-themes
-   '("5a4cdc4365122d1a17a7ad93b6e3370ffe95db87ed17a38a94713f6ffe0d8ceb"
+   '("5ae5a5647ebfd4a9dac864704b9f8ab03e4af3b8909477ea48c908e05b41010e"
+     "1781e8bccbd8869472c09b744899ff4174d23e4f7517b8a6c721100288311fa5"
+     "e7820b899036ae7e966dcaaec29fd6b87aef253748b7de09e74fdc54407a7a02"
+     "de8f2d8b64627535871495d6fe65b7d0070c4a1eb51550ce258cd240ff9394b0"
+     "5a4cdc4365122d1a17a7ad93b6e3370ffe95db87ed17a38a94713f6ffe0d8ceb"
      "2d74de1cc32d00b20b347f2d0037b945a4158004f99877630afc034a674e3ab7"
      "f9d423fcd4581f368b08c720f04d206ee80b37bfb314fa37e279f554b6f415e9"
      default))
