@@ -301,6 +301,7 @@
 (use-package verb
   :commands (verb-command-map verb-fetch)
   :config
+  (setq verb-trim-body-end "[ \t\n\r]+")
   (setq verb-auto-kill-response-buffers t)
   (setq verb-suppress-load-unsecure-prelude-warning t))
 
@@ -399,8 +400,8 @@
   :init
   (setenv "CLAUDE_CODE_USE_BEDROCK" "1")
   (setenv "AWS_REGION" "ap-southeast-2")
-  (setenv "ANTHROPIC_MODEL" "arn:aws:bedrock:ap-southeast-2:384553929753:application-inference-profile/9msh6tdlsg7d")
-  (setenv "ANTHROPIC_SMALL_FAST_MODEL" "au.anthropic.claude-haiku-4-5-20251001-v1:0")
+  (setenv "ANTHROPIC_MODEL" "arn:aws:bedrock:ap-southeast-2:384553929753:application-inference-profile/z9edt4wigsx1")
+  (setenv "ANTHROPIC_SMALL_FAST_MODEL" "arn:aws:bedrock:ap-southeast-2:384553929753:application-inference-profile/sq9m6du6c693")
   :config
   (claude-code-ide-emacs-tools-setup))
 
@@ -411,8 +412,7 @@
   (setf (alist-get 'org-mode gptel-prompt-prefix-alist) "@user:\n")
   (setf (alist-get 'org-mode gptel-response-prefix-alist) "@assistant:\n")
   (setq gptel-default-mode 'org-mode)
-  (setq gptel-model 'claude-sonnet-4.5
-        gptel-backend (gptel-make-gh-copilot "Copilot")))
+  (setq gptel-backend (gptel-make-gh-copilot "Copilot")))
 
   ;; (gptel-make-bedrock "Bedrock"
   ;;   :stream t
