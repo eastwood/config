@@ -43,6 +43,6 @@ export NVM_DIR="$HOME/.nvm"
 # ============================================================
 export CLAUDE_CODE_USE_BEDROCK=1
 export AWS_REGION=ap-southeast-2
-export ANTHROPIC_MODEL='arn:aws:bedrock:ap-southeast-2:384553929753:application-inference-profile/9msh6tdlsg7d'
+export ANTHROPIC_MODEL='arn:aws:bedrock:ap-southeast-2:384553929753:application-inference-profile/z9edt4wigsx1'
 export ANTHROPIC_SMALL_FAST_MODEL='au.anthropic.claude-haiku-4-5-20251001-v1:0'
 # ============================================================

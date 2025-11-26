@@ -407,19 +407,14 @@
 
 (use-package gptel
   :commands (gptel-menu)
+  :init
+  (setq gptel-model 'claude-sonnet-4.5)
+  (setq gptel-backend (gptel-make-gh-copilot "Copilot"))
   :config
   (require 'gptel-integrations)
   (setf (alist-get 'org-mode gptel-prompt-prefix-alist) "@user:\n")
   (setf (alist-get 'org-mode gptel-response-prefix-alist) "@assistant:\n")
-  (setq gptel-default-mode 'org-mode)
-  (setq gptel-backend (gptel-make-gh-copilot "Copilot")))
-
-  ;; (gptel-make-bedrock "Bedrock"
-  ;;   :stream t
-  ;;   :region "ap-southeast-2"      ; your region
-  ;;   :models '(nib-claude)
-  ;;   :aws-profile "default")
-  ;; (push '(nib-claude . "au.anthropic.claude-sonnet-4-5-20250929-v1:0") gptel-bedrock--model-ids))
+  (setq gptel-default-mode 'org-mode))
 
 (use-package mcp
   :after gptel
