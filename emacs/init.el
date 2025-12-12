@@ -41,7 +41,7 @@
 (setq-default standard-indent 2)
 
 ;; Interface
-(set-face-attribute 'default nil :family "RobotoMono Nerd Font" :height (cond (my/IS-MAC 160) (t 140)) :weight 'normal :width 'normal)
+(set-face-attribute 'default nil :family "RobotoMono Nerd Font" :height (cond (my/IS-MAC 140) (t 120)) :weight 'normal :width 'normal)
 (set-fontset-font t 'symbol "Apple Color Emoji")
 (pixel-scroll-precision-mode t)
 (global-display-line-numbers-mode t)
@@ -190,7 +190,6 @@
   (interactive)
   (find-file (concat (my/get-config-dir) "init.el")))
 
-(use-package dape)
 (use-package eldoc-box
   :config
   (eldoc-mode nil))
@@ -272,6 +271,21 @@
   :config
   (setq python-indent-offset 4))
 
+;; C# and .NET Configuration
+(use-package csharp-mode
+  :mode (("\\.cs\\'" . csharp-ts-mode)
+         ("\\.csx\\'" . csharp-ts-mode))
+  :hook ((csharp-ts-mode . eglot-ensure))
+  :config
+  (add-hook 'csharp-ts-mode-hook
+            (lambda ()
+              (setq-local eglot-inlay-hints-mode -1)
+              (setq-local csharp-ts-mode-indent-offset 4)
+              (setq-local tab-width 4)))
+
+  (with-eval-after-load 'eglot
+    (add-to-list 'eglot-server-programs
+                 '(csharp-ts-mode . ("csharp-ls")))))
 
 (defun my/open-vterm-at-project-root ()
   "Open vterm at the `project-current' root directory."
@@ -489,6 +503,7 @@ Assumes credentials are in the [default] section."
   (define-key evil-normal-state-map (kbd "C-d") 'evil-scroll-down)
   (define-key evil-normal-state-map (kbd "C-.") 'eglot-code-actions)
   (define-key evil-normal-state-map (kbd "M-.") 'eglot-code-actions)
+  (define-key evil-normal-state-map (kbd "gi") 'eglot-find-implementation)
   (define-key evil-normal-state-map (kbd "gd") 'xref-find-definitions)
   (define-key evil-normal-state-map (kbd "gD") 'xref-find-definitions-other-window)
   (define-key evil-normal-state-map (kbd "gr") 'xref-find-references)

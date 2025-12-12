@@ -14,17 +14,18 @@
      "2d74de1cc32d00b20b347f2d0037b945a4158004f99877630afc034a674e3ab7"
      "f9d423fcd4581f368b08c720f04d206ee80b37bfb314fa37e279f554b6f415e9"
      default))
+ '(eglot-ignored-server-capabilities '(:inlayHintProvider))
  '(evil-undo-system 'undo-redo)
  '(ignored-local-variable-values '((evil-shift-width . 2)))
  '(org-safe-remote-resources '("\\`https://system2\\.io/assets/org/theme\\.setup\\'"))
  '(package-selected-packages
-   '(ace-window catppuccin-theme claude-code-ide copilot corfu-terminal
-                dape doom-modeline dracula-theme eldoc-box
-                evil-collection evil-leader
-                evil-terminal-cursor-changer expand-region git-link
-                gptel magit markdown-mode mcp move-text nano-theme
-                nord-theme perspective python-mode request
-                treesit-auto verb vterm zenburn-theme))
+   '(ace-window agent-shell claude-code-ide copilot corfu-terminal
+                dap-mode dape doom-modeline eldoc-box evil-collection
+                evil-leader evil-terminal-cursor-changer
+                exec-path-from-shell expand-region git-link gptel
+                magit markdown-mode mcp move-text nord-theme
+                perspective python-mode request treesit-auto verb
+                vterm))
  '(package-vc-selected-packages
    '((claude-code-ide :url
                       "https://github.com/manzaltu/claude-code-ide.el")

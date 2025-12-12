@@ -1,0 +1,100 @@
+{
+  "name": "vsc-nib",
+  "displayName": "Nib Utilities",
+  "description": "Utility commands for Nib development workflows",
+  "version": "0.1.0",
+  "publisher": "eastwood",
+  "engines": {
+    "vscode": "^1.107.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "nib.rqpAuth",
+        "title": "Nib: RQP Auth (SSO)"
+      },
+      {
+        "command": "nib.cloneRepo",
+        "title": "Nib: Clone Repository"
+      },
+      {
+        "command": "nib.openSalesZoom",
+        "title": "Nib: Open Sales Zoom"
+      },
+      {
+        "command": "nib.openJira",
+        "title": "Nib: Open Jira Ticket"
+      },
+      {
+        "command": "nib.openBuildkite",
+        "title": "Nib: Open Buildkite"
+      },
+      {
+        "command": "nib.createReviewNotes",
+        "title": "Nib: Create Review Notes"
+      }
+    ],
+    "configuration": {
+      "title": "Nib Utilities",
+      "properties": {
+        "nib.cloneDirectory": {
+          "type": "string",
+          "default": "",
+          "description": "Directory where repositories will be cloned. Leave empty to prompt each time."
+        },
+        "nib.githubOrganization": {
+          "type": "string",
+          "default": "nib-group",
+          "description": "GitHub organization name for cloning repositories"
+        },
+        "nib.salesZoomUrl": {
+          "type": "string",
+          "default": "https://nibgroup.zoom.us/j/815911628?pwd=UnJBQ2hYaFBxOHBJazNzdzJ6TDc2UT09",
+          "description": "Zoom meeting URL for sales calls"
+        },
+        "nib.jiraBaseUrl": {
+          "type": "string",
+          "default": "https://nibgroup.atlassian.net",
+          "description": "Base URL for Jira instance"
+        },
+        "nib.buildkiteBaseUrl": {
+          "type": "string",
+          "default": "https://buildkite.com",
+          "description": "Base URL for Buildkite"
+        },
+        "nib.buildkiteOrganization": {
+          "type": "string",
+          "default": "nib-health-funds-ltd",
+          "description": "Buildkite organization name"
+        },
+        "nib.rqpDefaultStage": {
+          "type": "string",
+          "default": "kaos",
+          "description": "Default stage for RQP authentication"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "package": "vsce package"
+  },
+  "devDependencies": {
+    "@types/node": "^20.19.26",
+    "@types/vscode": "^1.107.0",
+    "@typescript-eslint/eslint-plugin": "^6.21.0",
+    "@typescript-eslint/parser": "^6.21.0",
+    "@vscode/vsce": "^3.7.0",
+    "eslint": "^8.57.1",
+    "typescript": "^5.9.3"
+  }
+}
