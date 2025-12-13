@@ -1,0 +1,60 @@
+version: "3.9"
+
+services:
+  gluetun:
+    image: qmcgaw/gluetun:latest
+    container_name: gluetun
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun
+    sysctls:
+      net.ipv4.conf.all.src_valid_mark: 1
+    environment:
+      - DOT=off
+      - DNS_ADDRESS=1.1.1.1
+      - VPN_SERVICE_PROVIDER=custom
+      - VPN_TYPE=wireguard
+      # === fill from your Proton .conf ===
+      - WIREGUARD_PRIVATE_KEY=eA1hz/urN9mtujN4ZMNrK8z7RH3jvyGJPix3WctrfVM=
+      - WIREGUARD_ADDRESSES=10.2.0.2/32
+      - WIREGUARD_PUBLIC_KEY=hPKSC01LiQsP+1pzPm98CFZXqkESBuwqdmMe+4ujeEs=
+      - WIREGUARD_ENDPOINT_IP=103.216.220.98
+      - WIREGUARD_ENDPOINT_PORT=51820
+      - FIREWALL_INPUT_SUBNETS=172.18.0.0/16,192.168.0.0/16
+      # Optional: allow LAN access to your NAS/PC subnets (adjust to your LAN)
+      - FIREWALL_OUTBOUND_SUBNETS=192.168.0.0/16
+      - FIREWALL_INPUT_PORTS=9091
+      - TZ=Australia/Sydney
+    # Expose Transmission's ports *through* the VPN container:
+    ports:
+      - "9091:9091"           # Transmission Web UI
+      - "51413:51413"         # TCP torrent
+      - "51413:51413/udp"     # UDP torrent (DHT/PEX)
+    volumes:
+      - gluetun:/gluetun
+    restart: unless-stopped
+
+  transmission:
+    image: lscr.io/linuxserver/transmission:4.0.5
+    container_name: transmission
+    # Route all traffic via the VPN container:
+    network_mode: "service:gluetun"
+    depends_on:
+      - gluetun
+    environment:
+      - PUID=1000                   # set to your user id
+      - PGID=1000                   # set to your group id
+      - TZ=Australia/Sydney
+      # optional tweaks:
+      # - TRANSMISSION_SPEED_LIMIT_UP_ENABLED=false
+      # - TRANSMISSION_DOWNLOAD_DIR=/downloads/completed
+      # - TRANSMISSION_INCOMPLETE_DIR=/downloads/incomplete
+    volumes:
+      - /share/Download/Transmission/watch:/watch
+      - /share/Download/Transmission:/downloads
+      - /share/Docker/Transmission/config:/config
+    restart: unless-stopped
+
+volumes:
+  gluetun:
